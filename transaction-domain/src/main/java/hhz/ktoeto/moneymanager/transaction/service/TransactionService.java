@@ -1,0 +1,83 @@
+package hhz.ktoeto.moneymanager.transaction.service;
+
+import hhz.ktoeto.moneymanager.transaction.exception.EntityNotFoundException;
+import hhz.ktoeto.moneymanager.transaction.exception.NonOwnerRequestException;
+import hhz.ktoeto.moneymanager.transaction.mapper.TransactionMapper;
+import hhz.ktoeto.moneymanager.transaction.model.category.Category;
+import hhz.ktoeto.moneymanager.transaction.model.category.CategoryDTO;
+import hhz.ktoeto.moneymanager.transaction.model.transaction.Transaction;
+import hhz.ktoeto.moneymanager.transaction.model.transaction.TransactionDTO;
+import hhz.ktoeto.moneymanager.transaction.repository.TransactionsRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class TransactionService {
+
+    private final TransactionMapper mapper;
+    private final CategoryService categoryService;
+    private final TransactionsRepository repository;
+
+    public List<Transaction> getAll(long userId) {
+        log.debug("Fetching all transactions ");
+        return repository.findAllByUserId(userId);
+    }
+
+    public Transaction getById(long id, long userId) {
+        Transaction transaction = getTransactionFromRepository(id);
+        if (transaction.getUserId() != userId) {
+            throw new NonOwnerRequestException("User with id %d requested a transaction, which owner is user with id %d".formatted(userId, transaction.getUserId()));
+        }
+        return transaction;
+    }
+
+    @Transactional
+    public Transaction create(TransactionDTO dto, long userId) {
+        log.info("Processing Transaction create request");
+        Transaction transaction = mapper.toEntity(dto);
+        Category category = categoryService.findByNameAndUserId(dto.category(), userId)
+                .orElseGet(() -> categoryService.create(new CategoryDTO(null, dto.category()), userId));
+
+        transaction.setUserId(userId);
+        transaction.setCategory(category);
+
+        return repository.save(transaction);
+    }
+
+    @Transactional
+    public Transaction update(TransactionDTO dto, long userId) {
+        Transaction transaction = getTransactionFromRepository(dto.id());
+        if (transaction.getUserId() != userId) {
+            throw new NonOwnerRequestException("User with id %d requested transaction update, which owner is user with id %d".formatted(userId, transaction.getUserId()));
+        }
+        mapper.updateEntity(transaction, dto);
+
+        if (!transaction.getCategory().getName().equals(dto.category())) {
+            Category category = categoryService.findByNameAndUserId(dto.category(), userId)
+                    .orElseGet(() -> categoryService.create(new CategoryDTO(null, dto.category()), userId));
+            transaction.setCategory(category);
+        }
+
+        return repository.save(transaction);
+    }
+
+    @Transactional
+    public void delete(long id, long userId) {
+        Transaction transaction = getTransactionFromRepository(id);
+        if (transaction.getUserId() != userId) {
+            throw new NonOwnerRequestException("User with id %d requested transaction deletion, which owner is user with id %d".formatted(userId, transaction.getUserId()));
+        }
+        repository.delete(transaction);
+    }
+
+    private Transaction getTransactionFromRepository(long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not find Transaction with id %d".formatted(id)));
+    }
+}

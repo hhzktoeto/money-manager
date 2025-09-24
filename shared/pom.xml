@@ -1,0 +1,11 @@
+<project>
+    <parent>
+        <groupId>hhz.ktoeto</groupId>
+        <artifactId>money-manager</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>shared</artifactId>
+    <packaging>jar</packaging>
+</project>

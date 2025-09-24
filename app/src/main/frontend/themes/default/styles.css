@@ -1,0 +1,47 @@
+.main-root {
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    background: #0f1724; /* что-то темное как bg-dark-1 */
+    color: var(--lumo-contrast-90pct);
+    padding: 16px;
+}
+
+.card {
+    background: var(--lumo-base-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    margin: auto;
+}
+
+/* логотип M синего */
+.logo-blue { color: #3b82f6; font-weight: 800; }
+.logo-light { color: #f3f4f6; }
+
+/* spinner center */
+.main-spinner {
+    margin: auto;
+    width: 120px;
+}
+
+/* заголовки в форме */
+.login-title { font-size: 36px; margin: 0; }
+.login-subtitle { font-size: 20px; margin-top: 8px; color: var(--lumo-secondary-text-color); }
+
+/* стили для кнопки primary */
+.button.primary {
+    background-color: var(--lumo-primary-color);
+    color: white;
+}
+
+/* немного расстояний внутри dashboard */
+.dashboard-root {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+.add-transaction, .summary-card {
+    margin-bottom: 16px;
+}
