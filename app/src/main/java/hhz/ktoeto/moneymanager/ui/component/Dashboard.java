@@ -19,39 +19,6 @@ public class Dashboard extends VerticalLayout {
     public Dashboard() {
         setSizeFull();
         addClassName("dashboard-root");
-
-        add(new AppToolbar());
-
-        Tabs tabs = new Tabs(tabMain, tabStats, tabPlanning);
-        tabs.addSelectedChangeListener(this::onTabChanged);
-        tabs.setFlexGrowForEnclosedTabs(1);
-
-        // Extra control (похож на p-select в tablist)
-        Select<String> periodSelect = new Select<>();
-        periodSelect.add("All");
-        periodSelect.add("Month");
-        periodSelect.add("Week");
-        periodSelect.setLabel("");
-        periodSelect.setPlaceholder("Период");
-        HorizontalLayout tabsBar = new HorizontalLayout(tabs, periodSelect);
-        tabsBar.setWidthFull();
-        tabsBar.expand(tabs);
-
-        // main page content
-        pageMain.add(new AddTransaction());
-        pageMain.add(new SummaryCard());
-        pageMain.add(new TransactionsHistory());
-
-        pageStats.add(new CategoriesCharts());
-        pagePlanning.add(new AllCategories());
-        pagePlanning.add(new BudgetGoals());
-
-        // initial visibility
-        pageMain.setVisible(true);
-        pageStats.setVisible(false);
-        pagePlanning.setVisible(false);
-
-        add(tabsBar, pageMain, pageStats, pagePlanning);
     }
 
     private void onTabChanged(Tabs.SelectedChangeEvent ev) {

@@ -1,47 +1,53 @@
-.main-root {
+/* Подключим Oswald с CDN (как в твоём src/styles.css) */
+@import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
+
+/* Если нужны локальные шрифты, переложи их сюда: frontend/themes/mm/fonts/ */
+@font-face {
+    font-family: "JetBrains Mono";
+    src: url("./fonts/JetBrainsMono-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Глобально на всё приложение: аналог body.fonts-oswald */
+html, body {
+    font-family: "Oswald", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* Оставим утилитарный класс на всякий случай — если захочешь точечно использовать */
+.fonts-oswald {
+    font-family: "Oswald", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* Пара твоих утилит из Angular для согласованности верстки */
+.flex {
     display: flex;
+}
+
+.justify-center {
     justify-content: center;
+}
+
+.min-h-screen {
     min-height: 100vh;
-    background: #0f1724; /* что-то темное как bg-dark-1 */
-    color: var(--lumo-contrast-90pct);
-    padding: 16px;
 }
 
-.card {
-    background: var(--lumo-base-color);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-    margin: auto;
+.bg-dark-1 {
+    background: var(--lumo-contrast-10pct);
 }
 
-/* логотип M синего */
-.logo-blue { color: #3b82f6; font-weight: 800; }
-.logo-light { color: #f3f4f6; }
-
-/* spinner center */
-.main-spinner {
-    margin: auto;
-    width: 120px;
+/* Лого в шапке (на будущее) */
+.app-title {
+    margin: 0;
+    font-size: var(--lumo-font-size-xxl);
 }
 
-/* заголовки в форме */
-.login-title { font-size: 36px; margin: 0; }
-.login-subtitle { font-size: 20px; margin-top: 8px; color: var(--lumo-secondary-text-color); }
-
-/* стили для кнопки primary */
-.button.primary {
-    background-color: var(--lumo-primary-color);
-    color: white;
+.logo-blue {
+    color: var(--lumo-primary-color);
+    font-weight: 700;
 }
 
-/* немного расстояний внутри dashboard */
-.dashboard-root {
-    width: 100%;
-    max-width: 1200px;
-    margin: 20px auto;
-}
-
-.add-transaction, .summary-card {
-    margin-bottom: 16px;
+.logo-light {
+    color: var(--lumo-secondary-text-color);
 }
