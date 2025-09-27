@@ -1,0 +1,52 @@
+html {
+    --lumo-font-family: "Oswald", ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    --lumo-border-radius: 0.55em;
+    --lumo-space-xl: 1.875rem;
+    --lumo-space-l: 1.25rem;
+    --lumo-space-m: 0.625rem;
+    --lumo-space-s: 0.3125rem;
+    --lumo-space-xs: 0.1875rem;
+}
+
+[theme~="dark"] {
+    --lumo-tint-5pct: rgba(161, 198, 237, 0.05);
+    --lumo-tint-10pct: rgba(161, 198, 237, 0.1);
+    --lumo-tint-20pct: rgba(161, 198, 237, 0.2);
+    --lumo-tint-30pct: rgba(161, 198, 237, 0.3);
+    --lumo-tint-40pct: rgba(161, 198, 237, 0.4);
+    --lumo-tint-50pct: rgba(161, 198, 237, 0.5);
+    --lumo-tint-60pct: rgba(161, 198, 237, 0.6);
+    --lumo-tint-70pct: rgba(161, 198, 237, 0.7);
+    --lumo-tint-80pct: rgba(161, 198, 237, 0.8);
+    --lumo-tint-90pct: rgba(161, 198, 237, 0.9);
+    --lumo-shade-5pct: rgba(31, 34, 40, 0.05);
+    --lumo-shade-10pct: rgba(31, 34, 40, 0.1);
+    --lumo-shade-20pct: rgba(31, 34, 40, 0.2);
+    --lumo-shade-30pct: rgba(31, 34, 40, 0.3);
+    --lumo-shade-40pct: rgba(31, 34, 40, 0.4);
+    --lumo-shade-50pct: rgba(31, 34, 40, 0.5);
+    --lumo-shade-60pct: rgba(31, 34, 40, 0.6);
+    --lumo-shade-70pct: rgba(31, 34, 40, 0.7);
+    --lumo-shade-80pct: rgba(31, 34, 40, 0.8);
+    --lumo-shade-90pct: rgba(31, 34, 40, 0.9);
+    --lumo-primary-text-color: #d8dee9;
+    --lumo-primary-color-50pct: rgba(136, 192, 208, 0.5);
+    --lumo-primary-color-10pct: rgba(136, 192, 208, 0.1);
+    --lumo-error-text-color: #bf616a;
+    --lumo-error-color-50pct: rgba(191, 97, 106, 0.5);
+    --lumo-error-color-10pct: rgba(191, 97, 106, 0.1);
+    --lumo-success-text-color: rgb(163, 190, 140);
+    --lumo-success-color-50pct: rgba(163, 190, 140, 0.5);
+    --lumo-success-color-10pct: rgba(163, 190, 140, 0.1);
+    --lumo-tint: #a1c6ed;
+    --lumo-shade: #1f2228;
+    --lumo-primary-color: #88c0d0;
+    --lumo-error-color: #bf616a;
+    --lumo-success-color: #a3be8c;
+    --lumo-header-text-color: #b0bfd9;
+    --lumo-primary-contrast-color: #123259;
+    --lumo-error-contrast-color: #372f2f;
+    --lumo-success-contrast-color: #2d3829;
+    --lumo-base-color: #3b4252;
+    --lumo-disabled-text-color: rgba(145, 163, 182, 0.3);
+}

@@ -7,7 +7,7 @@ import com.vaadin.flow.theme.Theme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@Theme("default")
+@Theme(value = "nord", variant = "dark")
 @PWA(name = "Money Manager", shortName = "MM")
 @Viewport("width=device-width, initial-scale=1")
 @SpringBootApplication(scanBasePackages = "hhz.ktoeto.moneymanager")

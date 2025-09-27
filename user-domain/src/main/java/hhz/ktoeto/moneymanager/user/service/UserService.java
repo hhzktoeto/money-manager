@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -27,6 +28,10 @@ public class UserService {
     private final UserRepository repository;
     private final TokenService tokenService;
     private final UserValidator validator;
+
+    public Optional<User> getById(Long id) {
+        return repository.findById(id);
+    }
 
     @Transactional
     public User register(RegisterRequest request) {
