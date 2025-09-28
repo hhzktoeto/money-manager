@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.page;
+package hhz.ktoeto.moneymanager.ui.view;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.card.Card;
@@ -25,12 +25,12 @@ import org.springframework.stereotype.Component;
 @Component
 @AnonymousAllowed
 @Route(RouteName.LOGIN)
-public class LoginPage extends VerticalLayout {
+public class LoginView extends VerticalLayout {
 
     private final LoginForm loginForm = new LoginForm();
     private final RegisterForm registerForm = new RegisterForm();
 
-    public LoginPage(UserService userService) {
+    public LoginView(UserService userService) {
         loginForm.setVisible(true);
         registerForm.setVisible(false);
         registerForm.setVisible(false);
@@ -56,7 +56,7 @@ public class LoginPage extends VerticalLayout {
                 VaadinService.getCurrentResponse().addCookie(buildCookie(CookieConstant.ACCESS_TOKEN, response.accessToken(), CookieConstant.ACCESS_TOKEN_MAX_AGE));
                 VaadinService.getCurrentResponse().addCookie(buildCookie(CookieConstant.REFRESH_TOKEN, response.refreshToken(), CookieConstant.REFRESH_TOKEN_MAX_AGE));
 
-                UI.getCurrent().getPage().setLocation("/");
+                UI.getCurrent().getPage().setLocation(RouteName.MAIN);
             } catch (Exception e) {
                 log.error("Exception occurred, while trying to login", e);
             }

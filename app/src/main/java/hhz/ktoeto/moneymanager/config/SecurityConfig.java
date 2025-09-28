@@ -2,7 +2,7 @@ package hhz.ktoeto.moneymanager.config;
 
 import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
-import hhz.ktoeto.moneymanager.ui.page.LoginPage;
+import hhz.ktoeto.moneymanager.ui.view.LoginView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(LoginPage.class))
+                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(LoginView.class))
                 .build();
     }
 }
