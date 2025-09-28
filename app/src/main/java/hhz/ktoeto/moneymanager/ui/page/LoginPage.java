@@ -56,7 +56,7 @@ public class LoginPage extends VerticalLayout {
                 VaadinService.getCurrentResponse().addCookie(buildCookie(CookieConstant.ACCESS_TOKEN, response.accessToken(), CookieConstant.ACCESS_TOKEN_MAX_AGE));
                 VaadinService.getCurrentResponse().addCookie(buildCookie(CookieConstant.REFRESH_TOKEN, response.refreshToken(), CookieConstant.REFRESH_TOKEN_MAX_AGE));
 
-                UI.getCurrent().navigate(MainPage.class);
+                UI.getCurrent().getPage().setLocation("/");
             } catch (Exception e) {
                 log.error("Exception occurred, while trying to login", e);
             }
