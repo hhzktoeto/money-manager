@@ -1,8 +1,7 @@
-package hhz.ktoeto.moneymanager.ui.component;
+package hhz.ktoeto.moneymanager.ui.component.grid;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
-import com.vaadin.flow.component.card.Card;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -12,35 +11,36 @@ import hhz.ktoeto.moneymanager.broadcast.Broadcaster;
 import hhz.ktoeto.moneymanager.broadcast.event.TransactionAddedEvent;
 import hhz.ktoeto.moneymanager.broadcast.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.broadcast.event.TransactionUpdatedEvent;
-import hhz.ktoeto.moneymanager.transaction.model.category.Category;
-import hhz.ktoeto.moneymanager.transaction.service.CategoryService;
+import hhz.ktoeto.moneymanager.transaction.model.transaction.Transaction;
+import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
+import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 
 @UIScope
 @SpringComponent
-public class CategoriesCard extends Card {
+public class TransactionsGrid extends Grid<Transaction> {
 
-    private final transient CallbackDataProvider<Category, Void> dataProvider;
+    private final transient CallbackDataProvider<Transaction, Void> dataProvider;
     private final transient Broadcaster broadcaster;
 
-    public CategoriesCard(CategoryService categoryService, Broadcaster broadcaster) {
+    public TransactionsGrid(TransactionService transactionService, Broadcaster broadcaster) {
+        super(Transaction.class, false);
         this.broadcaster = broadcaster;
         this.dataProvider = DataProvider.fromCallbacks(
-                query -> categoryService.getAll(SecurityUtils.getCurrentUser().getId())
+                query -> transactionService.getAll(SecurityUtils.getCurrentUser().getId())
                         .stream()
                         .skip(query.getOffset())
                         .limit(query.getLimit()),
-                query -> (int) categoryService.count(SecurityUtils.getCurrentUser().getId())
+                query -> (int) transactionService.count(SecurityUtils.getCurrentUser().getId())
         );
 
-        Grid<Category> categoriesGrid = new Grid<>(Category.class, false);
-        categoriesGrid.setWidthFull();
-        categoriesGrid.setHeightFull();
-        categoriesGrid.addColumn(Category::getName);
+        addColumn(transaction -> FormattingUtils.formatDate(transaction.getDate())).setHeader("Дата");
+        addColumn(transaction -> transaction.getCategory().getName()).setHeader("Категория");
+        addColumn(transaction -> FormattingUtils.formatAmount(transaction.getAmount())).setHeader("Сумма");
 
-        categoriesGrid.setDataProvider(this.dataProvider);
+        setMultiSort(true);
+        setDataProvider(dataProvider);
         setSizeFull();
-        add(categoriesGrid);
     }
 
     @Override
@@ -60,6 +60,7 @@ public class CategoriesCard extends Card {
 
         super.onDetach(detachEvent);
     }
+
 
     private void onTransactionAdded(TransactionAddedEvent ignored) {
         onEvent();

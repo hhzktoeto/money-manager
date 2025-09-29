@@ -1,7 +1,8 @@
-package hhz.ktoeto.moneymanager.ui.component;
+package hhz.ktoeto.moneymanager.ui.component.card;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.component.card.Card;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -11,45 +12,35 @@ import hhz.ktoeto.moneymanager.broadcast.Broadcaster;
 import hhz.ktoeto.moneymanager.broadcast.event.TransactionAddedEvent;
 import hhz.ktoeto.moneymanager.broadcast.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.broadcast.event.TransactionUpdatedEvent;
-import hhz.ktoeto.moneymanager.transaction.model.transaction.Transaction;
-import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
+import hhz.ktoeto.moneymanager.transaction.model.category.Category;
+import hhz.ktoeto.moneymanager.transaction.service.CategoryService;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
-
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.Locale;
 
 @UIScope
 @SpringComponent
-public class TransactionsGrid extends Grid<Transaction> {
+public class CategoriesCard extends Card {
 
-    private final transient CallbackDataProvider<Transaction, Void> dataProvider;
+    private final transient CallbackDataProvider<Category, Void> dataProvider;
     private final transient Broadcaster broadcaster;
 
-    private static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
-            .appendPattern("dd ")
-            .appendText(ChronoField.MONTH_OF_YEAR)
-            .appendPattern(" yyyy")
-            .toFormatter(Locale.of("ru"));
-
-    public TransactionsGrid(TransactionService transactionService, Broadcaster broadcaster) {
-        super(Transaction.class, false);
+    public CategoriesCard(CategoryService categoryService, Broadcaster broadcaster) {
         this.broadcaster = broadcaster;
         this.dataProvider = DataProvider.fromCallbacks(
-                query -> transactionService.getAll(SecurityUtils.getCurrentUser().getId())
+                query -> categoryService.getAll(SecurityUtils.getCurrentUser().getId())
                         .stream()
                         .skip(query.getOffset())
                         .limit(query.getLimit()),
-                query -> (int) transactionService.count(SecurityUtils.getCurrentUser().getId())
+                query -> (int) categoryService.count(SecurityUtils.getCurrentUser().getId())
         );
 
-        addColumn(transaction -> transaction.getDate().format(FORMATTER)).setHeader("Дата");
-        addColumn(transaction -> transaction.getCategory().getName()).setHeader("Категория");
-        addColumn(transaction -> transaction.getAmount().toString()).setHeader("Сумма");
+        Grid<Category> categoriesGrid = new Grid<>(Category.class, false);
+        categoriesGrid.setWidthFull();
+        categoriesGrid.setHeightFull();
+        categoriesGrid.addColumn(Category::getName);
 
-        setDataProvider(dataProvider);
+        categoriesGrid.setDataProvider(this.dataProvider);
         setSizeFull();
+        add(categoriesGrid);
     }
 
     @Override
@@ -69,7 +60,6 @@ public class TransactionsGrid extends Grid<Transaction> {
 
         super.onDetach(detachEvent);
     }
-
 
     private void onTransactionAdded(TransactionAddedEvent ignored) {
         onEvent();

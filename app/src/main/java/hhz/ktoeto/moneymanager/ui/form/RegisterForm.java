@@ -2,7 +2,6 @@ package hhz.ktoeto.moneymanager.ui.form;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -17,23 +16,37 @@ public class RegisterForm extends VerticalLayout {
     private final EmailField emailField = new EmailField("E-mail");
     private final TextField phoneField = new TextField("Телефон");
     private final Button openLoginButton = new Button("У меня есть аккаунт");
-    private final Button registerButton = new Button("Зарегистрироваться");
-
-    private final HorizontalLayout buttonsLayout = new HorizontalLayout();
+    private final Button registerButton = new Button("Регистрация");
 
     public RegisterForm() {
         this.registerButton.addClickShortcut(Key.ENTER);
 
-        this.buttonsLayout.setAlignItems(Alignment.CENTER);
-        this.buttonsLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        this.openLoginButton.getStyle()
+                .set("color", "var(--lumo-primary-color)")
+                .set("background", "transparent")
+                .set("border", "none");
+
+        this.registerButton.getStyle()
+                .set("background", "var(--lumo-primary-color)")
+                .set("color", "var(--lumo-primary-contrast-color)");
+
+        HorizontalLayout buttonsLayout = new HorizontalLayout(openLoginButton, registerButton);
+        buttonsLayout.setWidthFull();
+        buttonsLayout.setAlignItems(Alignment.CENTER);
+        buttonsLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
+
+        buttonsLayout.setAlignItems(Alignment.CENTER);
+        buttonsLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
 
         setAlignItems(Alignment.STRETCH);
+        setSpacing(true);
+        setPadding(false);
         add(
                 this.loginField,
                 this.passwordField,
                 this.emailField,
                 this.phoneField,
-                new Div(this.openLoginButton, this.registerButton)
+                buttonsLayout
         );
     }
 

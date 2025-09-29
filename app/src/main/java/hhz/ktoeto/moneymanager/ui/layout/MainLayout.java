@@ -40,7 +40,6 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
         DrawerToggle toggle = new DrawerToggle();
 
         Button logOut = new Button(new Icon(VaadinIcon.SIGN_OUT));
-        logOut.getElement().setAttribute("aria-label", "Выйти");
         logOut.addClickListener(ignored -> log.info("Чел нажал на выйти!"));
 
         HorizontalLayout header = new HorizontalLayout(toggle, title, logOut);

@@ -16,16 +16,29 @@ public class LoginForm extends VerticalLayout {
     private final Button openRegisterButton = new Button("Зарегистрироваться");
     private final Button loginButton = new Button("Войти");
 
-    private final HorizontalLayout buttonsLayout = new HorizontalLayout(openRegisterButton, loginButton);
-
     public LoginForm() {
         this.loginButton.addClickShortcut(Key.ENTER);
 
-        this.buttonsLayout.setAlignItems(Alignment.CENTER);
-        this.buttonsLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        this.openRegisterButton.getStyle()
+                .set("color", "var(--lumo-primary-color)")
+                .set("background", "transparent")
+                .set("border", "none");
+        this.loginButton.getStyle()
+                .set("background", "var(--lumo-primary-color)")
+                .set("color", "var(--lumo-primary-contrast-color)");
+
+        HorizontalLayout buttonsLayout = new HorizontalLayout(openRegisterButton, loginButton);
+        buttonsLayout.setWidthFull();
+        buttonsLayout.setAlignItems(Alignment.CENTER);
+        buttonsLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
+
+        this.loginField.setWidthFull();
+        this.passwordField.setWidthFull();
 
         setAlignItems(Alignment.STRETCH);
-        add(this.loginField, this.passwordField, this.buttonsLayout);
+        setSpacing(true);
+        setPadding(false);
+        add(this.loginField, this.passwordField, buttonsLayout);
     }
 
     public String login() {

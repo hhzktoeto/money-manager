@@ -5,7 +5,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.constant.RouteName;
-import hhz.ktoeto.moneymanager.ui.component.CategoriesCard;
+import hhz.ktoeto.moneymanager.ui.component.card.CategoriesCard;
 import hhz.ktoeto.moneymanager.ui.layout.MainLayout;
 import jakarta.annotation.security.PermitAll;
 
