@@ -42,7 +42,7 @@ public class BudgetGoalService {
         log.debug("Creating budget goal");
         BudgetGoal goal = mapper.toEntity(dto);
         Category category = categoryService.findByNameAndUserId(dto.category(), userId)
-                .orElseGet(() -> categoryService.create(new CategoryDTO(null, dto.category()), userId));
+                .orElseGet(() -> categoryService.create(new CategoryDTO(dto.category()), userId));
 
         goal.setUserId(userId);
         goal.setCategory(category);
@@ -51,21 +51,17 @@ public class BudgetGoalService {
     }
 
     @Transactional
-    public BudgetGoal update(BudgetGoalDTO dto, long userId) {
+    public BudgetGoal update(BudgetGoal dto, long userId) {
         log.debug("Updating budget goal");
-        BudgetGoal goal = getGoalFromRepository(dto.id());
-        if (goal.getUserId() != userId) {
-            throw new NonOwnerRequestException("User with id %d requested budget goal update, which owner is user with id %d".formatted(userId, goal.getUserId()));
-        }
-        mapper.updateEntity(goal, dto);
+        BudgetGoal goal = getGoalFromRepository(dto.getId());
 
-        if (!goal.getCategory().getName().equals(dto.category())) {
-            Category category = categoryService.findByNameAndUserId(dto.category(), userId)
-                    .orElseGet(() -> categoryService.create(new CategoryDTO(null, dto.category()), userId));
+        if (!goal.getCategory().getName().equals(dto.getCategory().getName())) {
+            Category category = categoryService.findByNameAndUserId(dto.getCategory().getName(), userId)
+                    .orElseGet(() -> categoryService.create(new CategoryDTO(dto.getCategory().getName()), userId));
             goal.setCategory(category);
         }
 
-        return repository.save(goal);
+        return repository.save(dto);
     }
 
     @Transactional

@@ -36,15 +36,13 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category update(CategoryDTO dto, long userId) {
+    public Category update(Category updated, long userId) {
         log.debug("Updating category");
-        Category category = getCategoryFromRepository(dto.id());
-        if (category.getUserId() != userId) {
-            throw new NonOwnerRequestException("User with id %d requested category updating, which owner is user with id %d".formatted(category.getUserId(), userId));
+        if (updated.getUserId() != userId) {
+            throw new NonOwnerRequestException("User with id %d requested category updating, which owner is user with id %d".formatted(updated.getUserId(), userId));
         }
-        mapper.updateEntity(category, dto);
 
-        return repository.save(category);
+        return repository.save(updated);
     }
 
     @Transactional

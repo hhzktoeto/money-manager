@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -42,7 +43,7 @@ public class TransactionService {
         log.info("Processing Transaction create request");
         Transaction transaction = mapper.toEntity(dto);
         Category category = categoryService.findByNameAndUserId(dto.category(), userId)
-                .orElseGet(() -> categoryService.create(new CategoryDTO(null, dto.category()), userId));
+                .orElseGet(() -> categoryService.create(new CategoryDTO(dto.category()), userId));
 
         transaction.setUserId(userId);
         transaction.setCategory(category);
@@ -51,20 +52,19 @@ public class TransactionService {
     }
 
     @Transactional
-    public Transaction update(TransactionDTO dto, long userId) {
-        Transaction transaction = getTransactionFromRepository(dto.id());
+    public Transaction update(Transaction updated, long userId) {
+        Transaction transaction = getTransactionFromRepository(updated.getId());
         if (transaction.getUserId() != userId) {
             throw new NonOwnerRequestException("User with id %d requested transaction update, which owner is user with id %d".formatted(userId, transaction.getUserId()));
         }
-        mapper.updateEntity(transaction, dto);
 
-        if (!transaction.getCategory().getName().equals(dto.category())) {
-            Category category = categoryService.findByNameAndUserId(dto.category(), userId)
-                    .orElseGet(() -> categoryService.create(new CategoryDTO(null, dto.category()), userId));
-            transaction.setCategory(category);
+        if (!Objects.equals(transaction.getCategory().getName(), updated.getCategory().getName())) {
+            Category category = categoryService.findByNameAndUserId(updated.getCategory().getName(), userId)
+                    .orElseGet(() -> categoryService.create(new CategoryDTO(updated.getCategory().getName()), userId));
+            updated.setCategory(category);
         }
 
-        return repository.save(transaction);
+        return repository.save(updated);
     }
 
     @Transactional
