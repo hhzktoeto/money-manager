@@ -5,22 +5,20 @@ import com.vaadin.flow.component.card.Card;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.data.renderer.ClickableRenderer;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.transaction.model.transaction.Transaction;
 import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
-import org.checkerframework.checker.units.qual.C;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
 
 @UIScope
-@Component
+@SpringComponent
 public class SummaryCards extends HorizontalLayout {
 
-    private final TransactionService transactionService;
+    private final transient  TransactionService transactionService;
 
     private final Card incomesCard;
     private final Card expensesCard;

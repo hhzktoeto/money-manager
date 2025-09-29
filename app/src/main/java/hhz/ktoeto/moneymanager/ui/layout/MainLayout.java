@@ -1,5 +1,6 @@
 package hhz.ktoeto.moneymanager.ui.layout;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -14,20 +15,20 @@ import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.constant.RouteName;
 import hhz.ktoeto.moneymanager.ui.view.DashboardView;
 import hhz.ktoeto.moneymanager.ui.view.PlanningView;
 import hhz.ktoeto.moneymanager.ui.view.StatsView;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
 @UIScope
-@Component
+@SpringComponent
 public class MainLayout extends AppLayout implements AfterNavigationObserver {
 
     private final Tabs menu;
@@ -71,7 +72,7 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
         return tabs;
     }
 
-    private Tab createTab(String title, Class<? extends com.vaadin.flow.component.Component> viewClass, String routePath) {
+    private Tab createTab(String title, Class<? extends Component> viewClass, String routePath) {
         RouterLink link = new RouterLink(title, viewClass);
         link.setHighlightCondition(HighlightConditions.sameLocation());
         Tab tab = new Tab(link);

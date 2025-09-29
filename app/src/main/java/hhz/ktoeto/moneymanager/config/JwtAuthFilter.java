@@ -1,5 +1,6 @@
 package hhz.ktoeto.moneymanager.config;
 
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import hhz.ktoeto.moneymanager.constant.CookieConstant;
 import hhz.ktoeto.moneymanager.service.AuthService;
 import jakarta.servlet.FilterChain;
@@ -9,7 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.lang.NonNull;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -19,14 +20,16 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
-@Component
+@SpringComponent
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final AuthService authService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
             List<Cookie> authCookies = Arrays.stream(request.getCookies())
                     .filter(cookie ->
@@ -44,8 +47,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             if (accessToken.isPresent()) {
                 authService.processAccessToken(accessToken.get(), refreshToken, response);
-            } else if (refreshToken.isPresent()) {
-                authService.processRefreshToken(refreshToken.get(), response);
+            } else {
+                refreshToken.ifPresent(s -> authService.processRefreshToken(s, response));
             }
         } catch (Exception e) {
             log.error("Exception occurred, while filtering the request", e);

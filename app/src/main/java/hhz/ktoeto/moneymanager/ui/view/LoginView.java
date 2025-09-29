@@ -7,6 +7,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.constant.CookieConstant;
 import hhz.ktoeto.moneymanager.constant.RouteName;
@@ -18,11 +19,10 @@ import hhz.ktoeto.moneymanager.user.model.RegisterRequest;
 import hhz.ktoeto.moneymanager.user.service.UserService;
 import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 @Slf4j
 @UIScope
-@Component
+@SpringComponent
 @AnonymousAllowed
 @Route(RouteName.LOGIN)
 public class LoginView extends VerticalLayout {
@@ -74,7 +74,7 @@ public class LoginView extends VerticalLayout {
                 registerForm.clear();
                 loginForm.setVisible(true);
             } catch (Exception ex) {
-                log.error("Exception occurred, while trying to register", e);
+                log.error("Exception occurred, while trying to register", ex);
             }
         });
 

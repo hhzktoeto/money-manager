@@ -2,11 +2,11 @@ package hhz.ktoeto.moneymanager.ui.component;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.transaction.model.transaction.Transaction;
 import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
-import org.springframework.stereotype.Component;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -14,10 +14,10 @@ import java.time.temporal.ChronoField;
 import java.util.Locale;
 
 @UIScope
-@Component
+@SpringComponent
 public class TransactionsGrid extends Grid<Transaction> {
 
-    private final TransactionService transactionService;
+    private final transient  TransactionService transactionService;
 
     private static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
             .appendPattern("dd ")

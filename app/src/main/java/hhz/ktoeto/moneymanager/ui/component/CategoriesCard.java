@@ -3,17 +3,17 @@ package hhz.ktoeto.moneymanager.ui.component;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.card.Card;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.transaction.model.category.Category;
 import hhz.ktoeto.moneymanager.transaction.service.CategoryService;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
-import org.springframework.stereotype.Component;
 
 @UIScope
-@Component
+@SpringComponent
 public class CategoriesCard extends Card {
 
-    private final CategoryService categoryService;
+    private final transient  CategoryService categoryService;
 
     public CategoriesCard(CategoryService categoryService) {
         this.categoryService = categoryService;
