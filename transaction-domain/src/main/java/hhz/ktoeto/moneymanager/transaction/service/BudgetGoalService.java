@@ -29,19 +29,11 @@ public class BudgetGoalService {
         return repository.findAllByUserId(userId);
     }
 
-    public BudgetGoal getById(long id, long userId) {
-        BudgetGoal goal = getGoalFromRepository(id);
-        if (goal.getUserId() != userId) {
-            throw new NonOwnerRequestException("User with id %d requested a budget goal, which owner is user with id %d".formatted(userId, goal.getUserId()));
-        }
-        return goal;
-    }
-
     @Transactional
     public BudgetGoal create(BudgetGoalDTO dto, long userId) {
         log.debug("Creating budget goal");
         BudgetGoal goal = mapper.toEntity(dto);
-        Category category = categoryService.findByNameAndUserId(dto.category(), userId)
+        Category category = categoryService.getByNameAndUserId(dto.category(), userId)
                 .orElseGet(() -> categoryService.create(new CategoryDTO(dto.category()), userId));
 
         goal.setUserId(userId);
@@ -56,7 +48,7 @@ public class BudgetGoalService {
         BudgetGoal goal = getGoalFromRepository(dto.getId());
 
         if (!goal.getCategory().getName().equals(dto.getCategory().getName())) {
-            Category category = categoryService.findByNameAndUserId(dto.getCategory().getName(), userId)
+            Category category = categoryService.getByNameAndUserId(dto.getCategory().getName(), userId)
                     .orElseGet(() -> categoryService.create(new CategoryDTO(dto.getCategory().getName()), userId));
             goal.setCategory(category);
         }

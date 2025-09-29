@@ -1,6 +1,5 @@
 package hhz.ktoeto.moneymanager.ui.component;
 
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.card.Card;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
@@ -18,47 +17,45 @@ import java.util.Objects;
 @SpringComponent
 public class SummaryCards extends HorizontalLayout {
 
-    private final transient  TransactionService transactionService;
+    private final transient TransactionService transactionService;
 
-    private final Card incomesCard;
-    private final Card expensesCard;
-    private final Card totalCard;
+
+    private final Card incomesCard = new Card();
+    private final Card expensesCard = new Card();
+    private final Card totalCard = new Card();
 
     public SummaryCards(TransactionService transactionService) {
         this.transactionService = transactionService;
-        this.incomesCard = new Card();
-        this.expensesCard = new Card();
-        this.totalCard = new Card();
 
         incomesCard.setHeader(new H1("Доходы"));
         expensesCard.setHeader(new H1("Расходы"));
         totalCard.setHeader(new H1("Баланс"));
+
+        refresh();
+        add(incomesCard, expensesCard, totalCard);
     }
 
-    @Override
-    protected void onAttach(AttachEvent attachEvent) {
-        super.onAttach(attachEvent);
+    public void refresh() {
+        List<Transaction> transactions = transactionService.getAll(SecurityUtils.getCurrentUser().getId());
 
-        Long userId = SecurityUtils.getCurrentUser().getId();
-        List<Transaction> transactions = transactionService.getAll(userId);
         Double incomes = transactions.stream()
-                .filter(transaction -> Objects.equals(Transaction.Type.INCOME, transaction.getType()))
-                .mapToDouble(transaction -> transaction.getAmount().doubleValue())
+                .filter(t -> Objects.equals(Transaction.Type.INCOME, t.getType()))
+                .mapToDouble(t -> t.getAmount().doubleValue())
                 .sum();
+
         Double expenses = transactions.stream()
-                .filter(transaction -> Objects.equals(Transaction.Type.EXPENSE, transaction.getType()))
-                .mapToDouble(transaction -> transaction.getAmount().doubleValue())
+                .filter(t -> Objects.equals(Transaction.Type.EXPENSE, t.getType()))
+                .mapToDouble(t -> t.getAmount().doubleValue())
                 .sum();
+
         double total = incomes - expenses;
 
-        this.incomesCard.removeAll();
-        this.expensesCard.removeAll();
-        this.totalCard.removeAll();
+        incomesCard.removeAll();
+        expensesCard.removeAll();
+        totalCard.removeAll();
 
-        this.incomesCard.add(new Span(incomes.toString()));
-        this.expensesCard.add(new Span(expenses.toString()));
-        this.totalCard.add(new Span(Double.toString(total)));
-
-        add(incomesCard, expensesCard, totalCard);
+        incomesCard.add(new Span(incomes.toString()));
+        expensesCard.add(new Span(expenses.toString()));
+        totalCard.add(new Span(Double.toString(total)));
     }
 }

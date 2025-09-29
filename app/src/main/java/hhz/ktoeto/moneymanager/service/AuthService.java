@@ -26,10 +26,6 @@ public class AuthService {
     private final UserService userService;
     private final TokenService tokenService;
 
-    public User getCurrentUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
-
     public void processAccessToken(String accessToken, Optional<String> refreshToken, HttpServletResponse response) {
         try {
             Long userId = tokenService.parseUserId(accessToken);

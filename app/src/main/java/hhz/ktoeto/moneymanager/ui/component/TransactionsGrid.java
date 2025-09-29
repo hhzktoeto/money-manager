@@ -1,7 +1,8 @@
 package hhz.ktoeto.moneymanager.ui.component;
 
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.data.provider.CallbackDataProvider;
+import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.transaction.model.transaction.Transaction;
@@ -17,7 +18,7 @@ import java.util.Locale;
 @SpringComponent
 public class TransactionsGrid extends Grid<Transaction> {
 
-    private final transient  TransactionService transactionService;
+    private final transient CallbackDataProvider<Transaction, Void> dataProvider;
 
     private static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
             .appendPattern("dd ")
@@ -27,19 +28,23 @@ public class TransactionsGrid extends Grid<Transaction> {
 
     public TransactionsGrid(TransactionService transactionService) {
         super(Transaction.class, false);
-        this.transactionService = transactionService;
+        this.dataProvider = DataProvider.fromCallbacks(
+                query -> transactionService.getAll(SecurityUtils.getCurrentUser().getId())
+                        .stream()
+                        .skip(query.getOffset())
+                        .limit(query.getLimit()),
+                query -> (int) transactionService.count(SecurityUtils.getCurrentUser().getId())
+        );
 
         addColumn(transaction -> transaction.getDate().format(FORMATTER)).setHeader("Дата");
         addColumn(transaction -> transaction.getCategory().getName()).setHeader("Категория");
         addColumn(transaction -> transaction.getAmount().toString()).setHeader("Сумма");
+
+        setDataProvider(dataProvider);
         setSizeFull();
-        setHeightFull();
     }
 
-    @Override
-    protected void onAttach(AttachEvent attachEvent) {
-        super.onAttach(attachEvent);
-        Long userId = SecurityUtils.getCurrentUser().getId();
-        setItems(this.transactionService.getAll(userId));
+    public void refreshTransactions() {
+        this.dataProvider.refreshAll();
     }
 }

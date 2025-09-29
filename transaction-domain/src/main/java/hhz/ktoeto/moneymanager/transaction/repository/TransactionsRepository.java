@@ -10,4 +10,6 @@ import java.util.List;
 public interface TransactionsRepository extends JpaRepository<Transaction, Long> {
 
     List<Transaction> findAllByUserId(long userId);
+
+    long countByUserId(long userId);
 }

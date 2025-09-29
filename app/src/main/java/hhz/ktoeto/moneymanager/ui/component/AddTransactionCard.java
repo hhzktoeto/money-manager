@@ -6,7 +6,9 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.transaction.model.category.Category;
+import hhz.ktoeto.moneymanager.transaction.model.transaction.TransactionDTO;
 import hhz.ktoeto.moneymanager.transaction.service.CategoryService;
+import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
 import hhz.ktoeto.moneymanager.ui.form.AddTransactionForm;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 
@@ -17,10 +19,17 @@ import java.util.List;
 public class AddTransactionCard extends Card {
 
     private final transient CategoryService categoryService;
+    private final transient TransactionService transactionService;
+    private final TransactionsGrid transactionsGrid;
+
     private final AddTransactionForm addTransactionForm = new AddTransactionForm();
 
-    public AddTransactionCard(CategoryService categoryService) {
+    public AddTransactionCard(CategoryService categoryService,
+                              TransactionService transactionService,
+                              TransactionsGrid transactionsGrid) {
         this.categoryService = categoryService;
+        this.transactionService = transactionService;
+        this.transactionsGrid = transactionsGrid;
 
         setWidthFull();
         add(new H2("Добавить транзакцию"));
@@ -32,7 +41,19 @@ public class AddTransactionCard extends Card {
         super.onAttach(attachEvent);
 
         Long userId = SecurityUtils.getCurrentUser().getId();
-        List<Category> categories = categoryService.findAll(userId);
-        addTransactionForm.addCategories(categories);
+        List<Category> categories = categoryService.getAll(userId);
+        this.addTransactionForm.addCategories(categories);
+
+        this.addTransactionForm.addSubmitListener(() -> {
+            TransactionDTO dto = new TransactionDTO(
+                    this.addTransactionForm.type(),
+                    this.addTransactionForm.category().getName(),
+                    this.addTransactionForm.date(),
+                    this.addTransactionForm.amount(),
+                    this.addTransactionForm.description()
+            );
+            transactionService.create(dto, userId);
+            transactionsGrid.refreshTransactions();
+        });
     }
 }

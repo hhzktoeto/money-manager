@@ -22,9 +22,17 @@ public class CategoryService {
     private final CategoryMapper mapper;
     private final CategoryRepository repository;
 
-    public List<Category> findAll(long userId) {
+    public List<Category> getAll(long userId) {
         log.info("Processing get categories request");
         return repository.findAllByUserId(userId);
+    }
+
+    public Optional<Category> getByNameAndUserId(String name, long userId) {
+        log.debug("Trying to find category by name {}", name);
+        Optional<Category> category = repository.findByNameAndUserId(name, userId);
+        log.info("Found category: {}", category);
+
+        return category;
     }
 
     @Transactional
@@ -52,14 +60,6 @@ public class CategoryService {
             throw new NonOwnerRequestException("User with id %d requested category deletion, which owner is user with id %d".formatted(userId, category.getUserId()));
         }
         repository.delete(category);
-    }
-
-    public Optional<Category> findByNameAndUserId(String name, long userId) {
-        log.debug("Trying to find category by name {}", name);
-        Optional<Category> category = repository.findByNameAndUserId(name, userId);
-        log.info("Found category: {}", category);
-
-        return category;
     }
 
     private Category getCategoryFromRepository(long id) {

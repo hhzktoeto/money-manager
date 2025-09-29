@@ -30,19 +30,11 @@ public class TransactionService {
         return repository.findAllByUserId(userId);
     }
 
-    public Transaction getById(long id, long userId) {
-        Transaction transaction = getTransactionFromRepository(id);
-        if (transaction.getUserId() != userId) {
-            throw new NonOwnerRequestException("User with id %d requested a transaction, which owner is user with id %d".formatted(userId, transaction.getUserId()));
-        }
-        return transaction;
-    }
-
     @Transactional
     public Transaction create(TransactionDTO dto, long userId) {
         log.info("Processing Transaction create request");
         Transaction transaction = mapper.toEntity(dto);
-        Category category = categoryService.findByNameAndUserId(dto.category(), userId)
+        Category category = categoryService.getByNameAndUserId(dto.category(), userId)
                 .orElseGet(() -> categoryService.create(new CategoryDTO(dto.category()), userId));
 
         transaction.setUserId(userId);
@@ -59,7 +51,7 @@ public class TransactionService {
         }
 
         if (!Objects.equals(transaction.getCategory().getName(), updated.getCategory().getName())) {
-            Category category = categoryService.findByNameAndUserId(updated.getCategory().getName(), userId)
+            Category category = categoryService.getByNameAndUserId(updated.getCategory().getName(), userId)
                     .orElseGet(() -> categoryService.create(new CategoryDTO(updated.getCategory().getName()), userId));
             updated.setCategory(category);
         }
@@ -74,6 +66,10 @@ public class TransactionService {
             throw new NonOwnerRequestException("User with id %d requested transaction deletion, which owner is user with id %d".formatted(userId, transaction.getUserId()));
         }
         repository.delete(transaction);
+    }
+
+    public long count(long userId) {
+        return repository.countByUserId(userId);
     }
 
     private Transaction getTransactionFromRepository(long id) {

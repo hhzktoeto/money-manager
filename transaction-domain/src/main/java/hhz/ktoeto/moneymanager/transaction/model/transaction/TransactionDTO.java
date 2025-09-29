@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record TransactionDTO(
-        String type,
+        Transaction.Type type,
         String category,
         LocalDate date,
         BigDecimal amount,

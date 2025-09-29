@@ -51,6 +51,9 @@ public class AddTransactionForm extends VerticalLayout {
         add(this.mainFieldsLayout, this.descriptionFieldLayout, this.addButtonLayout);
     }
 
+    public void addSubmitListener(Runnable listener) {
+        this.addButton.addClickListener(ignored -> listener.run());
+    }
     public void addCategories(List<Category> categories) {
         categories.sort(Comparator.comparing(Category::getName));
         this.categorySelect.setItems(categories);
