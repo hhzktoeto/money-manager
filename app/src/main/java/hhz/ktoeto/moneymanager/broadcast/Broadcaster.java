@@ -1,5 +1,6 @@
 package hhz.ktoeto.moneymanager.broadcast;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,11 +13,11 @@ import java.util.function.Consumer;
 public class Broadcaster {
     private final Map<Class<? extends BroadcastEvent>, List<Consumer<? extends BroadcastEvent>>> listeners = new ConcurrentHashMap<>();
 
-    public <T extends BroadcastEvent> void register(Class<T> eventType, Consumer<T> listener) {
+    public <T extends BroadcastEvent> void register(@NonNull Class<T> eventType, @NonNull Consumer<T> listener) {
         listeners.computeIfAbsent(eventType, k -> new CopyOnWriteArrayList<>()).add(listener);
     }
 
-    public <T extends BroadcastEvent> void unregister(Class<T> eventType, Consumer<T> listener) {
+    public <T extends BroadcastEvent> void unregister(@NonNull Class<T> eventType, @NonNull Consumer<T> listener) {
         List<Consumer<? extends BroadcastEvent>> eventListeners = listeners.get(eventType);
         if (eventListeners != null) {
             eventListeners.remove(listener);
@@ -24,7 +25,7 @@ public class Broadcaster {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends BroadcastEvent> void broadcast(T event) {
+    public <T extends BroadcastEvent> void broadcast(@NonNull T event) {
         List<Consumer<? extends BroadcastEvent>> eventListeners = listeners.get(event.getClass());
         if (eventListeners != null) {
             for (Consumer<? extends BroadcastEvent> listener : eventListeners) {
