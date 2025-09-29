@@ -62,6 +62,10 @@ public class CategoryService {
         repository.delete(category);
     }
 
+    public long count(long userId) {
+        return repository.countAllByUserId(userId);
+    }
+
     private Category getCategoryFromRepository(long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Could not find Transaction with id %s".formatted(id)));

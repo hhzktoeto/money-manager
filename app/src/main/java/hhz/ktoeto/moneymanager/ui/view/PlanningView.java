@@ -17,5 +17,6 @@ public class PlanningView extends VerticalLayout {
 
     public PlanningView(CategoriesCard categoriesCard) {
         add(categoriesCard);
+        setSizeFull();
     }
 }

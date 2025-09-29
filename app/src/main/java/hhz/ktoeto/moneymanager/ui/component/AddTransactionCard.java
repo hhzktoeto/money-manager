@@ -5,6 +5,8 @@ import com.vaadin.flow.component.card.Card;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import hhz.ktoeto.moneymanager.broadcast.Broadcaster;
+import hhz.ktoeto.moneymanager.broadcast.event.TransactionAddedEvent;
 import hhz.ktoeto.moneymanager.transaction.model.category.Category;
 import hhz.ktoeto.moneymanager.transaction.model.transaction.TransactionDTO;
 import hhz.ktoeto.moneymanager.transaction.service.CategoryService;
@@ -20,16 +22,16 @@ public class AddTransactionCard extends Card {
 
     private final transient CategoryService categoryService;
     private final transient TransactionService transactionService;
-    private final TransactionsGrid transactionsGrid;
+    private final transient Broadcaster broadcaster;
 
     private final AddTransactionForm addTransactionForm = new AddTransactionForm();
 
     public AddTransactionCard(CategoryService categoryService,
                               TransactionService transactionService,
-                              TransactionsGrid transactionsGrid) {
+                              Broadcaster broadcaster) {
         this.categoryService = categoryService;
         this.transactionService = transactionService;
-        this.transactionsGrid = transactionsGrid;
+        this.broadcaster = broadcaster;
 
         setWidthFull();
         add(new H2("Добавить транзакцию"));
@@ -53,7 +55,8 @@ public class AddTransactionCard extends Card {
                     this.addTransactionForm.description()
             );
             transactionService.create(dto, userId);
-            transactionsGrid.refreshTransactions();
+
+            broadcaster.broadcast(new TransactionAddedEvent());
         });
     }
 }
