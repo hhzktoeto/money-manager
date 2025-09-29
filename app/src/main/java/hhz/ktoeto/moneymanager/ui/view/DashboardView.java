@@ -24,7 +24,7 @@ public class DashboardView extends VerticalLayout {
                          TransactionsGrid transactionsGrid) {
         Div container = new Div();
         container.setWidth("100%");
-        container.setMaxWidth("1200px");
+        container.setMaxWidth("900px");
         container.getStyle().set("spacing", "10px");
 
         Card transactionsGridCard = new Card();
