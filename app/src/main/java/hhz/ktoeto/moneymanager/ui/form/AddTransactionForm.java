@@ -41,8 +41,8 @@ public class AddTransactionForm extends VerticalLayout {
                 "Расход" : "Доход");
         this.mainFieldsLayout.setAlignItems(Alignment.STRETCH);
         this.mainFieldsLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        this.descriptionFieldLayout.setWidthFull();
         this.descriptionFieldLayout.setAlignItems(Alignment.STRETCH);
-        this.descriptionFieldLayout.setSizeFull();
         this.addButtonLayout.setAlignItems(Alignment.STRETCH);
         this.addButtonLayout.setJustifyContentMode(JustifyContentMode.END);
         this.categorySelect.setItemLabelGenerator(Category::getName);

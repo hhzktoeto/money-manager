@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.component.layout;
+package hhz.ktoeto.moneymanager.ui.component;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
@@ -11,7 +11,6 @@ import hhz.ktoeto.moneymanager.broadcast.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.broadcast.event.TransactionUpdatedEvent;
 import hhz.ktoeto.moneymanager.transaction.model.transaction.Transaction;
 import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
-import hhz.ktoeto.moneymanager.ui.component.CustomCard;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +27,7 @@ public class SummaryCards extends HorizontalLayout {
     private final transient TransactionService transactionService;
     private final transient Broadcaster broadcaster;
 
-    private static final class SummaryCard extends CustomCard {
+    private static final class SummaryCard extends ComponentContainer {
     }
 
     private final SummaryCard incomesCard = new SummaryCard();

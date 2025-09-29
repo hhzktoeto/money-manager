@@ -7,9 +7,9 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.constant.RouteName;
-import hhz.ktoeto.moneymanager.ui.component.card.AddTransactionCard;
-import hhz.ktoeto.moneymanager.ui.component.layout.SummaryCards;
-import hhz.ktoeto.moneymanager.ui.component.grid.TransactionsGrid;
+import hhz.ktoeto.moneymanager.ui.component.container.AddTransactionContainer;
+import hhz.ktoeto.moneymanager.ui.component.SummaryCards;
+import hhz.ktoeto.moneymanager.ui.component.TransactionsGrid;
 import hhz.ktoeto.moneymanager.ui.layout.MainLayout;
 import jakarta.annotation.security.PermitAll;
 
@@ -19,7 +19,7 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = RouteName.MAIN, layout = MainLayout.class)
 public class DashboardView extends VerticalLayout {
 
-    public DashboardView(AddTransactionCard addTransactionCard,
+    public DashboardView(AddTransactionContainer addTransactionContainer,
                          SummaryCards summaryCards,
                          TransactionsGrid transactionsGrid) {
         Div container = new Div();
@@ -37,7 +37,7 @@ public class DashboardView extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
 
         container.add(
-                addTransactionCard,
+                addTransactionContainer,
                 summaryCards,
                 transactionsGridCard
         );

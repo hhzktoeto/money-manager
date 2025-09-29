@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.component.grid;
+package hhz.ktoeto.moneymanager.ui.component;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;

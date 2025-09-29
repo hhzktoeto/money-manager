@@ -1,14 +1,15 @@
 package hhz.ktoeto.moneymanager.ui.form;
 
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
-import lombok.Getter;
+import org.springframework.lang.Nullable;
 
-@Getter
 public class RegisterForm extends VerticalLayout {
 
     private final TextField loginField = new TextField("Логин");
@@ -57,6 +58,14 @@ public class RegisterForm extends VerticalLayout {
         this.phoneField.clear();
     }
 
+    public void addRegisterButtonClickListener(ComponentEventListener<ClickEvent<Button>> event) {
+        this.registerButton.addClickListener(event);
+    }
+
+    public void addOpenLoginButtonClickListener(ComponentEventListener<ClickEvent<Button>> event) {
+        this.openLoginButton.addClickListener(event);
+    }
+
     public String login() {
         return this.loginField.getValue();
     }
@@ -65,11 +74,11 @@ public class RegisterForm extends VerticalLayout {
         return this.passwordField.getValue();
     }
 
-    public String email() {
-        return this.emailField.getValue();
+    public @Nullable String email() {
+        return this.emailField.getOptionalValue().orElse(null);
     }
 
-    public String phone() {
-        return this.phoneField.getValue();
+    public @Nullable String phone() {
+        return this.phoneField.getOptionalValue().orElse(null);
     }
 }

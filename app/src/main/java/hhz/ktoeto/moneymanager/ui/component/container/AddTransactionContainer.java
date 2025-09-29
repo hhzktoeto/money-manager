@@ -1,7 +1,6 @@
-package hhz.ktoeto.moneymanager.ui.component.card;
+package hhz.ktoeto.moneymanager.ui.component.container;
 
 import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.broadcast.Broadcaster;
@@ -10,7 +9,7 @@ import hhz.ktoeto.moneymanager.transaction.model.category.Category;
 import hhz.ktoeto.moneymanager.transaction.model.transaction.TransactionDTO;
 import hhz.ktoeto.moneymanager.transaction.service.CategoryService;
 import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
-import hhz.ktoeto.moneymanager.ui.component.CustomCard;
+import hhz.ktoeto.moneymanager.ui.component.ComponentContainer;
 import hhz.ktoeto.moneymanager.ui.form.AddTransactionForm;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 
@@ -18,7 +17,7 @@ import java.util.List;
 
 @UIScope
 @SpringComponent
-public class AddTransactionCard extends CustomCard {
+public class AddTransactionContainer extends ComponentContainer {
 
     private final transient CategoryService categoryService;
     private final transient TransactionService transactionService;
@@ -26,17 +25,15 @@ public class AddTransactionCard extends CustomCard {
 
     private final AddTransactionForm addTransactionForm = new AddTransactionForm();
 
-    public AddTransactionCard(CategoryService categoryService,
-                              TransactionService transactionService,
-                              Broadcaster broadcaster) {
+    public AddTransactionContainer(CategoryService categoryService,
+                                   TransactionService transactionService,
+                                   Broadcaster broadcaster) {
         this.categoryService = categoryService;
         this.transactionService = transactionService;
         this.broadcaster = broadcaster;
 
-        addClassName("card");
-        setWidthFull();
-        add(new H2("Добавить транзакцию"));
-        add(this.addTransactionForm);
+        setHeader("Добавить Транзакцию");
+        setContent(this.addTransactionForm);
     }
 
     @Override
