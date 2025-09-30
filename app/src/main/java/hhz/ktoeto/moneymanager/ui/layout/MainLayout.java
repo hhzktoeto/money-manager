@@ -1,81 +1,41 @@
 package hhz.ktoeto.moneymanager.ui.layout;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.router.AfterNavigationEvent;
-import com.vaadin.flow.router.AfterNavigationObserver;
-import com.vaadin.flow.router.HighlightConditions;
-import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.constant.RouteName;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.view.DashboardView;
 import hhz.ktoeto.moneymanager.ui.view.PlanningView;
 import hhz.ktoeto.moneymanager.ui.view.StatsView;
+import hhz.ktoeto.moneymanager.utils.RouterUtils;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @UIScope
 @SpringComponent
-public class MainLayout extends AppLayout implements AfterNavigationObserver {
-
-    private final Tabs menu;
-    private final Map<String, Tab> tabsByRoute = new HashMap<>();
+public class MainLayout extends AppLayout {
 
     public MainLayout() {
         H1 title = new H1("Money Manager");
+        HorizontalLayout navigation = new HorizontalLayout(
+                RouterUtils.createLink(null,  DashboardView.class, VaadinIcon.HOME),
+                RouterUtils.createLink(null, StatsView.class, VaadinIcon.PIE_BAR_CHART),
+                RouterUtils.createLink(null, PlanningView.class, VaadinIcon.CALC_BOOK)
+        );
 
-        DrawerToggle toggle = new DrawerToggle();
+        navigation.addClassNames(
+                LumoUtility.Position.ABSOLUTE,
+                LumoUtility.Width.FULL,
+                LumoUtility.AlignItems.CENTER,
+                LumoUtility.JustifyContent.CENTER,
+                LumoUtility.Height.MEDIUM,
+                LumoUtility.Gap.LARGE
+        );
 
-        Button logOut = new Button(new Icon(VaadinIcon.SIGN_OUT));
-        logOut.addClickListener(ignored -> log.info("Чел нажал на выйти!"));
-
-        HorizontalLayout header = new HorizontalLayout(toggle, title, logOut);
-        header.setWidthFull();
-        header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
-
-        addToNavbar(header);
-        Tabs tabs = createMenuTabs();
-        tabs.setOrientation(Tabs.Orientation.VERTICAL);
-        addToDrawer(tabs);
-
-        this.menu = tabs;
-    }
-
-    @Override
-    public void afterNavigation(AfterNavigationEvent afterNavigationEvent) {
-        String path = afterNavigationEvent.getLocation().getPath();
-        Tab tab = tabsByRoute.getOrDefault(path, tabsByRoute.get(""));
-        menu.setSelectedTab(tab);
-    }
-
-    private Tabs createMenuTabs() {
-        Tabs tabs = new Tabs();
-        tabs.setOrientation(Tabs.Orientation.VERTICAL);
-        tabs.add(createTab("Главная", DashboardView.class, RouteName.MAIN));
-        tabs.add(createTab("Статистика", StatsView.class, RouteName.STATS));
-        tabs.add(createTab("Планирование", PlanningView.class, RouteName.PLANNING));
-
-        return tabs;
-    }
-
-    private Tab createTab(String title, Class<? extends Component> viewClass, String routePath) {
-        RouterLink link = new RouterLink(title, viewClass);
-        link.setHighlightCondition(HighlightConditions.sameLocation());
-        Tab tab = new Tab(link);
-        tabsByRoute.put(routePath, tab);
-        return tab;
+        addToNavbar(title);
+        addToNavbar(true, navigation);
     }
 }

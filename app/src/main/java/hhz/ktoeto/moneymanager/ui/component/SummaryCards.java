@@ -5,6 +5,7 @@ import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.broadcast.Broadcaster;
 import hhz.ktoeto.moneymanager.broadcast.event.TransactionAddedEvent;
 import hhz.ktoeto.moneymanager.broadcast.event.TransactionDeletedEvent;
@@ -38,6 +39,9 @@ public class SummaryCards extends HorizontalLayout {
         this.transactionService = transactionService;
         this.broadcaster = broadcaster;
 
+        addClassNames(
+                LumoUtility.Width.FULL
+        );
         add(incomesCard, expensesCard, totalCard);
     }
 

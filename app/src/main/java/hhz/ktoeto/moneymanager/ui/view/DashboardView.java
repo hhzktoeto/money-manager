@@ -6,6 +6,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.constant.RouteName;
 import hhz.ktoeto.moneymanager.ui.component.container.AddTransactionContainer;
 import hhz.ktoeto.moneymanager.ui.component.SummaryCards;
@@ -25,16 +26,10 @@ public class DashboardView extends VerticalLayout {
         Div container = new Div();
         container.setWidth("100%");
         container.setMaxWidth("900px");
-        container.getStyle().set("spacing", "10px");
 
         Card transactionsGridCard = new Card();
         transactionsGridCard.add(transactionsGrid);
         transactionsGridCard.setSizeFull();
-
-        setSpacing(true);
-        setPadding(true);
-        setHeightFull();
-        setAlignItems(Alignment.CENTER);
 
         container.add(
                 addTransactionContainer,
@@ -42,6 +37,10 @@ public class DashboardView extends VerticalLayout {
                 transactionsGridCard
         );
 
+        addClassNames(
+                LumoUtility.Height.FULL,
+                LumoUtility.AlignItems.CENTER
+        );
         add(container);
     }
 }
