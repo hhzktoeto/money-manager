@@ -16,6 +16,8 @@ import hhz.ktoeto.moneymanager.transaction.model.category.Category;
 import hhz.ktoeto.moneymanager.transaction.service.CategoryService;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 
+import java.util.Comparator;
+
 @UIScope
 @SpringComponent
 public class CategoriesCard extends Card {
@@ -28,6 +30,7 @@ public class CategoriesCard extends Card {
         this.dataProvider = DataProvider.fromCallbacks(
                 query -> categoryService.getAll(SecurityUtils.getCurrentUser().getId())
                         .stream()
+                        .sorted(Comparator.comparing(Category::getName))
                         .skip(query.getOffset())
                         .limit(query.getLimit()),
                 query -> (int) categoryService.count(SecurityUtils.getCurrentUser().getId())

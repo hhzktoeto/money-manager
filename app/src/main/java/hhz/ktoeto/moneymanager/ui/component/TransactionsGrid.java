@@ -16,6 +16,8 @@ import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 
+import java.util.Comparator;
+
 @UIScope
 @SpringComponent
 public class TransactionsGrid extends Grid<Transaction> {
@@ -29,18 +31,19 @@ public class TransactionsGrid extends Grid<Transaction> {
         this.dataProvider = DataProvider.fromCallbacks(
                 query -> transactionService.getAll(SecurityUtils.getCurrentUser().getId())
                         .stream()
+                        .sorted(Comparator.comparing(Transaction::getDate).reversed())
                         .skip(query.getOffset())
                         .limit(query.getLimit()),
                 query -> (int) transactionService.count(SecurityUtils.getCurrentUser().getId())
         );
 
-        addColumn(transaction -> FormattingUtils.formatDate(transaction.getDate())).setHeader("Дата");
-        addColumn(transaction -> transaction.getCategory().getName()).setHeader("Категория");
-        addColumn(transaction -> FormattingUtils.formatAmount(transaction.getAmount())).setHeader("Сумма");
+        this.addColumn(transaction -> FormattingUtils.formatDate(transaction.getDate())).setHeader("Дата");
+        this.addColumn(transaction -> transaction.getCategory().getName()).setHeader("Категория");
+        this.addColumn(transaction -> FormattingUtils.formatAmount(transaction.getAmount())).setHeader("Сумма");
 
-        setMultiSort(true);
-        setDataProvider(dataProvider);
-        setSizeFull();
+        this.setMultiSort(true);
+        this.setDataProvider(dataProvider);
+        this.setSizeFull();
     }
 
     @Override

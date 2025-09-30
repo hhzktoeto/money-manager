@@ -27,24 +27,26 @@ public class AddTransactionForm extends VerticalLayout {
     private final TextArea descriptionField = new TextArea("Описание");
     private final Button addButton = new Button("Добавить");
 
-    private final HorizontalLayout firstRow = new HorizontalLayout(typeSelect, categorySelect, amountField, datePicker);
-    private final HorizontalLayout secondRow = new HorizontalLayout(descriptionField, addButton);
-
     public AddTransactionForm() {
+        HorizontalLayout firstRow = new HorizontalLayout(typeSelect, categorySelect, amountField, datePicker);
+        HorizontalLayout secondRow = new HorizontalLayout(descriptionField, addButton);
         this.typeSelect.setLabel("Тип");
         this.typeSelect.setItems(Transaction.Type.values());
         this.typeSelect.setItemLabelGenerator(type -> Transaction.Type.EXPENSE == type ?
                 "Расход" : "Доход");
         this.categorySelect.setItemLabelGenerator(Category::getName);
 
-        this.firstRow.addClassNames(
+        firstRow.addClassNames(
+                LumoUtility.Width.FULL,
                 LumoUtility.JustifyContent.BETWEEN
         );
-        this.secondRow.addClassNames(
+        secondRow.addClassNames(
+                LumoUtility.AlignItems.CENTER,
+                LumoUtility.Width.FULL,
                 LumoUtility.JustifyContent.BETWEEN
         );
 
-        add(this.firstRow, this.secondRow);
+        add(firstRow, secondRow);
     }
 
     public void addSubmitListener(Runnable listener) {

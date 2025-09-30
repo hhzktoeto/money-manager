@@ -40,7 +40,10 @@ public class SummaryCards extends HorizontalLayout {
         this.broadcaster = broadcaster;
 
         addClassNames(
-                LumoUtility.Width.FULL
+                LumoUtility.Width.FULL,
+                LumoUtility.AlignContent.CENTER,
+                LumoUtility.JustifyContent.BETWEEN,
+                LumoUtility.Gap.XLARGE
         );
         add(incomesCard, expensesCard, totalCard);
     }

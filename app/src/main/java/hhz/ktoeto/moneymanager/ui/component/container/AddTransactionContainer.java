@@ -32,8 +32,8 @@ public class AddTransactionContainer extends ComponentContainer {
         this.transactionService = transactionService;
         this.broadcaster = broadcaster;
 
-        setHeader("Добавить Транзакцию");
-        setContent(this.addTransactionForm);
+        this.setHeader("Добавить Транзакцию");
+        this.setContent(this.addTransactionForm);
     }
 
     @Override
