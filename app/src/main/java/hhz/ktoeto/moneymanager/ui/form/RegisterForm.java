@@ -8,7 +8,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
-import org.springframework.lang.Nullable;
+
+import java.util.Optional;
 
 public class RegisterForm extends VerticalLayout {
 
@@ -74,11 +75,11 @@ public class RegisterForm extends VerticalLayout {
         return this.passwordField.getValue();
     }
 
-    public @Nullable String email() {
-        return this.emailField.getOptionalValue().orElse(null);
+    public Optional<String> email() {
+        return this.emailField.getOptionalValue();
     }
 
-    public @Nullable String phone() {
-        return this.phoneField.getOptionalValue().orElse(null);
+    public Optional<String> phone() {
+        return this.phoneField.getOptionalValue();
     }
 }

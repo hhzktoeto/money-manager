@@ -1,5 +1,7 @@
 package hhz.ktoeto.moneymanager.ui.view;
 
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -20,6 +22,10 @@ public class LoginView extends VerticalLayout {
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
+
+        loginContainer.setHeader(new H1(new Span("M"), new Span("oney "), new Span("M"), new Span("anager")));
+        loginContainer.addClassName("login-container");
+        loginContainer.addContentClassName("login-container-content");
 
         add(loginContainer);
     }

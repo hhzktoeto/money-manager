@@ -1,12 +1,8 @@
 package hhz.ktoeto.moneymanager.ui.component.container;
 
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.constant.CookieConstant;
 import hhz.ktoeto.moneymanager.constant.RouteName;
 import hhz.ktoeto.moneymanager.ui.component.ComponentContainer;
 import hhz.ktoeto.moneymanager.ui.form.LoginForm;
@@ -15,7 +11,7 @@ import hhz.ktoeto.moneymanager.user.model.AuthResponse;
 import hhz.ktoeto.moneymanager.user.model.LoginRequest;
 import hhz.ktoeto.moneymanager.user.model.RegisterRequest;
 import hhz.ktoeto.moneymanager.user.service.UserService;
-import jakarta.servlet.http.Cookie;
+import hhz.ktoeto.moneymanager.utils.CookieUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -44,9 +40,7 @@ public class LoginContainer extends ComponentContainer {
                 AuthResponse response = userService.login(
                         new LoginRequest(loginForm.login(), loginForm.password())
                 );
-
-                VaadinService.getCurrentResponse().addCookie(buildCookie(CookieConstant.ACCESS_TOKEN, response.accessToken(), CookieConstant.ACCESS_TOKEN_MAX_AGE));
-                VaadinService.getCurrentResponse().addCookie(buildCookie(CookieConstant.REFRESH_TOKEN, response.refreshToken(), CookieConstant.REFRESH_TOKEN_MAX_AGE));
+                CookieUtils.addTokensToClientsCookies(response.accessToken(), response.refreshToken());
 
                 UI.getCurrent().getPage().setLocation(RouteName.MAIN);
             } catch (Exception e) {
@@ -56,7 +50,10 @@ public class LoginContainer extends ComponentContainer {
         registerForm.addRegisterButtonClickListener(e -> {
             try {
                 userService.register(new RegisterRequest(
-                        registerForm.login(), registerForm.password(), registerForm.email(), registerForm.phone())
+                        registerForm.login(),
+                        registerForm.password(),
+                        registerForm.email().orElse(null),
+                        registerForm.phone().orElse(null))
                 );
 
                 loginForm.setLoginValue(registerForm.login());
@@ -70,17 +67,6 @@ public class LoginContainer extends ComponentContainer {
             }
         });
 
-        addClassName("login-card");
-        addContentClassName("login-card-content");
-        setHeader(new H1(new Span("M"), new Span("oney "), new Span("M"), new Span("anager")));
-        setContent(loginForm, registerForm);
-    }
-
-    private Cookie buildCookie(String name, String value, int maxAge) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(maxAge);
-        return cookie;
+        this.setContent(loginForm, registerForm);
     }
 }
