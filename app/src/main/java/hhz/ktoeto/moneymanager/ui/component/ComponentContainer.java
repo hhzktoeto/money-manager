@@ -10,8 +10,8 @@ public abstract class ComponentContainer extends Div {
     protected final Div content = new Div();
 
     protected ComponentContainer() {
-        addClassName("card");
-        this.header.setClassName("card-header");
+        addClassName("container");
+        this.header.setClassName("container-header");
 
         add(this.header, this.content);
     }

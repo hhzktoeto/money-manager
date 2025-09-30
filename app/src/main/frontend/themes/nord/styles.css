@@ -75,7 +75,7 @@ html {
     --lumo-disabled-text-color: rgba(145, 163, 182, 0.3);
 }
 
-.card {
+.container {
     width: 100%;
     background-color: var(--lumo-tint-10pct);
     border-radius: 12px;
@@ -86,25 +86,25 @@ html {
     gap: 1rem;
 }
 
-.card-header {
+.container-header {
     margin-bottom: 0.5rem;
 }
 
-.card.login-card {
+.container.login-container {
     width: 400px;
     max-width: 90%;
     min-width: 300px;
 }
 
-.card.login-card-content {
+.container.login-container-content {
     padding: 0.5em;
 }
 
-.card.login-card h1 {
+.container.login-container h1 {
     text-align: center;
 }
 
-.card.login-card h1 span:first-child,
-.card.login-card h1 span:nth-child(3) {
+.container.login-container h1 span:first-child,
+.container.login-container h1 span:nth-child(3) {
     color: var(--lumo-primary-color);
 }
