@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changes/transactions_V000__initial.sql
+  - include:
+      file: db/changelog/changes/budget-goals_V001__initial.sql
+  - include:
+      file: db/changelog/changes/categories_V002__add-cascade-deletion.sql
+  - include:
+      file: db/changelog/changes/users_V000__initial.sql
+  - include:
+      file: db/changelog/changes/users_V001__add-budget-goal.sql
