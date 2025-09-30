@@ -1,8 +1,11 @@
 package hhz.ktoeto.moneymanager.ui.component.container;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.constant.RouteName;
 import hhz.ktoeto.moneymanager.ui.component.ComponentContainer;
 import hhz.ktoeto.moneymanager.ui.form.LoginForm;
@@ -67,6 +70,8 @@ public class LoginContainer extends ComponentContainer {
             }
         });
 
+        this.setHeader(new H1(new Span("M"), new Span("oney "), new Span("M"), new Span("anager")));
+        this.addClassName("login-container");
         this.setContent(loginForm, registerForm);
     }
 }

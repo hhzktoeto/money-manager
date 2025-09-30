@@ -7,6 +7,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 
 import java.util.Optional;
@@ -14,42 +15,22 @@ import java.util.Optional;
 public class RegisterForm extends VerticalLayout {
 
     private final TextField loginField = new TextField("Логин");
-    private final TextField passwordField = new TextField("Пароль");
+    private final PasswordField passwordField = new PasswordField("Пароль");
     private final EmailField emailField = new EmailField("E-mail");
     private final TextField phoneField = new TextField("Телефон");
     private final Button openLoginButton = new Button("У меня есть аккаунт");
     private final Button registerButton = new Button("Регистрация");
 
+    private final HorizontalLayout buttonsLayout = new HorizontalLayout(openLoginButton, registerButton);
+
     public RegisterForm() {
         this.registerButton.addClickShortcut(Key.ENTER);
+        this.emailField.setPlaceholder("e-mail@example.com");
+        this.phoneField.setPlaceholder("+7");
 
-        this.openLoginButton.getStyle()
-                .set("color", "var(--lumo-primary-color)")
-                .set("background", "transparent")
-                .set("border", "none");
+        this.applyStyling();
 
-        this.registerButton.getStyle()
-                .set("background", "var(--lumo-primary-color)")
-                .set("color", "var(--lumo-primary-contrast-color)");
-
-        HorizontalLayout buttonsLayout = new HorizontalLayout(openLoginButton, registerButton);
-        buttonsLayout.setWidthFull();
-        buttonsLayout.setAlignItems(Alignment.CENTER);
-        buttonsLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
-
-        buttonsLayout.setAlignItems(Alignment.CENTER);
-        buttonsLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
-
-        setAlignItems(Alignment.STRETCH);
-        setSpacing(true);
-        setPadding(false);
-        add(
-                this.loginField,
-                this.passwordField,
-                this.emailField,
-                this.phoneField,
-                buttonsLayout
-        );
+        this.add(this.loginField, this.passwordField, this.emailField, this.phoneField, buttonsLayout);
     }
 
     public void clear() {
@@ -81,5 +62,16 @@ public class RegisterForm extends VerticalLayout {
 
     public Optional<String> phone() {
         return this.phoneField.getOptionalValue();
+    }
+
+    private void applyStyling() {
+        this.openLoginButton.addClassName("open-login-button");
+        this.registerButton.addClassName("register-button");
+        this.buttonsLayout.addClassName("buttons-layout");
+        this.loginField.addClassName("login-field");
+        this.passwordField.addClassName("password-field");
+        this.emailField.addClassName("email-field");
+        this.phoneField.addClassName("phone-field");
+        this.addClassName("register-form");
     }
 }

@@ -1,0 +1,9 @@
+.component-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background: var(--lumo-primary-color-10pct);
+    box-shadow: var(--lumo-box-shadow-s);
+}

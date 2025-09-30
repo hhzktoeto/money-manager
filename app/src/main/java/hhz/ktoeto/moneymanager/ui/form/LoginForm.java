@@ -17,29 +17,12 @@ public class LoginForm extends VerticalLayout {
     private final Button openRegisterButton = new Button("Зарегистрироваться");
     private final Button loginButton = new Button("Войти");
 
+    private final HorizontalLayout buttonsLayout = new HorizontalLayout(openRegisterButton, loginButton);
     public LoginForm() {
         this.loginButton.addClickShortcut(Key.ENTER);
 
-        this.openRegisterButton.getStyle()
-                .set("color", "var(--lumo-primary-color)")
-                .set("background", "transparent")
-                .set("border", "none");
-        this.loginButton.getStyle()
-                .set("background", "var(--lumo-primary-color)")
-                .set("color", "var(--lumo-primary-contrast-color)");
-
-        HorizontalLayout buttonsLayout = new HorizontalLayout(openRegisterButton, loginButton);
-        buttonsLayout.setWidthFull();
-        buttonsLayout.setAlignItems(Alignment.CENTER);
-        buttonsLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
-
-        this.loginField.setWidthFull();
-        this.passwordField.setWidthFull();
-
-        setAlignItems(Alignment.STRETCH);
-        setSpacing(true);
-        setPadding(false);
-        add(this.loginField, this.passwordField, buttonsLayout);
+        this.applyStyling();
+        this.add(this.loginField, this.passwordField, buttonsLayout);
     }
 
     public void addLoginButtonClickListener(ComponentEventListener<ClickEvent<Button>> event) {
@@ -64,5 +47,14 @@ public class LoginForm extends VerticalLayout {
 
     public void setPasswordValue(String password) {
         this.passwordField.setValue(password);
+    }
+
+    private void applyStyling() {
+        this.openRegisterButton.addClassName("open-register-button");
+        this.loginButton.addClassName("login-button");
+        this.buttonsLayout.addClassName("buttons-layout");
+        this.loginField.addClassName("login-field");
+        this.passwordField.addClassName("password-field");
+        this.addClassName("login-form");
     }
 }
