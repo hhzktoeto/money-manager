@@ -1,0 +1,25 @@
+.login-form {
+    align-items: stretch;
+}
+
+.open-register-button {
+    color: var(--lumo-primary-color);
+    background: transparent;
+    border: none;
+}
+
+.login-button {
+    background: var(--lumo-primary-color);
+    color: var(--lumo-primary-contrast-color);
+}
+
+.buttons-layout {
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.login-field,
+.password-field {
+    width: 100%;
+}

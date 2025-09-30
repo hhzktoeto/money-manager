@@ -20,26 +20,17 @@ public class LoginForm extends VerticalLayout {
     public LoginForm() {
         this.loginButton.addClickShortcut(Key.ENTER);
 
-        this.openRegisterButton.getStyle()
-                .set("color", "var(--lumo-primary-color)")
-                .set("background", "transparent")
-                .set("border", "none");
-        this.loginButton.getStyle()
-                .set("background", "var(--lumo-primary-color)")
-                .set("color", "var(--lumo-primary-contrast-color)");
+        this.openRegisterButton.addClassName("open-register-button");
+        this.loginButton.addClassName("login-button");
 
         HorizontalLayout buttonsLayout = new HorizontalLayout(openRegisterButton, loginButton);
-        buttonsLayout.setWidthFull();
-        buttonsLayout.setAlignItems(Alignment.CENTER);
-        buttonsLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        buttonsLayout.addClassName("buttons-layout");
 
-        this.loginField.setWidthFull();
-        this.passwordField.setWidthFull();
+        this.loginField.addClassName("login-field");
+        this.passwordField.addClassName("password-field");
 
-        setAlignItems(Alignment.STRETCH);
-        setSpacing(true);
-        setPadding(false);
-        add(this.loginField, this.passwordField, buttonsLayout);
+        this.addClassName("login-form");
+        this.add(this.loginField, this.passwordField, buttonsLayout);
     }
 
     public void addLoginButtonClickListener(ComponentEventListener<ClickEvent<Button>> event) {

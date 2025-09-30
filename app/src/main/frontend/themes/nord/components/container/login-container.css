@@ -1,0 +1,14 @@
+.login-container {
+    width: 100%;
+    max-width: 350px;
+    min-width: 300px;
+}
+
+.login-container h1 {
+    text-align: center;
+}
+
+.login-container h1 span:first-child,
+.login-container h1 span:nth-child(3) {
+    color: var(--lumo-primary-color);
+}
