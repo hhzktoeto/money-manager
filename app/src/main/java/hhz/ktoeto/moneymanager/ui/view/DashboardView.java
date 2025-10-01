@@ -11,7 +11,7 @@ import hhz.ktoeto.moneymanager.constant.RouteName;
 import hhz.ktoeto.moneymanager.ui.component.container.AddTransactionContainer;
 import hhz.ktoeto.moneymanager.ui.component.SummaryCards;
 import hhz.ktoeto.moneymanager.ui.component.TransactionsGrid;
-import hhz.ktoeto.moneymanager.ui.layout.MainLayout;
+import hhz.ktoeto.moneymanager.ui.MainLayout;
 import jakarta.annotation.security.PermitAll;
 
 @UIScope
