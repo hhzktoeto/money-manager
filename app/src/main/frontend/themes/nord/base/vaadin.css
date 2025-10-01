@@ -1,0 +1,7 @@
+vaadin-app-layout,
+vaadin-app-layout::part(navbar) {
+    justify-self: center;
+    border-radius: 0.75rem;
+    padding-left: 1rem;
+    width: 1200px;
+}

@@ -1,5 +1,6 @@
 @import 'components/index.css';
 @import "fonts/index.css";
+@import "base/index.css";
 
 [theme~="dark"] {
     --lumo-tint-5pct: rgba(161, 198, 237, 0.05);
