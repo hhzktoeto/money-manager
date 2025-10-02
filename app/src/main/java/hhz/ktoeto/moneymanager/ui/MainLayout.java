@@ -6,6 +6,7 @@ import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -32,10 +33,13 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
     private final HorizontalLayout desktopNavigationContainer = new HorizontalLayout();
     private final HorizontalLayout mobileNavigationContainer = new HorizontalLayout();
 
-    private final HorizontalLayout headerContainer = new HorizontalLayout(new H1("Money Manager"), desktopNavigationContainer);
+    private final HorizontalLayout headerContainer = new HorizontalLayout();
     private final Div contentContainer = new Div();
 
     public MainLayout() {
+        Image logo = new Image("logo.png", "Money Manager");
+        logo.addClassName("app-logo");
+        headerContainer.add(logo, desktopNavigationContainer);
         VerticalLayout root = this.getContent();
         root.addClassName("app-root");
         root.setPadding(false);

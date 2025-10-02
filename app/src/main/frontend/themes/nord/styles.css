@@ -58,7 +58,7 @@ html {
     width: 62rem;
     padding: 0.5rem;
     border-radius: 0.75rem;
-    background: var(--dark1);
+    background: var(--dark5);
     align-self: center;
     align-items: center;
 }
@@ -101,6 +101,11 @@ html {
 
 .app-mobile-nav-buttons {
 
+}
+
+.app-logo {
+    width: 150px;
+    height: 70px;
 }
 
 /* Desktop: хедер “слева” — благодаря STRETCH он на всю ширину; внутри:
