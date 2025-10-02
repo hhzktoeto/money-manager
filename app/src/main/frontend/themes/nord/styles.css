@@ -76,15 +76,31 @@ html {
     justify-content: center;
 }
 
+.app-desktop-nav-buttons {
+    color: var(--blue2);
+    gap: 0.5rem;
+    align-items: center;
+}
+.app-desktop-nav-buttons:hover {
+    color: var(--light1);
+}
+
 .app-mobile-nav {
-    width: 100%;
+    width: 100vw;
+    height: 5rem;
     display: none;
     position: sticky;
     bottom: 0;
     border-top: 1px solid var(--blue2);
     background: var(--dark1);
-    justify-items: center;
+    justify-content: center;
+    gap: 12vw;
+    align-items: center;
     padding: 0.75rem;
+}
+
+.app-mobile-nav-buttons {
+
 }
 
 /* Desktop: хедер “слева” — благодаря STRETCH он на всю ширину; внутри:
@@ -100,6 +116,6 @@ html {
         display: none;                /* десктопную навигацию скрываем */
     }
     .app-mobile-nav {
-        display: block;               /* показываем нижнюю навигацию */
+        display: flex;               /* показываем нижнюю навигацию */
     }
 }
