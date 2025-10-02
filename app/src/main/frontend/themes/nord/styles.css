@@ -2,6 +2,10 @@
 @import "fonts/index.css";
 @import "base/index.css";
 
+html {
+    overflow-y: scroll; /* кросс-браузерный базовый */
+}
+
 [theme~="dark"] {
     --lumo-tint-5pct: rgba(161, 198, 237, 0.05);
     --lumo-tint-10pct: rgba(161, 198, 237, 0.1);
@@ -43,4 +47,88 @@
     --lumo-success-contrast-color: #2d3829;
     --lumo-base-color: #3b4252;
     --lumo-disabled-text-color: rgba(145, 163, 182, 0.3);
+}
+
+:root {
+    --app-max-width: 1200px;
+    --app-navbar-height: 56px;
+}
+
+.container {
+    max-width: var(--app-max-width);
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--lumo-space-m);
+    box-sizing: border-box;
+}
+
+.app-navbar {
+    display: flex;
+    align-items: center;
+    gap: var(--lumo-space-m);
+}
+
+/* Чтобы центр не «прыгал» при появлении оверлея */
+html {
+    overflow-y: scroll;
+    scrollbar-gutter: stable both-edges;
+}
+
+/* ======= ВЫЕЗЖАЮЩЕЕ МЕНЮ ======= */
+.top-menu {
+    position: fixed;
+    top: var(--app-navbar-height);
+    left: max(0px, calc((100vw - var(--app-max-width)) / 2));
+    width: 320px;
+    max-height: calc(100vh - var(--app-navbar-height));
+    overflow: auto;
+    background: var(--lumo-base-color);
+    box-shadow: var(--lumo-box-shadow-l);
+    border-radius: var(--lumo-border-radius-m);
+    z-index: 1001;
+
+    /* скрыто по умолчанию + анимация появления сверху */
+    opacity: 0;
+    transform: translateY(-12px);
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity 140ms ease, transform 180ms ease, visibility 0s linear 180ms;
+}
+
+.top-menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    visibility: visible;
+    transition: opacity 140ms ease, transform 180ms ease;
+}
+
+/* фон-оверлей */
+.top-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 120ms ease;
+}
+
+.top-menu-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Табам — компактность */
+.top-menu-tabs {
+    padding: var(--lumo-space-s);
+}
+
+/* Мобилка — тянем на всю ширину */
+@media (max-width: 900px) {
+    .top-menu {
+        left: 0;
+        width: 100vw;
+        border-radius: 0;
+    }
 }
