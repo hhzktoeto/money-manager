@@ -2,6 +2,8 @@ package hhz.ktoeto.moneymanager.ui;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.HasElement;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -33,6 +35,7 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
     public MainLayout() {
         Image logo = new Image("logo.png", "Money Manager");
         logo.addClassName("app-logo");
+        logo.addClickListener(event -> UI.getCurrent().navigate(DashboardView.class));
         headerContainer.add(logo, desktopNavigationContainer);
         VerticalLayout root = this.getContent();
         root.addClassName("app-root");
@@ -40,9 +43,9 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
         root.setSpacing(false);
 
         List<RouterLink> desktopRouters = List.of(
-                RouterUtils.createLink(DashboardView.class, "Главная", VaadinIcon.HOME.create()),
-                RouterUtils.createLink(StatsView.class, "Статистика", VaadinIcon.PIE_BAR_CHART.create()),
-                RouterUtils.createLink(PlanningView.class, "Планирование", VaadinIcon.CALC_BOOK.create())
+                RouterUtils.createLink(DashboardView.class, "Главная"),
+                RouterUtils.createLink(StatsView.class, "Статистика"),
+                RouterUtils.createLink(PlanningView.class, "Планирование")
         );
         desktopRouters.forEach(router -> {
             router.addClassName("app-desktop-nav-buttons");
