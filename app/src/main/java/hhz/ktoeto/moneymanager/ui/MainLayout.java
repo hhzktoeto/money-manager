@@ -1,8 +1,6 @@
 package hhz.ktoeto.moneymanager.ui;
 
-import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.HasElement;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
@@ -28,19 +26,24 @@ import java.util.List;
 public class MainLayout extends Composite<VerticalLayout> implements RouterLayout {
     private final HorizontalLayout desktopNavigationContainer = new HorizontalLayout();
     private final HorizontalLayout mobileNavigationContainer = new HorizontalLayout();
-
     private final HorizontalLayout headerContainer = new HorizontalLayout();
     private final Div contentContainer = new Div();
 
-    public MainLayout() {
-        Image logo = new Image("logo.png", "Money Manager");
-        logo.addClassName("app-logo");
-        logo.addClickListener(event -> UI.getCurrent().navigate(DashboardView.class));
-        headerContainer.add(logo, desktopNavigationContainer);
+    private final Button desktopAddTransactionButton = new Button("Добавить транзакцию");
+    private final Button mobileAddTransactionButton = new Button(VaadinIcon.PLUS.create());
+    private final Image appLogo = new Image("logo.png", "Money Manager");
+
+    public MainLayout(AddTransactionModal addTransactionModal) {
         VerticalLayout root = this.getContent();
-        root.addClassName("app-root");
+        root.addClassName("root");
         root.setPadding(false);
         root.setSpacing(false);
+
+        appLogo.addClickListener(event -> UI.getCurrent().navigate(DashboardView.class));
+
+        ComponentEventListener<ClickEvent<Button>> openAddTransaction = e -> addTransactionModal.open();
+        desktopAddTransactionButton.addClickListener(openAddTransaction);
+        mobileAddTransactionButton.addClickListener(openAddTransaction);
 
         List<RouterLink> desktopRouters = List.of(
                 RouterUtils.createLink(DashboardView.class, "Главная"),
@@ -48,7 +51,7 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
                 RouterUtils.createLink(PlanningView.class, "Планирование")
         );
         desktopRouters.forEach(router -> {
-            router.addClassName("app-desktop-nav-buttons");
+            router.addClassName("desktop-nav-buttons");
             router.setHighlightCondition(HighlightConditions.sameLocation());
             desktopNavigationContainer.add(router);
         });
@@ -59,17 +62,21 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
                 RouterUtils.createLink(PlanningView.class, VaadinIcon.CALC_BOOK.create())
         );
         mobileRouters.forEach(router -> {
-            router.addClassName("app-mobile-nav-buttons");
+            router.addClassName("mobile-nav-buttons");
             router.setHighlightCondition(HighlightConditions.sameLocation());
             mobileNavigationContainer.add(router);
         });
 
-        headerContainer.addClassName("app-header");
-        desktopNavigationContainer.addClassName("app-desktop-nav");
-        contentContainer.addClassName("app-content");
-        root.setFlexGrow(1, contentContainer);
-        mobileNavigationContainer.addClassName("app-mobile-nav");
+        appLogo.addClassName("logo");
+        headerContainer.addClassName("header");
+        desktopNavigationContainer.addClassName("desktop-nav");
+        mobileNavigationContainer.addClassName("mobile-nav");
+        desktopAddTransactionButton.addClassName("desktop-add-transaction-button");
+        mobileAddTransactionButton.addClassName("mobile-add-transaction-button");
+        contentContainer.addClassName("content");
 
+        headerContainer.add(appLogo, desktopNavigationContainer, desktopAddTransactionButton);
+        root.setFlexGrow(1, contentContainer);
         root.add(headerContainer, contentContainer, mobileNavigationContainer);
     }
 
