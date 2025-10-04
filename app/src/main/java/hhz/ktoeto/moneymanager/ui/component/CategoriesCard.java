@@ -14,8 +14,8 @@ import hhz.ktoeto.moneymanager.transaction.model.category.Category;
 import hhz.ktoeto.moneymanager.transaction.service.CategoryService;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import org.springframework.context.event.EventListener;
-
-import java.util.Comparator;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 @UIScope
 @SpringComponent
@@ -24,13 +24,17 @@ public class CategoriesCard extends Card {
     private final transient CallbackDataProvider<Category, Void> dataProvider;
 
     public CategoriesCard(CategoryService categoryService) {
+        long userId = SecurityUtils.getCurrentUser().getId();
         this.dataProvider = DataProvider.fromCallbacks(
-                query -> categoryService.getAll(SecurityUtils.getCurrentUser().getId())
-                        .stream()
-                        .sorted(Comparator.comparing(Category::getName))
-                        .skip(query.getOffset())
-                        .limit(query.getLimit()),
-                query -> (int) categoryService.count(SecurityUtils.getCurrentUser().getId())
+                query -> {
+                    PageRequest pageRequest = PageRequest.of(
+                            query.getOffset(),
+                            query.getPageSize(),
+                            Sort.by(Sort.Order.asc("name"))
+                    );
+                    return categoryService.getPage(userId, pageRequest).stream();
+                },
+                query -> (int) categoryService.count(userId)
         );
 
         Grid<Category> categoriesGrid = new Grid<>(Category.class, false);

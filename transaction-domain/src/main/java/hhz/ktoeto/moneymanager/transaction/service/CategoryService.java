@@ -9,6 +9,8 @@ import hhz.ktoeto.moneymanager.transaction.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,8 +25,13 @@ public class CategoryService {
     private final CategoryRepository repository;
 
     public List<Category> getAll(long userId) {
-        log.info("Processing get categories request");
+        log.debug("Fetching all categories for user with id {}", userId);
         return repository.findAllByUserId(userId);
+    }
+
+    public Page<Category> getPage(long userId, Pageable pageable) {
+        log.debug("Fetching categories for user with id {}, page {}, size {}", userId, pageable.getPageNumber(), pageable.getPageSize());
+        return repository.findByUserId(userId, pageable);
     }
 
     public Optional<Category> getByNameAndUserId(String name, long userId) {

@@ -14,8 +14,8 @@ import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import org.springframework.context.event.EventListener;
-
-import java.util.Comparator;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 @UIScope
 @SpringComponent
@@ -25,13 +25,21 @@ public class TransactionsGrid extends Grid<Transaction> {
 
     public TransactionsGrid(TransactionService transactionService) {
         super(Transaction.class, false);
+        long userId = SecurityUtils.getCurrentUser().getId();
         this.dataProvider = DataProvider.fromCallbacks(
-                query -> transactionService.getAll(SecurityUtils.getCurrentUser().getId())
-                        .stream()
-                        .sorted(Comparator.comparing(Transaction::getDate).reversed())
-                        .skip(query.getOffset())
-                        .limit(query.getLimit()),
-                query -> (int) transactionService.count(SecurityUtils.getCurrentUser().getId())
+                query -> {
+                    PageRequest pageRequest = PageRequest.of(
+                            query.getOffset(),
+                            query.getPageSize(),
+                            Sort.by(
+                                    Sort.Order.desc("date"),
+                                    Sort.Order.desc("createdAt")
+                            )
+                    );
+
+                    return transactionService.getPage(userId, pageRequest).stream();
+                },
+                query -> (int) transactionService.count(userId)
         );
 
         this.addColumn(transaction -> FormattingUtils.formatDate(transaction.getDate())).setHeader("Дата");

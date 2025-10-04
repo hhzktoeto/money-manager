@@ -11,9 +11,9 @@ import hhz.ktoeto.moneymanager.transaction.repository.BudgetGoalRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -24,9 +24,9 @@ public class BudgetGoalService {
     private final CategoryService categoryService;
     private final BudgetGoalRepository repository;
 
-    public List<BudgetGoal> getAll(long userId) {
-        log.debug("Fetching all budget goals");
-        return repository.findAllByUserId(userId);
+    public Page<BudgetGoal> getPage(long userId, Pageable pageable) {
+        log.debug("Fetching budget goals for user with id {}, page {}, size {}", userId, pageable.getPageNumber(), pageable.getPageSize());
+        return repository.findByUserId(userId, pageable);
     }
 
     @Transactional

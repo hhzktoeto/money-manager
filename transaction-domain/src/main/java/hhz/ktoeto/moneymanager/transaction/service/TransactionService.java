@@ -11,6 +11,8 @@ import hhz.ktoeto.moneymanager.transaction.repository.TransactionsRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +28,13 @@ public class TransactionService {
     private final TransactionsRepository repository;
 
     public List<Transaction> getAll(long userId) {
-        log.debug("Fetching all transactions ");
+        log.debug("Fetching all transactions for user with id {}", userId);
         return repository.findAllByUserId(userId);
+    }
+
+    public Page<Transaction> getPage(long userId, Pageable pageable) {
+        log.debug("Fetching transactions for user with id {}, page {}, size {}", userId, pageable.getPageNumber(), pageable.getPageSize());
+        return repository.findByUserId(userId, pageable);
     }
 
     @Transactional
