@@ -3,8 +3,7 @@ package hhz.ktoeto.moneymanager.ui.component.container;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.broadcast.Broadcaster;
-import hhz.ktoeto.moneymanager.broadcast.event.TransactionAddedEvent;
+import hhz.ktoeto.moneymanager.event.TransactionAddedEvent;
 import hhz.ktoeto.moneymanager.transaction.model.category.Category;
 import hhz.ktoeto.moneymanager.transaction.model.transaction.TransactionDTO;
 import hhz.ktoeto.moneymanager.transaction.service.CategoryService;
@@ -12,6 +11,7 @@ import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
 import hhz.ktoeto.moneymanager.ui.component.ComponentContainer;
 import hhz.ktoeto.moneymanager.ui.form.AddTransactionForm;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
@@ -21,16 +21,16 @@ public class AddTransactionContainer extends ComponentContainer {
 
     private final transient CategoryService categoryService;
     private final transient TransactionService transactionService;
-    private final transient Broadcaster broadcaster;
+    private final transient ApplicationEventPublisher eventPublisher;
 
     private final AddTransactionForm addTransactionForm = new AddTransactionForm();
 
     public AddTransactionContainer(CategoryService categoryService,
                                    TransactionService transactionService,
-                                   Broadcaster broadcaster) {
+                                   ApplicationEventPublisher eventPublisher) {
         this.categoryService = categoryService;
         this.transactionService = transactionService;
-        this.broadcaster = broadcaster;
+        this.eventPublisher = eventPublisher;
 
         this.setHeader("Добавить Транзакцию");
         this.setContent(this.addTransactionForm);
@@ -54,7 +54,7 @@ public class AddTransactionContainer extends ComponentContainer {
             );
             transactionService.create(dto, userId);
 
-            broadcaster.broadcast(new TransactionAddedEvent());
+            eventPublisher.publishEvent(new TransactionAddedEvent(this));
         });
     }
 }

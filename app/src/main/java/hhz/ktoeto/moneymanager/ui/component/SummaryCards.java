@@ -1,20 +1,19 @@
 package hhz.ktoeto.moneymanager.ui.component;
 
-import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.broadcast.Broadcaster;
-import hhz.ktoeto.moneymanager.broadcast.event.TransactionAddedEvent;
-import hhz.ktoeto.moneymanager.broadcast.event.TransactionDeletedEvent;
-import hhz.ktoeto.moneymanager.broadcast.event.TransactionUpdatedEvent;
+import hhz.ktoeto.moneymanager.event.TransactionAddedEvent;
+import hhz.ktoeto.moneymanager.event.TransactionDeletedEvent;
+import hhz.ktoeto.moneymanager.event.TransactionUpdatedEvent;
 import hhz.ktoeto.moneymanager.transaction.model.transaction.Transaction;
 import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,7 +25,6 @@ import java.util.Objects;
 public class SummaryCards extends HorizontalLayout {
 
     private final transient TransactionService transactionService;
-    private final transient Broadcaster broadcaster;
 
     private static final class SummaryCard extends ComponentContainer {
     }
@@ -35,9 +33,8 @@ public class SummaryCards extends HorizontalLayout {
     private final SummaryCard expensesCard = new SummaryCard();
     private final SummaryCard totalCard = new SummaryCard();
 
-    public SummaryCards(TransactionService transactionService, Broadcaster broadcaster) {
+    public SummaryCards(TransactionService transactionService) {
         this.transactionService = transactionService;
-        this.broadcaster = broadcaster;
 
         addClassNames(
                 LumoUtility.Width.FULL,
@@ -45,38 +42,18 @@ public class SummaryCards extends HorizontalLayout {
                 LumoUtility.JustifyContent.BETWEEN,
                 LumoUtility.Gap.XLARGE
         );
+
+        refresh();
         add(incomesCard, expensesCard, totalCard);
     }
 
-    @Override
-    protected void onAttach(AttachEvent attachEvent) {
-        super.onAttach(attachEvent);
-        refresh();
-
-        broadcaster.register(TransactionAddedEvent.class, this::onTransactionAdded);
-        broadcaster.register(TransactionDeletedEvent.class, this::onTransactionDeleted);
-        broadcaster.register(TransactionUpdatedEvent.class, this::onTransactionUpdated);
-    }
-
-    @Override
-    protected void onDetach(DetachEvent detachEvent) {
-        broadcaster.unregister(TransactionUpdatedEvent.class, this::onTransactionUpdated);
-        broadcaster.unregister(TransactionDeletedEvent.class, this::onTransactionDeleted);
-        broadcaster.unregister(TransactionAddedEvent.class, this::onTransactionAdded);
-
-        super.onDetach(detachEvent);
-    }
-
-    private void onTransactionAdded(TransactionAddedEvent ignored) {
-        refresh();
-    }
-
-    private void onTransactionDeleted(TransactionDeletedEvent ignored) {
-        refresh();
-    }
-
-    private void onTransactionUpdated(TransactionUpdatedEvent ignored) {
-        refresh();
+    @EventListener({
+            TransactionAddedEvent.class,
+            TransactionDeletedEvent.class,
+            TransactionUpdatedEvent.class}
+    )
+    private void onTransactionUpdate(TransactionAddedEvent ignored) {
+        UI.getCurrent().access(this::refresh);
     }
 
     private void refresh() {
