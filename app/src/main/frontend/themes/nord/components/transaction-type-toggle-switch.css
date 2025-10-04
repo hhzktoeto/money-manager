@@ -1,0 +1,70 @@
+.transaction-toggle-switch {
+    cursor: pointer;
+    user-select: none;
+}
+
+.transaction-toggle-switch .toggle-container {
+    position: relative;
+    border-radius: 1.5rem;
+    width: 200px;
+    height: 40px;
+    overflow: hidden;
+    gap: 0;
+    transition: background-color 0.3s ease;
+}
+
+.transaction-toggle-switch .toggle-knob {
+    position: absolute;
+    width: 6rem;
+    height: 2rem;
+    background-color: var(--lumo-base-color);
+    border-radius: 1rem;
+    box-shadow: var(--lumo-box-shadow-s);
+    transition: left 0.3s ease, background-color 0.3s ease;
+}
+
+.transaction-toggle-switch span {
+    color: var(--light4);
+    width: 100%;
+    text-align: center;
+    z-index: 2;
+    font-weight: bold;
+}
+
+.transaction-toggle-switch.expense .toggle-container {
+    background-color: var(--red-dark-30);
+}
+
+.transaction-toggle-switch.income .toggle-container {
+    background-color: var(--green-dark-30);
+}
+
+.transaction-toggle-switch.expense .expense-span {
+    color: var(--red-dark);
+    transition: color 0.3s ease;
+}
+
+.transaction-toggle-switch.expense .income-span {
+    color: var(--light4);
+    transition: color 0.3s ease;
+}
+
+.transaction-toggle-switch.income .income-span {
+    color: var(--green-dark);
+    transition: color 0.3s ease;
+}
+
+.transaction-toggle-switch.income .expense-span {
+    color: var(--light4);
+    transition: color 0.3s ease;
+}
+
+.transaction-toggle-switch.expense .toggle-knob {
+    left: 3px;
+    background-color: var(--red);
+}
+
+.transaction-toggle-switch.income .toggle-knob {
+    left: 103px;
+    background-color: var(--green);
+}

@@ -15,8 +15,12 @@
     --blue4: #5e81ac;
     --blue5: rgba(24, 60, 107, 0.9);
     --red: #bf616a;
+    --red-dark: #6e353b;
+    --red-dark-30: rgba(110, 53, 59, 0.3);
     --orange: #d08770;
     --yellow: #ebcb8b;
     --green: #a3be8c;
+    --green-dark: #435b2f;
+    --green-dark-30: rgba(67, 91, 47, 0.3);
     --purple: #b48ead;
 }
