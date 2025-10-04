@@ -19,7 +19,6 @@
         <module>app</module>
         <module>user-domain</module>
         <module>transaction-domain</module>
-        <module>shared</module>
     </modules>
 
     <properties>

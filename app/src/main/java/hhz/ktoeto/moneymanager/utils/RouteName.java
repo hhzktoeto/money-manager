@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.constant;
+package hhz.ktoeto.moneymanager.utils;
 
 public final class RouteName {
 

@@ -1,7 +1,7 @@
 package hhz.ktoeto.moneymanager.config;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import hhz.ktoeto.moneymanager.constant.CookieConstant;
+import hhz.ktoeto.moneymanager.utils.CookieConstant;
 import hhz.ktoeto.moneymanager.service.AuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

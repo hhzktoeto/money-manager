@@ -1,6 +1,6 @@
 package hhz.ktoeto.moneymanager.service;
 
-import hhz.ktoeto.moneymanager.constant.CookieConstant;
+import hhz.ktoeto.moneymanager.utils.CookieConstant;
 import hhz.ktoeto.moneymanager.user.model.AuthResponse;
 import hhz.ktoeto.moneymanager.user.model.User;
 import hhz.ktoeto.moneymanager.user.service.TokenService;

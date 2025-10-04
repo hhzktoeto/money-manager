@@ -5,7 +5,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.constant.RouteName;
+import hhz.ktoeto.moneymanager.utils.RouteName;
 import hhz.ktoeto.moneymanager.ui.component.container.LoginContainer;
 import lombok.extern.slf4j.Slf4j;
 

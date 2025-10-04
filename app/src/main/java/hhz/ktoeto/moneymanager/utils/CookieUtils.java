@@ -1,7 +1,6 @@
 package hhz.ktoeto.moneymanager.utils;
 
 import com.vaadin.flow.server.VaadinService;
-import hhz.ktoeto.moneymanager.constant.CookieConstant;
 import jakarta.servlet.http.Cookie;
 
 import java.util.List;

@@ -56,11 +56,6 @@
             <artifactId>transaction-domain</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>hhz.ktoeto</groupId>
-            <artifactId>shared</artifactId>
-            <version>1.0.0</version>
-        </dependency>
     </dependencies>
 
     <build>

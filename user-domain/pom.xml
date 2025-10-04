@@ -58,11 +58,5 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>${jwt.api.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>hhz.ktoeto</groupId>
-            <artifactId>shared</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 </project>
