@@ -1,0 +1,23 @@
+.add-transaction-modal {
+    position: absolute;
+    justify-self: center;
+    align-items: stretch;
+    width: 40rem;
+}
+
+.add-transaction-modal-header {
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.add-transaction-modal-content {
+    padding: 0;
+    width: 100%;
+    align-items: baseline;
+    justify-content: stretch;
+}
+
+.add-transaction-modal-category {
+    padding: 0;
+}

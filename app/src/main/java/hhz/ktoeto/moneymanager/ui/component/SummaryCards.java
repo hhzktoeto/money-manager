@@ -1,6 +1,7 @@
 package hhz.ktoeto.moneymanager.ui.component;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -26,12 +27,9 @@ public class SummaryCards extends HorizontalLayout {
 
     private final transient TransactionService transactionService;
 
-    private static final class SummaryCard extends ComponentContainer {
-    }
-
-    private final SummaryCard incomesCard = new SummaryCard();
-    private final SummaryCard expensesCard = new SummaryCard();
-    private final SummaryCard totalCard = new SummaryCard();
+    private final ComponentContainer incomesCard = new ComponentContainer("Доходы");
+    private final ComponentContainer expensesCard = new ComponentContainer("Расходы");
+    private final ComponentContainer totalCard = new ComponentContainer("Баланс");
 
     public SummaryCards(TransactionService transactionService) {
         this.transactionService = transactionService;
@@ -71,16 +69,8 @@ public class SummaryCards extends HorizontalLayout {
                 .orElse(BigDecimal.ZERO);
         BigDecimal total = incomes.subtract(expenses);
 
-        incomesCard.removeAll();
-        expensesCard.removeAll();
-        totalCard.removeAll();
-
-        incomesCard.setHeader("Доходы");
-        expensesCard.setHeader("Расходы");
-        totalCard.setHeader("Баланс");
-
-        incomesCard.add(FormattingUtils.formatAmountWithCurrency(incomes));
-        expensesCard.add(FormattingUtils.formatAmountWithCurrency(expenses));
-        totalCard.add(FormattingUtils.formatAmountWithCurrency(total));
+        incomesCard.setContent(new Span(FormattingUtils.formatAmountWithCurrency(incomes)));
+        expensesCard.setContent(new Span(FormattingUtils.formatAmountWithCurrency(expenses)));
+        totalCard.setContent(new Span(FormattingUtils.formatAmountWithCurrency(total)));
     }
 }
