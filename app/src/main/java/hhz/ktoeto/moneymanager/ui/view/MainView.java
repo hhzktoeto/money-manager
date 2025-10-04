@@ -18,11 +18,11 @@ import jakarta.annotation.security.PermitAll;
 @SpringComponent
 @PermitAll
 @Route(value = RouteName.MAIN, layout = MainLayout.class)
-public class DashboardView extends VerticalLayout {
+public class MainView extends VerticalLayout {
 
-    public DashboardView(AddTransactionContainer addTransactionContainer,
-                         SummaryCards summaryCards,
-                         TransactionsGrid transactionsGrid) {
+    public MainView(AddTransactionContainer addTransactionContainer,
+                    SummaryCards summaryCards,
+                    TransactionsGrid transactionsGrid) {
         Div container = new Div();
         container.setWidth("100%");
         container.setMaxWidth("900px");

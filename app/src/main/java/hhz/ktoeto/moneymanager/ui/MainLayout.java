@@ -12,7 +12,7 @@ import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.ui.view.DashboardView;
+import hhz.ktoeto.moneymanager.ui.view.MainView;
 import hhz.ktoeto.moneymanager.ui.view.PlanningView;
 import hhz.ktoeto.moneymanager.ui.view.StatsView;
 import hhz.ktoeto.moneymanager.utils.RouterUtils;
@@ -39,14 +39,14 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
         root.setPadding(false);
         root.setSpacing(false);
 
-        appLogo.addClickListener(event -> UI.getCurrent().navigate(DashboardView.class));
+        appLogo.addClickListener(event -> UI.getCurrent().navigate(MainView.class));
 
         ComponentEventListener<ClickEvent<Button>> openAddTransaction = e -> addTransactionModal.open();
         desktopAddTransactionButton.addClickListener(openAddTransaction);
         mobileAddTransactionButton.addClickListener(openAddTransaction);
 
         List<RouterLink> desktopRouters = List.of(
-                RouterUtils.createLink(DashboardView.class, "Главная"),
+                RouterUtils.createLink(MainView.class, "Главная"),
                 RouterUtils.createLink(StatsView.class, "Статистика"),
                 RouterUtils.createLink(PlanningView.class, "Планирование")
         );
@@ -57,7 +57,7 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
         });
 
         List<RouterLink> mobileRouters = List.of(
-                RouterUtils.createLink(DashboardView.class, VaadinIcon.HOME.create()),
+                RouterUtils.createLink(MainView.class, VaadinIcon.HOME.create()),
                 RouterUtils.createLink(StatsView.class, VaadinIcon.PIE_BAR_CHART.create()),
                 RouterUtils.createLink(PlanningView.class, VaadinIcon.CALC_BOOK.create())
         );
