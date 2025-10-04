@@ -3,14 +3,16 @@
 }
 
 .open-login-button {
-    color: var(--lumo-primary-color);
+    cursor: pointer;
+    color: var(--blue2);
     background: transparent;
     border: none;
 }
 
 .register-button {
-    background: var(--lumo-primary-color);
-    color: var(--lumo-primary-contrast-color);
+    cursor: pointer;
+    background: var(--blue2);
+    color: var(--blue5);
 }
 
 .buttons-layout {

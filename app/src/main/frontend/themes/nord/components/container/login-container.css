@@ -10,5 +10,5 @@
 
 .login-container h1 span:first-child,
 .login-container h1 span:nth-child(3) {
-    color: var(--lumo-primary-color);
+    color: var(--blue2);
 }
