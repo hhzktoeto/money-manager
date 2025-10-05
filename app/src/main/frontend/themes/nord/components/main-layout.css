@@ -1,15 +1,10 @@
-.logo {
-    width: 11rem;
-    cursor: pointer;
-}
-
 .root {
     width: 100vw;
     height: 100vh;
     align-items: stretch;
 }
 
-.header {
+.root .header {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
@@ -22,29 +17,39 @@
     border-bottom-color: var(--blue2);
     align-self: center;
 }
-.header > :last-child {
-    justify-self: end;
+
+.root .header .logo {
+    width: 11rem;
+    cursor: pointer;
 }
 
-.content {
+.root .header .desktop-nav {
+    align-self: center;
+}
+
+.root .header .desktop-nav .router {
+    color: var(--blue2);
+}
+
+.root .header .desktop-nav .router:hover,
+.root .header .desktop-nav .router[highlight] {
+    color: var(--light1);
+}
+
+.root .header .add-transaction-button {
+    justify-self: end;
+    cursor: pointer;
+    color: var(--blue5);
+    background-color: var(--blue2);
+}
+
+.root .content {
     overflow: auto;
     padding: var(--lumo-space-m);
     min-height: 0; /* чтобы работал overflow в flex/grid родителях */
 }
 
-.desktop-nav {
-    align-self: center;
-}
-
-.desktop-nav-buttons {
-    color: var(--blue2);
-}
-.desktop-nav-buttons:hover,
-.desktop-nav-buttons[highlight]{
-    color: var(--light1);
-}
-
-.mobile-nav {
+.root .mobile-nav {
     width: 100vw;
     height: 5rem;
     display: none;
@@ -58,34 +63,38 @@
     padding: 0.75rem;
 }
 
-.mobile-nav-buttons {
+.root .mobile-nav .router {
+    color: var(--blue2);
+}
+
+.root .mobile-nav .router[highlight] {
+    color: var(--light1);
+}
+
+.root .mobile-add-transaction-button {
 
 }
 
-.desktop-add-transaction-button {
-    cursor: pointer;
-    color: var(--blue5);
-    background-color: var(--blue2);
-}
-
-.mobile-add-transaction-button {
-
-}
-
-/* Desktop: хедер “слева” — благодаря STRETCH он на всю ширину; внутри:
-   логотип слева, .desktop-nav расширяется и центрирует ссылки */
-
-/* Mobile: центрируем хедер, показываем нижнюю навигацию, прячем десктопную */
 @media (max-width: 1023px) {
-    .header {
+    .root .header {
         display: flex;
-        justify-content: center;      /* центрируем содержимое хедера */
+        justify-content: center;
         text-align: center;
     }
-    .desktop-nav {
-        display: none;                /* десктопную навигацию скрываем */
+
+    .root .header .add-transaction-button {
+        display: none;
     }
-    .mobile-nav {
-        display: flex;               /* показываем нижнюю навигацию */
+
+    .root .desktop-nav {
+        display: none;
+    }
+
+    .root .mobile-nav {
+        display: flex;
+    }
+
+    .root .mobile-add-transaction-button {
+
     }
 }

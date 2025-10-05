@@ -52,7 +52,7 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
                 RouterUtils.createLink(PlanningView.class, "Планирование")
         );
         desktopRouters.forEach(router -> {
-            router.addClassName("desktop-nav-buttons");
+            router.addClassName("router");
             router.setHighlightCondition(HighlightConditions.sameLocation());
             desktopNavigationContainer.add(router);
         });
@@ -63,7 +63,7 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
                 RouterUtils.createLink(PlanningView.class, VaadinIcon.CALC_BOOK.create())
         );
         mobileRouters.forEach(router -> {
-            router.addClassName("mobile-nav-buttons");
+            router.addClassName("router");
             router.setHighlightCondition(HighlightConditions.sameLocation());
             mobileNavigationContainer.add(router);
         });
@@ -72,7 +72,7 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
         headerContainer.addClassName("header");
         desktopNavigationContainer.addClassName("desktop-nav");
         mobileNavigationContainer.addClassName("mobile-nav");
-        desktopAddTransactionButton.addClassName("desktop-add-transaction-button");
+        desktopAddTransactionButton.addClassName("add-transaction-button");
         mobileAddTransactionButton.addClassName("mobile-add-transaction-button");
         contentContainer.addClassName("content");
 
