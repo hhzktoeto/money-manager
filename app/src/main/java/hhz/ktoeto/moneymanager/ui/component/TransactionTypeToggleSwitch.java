@@ -7,7 +7,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.transaction.model.transaction.Transaction;
+import hhz.ktoeto.moneymanager.transaction.entity.Transaction;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

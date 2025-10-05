@@ -10,8 +10,8 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.transaction.model.category.Category;
-import hhz.ktoeto.moneymanager.transaction.model.transaction.Transaction;
+import hhz.ktoeto.moneymanager.transaction.entity.Category;
+import hhz.ktoeto.moneymanager.transaction.entity.Transaction;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

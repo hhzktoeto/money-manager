@@ -1,6 +1,6 @@
 package hhz.ktoeto.moneymanager.transaction.repository;
 
-import hhz.ktoeto.moneymanager.transaction.model.transaction.Transaction;
+import hhz.ktoeto.moneymanager.transaction.entity.Transaction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

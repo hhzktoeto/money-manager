@@ -9,7 +9,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.event.TransactionAddedEvent;
 import hhz.ktoeto.moneymanager.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.event.TransactionUpdatedEvent;
-import hhz.ktoeto.moneymanager.transaction.model.transaction.Transaction;
+import hhz.ktoeto.moneymanager.transaction.entity.Transaction;
 import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;

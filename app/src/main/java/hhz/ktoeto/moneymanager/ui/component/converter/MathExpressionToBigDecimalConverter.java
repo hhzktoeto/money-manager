@@ -1,0 +1,31 @@
+package hhz.ktoeto.moneymanager.ui.component.converter;
+
+import com.udojava.evalex.Expression;
+import com.vaadin.flow.data.binder.Result;
+import com.vaadin.flow.data.binder.ValueContext;
+import com.vaadin.flow.data.converter.Converter;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
+import hhz.ktoeto.moneymanager.utils.FormattingUtils;
+
+import java.math.BigDecimal;
+
+@UIScope
+@SpringComponent
+public class MathExpressionToBigDecimalConverter implements Converter<String, BigDecimal> {
+
+    @Override
+    public Result<BigDecimal> convertToModel(String expression, ValueContext context) {
+        try {
+            BigDecimal value = new Expression(expression).eval();
+            return Result.ok(value);
+        } catch (Exception e) {
+            return Result.error("Некорректно введена сумма");
+        }
+    }
+
+    @Override
+    public String convertToPresentation(BigDecimal value, ValueContext context) {
+        return value == null ? "" : FormattingUtils.formatAmount(value);
+    }
+}

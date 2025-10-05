@@ -1,6 +1,5 @@
-package hhz.ktoeto.moneymanager.transaction.model.transaction;
+package hhz.ktoeto.moneymanager.transaction.entity;
 
-import hhz.ktoeto.moneymanager.transaction.model.category.Category;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

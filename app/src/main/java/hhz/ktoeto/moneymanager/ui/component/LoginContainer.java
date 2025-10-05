@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.component.container;
+package hhz.ktoeto.moneymanager.ui.component;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H1;
@@ -6,7 +6,6 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.utils.RouteName;
-import hhz.ktoeto.moneymanager.ui.component.ComponentContainer;
 import hhz.ktoeto.moneymanager.ui.form.LoginForm;
 import hhz.ktoeto.moneymanager.ui.form.RegisterForm;
 import hhz.ktoeto.moneymanager.user.model.AuthResponse;
