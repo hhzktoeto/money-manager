@@ -5,19 +5,29 @@
     width: 40rem;
 }
 
-.add-transaction-modal-header {
+.add-transaction-modal .header {
     width: 100%;
     align-items: center;
     justify-content: space-between;
 }
 
-.add-transaction-modal-content {
+.add-transaction-modal .content {
     padding: 0;
     width: 100%;
-    align-items: baseline;
-    justify-content: stretch;
 }
 
-.add-transaction-modal-category {
+.add-transaction-modal .content .first-row {
+    align-items: baseline;
+}
+
+.add-transaction-modal .content .second-row,
+.add-transaction-modal .content .buttons {
+    width: 100%;
+    align-items: start;
+    justify-content: space-between;
+}
+
+.add-transaction-modal .content .first-row .category {
     padding: 0;
+    width: 100%;
 }
