@@ -28,16 +28,16 @@ public class LoginContainer extends BasicContainer {
         loginForm.setVisible(true);
         registerForm.setVisible(false);
 
-        loginForm.addOpenRegisterButtonClickListener(e -> {
+        loginForm.onOpenRegisterButtonClicked(e -> {
             loginForm.setVisible(false);
             registerForm.setVisible(true);
         });
-        registerForm.addOpenLoginButtonClickListener(e -> {
+        registerForm.onOpenLoginButtonClicked(e -> {
             loginForm.setVisible(true);
             registerForm.setVisible(false);
         });
 
-        loginForm.addLoginButtonClickListener(event -> {
+        loginForm.onLoginButtonClicked(event -> {
             try {
                 AuthResponse response = userService.login(
                         new LoginRequest(loginForm.login(), loginForm.password())
@@ -49,7 +49,7 @@ public class LoginContainer extends BasicContainer {
                 log.error("Exception occurred, while trying to login", e);
             }
         });
-        registerForm.addRegisterButtonClickListener(e -> {
+        registerForm.onRegisterButtonClicked(e -> {
             try {
                 userService.register(new RegisterRequest(
                         registerForm.login(),

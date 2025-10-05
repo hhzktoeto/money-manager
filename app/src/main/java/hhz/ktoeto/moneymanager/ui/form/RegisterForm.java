@@ -40,11 +40,11 @@ public class RegisterForm extends VerticalLayout {
         this.phoneField.clear();
     }
 
-    public void addRegisterButtonClickListener(ComponentEventListener<ClickEvent<Button>> event) {
+    public void onRegisterButtonClicked(ComponentEventListener<ClickEvent<Button>> event) {
         this.registerButton.addClickListener(event);
     }
 
-    public void addOpenLoginButtonClickListener(ComponentEventListener<ClickEvent<Button>> event) {
+    public void onOpenLoginButtonClicked(ComponentEventListener<ClickEvent<Button>> event) {
         this.openLoginButton.addClickListener(event);
     }
 

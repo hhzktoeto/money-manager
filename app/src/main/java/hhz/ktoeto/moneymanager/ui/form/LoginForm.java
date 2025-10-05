@@ -25,11 +25,11 @@ public class LoginForm extends VerticalLayout {
         this.add(this.loginField, this.passwordField, buttonsLayout);
     }
 
-    public void addLoginButtonClickListener(ComponentEventListener<ClickEvent<Button>> event) {
+    public void onLoginButtonClicked(ComponentEventListener<ClickEvent<Button>> event) {
         loginButton.addClickListener(event);
     }
 
-    public void addOpenRegisterButtonClickListener(ComponentEventListener<ClickEvent<Button>> event) {
+    public void onOpenRegisterButtonClicked(ComponentEventListener<ClickEvent<Button>> event) {
         openRegisterButton.addClickListener(event);
     }
 
