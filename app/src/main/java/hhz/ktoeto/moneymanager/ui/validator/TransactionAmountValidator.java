@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.component.validator;
+package hhz.ktoeto.moneymanager.ui.validator;
 
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;

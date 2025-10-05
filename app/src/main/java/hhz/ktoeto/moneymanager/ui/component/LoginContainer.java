@@ -5,6 +5,7 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import hhz.ktoeto.moneymanager.ui.component.container.BasicContainer;
 import hhz.ktoeto.moneymanager.utils.RouteName;
 import hhz.ktoeto.moneymanager.ui.form.LoginForm;
 import hhz.ktoeto.moneymanager.ui.form.RegisterForm;
@@ -18,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UIScope
 @SpringComponent
-public class LoginContainer extends ComponentContainer {
+public class LoginContainer extends BasicContainer {
 
     public LoginContainer(UserService userService) {
         LoginForm loginForm = new LoginForm();

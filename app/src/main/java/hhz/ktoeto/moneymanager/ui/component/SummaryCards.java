@@ -11,6 +11,7 @@ import hhz.ktoeto.moneymanager.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.event.TransactionUpdatedEvent;
 import hhz.ktoeto.moneymanager.transaction.entity.Transaction;
 import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
+import hhz.ktoeto.moneymanager.ui.component.container.BasicContainer;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +28,9 @@ public class SummaryCards extends HorizontalLayout {
 
     private final transient TransactionService transactionService;
 
-    private final ComponentContainer incomesCard = new ComponentContainer("Доходы");
-    private final ComponentContainer expensesCard = new ComponentContainer("Расходы");
-    private final ComponentContainer totalCard = new ComponentContainer("Баланс");
+    private final BasicContainer incomesCard = new BasicContainer("Доходы");
+    private final BasicContainer expensesCard = new BasicContainer("Расходы");
+    private final BasicContainer totalCard = new BasicContainer("Баланс");
 
     public SummaryCards(TransactionService transactionService) {
         this.transactionService = transactionService;

@@ -12,7 +12,7 @@ import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.ui.component.AddTransactionModal;
+import hhz.ktoeto.moneymanager.ui.component.modal.AddTransactionModal;
 import hhz.ktoeto.moneymanager.ui.view.MainView;
 import hhz.ktoeto.moneymanager.ui.view.PlanningView;
 import hhz.ktoeto.moneymanager.ui.view.StatsView;
@@ -78,7 +78,7 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
 
         headerContainer.add(appLogo, desktopNavigationContainer, desktopAddTransactionButton);
         root.setFlexGrow(1, contentContainer);
-        root.add(headerContainer, contentContainer, mobileNavigationContainer);
+        root.add(headerContainer, contentContainer, mobileAddTransactionButton, mobileNavigationContainer);
     }
 
     @Override

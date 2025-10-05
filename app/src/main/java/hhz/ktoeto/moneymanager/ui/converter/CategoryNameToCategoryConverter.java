@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.component.converter;
+package hhz.ktoeto.moneymanager.ui.converter;
 
 import com.vaadin.flow.data.binder.Result;
 import com.vaadin.flow.data.binder.ValueContext;

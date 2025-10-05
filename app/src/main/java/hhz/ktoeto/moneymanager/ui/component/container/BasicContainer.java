@@ -1,19 +1,19 @@
-package hhz.ktoeto.moneymanager.ui.component;
+package hhz.ktoeto.moneymanager.ui.component.container;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 
-public class ComponentContainer extends Composite<Div> {
+public class BasicContainer extends Composite<Div> {
 
     private final Div header = new Div();
     private final Div content = new Div();
 
-    public ComponentContainer() {
+    public BasicContainer() {
     }
 
-    public ComponentContainer(String header) {
+    public BasicContainer(String header) {
         this();
         this.setHeader(header);
     }

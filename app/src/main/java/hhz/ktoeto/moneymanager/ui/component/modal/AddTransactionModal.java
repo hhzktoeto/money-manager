@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.component;
+package hhz.ktoeto.moneymanager.ui.component.modal;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
@@ -22,10 +22,12 @@ import hhz.ktoeto.moneymanager.transaction.entity.Category;
 import hhz.ktoeto.moneymanager.transaction.entity.Transaction;
 import hhz.ktoeto.moneymanager.transaction.service.CategoryService;
 import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
-import hhz.ktoeto.moneymanager.ui.component.converter.CategoryNameToCategoryConverter;
-import hhz.ktoeto.moneymanager.ui.component.converter.MathExpressionToBigDecimalConverter;
-import hhz.ktoeto.moneymanager.ui.component.validator.TransactionAmountValidator;
-import hhz.ktoeto.moneymanager.ui.component.validator.TransactionDescriptionValidator;
+import hhz.ktoeto.moneymanager.ui.component.common.RussianDatePicker;
+import hhz.ktoeto.moneymanager.ui.component.common.TransactionTypeToggleSwitch;
+import hhz.ktoeto.moneymanager.ui.converter.CategoryNameToCategoryConverter;
+import hhz.ktoeto.moneymanager.ui.converter.MathExpressionToBigDecimalConverter;
+import hhz.ktoeto.moneymanager.ui.validator.TransactionAmountValidator;
+import hhz.ktoeto.moneymanager.ui.validator.TransactionDescriptionValidator;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

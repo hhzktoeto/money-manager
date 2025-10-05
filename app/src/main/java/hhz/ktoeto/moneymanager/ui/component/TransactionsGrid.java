@@ -29,7 +29,7 @@ public class TransactionsGrid extends Grid<Transaction> {
         this.dataProvider = DataProvider.fromCallbacks(
                 query -> {
                     PageRequest pageRequest = PageRequest.of(
-                            query.getOffset(),
+                            query.getOffset() / query.getLimit(),
                             query.getPageSize(),
                             Sort.by(
                                     Sort.Order.desc("date"),
