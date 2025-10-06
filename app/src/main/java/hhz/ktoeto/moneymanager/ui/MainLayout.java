@@ -12,7 +12,7 @@ import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.ui.component.modal.AddTransactionModal;
+import hhz.ktoeto.moneymanager.ui.transaction.TransactionCreateComponent;
 import hhz.ktoeto.moneymanager.ui.view.MainView;
 import hhz.ktoeto.moneymanager.ui.view.PlanningView;
 import hhz.ktoeto.moneymanager.ui.view.StatsView;
@@ -34,7 +34,7 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
     private final Button mobileAddTransactionButton = new Button(VaadinIcon.PLUS.create());
     private final Image appLogo = new Image("logo.png", "Money Manager");
 
-    public MainLayout(AddTransactionModal addTransactionModal) {
+    public MainLayout(TransactionCreateComponent addTransactionModal) {
         VerticalLayout root = this.getContent();
         root.addClassName("root");
         root.setPadding(false);
