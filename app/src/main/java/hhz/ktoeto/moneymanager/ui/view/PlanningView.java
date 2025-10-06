@@ -5,7 +5,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.utils.RouteName;
-import hhz.ktoeto.moneymanager.ui.component.CategoriesCard;
 import hhz.ktoeto.moneymanager.ui.MainLayout;
 import jakarta.annotation.security.PermitAll;
 
@@ -15,8 +14,7 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = RouteName.PLANNING, layout = MainLayout.class)
 public class PlanningView extends VerticalLayout {
 
-    public PlanningView(CategoriesCard categoriesCard) {
-        add(categoriesCard);
+    public PlanningView() {
         setSizeFull();
     }
 }
