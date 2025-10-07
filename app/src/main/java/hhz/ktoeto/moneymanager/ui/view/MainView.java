@@ -8,7 +8,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.MainLayout;
-import hhz.ktoeto.moneymanager.ui.transaction.TransactionCreateComponent;
+import hhz.ktoeto.moneymanager.ui.transaction.TransactionCreateDialog;
 import hhz.ktoeto.moneymanager.ui.component.SummaryCards;
 import hhz.ktoeto.moneymanager.ui.component.TransactionsGrid;
 import hhz.ktoeto.moneymanager.utils.RouteName;
@@ -20,7 +20,7 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = RouteName.MAIN, layout = MainLayout.class)
 public class MainView extends VerticalLayout {
 
-    public MainView(TransactionCreateComponent addTransactionModal,
+    public MainView(TransactionCreateDialog addTransactionModal,
                     SummaryCards summaryCards,
                     TransactionsGrid transactionsGrid) {
         Div container = new Div();

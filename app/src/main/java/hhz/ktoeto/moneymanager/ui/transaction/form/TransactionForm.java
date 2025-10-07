@@ -8,12 +8,13 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import hhz.ktoeto.moneymanager.transaction.entity.Transaction;
+import hhz.ktoeto.moneymanager.ui.category.CategoryNameDataProvider;
 import hhz.ktoeto.moneymanager.ui.component.common.RussianDatePicker;
 import hhz.ktoeto.moneymanager.ui.component.common.TransactionTypeToggleSwitch;
-import hhz.ktoeto.moneymanager.ui.converter.CategoryNameToCategoryConverter;
-import hhz.ktoeto.moneymanager.ui.converter.MathExpressionToBigDecimalConverter;
-import hhz.ktoeto.moneymanager.ui.validator.TransactionAmountValidator;
-import hhz.ktoeto.moneymanager.ui.validator.TransactionDescriptionValidator;
+import hhz.ktoeto.moneymanager.ui.transaction.converter.CategoryNameToCategoryConverter;
+import hhz.ktoeto.moneymanager.ui.transaction.converter.MathExpressionToBigDecimalConverter;
+import hhz.ktoeto.moneymanager.ui.transaction.validator.TransactionAmountValidator;
+import hhz.ktoeto.moneymanager.ui.transaction.validator.TransactionDescriptionValidator;
 
 import java.time.LocalDate;
 
@@ -29,12 +30,12 @@ public final class TransactionForm {
 
     private final Binder<Transaction> binder = new Binder<>(Transaction.class);
 
-    private final ListDataProvider<String> categoryProvider;
+    private final CategoryNameDataProvider categoryProvider;
 
     TransactionForm(
             MathExpressionToBigDecimalConverter amountConverter,
             CategoryNameToCategoryConverter categoryConverter,
-            ListDataProvider<String> categoryProvider,
+            CategoryNameDataProvider categoryProvider,
             TransactionAmountValidator amountValidator,
             TransactionDescriptionValidator descriptionValidator,
             TransactionFormLogic logic
@@ -73,13 +74,16 @@ public final class TransactionForm {
                 .bind(Transaction::getDescription, Transaction::setDescription);
     }
 
+    public Transaction.Type selectedType() {
+        return typeToggleSwitch.getSelectedType();
+    }
+
     public boolean writeTo(Transaction transaction) {
         return binder.writeBeanIfValid(transaction);
     }
 
     public void refreshCategories() {
-        categoryProvider.refreshAll();
-        categorySelect.setItems(categoryProvider.getItems());
+        categoryProvider.refresh();
     }
 
     public Components components() {

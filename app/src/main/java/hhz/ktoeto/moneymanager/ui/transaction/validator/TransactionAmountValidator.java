@@ -1,14 +1,12 @@
-package hhz.ktoeto.moneymanager.ui.validator;
+package hhz.ktoeto.moneymanager.ui.transaction.validator;
 
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 
 import java.math.BigDecimal;
 
-@UIScope
 @SpringComponent
 public class TransactionAmountValidator implements Validator<BigDecimal> {
 

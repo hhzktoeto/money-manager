@@ -1,15 +1,13 @@
 package hhz.ktoeto.moneymanager.ui.transaction.form;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.ui.category.CategoryNameDataProvider;
-import hhz.ktoeto.moneymanager.ui.converter.CategoryNameToCategoryConverter;
-import hhz.ktoeto.moneymanager.ui.converter.MathExpressionToBigDecimalConverter;
-import hhz.ktoeto.moneymanager.ui.validator.TransactionAmountValidator;
-import hhz.ktoeto.moneymanager.ui.validator.TransactionDescriptionValidator;
+import hhz.ktoeto.moneymanager.ui.transaction.converter.CategoryNameToCategoryConverter;
+import hhz.ktoeto.moneymanager.ui.transaction.converter.MathExpressionToBigDecimalConverter;
+import hhz.ktoeto.moneymanager.ui.transaction.validator.TransactionAmountValidator;
+import hhz.ktoeto.moneymanager.ui.transaction.validator.TransactionDescriptionValidator;
 import lombok.RequiredArgsConstructor;
 
-@UIScope
 @SpringComponent
 @RequiredArgsConstructor
 public class TransactionFormFactory {

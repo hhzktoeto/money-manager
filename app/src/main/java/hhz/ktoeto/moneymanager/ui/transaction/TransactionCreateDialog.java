@@ -1,0 +1,80 @@
+package hhz.ktoeto.moneymanager.ui.transaction;
+
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
+import hhz.ktoeto.moneymanager.ui.event.TransactionCreatedEvent;
+import hhz.ktoeto.moneymanager.ui.event.TransactionCreationCanceledEvent;
+import hhz.ktoeto.moneymanager.ui.LayoutProvider;
+import hhz.ktoeto.moneymanager.ui.transaction.form.TransactionForm;
+import hhz.ktoeto.moneymanager.ui.transaction.form.TransactionFormFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.event.EventListener;
+
+@Slf4j
+@UIScope
+@SpringComponent
+public class TransactionCreateDialog extends Composite<Dialog> {
+
+    private final transient LayoutProvider<TransactionForm> formLayoutProvider;
+
+    private final Button closeButton;
+    private final HorizontalLayout header;
+
+    private final TransactionForm transactionForm;
+
+    public TransactionCreateDialog(TransactionFormFactory formFactory,
+                                   @Qualifier("transactionCreate") LayoutProvider<TransactionForm> formLayoutProvider) {
+        this.formLayoutProvider = formLayoutProvider;
+
+        this.closeButton = new Button(VaadinIcon.CLOSE.create());
+        this.header = new HorizontalLayout(new H3("Добавить транзакцию"), closeButton);
+        this.transactionForm = formFactory.transactionCreateForm();
+
+        this.transactionForm.refreshCategories();
+    }
+
+    public void open() {
+        if (this.getContent().isOpened()) {
+            this.getContent().close();
+        }
+        this.getContent().open();
+    }
+
+    public void close() {
+        this.getContent().close();
+    }
+
+    @Override
+    protected Dialog initContent() {
+        Component formLayout = formLayoutProvider.createLayout(transactionForm);
+        Dialog root = new Dialog(header, formLayout);
+
+        closeButton.addClickListener(e -> this.close());
+
+        root.setCloseOnOutsideClick(false);
+        root.addClassName("add-transaction-modal");
+
+        return root;
+    }
+
+    @EventListener(TransactionCreatedEvent.class)
+    private void onTransactionCreated() {
+        UI.getCurrent().access(transactionForm::refreshCategories);
+    }
+
+    @EventListener(TransactionCreationCanceledEvent.class)
+    private void onTransactionCreationCanceled() {
+        UI.getCurrent().access(this::close);
+    }
+}
+
+

@@ -6,9 +6,9 @@ import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.event.TransactionAddedEvent;
-import hhz.ktoeto.moneymanager.event.TransactionDeletedEvent;
-import hhz.ktoeto.moneymanager.event.TransactionUpdatedEvent;
+import hhz.ktoeto.moneymanager.ui.event.TransactionCreatedEvent;
+import hhz.ktoeto.moneymanager.ui.event.TransactionDeletedEvent;
+import hhz.ktoeto.moneymanager.ui.event.TransactionUpdatedEvent;
 import hhz.ktoeto.moneymanager.transaction.entity.Transaction;
 import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
@@ -52,11 +52,11 @@ public class TransactionsGrid extends Grid<Transaction> {
     }
 
     @EventListener({
-            TransactionAddedEvent.class,
+            TransactionCreatedEvent.class,
             TransactionDeletedEvent.class,
             TransactionUpdatedEvent.class}
     )
-    private void onTransactionUpdate(TransactionAddedEvent ignored) {
+    private void onTransactionUpdate(TransactionCreatedEvent ignored) {
         UI.getCurrent().access(this.dataProvider::refreshAll);
     }
 }
