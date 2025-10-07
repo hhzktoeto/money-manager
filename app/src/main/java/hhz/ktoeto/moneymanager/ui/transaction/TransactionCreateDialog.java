@@ -38,8 +38,6 @@ public class TransactionCreateDialog extends Composite<Dialog> {
         this.closeButton = new Button(VaadinIcon.CLOSE.create());
         this.header = new HorizontalLayout(new H3("Добавить транзакцию"), closeButton);
         this.transactionForm = formFactory.transactionCreateForm();
-
-        this.transactionForm.refreshCategories();
     }
 
     public void open() {
@@ -66,14 +64,9 @@ public class TransactionCreateDialog extends Composite<Dialog> {
         return root;
     }
 
-    @EventListener(TransactionCreatedEvent.class)
-    private void onTransactionCreated() {
-        UI.getCurrent().access(transactionForm::refreshCategories);
-    }
-
     @EventListener(TransactionCreationCanceledEvent.class)
     private void onTransactionCreationCanceled() {
-        UI.getCurrent().access(this::close);
+        this.close();
     }
 }
 

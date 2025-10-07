@@ -1,14 +1,14 @@
 package hhz.ktoeto.moneymanager.ui.transaction.form;
 
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import hhz.ktoeto.moneymanager.ui.event.TransactionCreatedEvent;
-import hhz.ktoeto.moneymanager.ui.event.TransactionCreationCanceledEvent;
 import hhz.ktoeto.moneymanager.transaction.entity.Transaction;
 import hhz.ktoeto.moneymanager.transaction.service.TransactionService;
+import hhz.ktoeto.moneymanager.ui.event.TransactionCreatedEvent;
+import hhz.ktoeto.moneymanager.ui.event.TransactionCreationCanceledEvent;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 
 @SpringComponent
 @RequiredArgsConstructor
@@ -27,7 +27,6 @@ public class TransactionCreateFormLogic implements TransactionFormLogic {
 
         boolean valid = form.writeTo(transaction);
         if (!valid) {
-            Notification.show("Проверьте корректность заполнения", 1500, Notification.Position.TOP_CENTER);
             return;
         }
 
