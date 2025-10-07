@@ -9,8 +9,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.ui.event.TransactionCreatedEvent;
 import hhz.ktoeto.moneymanager.ui.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.ui.event.TransactionUpdatedEvent;
-import hhz.ktoeto.moneymanager.backend.transaction_domain.entity.Transaction;
-import hhz.ktoeto.moneymanager.backend.transaction_domain.service.TransactionService;
+import hhz.ktoeto.moneymanager.backend.entity.Transaction;
+import hhz.ktoeto.moneymanager.backend.service.TransactionService;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import org.springframework.context.event.EventListener;
@@ -25,7 +25,7 @@ public class TransactionsGrid extends Grid<Transaction> {
 
     public TransactionsGrid(TransactionService transactionService) {
         super(Transaction.class, false);
-        long userId = SecurityUtils.getCurrentUser().getId();
+        long userId = SecurityUtils.getCurrentUserId();
         this.dataProvider = DataProvider.fromCallbacks(
                 query -> {
                     PageRequest pageRequest = PageRequest.of(

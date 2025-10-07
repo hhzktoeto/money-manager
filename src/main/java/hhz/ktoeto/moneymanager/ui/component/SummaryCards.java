@@ -9,8 +9,8 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.event.TransactionCreatedEvent;
 import hhz.ktoeto.moneymanager.ui.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.ui.event.TransactionUpdatedEvent;
-import hhz.ktoeto.moneymanager.backend.transaction_domain.entity.Transaction;
-import hhz.ktoeto.moneymanager.backend.transaction_domain.service.TransactionService;
+import hhz.ktoeto.moneymanager.backend.entity.Transaction;
+import hhz.ktoeto.moneymanager.backend.service.TransactionService;
 import hhz.ktoeto.moneymanager.ui.component.container.BasicContainer;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
@@ -56,7 +56,7 @@ public class SummaryCards extends HorizontalLayout {
     }
 
     private void refresh() {
-        List<Transaction> transactions = transactionService.getAll(SecurityUtils.getCurrentUser().getId());
+        List<Transaction> transactions = transactionService.getAll(SecurityUtils.getCurrentUserId());
 
         BigDecimal incomes = transactions.stream()
                 .filter(t -> Objects.equals(Transaction.Type.INCOME, t.getType()))

@@ -1,6 +1,7 @@
 package hhz.ktoeto.moneymanager.ui.transaction.form;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import hhz.ktoeto.moneymanager.backend.service.CategoryService;
 import hhz.ktoeto.moneymanager.ui.category.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.ui.transaction.converter.MathExpressionToBigDecimalConverter;
 import hhz.ktoeto.moneymanager.ui.transaction.validator.TransactionAmountValidator;

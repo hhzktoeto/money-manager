@@ -1,15 +1,30 @@
 package hhz.ktoeto.moneymanager.utils;
 
-import hhz.ktoeto.moneymanager.backend.user_domain.model.User;
+import hhz.ktoeto.moneymanager.backend.security.AppUserDetails;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
+@Component
+@RequiredArgsConstructor
 public final class SecurityUtils {
 
-    private SecurityUtils() {
+    public static Long getCurrentUserId() {
+        return getCurrentUser().orElseThrow().getId();
     }
 
-    public static User getCurrentUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    private static Optional<AppUserDetails> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            return Optional.empty();
+        }
+        Object principal = authentication.getPrincipal();
+
+        return principal instanceof AppUserDetails ? Optional.of((AppUserDetails) principal) : Optional.empty();
     }
 }
 
