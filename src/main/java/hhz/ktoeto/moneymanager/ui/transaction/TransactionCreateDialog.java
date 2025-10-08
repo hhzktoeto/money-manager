@@ -53,6 +53,8 @@ public class TransactionCreateDialog extends Composite<Dialog> {
 
         root.setCloseOnOutsideClick(false);
         root.addClassName("add-transaction-modal");
+        header.addClassName("header");
+        transactionFormContainer.addClassName("content");
 
         return root;
     }
