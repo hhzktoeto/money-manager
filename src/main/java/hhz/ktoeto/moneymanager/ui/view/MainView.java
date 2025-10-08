@@ -1,6 +1,5 @@
 package hhz.ktoeto.moneymanager.ui.view;
 
-import com.vaadin.flow.component.card.Card;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -27,14 +26,10 @@ public class MainView extends VerticalLayout {
         container.setWidth("100%");
         container.setMaxWidth("900px");
 
-        Card transactionsGridCard = new Card();
-        transactionsGridCard.add(transactionsGrid);
-        transactionsGridCard.setSizeFull();
-
         container.add(
                 addTransactionModal,
                 summaryCards,
-                transactionsGridCard
+                transactionsGrid
         );
 
         addClassNames(
