@@ -3,6 +3,7 @@ package hhz.ktoeto.moneymanager.ui.transaction.form;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import hhz.ktoeto.moneymanager.backend.entity.Transaction;
 import hhz.ktoeto.moneymanager.backend.service.TransactionService;
+import hhz.ktoeto.moneymanager.ui.event.OpenCategoryCreateDialog;
 import hhz.ktoeto.moneymanager.ui.event.TransactionCreatedEvent;
 import hhz.ktoeto.moneymanager.ui.event.TransactionCreationCanceledEvent;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
@@ -45,6 +46,6 @@ public class TransactionCreateFormLogic implements TransactionFormLogic {
 
     @Override
     public void onCategoryAdd(TransactionForm form) {
-        eventPublisher.publishEvent();
+        eventPublisher.publishEvent(new OpenCategoryCreateDialog(this));
     }
 }
