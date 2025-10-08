@@ -15,6 +15,7 @@ import org.springframework.context.event.EventListener;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ public class CategoryDataProvider extends ListDataProvider<Category> {
             this.getItems().addAll(
                     categoryService.getAll(SecurityUtils.getCurrentUserId())
                             .stream()
-                            .sorted(Comparator.comparing(Category::getName))
+                            .sorted(Comparator.comparing(Category::getName, String.CASE_INSENSITIVE_ORDER))
                             .collect(Collectors.toList())
             );
             this.refreshAll();
@@ -45,13 +46,17 @@ public class CategoryDataProvider extends ListDataProvider<Category> {
 
     @EventListener(CategoryCreatedEvent.class)
     private void onCategoryCreated(CategoryCreatedEvent event) {
-        this.getItems().add(event.getCategory());
+        List<Category> items = (List<Category>) this.getItems();
+        items.add(event.getCategory());
+        items.sort(Comparator.comparing(Category::getName, String.CASE_INSENSITIVE_ORDER));
         this.refreshAll();
     }
 
     @EventListener(CategoryDeletedEvent.class)
     private void onCategoryDeleted(CategoryDeletedEvent event) {
-        this.getItems().remove(event.getCategory());
+        List<Category> items = (List<Category>) this.getItems();
+        items.remove(event.getCategory());
+        items.sort(Comparator.comparing(Category::getName, String.CASE_INSENSITIVE_ORDER));
         this.refreshAll();
     }
 
@@ -62,8 +67,10 @@ public class CategoryDataProvider extends ListDataProvider<Category> {
                 .findFirst()
                 .orElse(null);
         if (oldCategory != null) {
-            this.getItems().remove(oldCategory);
-            this.getItems().add(event.getCategory());
+            List<Category> items = (List<Category>) this.getItems();
+            items.remove(oldCategory);
+            items.add(event.getCategory());
+            items.sort(Comparator.comparing(Category::getName, String.CASE_INSENSITIVE_ORDER));
             this.refreshAll();
         }
     }
