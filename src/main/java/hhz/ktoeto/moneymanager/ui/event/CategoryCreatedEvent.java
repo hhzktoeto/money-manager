@@ -1,10 +1,16 @@
 package hhz.ktoeto.moneymanager.ui.event;
 
+import hhz.ktoeto.moneymanager.backend.entity.Category;
+import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
+@Getter
 public class CategoryCreatedEvent extends ApplicationEvent {
 
-    public CategoryCreatedEvent(Object source) {
+    private final Category category;
+
+    public CategoryCreatedEvent(Object source, Category category) {
         super(source);
+        this.category = category;
     }
 }

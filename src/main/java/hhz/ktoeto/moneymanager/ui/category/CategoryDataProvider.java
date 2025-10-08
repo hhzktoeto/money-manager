@@ -10,10 +10,12 @@ import hhz.ktoeto.moneymanager.ui.event.CategoryCreatedEvent;
 import hhz.ktoeto.moneymanager.ui.event.CategoryDeletedEvent;
 import hhz.ktoeto.moneymanager.ui.event.CategoryUpdatedEvent;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
+import jakarta.annotation.PostConstruct;
 import org.springframework.context.event.EventListener;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @SpringComponent
@@ -27,12 +29,8 @@ public class CategoryDataProvider extends ListDataProvider<Category> {
         this.categoryService = categoryService;
     }
 
-    @EventListener({
-            CategoryCreatedEvent.class,
-            CategoryDeletedEvent.class,
-            CategoryUpdatedEvent.class
-    })
-    private void refresh() {
+    @PostConstruct
+    private void loadData() {
         VaadinSession.getCurrent().getUIs().forEach(ui -> ui.access(() -> {
             this.getItems().clear();
             this.getItems().addAll(
@@ -43,5 +41,30 @@ public class CategoryDataProvider extends ListDataProvider<Category> {
             );
             this.refreshAll();
         }));
+    }
+
+    @EventListener(CategoryCreatedEvent.class)
+    private void onCategoryCreated(CategoryCreatedEvent event) {
+        this.getItems().add(event.getCategory());
+        this.refreshAll();
+    }
+
+    @EventListener(CategoryDeletedEvent.class)
+    private void onCategoryDeleted(CategoryDeletedEvent event) {
+        this.getItems().remove(event.getCategory());
+        this.refreshAll();
+    }
+
+    @EventListener(CategoryUpdatedEvent.class)
+    private void onCategoryUpdated(CategoryUpdatedEvent event) {
+        Category oldCategory = this.getItems().stream()
+                .filter(category -> Objects.equals(category.getId(), event.getCategory().getId()))
+                .findFirst()
+                .orElse(null);
+        if (oldCategory != null) {
+            this.getItems().remove(oldCategory);
+            this.getItems().add(event.getCategory());
+            this.refreshAll();
+        }
     }
 }
