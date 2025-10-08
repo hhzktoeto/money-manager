@@ -3,9 +3,7 @@ package hhz.ktoeto.moneymanager.ui.transaction.validator;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.binder.ValueContext;
-import com.vaadin.flow.spring.annotation.SpringComponent;
 
-@SpringComponent
 public class TransactionDescriptionValidator implements Validator<String> {
 
     private final int maxLength = 1000;

@@ -29,17 +29,7 @@ public final class TransactionForm {
 
     private final Binder<Transaction> binder = new Binder<>(Transaction.class);
 
-    private final CategoryDataProvider categoryProvider;
-
-    TransactionForm(
-            MathExpressionToBigDecimalConverter amountConverter,
-            CategoryDataProvider categoryProvider,
-            TransactionAmountValidator amountValidator,
-            TransactionDescriptionValidator descriptionValidator,
-            TransactionFormLogic logic
-    ) {
-        this.categoryProvider = categoryProvider;
-
+    TransactionForm(CategoryDataProvider categoryProvider, TransactionFormLogic logic) {
         submitButton.addClickListener(e -> logic.onSubmit(this));
         cancelButton.addClickListener(e -> logic.onCancel(this));
 
@@ -52,8 +42,8 @@ public final class TransactionForm {
 
         binder.forField(amountField)
                 .asRequired("Не введена сумма")
-                .withConverter(amountConverter)
-                .withValidator(amountValidator)
+                .withConverter(new MathExpressionToBigDecimalConverter())
+                .withValidator(new TransactionAmountValidator())
                 .bind(Transaction::getAmount, Transaction::setAmount);
 
         binder.forField(datePicker)
@@ -61,7 +51,7 @@ public final class TransactionForm {
                 .bind(Transaction::getDate, Transaction::setDate);
 
         binder.forField(descriptionArea)
-                .withValidator(descriptionValidator)
+                .withValidator(new TransactionDescriptionValidator())
                 .bind(Transaction::getDescription, Transaction::setDescription);
     }
 
@@ -73,11 +63,11 @@ public final class TransactionForm {
         return binder.writeBeanIfValid(transaction);
     }
 
-    public Components components() {
+    Components components() {
         return new Components(typeToggleSwitch, categorySelect, amountField, datePicker, descriptionArea, submitButton, cancelButton);
     }
 
-    public record Components(
+    record Components(
             TransactionTypeToggleSwitch typeToggleSwitch,
             ComboBox<Category> categorySelect,
             TextField amountField,

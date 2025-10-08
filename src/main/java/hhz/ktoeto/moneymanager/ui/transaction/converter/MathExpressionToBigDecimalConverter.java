@@ -4,12 +4,10 @@ import com.udojava.evalex.Expression;
 import com.vaadin.flow.data.binder.Result;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.converter.Converter;
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 
 import java.math.BigDecimal;
 
-@SpringComponent
 public class MathExpressionToBigDecimalConverter implements Converter<String, BigDecimal> {
 
     @Override
