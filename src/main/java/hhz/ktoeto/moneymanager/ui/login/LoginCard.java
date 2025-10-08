@@ -1,26 +1,24 @@
-package hhz.ktoeto.moneymanager.ui.component.container;
+package hhz.ktoeto.moneymanager.ui.login;
 
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.login.LoginForm;
-import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.backend.dto.RegisterRequest;
 import hhz.ktoeto.moneymanager.backend.service.UserService;
-import hhz.ktoeto.moneymanager.ui.login.RegisterForm;
+import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @UIScope
 @SpringComponent
-public class LoginContainer extends BasicContainer implements BeforeEnterObserver {
+public class LoginCard extends BasicContainer implements BeforeEnterObserver {
 
     private final LoginForm loginForm;
 
-    public LoginContainer(UserService userService) {
+    public LoginCard(UserService userService) {
         this.loginForm = new LoginForm();
 
         RegisterForm registerForm = new RegisterForm();
@@ -28,11 +26,6 @@ public class LoginContainer extends BasicContainer implements BeforeEnterObserve
         loginForm.setVisible(true);
         registerForm.setVisible(false);
 
-        loginForm.setAction("login");
-        loginForm.addForgotPasswordListener(e -> {
-            loginForm.setVisible(false);
-            registerForm.setVisible(true);
-        });
         registerForm.onOpenLoginButtonClicked(e -> {
             loginForm.setVisible(true);
             registerForm.setVisible(false);
@@ -46,6 +39,9 @@ public class LoginContainer extends BasicContainer implements BeforeEnterObserve
                         registerForm.email().orElse(null),
                         registerForm.phone().orElse(null))
                 );
+
+                loginForm.setLoginValue(registerForm.login());
+                loginForm.setPasswordValue(registerForm.password());
 
                 registerForm.setVisible(false);
                 registerForm.clear();

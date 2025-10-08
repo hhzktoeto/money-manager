@@ -4,7 +4,9 @@ import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyC
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import hhz.ktoeto.moneymanager.backend.service.UserService;
 import hhz.ktoeto.moneymanager.ui.view.LoginView;
+import hhz.ktoeto.moneymanager.utils.CookieConstant;
 import hhz.ktoeto.moneymanager.utils.RouteName;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -18,24 +20,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 @Import(VaadinAwareSecurityContextHolderStrategyConfiguration.class)
 public class SecurityConfig {
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(LoginView.class, RouteName.LOGIN))
-                .formLogin(formLogin -> formLogin
-                        .loginPage(RouteName.LOGIN)
-                        .loginProcessingUrl(RouteName.LOGIN)
-                        .defaultSuccessUrl(RouteName.MAIN, true)
-                )
-                .securityContext(context -> context.requireExplicitSave(false))
-                .build();
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -50,10 +44,47 @@ public class SecurityConfig {
     }
 
     @Bean
+    public PersistentTokenRepository persistentTokenRepository(DataSource dataSource) {
+        JdbcTokenRepositoryImpl repository = new JdbcTokenRepositoryImpl();
+        repository.setDataSource(dataSource);
+
+        return repository;
+    }
+
+    @Bean
     public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
 
         return new ProviderManager(provider);
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http,
+                                           UserDetailsService userDetailsService,
+                                           PersistentTokenRepository persistentTokenRepository,
+                                           @Value("${spring.security.remember-me}") String secret) throws Exception {
+        HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
+        requestCache.setMatchingRequestParameterName(null);
+
+        return http
+                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(LoginView.class, RouteName.LOGIN))
+                .requestCache(configurer -> configurer.requestCache(requestCache))
+                .formLogin(configurer -> configurer
+                        .loginPage(RouteName.LOGIN)
+                        .loginProcessingUrl(RouteName.LOGIN)
+                        .defaultSuccessUrl(RouteName.MAIN, true)
+                )
+                .rememberMe(configurer -> configurer
+                        .key(secret)
+                        .userDetailsService(userDetailsService)
+                        .tokenRepository(persistentTokenRepository)
+                        .rememberMeCookieName(CookieConstant.REMEMBER_ME)
+                        .tokenValiditySeconds(CookieConstant.REMEMBER_ME_MAX_AGE)
+                        .useSecureCookie(true)
+                        .alwaysRemember(true)
+                )
+                .securityContext(context -> context.requireExplicitSave(false))
+                .build();
     }
 }

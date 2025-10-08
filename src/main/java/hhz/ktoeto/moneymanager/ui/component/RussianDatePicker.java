@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.component.common;
+package hhz.ktoeto.moneymanager.ui.component;
 
 import com.vaadin.flow.component.datepicker.DatePicker;
 

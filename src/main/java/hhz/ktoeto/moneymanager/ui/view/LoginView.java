@@ -5,8 +5,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import hhz.ktoeto.moneymanager.ui.login.LoginCard;
 import hhz.ktoeto.moneymanager.utils.RouteName;
-import hhz.ktoeto.moneymanager.ui.component.container.LoginContainer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Route(RouteName.LOGIN)
 public class LoginView extends VerticalLayout {
 
-    public LoginView(LoginContainer loginContainer) {
+    public LoginView(LoginCard loginContainer) {
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);

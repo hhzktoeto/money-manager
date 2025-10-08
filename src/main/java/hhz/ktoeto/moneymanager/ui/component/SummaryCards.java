@@ -11,7 +11,6 @@ import hhz.ktoeto.moneymanager.ui.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.ui.event.TransactionUpdatedEvent;
 import hhz.ktoeto.moneymanager.backend.entity.Transaction;
 import hhz.ktoeto.moneymanager.backend.service.TransactionService;
-import hhz.ktoeto.moneymanager.ui.component.container.BasicContainer;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
