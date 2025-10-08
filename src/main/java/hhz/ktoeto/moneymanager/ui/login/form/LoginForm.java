@@ -30,15 +30,14 @@ public class LoginForm extends VerticalLayout {
     private final Div errorBox = new Div(new Span());
 
     public LoginForm() {
-        // ---- форма ----
         form.getElement().setAttribute("method", "post");
-        form.getElement().setAttribute("action", "/login"); // дефолт
+        form.getElement().setAttribute("action", "/login");
         hiddenUsername.setType("hidden");
         hiddenUsername.getElement().setAttribute("name", "username");
         hiddenPassword.setType("hidden");
         hiddenPassword.getElement().setAttribute("name", "password");
         form.getElement().appendChild(hiddenUsername.getElement(), hiddenPassword.getElement());
-        // Встраиваем форму (она невидима)
+
         this.add(form);
 
         this.loginButton.addClickShortcut(Key.ENTER);
