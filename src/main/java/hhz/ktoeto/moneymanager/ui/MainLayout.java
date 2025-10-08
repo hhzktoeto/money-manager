@@ -2,7 +2,6 @@ package hhz.ktoeto.moneymanager.ui;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -13,12 +12,13 @@ import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.ui.transaction.TransactionCreateDialog;
+import hhz.ktoeto.moneymanager.ui.event.OpenTransactionCreateDialog;
 import hhz.ktoeto.moneymanager.ui.view.MainView;
 import hhz.ktoeto.moneymanager.ui.view.PlanningView;
 import hhz.ktoeto.moneymanager.ui.view.StatsView;
 import hhz.ktoeto.moneymanager.utils.RouterUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
     private final Button mobileAddTransactionButton = new Button(VaadinIcon.PLUS.create());
     private final Image appLogo = new Image("logo.png", "Money Manager");
 
-    public MainLayout(TransactionCreateDialog addTransactionModal) {
+    public MainLayout(ApplicationEventPublisher eventPublisher) {
         VerticalLayout root = this.getContent();
         root.addClassName("root");
         root.setPadding(false);
@@ -43,7 +43,9 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
 
         appLogo.addClickListener(event -> UI.getCurrent().navigate(MainView.class));
 
-        ComponentEventListener<ClickEvent<Button>> openAddTransaction = e -> addTransactionModal.open();
+        ComponentEventListener<ClickEvent<Button>> openAddTransaction = e ->
+                eventPublisher.publishEvent(new OpenTransactionCreateDialog(this));
+
         desktopAddTransactionButton.addClickListener(openAddTransaction);
         mobileAddTransactionButton.addClickListener(openAddTransaction);
 

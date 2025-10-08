@@ -3,6 +3,7 @@ package hhz.ktoeto.moneymanager.ui.transaction.form;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -24,12 +25,14 @@ public final class TransactionForm {
     private final TextField amountField = new TextField("Сумма");
     private final DatePicker datePicker = new RussianDatePicker("Дата", LocalDate.now());
     private final TextArea descriptionArea = new TextArea("Описание");
+    private final Button addCategoryButton = new Button(VaadinIcon.PLUS.create());
     private final Button submitButton = new Button("Сохранить");
     private final Button cancelButton = new Button("Отмена");
 
     private final Binder<Transaction> binder = new Binder<>(Transaction.class);
 
     TransactionForm(CategoryDataProvider categoryProvider, TransactionFormLogic logic) {
+        addCategoryButton.addClickListener(e -> logic.onCategoryAdd(this));
         submitButton.addClickListener(e -> logic.onSubmit(this));
         cancelButton.addClickListener(e -> logic.onCancel(this));
 

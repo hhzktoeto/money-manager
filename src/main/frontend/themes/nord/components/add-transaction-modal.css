@@ -37,6 +37,11 @@
             width: 100%;
             align-items: start;
             justify-content: end;
+
+            .submit {
+                background: var(--blue2);
+                color: var(--blue5);
+            }
         }
     }
 }

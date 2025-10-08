@@ -42,4 +42,9 @@ public class TransactionCreateFormLogic implements TransactionFormLogic {
     public void onCancel(TransactionForm form) {
         eventPublisher.publishEvent(new TransactionCreationCanceledEvent(this));
     }
+
+    @Override
+    public void onCategoryAdd(TransactionForm form) {
+        eventPublisher.publishEvent();
+    }
 }
