@@ -7,7 +7,7 @@ import com.vaadin.flow.data.binder.ValueContext;
 public class TransactionDescriptionValidator implements Validator<String> {
 
     private final int maxLength = 1000;
-    private final String errorMessage = "Максимальная длина описания не может превышать 1000 символов";
+    private final String errorMessage = "Длина описания не может превышать 1000 символов";
 
     @Override
     public ValidationResult apply(String value, ValueContext context) {
