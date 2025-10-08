@@ -10,8 +10,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.ui.LayoutProvider;
-import hhz.ktoeto.moneymanager.ui.event.OpenTransactionCreateDialog;
-import hhz.ktoeto.moneymanager.ui.event.TransactionCreationCanceledEvent;
+import hhz.ktoeto.moneymanager.ui.transaction.event.OpenTransactionCreateDialog;
+import hhz.ktoeto.moneymanager.ui.transaction.event.TransactionCreationCancelledEvent;
 import hhz.ktoeto.moneymanager.ui.transaction.form.TransactionForm;
 import hhz.ktoeto.moneymanager.ui.transaction.form.TransactionFormFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,7 +40,7 @@ public class TransactionCreateDialog extends Composite<Dialog> {
         closeButton.addClickListener(e -> this.close());
 
         root.setCloseOnOutsideClick(false);
-        root.addClassName("add-transaction-modal");
+        root.addClassName("create-transaction-dialog");
         header.addClassName("header");
         transactionFormContainer.addClassName("content");
 
@@ -55,7 +55,7 @@ public class TransactionCreateDialog extends Composite<Dialog> {
         this.getContent().open();
     }
 
-    @EventListener(TransactionCreationCanceledEvent.class)
+    @EventListener(TransactionCreationCancelledEvent.class)
     private void close() {
         this.getContent().close();
     }

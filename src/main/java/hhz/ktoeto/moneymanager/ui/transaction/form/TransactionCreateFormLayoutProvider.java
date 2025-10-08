@@ -17,7 +17,8 @@ public class TransactionCreateFormLayoutProvider implements LayoutProvider<Trans
         TransactionForm.Components components = form.components();
         HorizontalLayout firstRow = new HorizontalLayout(
                 components.typeToggleSwitch(),
-                components.categorySelect()
+                components.categorySelect(),
+                components.addCategoryButton()
         );
         HorizontalLayout secondRow = new HorizontalLayout(
                 components.amountField(),

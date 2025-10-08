@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.event;
+package hhz.ktoeto.moneymanager.ui.category.event;
 
 import hhz.ktoeto.moneymanager.backend.entity.Category;
 import lombok.Getter;

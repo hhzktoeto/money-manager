@@ -12,9 +12,9 @@ public class TransactionFormFactory {
 
     private final CategoryDataProvider categoryDataProvider;
 
-    private final TransactionCreateFormLogic createFormLogic;
+    private final TransactionCreateFormLogic createLogic;
 
     public TransactionForm transactionCreateForm() {
-        return new TransactionForm(categoryDataProvider, createFormLogic);
+        return new TransactionForm(categoryDataProvider, createLogic);
     }
 }

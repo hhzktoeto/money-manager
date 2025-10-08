@@ -12,7 +12,7 @@ import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.ui.event.OpenTransactionCreateDialog;
+import hhz.ktoeto.moneymanager.ui.transaction.event.OpenTransactionCreateDialog;
 import hhz.ktoeto.moneymanager.ui.view.MainView;
 import hhz.ktoeto.moneymanager.ui.view.PlanningView;
 import hhz.ktoeto.moneymanager.ui.view.StatsView;

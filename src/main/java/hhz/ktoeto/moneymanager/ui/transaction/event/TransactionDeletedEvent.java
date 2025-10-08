@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.event;
+package hhz.ktoeto.moneymanager.ui.transaction.event;
 
 import org.springframework.context.ApplicationEvent;
 

@@ -1,0 +1,47 @@
+.create-transaction-dialog {
+    position: absolute;
+    justify-self: center;
+    align-items: stretch;
+    width: 40rem;
+
+    .header {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .content {
+        padding: 0;
+        width: 100%;
+
+        .first-row {
+            display: flex;
+            align-items: baseline;
+
+            .category {
+                padding: 0;
+                width: 100%;
+            }
+        }
+
+        .second-row {
+            display: flex;
+            width: 100%;
+            align-items: start;
+            justify-content: space-between;
+        }
+
+        .buttons {
+            display: flex;
+            width: 100%;
+            align-items: start;
+            justify-content: end;
+
+            .submit {
+                background: var(--blue2);
+                color: var(--blue5);
+            }
+        }
+    }
+}

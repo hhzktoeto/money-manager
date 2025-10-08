@@ -67,7 +67,10 @@ public final class TransactionForm {
     }
 
     Components components() {
-        return new Components(typeToggleSwitch, categorySelect, amountField, datePicker, descriptionArea, submitButton, cancelButton);
+        return new Components(
+                typeToggleSwitch, categorySelect, amountField, datePicker, descriptionArea, addCategoryButton,
+                submitButton, cancelButton
+        );
     }
 
     record Components(
@@ -76,6 +79,7 @@ public final class TransactionForm {
             TextField amountField,
             DatePicker datePicker,
             TextArea descriptionArea,
+            Button addCategoryButton,
             Button submitButton,
             Button cancelButton
     ) {
