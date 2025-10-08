@@ -1,6 +1,7 @@
-package hhz.ktoeto.moneymanager.ui.login;
+package hhz.ktoeto.moneymanager.ui.login.form;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
@@ -52,6 +53,14 @@ public class LoginForm extends VerticalLayout {
         passwordField.addKeyPressListener(Key.ENTER, e -> handleSubmit(null));
     }
 
+    public String login() {
+        return this.loginField.getValue();
+    }
+
+    public String password() {
+        return this.passwordField.getValue();
+    }
+
     public void showErrorMessage(String title, String message) {
         errorBox.removeAll();
         Div h = new Div(new Span(title));
@@ -62,12 +71,8 @@ public class LoginForm extends VerticalLayout {
         errorBox.setVisible(true);
     }
 
-    public String login() {
-        return this.loginField.getValue();
-    }
-
-    public String password() {
-        return this.passwordField.getValue();
+    public void onOpenRegisterButtonClicked(ComponentEventListener<ClickEvent<Button>> event) {
+        this.openRegisterButton.addClickListener(event);
     }
 
     public void setLoginValue(String login) {

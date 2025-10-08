@@ -9,6 +9,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.backend.dto.RegisterRequest;
 import hhz.ktoeto.moneymanager.backend.service.UserService;
 import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
+import hhz.ktoeto.moneymanager.ui.login.form.LoginForm;
+import hhz.ktoeto.moneymanager.ui.login.form.RegisterForm;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -17,20 +19,24 @@ import lombok.extern.slf4j.Slf4j;
 public class LoginCard extends BasicContainer implements BeforeEnterObserver {
 
     private final LoginForm loginForm;
+    private final RegisterForm registerForm;
 
     public LoginCard(UserService userService) {
         this.loginForm = new LoginForm();
-
-        RegisterForm registerForm = new RegisterForm();
+        this.registerForm = new RegisterForm();
 
         loginForm.setVisible(true);
         registerForm.setVisible(false);
+
+        loginForm.onOpenRegisterButtonClicked(e -> {
+            loginForm.setVisible(false);
+            registerForm.setVisible(true);
+        });
 
         registerForm.onOpenLoginButtonClicked(e -> {
             loginForm.setVisible(true);
             registerForm.setVisible(false);
         });
-
         registerForm.onRegisterButtonClicked(e -> {
             try {
                 userService.register(new RegisterRequest(

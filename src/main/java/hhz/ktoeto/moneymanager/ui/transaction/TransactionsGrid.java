@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.component;
+package hhz.ktoeto.moneymanager.ui.transaction;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;

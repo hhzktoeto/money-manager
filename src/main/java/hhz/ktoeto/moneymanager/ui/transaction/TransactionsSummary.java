@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.component;
+package hhz.ktoeto.moneymanager.ui.transaction;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Span;
@@ -6,6 +6,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
 import hhz.ktoeto.moneymanager.ui.event.TransactionCreatedEvent;
 import hhz.ktoeto.moneymanager.ui.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.ui.event.TransactionUpdatedEvent;
@@ -23,7 +24,7 @@ import java.util.Objects;
 @Slf4j
 @UIScope
 @SpringComponent
-public class SummaryCards extends HorizontalLayout {
+public class TransactionsSummary extends HorizontalLayout {
 
     private final transient TransactionService transactionService;
 
@@ -31,7 +32,7 @@ public class SummaryCards extends HorizontalLayout {
     private final BasicContainer expensesCard = new BasicContainer("Расходы");
     private final BasicContainer totalCard = new BasicContainer("Баланс");
 
-    public SummaryCards(TransactionService transactionService) {
+    public TransactionsSummary(TransactionService transactionService) {
         this.transactionService = transactionService;
 
         addClassNames(

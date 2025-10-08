@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.login;
+package hhz.ktoeto.moneymanager.ui.login.form;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
