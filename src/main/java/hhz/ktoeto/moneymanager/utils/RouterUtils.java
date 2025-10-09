@@ -33,12 +33,6 @@ public final class RouterUtils {
             link.add(viewName);
         }
 
-        link.addClassNames(
-                LumoUtility.Display.FLEX,
-                LumoUtility.AlignItems.CENTER,
-                LumoUtility.Padding.Horizontal.MEDIUM
-        );
-
         return link;
     }
 }

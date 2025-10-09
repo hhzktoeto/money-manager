@@ -38,11 +38,7 @@ public class TransactionCreateDialog extends Composite<Dialog> {
         Dialog root = new Dialog(header, transactionFormContainer);
 
         closeButton.addClickListener(e -> this.close());
-
         root.setCloseOnOutsideClick(false);
-        root.addClassName("transaction-create-dialog");
-        header.addClassName("header");
-        transactionFormContainer.addClassName("content");
 
         return root;
     }

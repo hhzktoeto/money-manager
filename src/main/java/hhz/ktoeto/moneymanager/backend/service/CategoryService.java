@@ -26,23 +26,6 @@ public class CategoryService {
         return repository.findAllByUserId(userId);
     }
 
-    public Page<Category> getPage(long userId, Pageable pageable) {
-        log.debug("Fetching categories for user with id {}, page {}, size {}", userId, pageable.getPageNumber(), pageable.getPageSize());
-        return repository.findByUserId(userId, pageable);
-    }
-
-    public Optional<Category> getByNameAndUserId(String name, long userId) {
-        log.debug("Fetching category with name {} for user with id {}", name, userId);
-        Optional<Category> category = repository.findByNameAndUserId(name, userId);
-        if (category.isPresent()) {
-            log.debug("Category found: {}", category.get());
-        } else {
-            log.debug("Category not found");
-        }
-
-        return category;
-    }
-
     @Transactional
     public Category create(Category category) {
         log.debug("Creating category for user with id {}. Category: {}", category.getUserId(), category);
@@ -70,8 +53,9 @@ public class CategoryService {
         repository.delete(category);
     }
 
-    public long count(long userId) {
-        return repository.countAllByUserId(userId);
+    public boolean exist(String name, long userId) {
+        log.debug("Checking if category with name {} exists for user with id {}", name, userId);
+        return repository.existsByNameAndUserId(name, userId);
     }
 
     private Category getCategoryFromRepository(long id) {

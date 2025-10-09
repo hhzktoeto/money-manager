@@ -25,11 +25,6 @@ public class CategoryCreateFormLayoutProvider implements LayoutProvider<Category
 
         layout.add(firstRow, buttons);
 
-        firstRow.addClassName("first-row");
-        buttons.addClassName("buttons");
-        components.nameField().addClassName("name");
-        components.submitButton().addClassName("submit");
-
         return layout;
     }
 }

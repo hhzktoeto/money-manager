@@ -1,2 +1,3 @@
 @import "fonts/index.css";
-@import "colors.css";
+@import "_colors.css";
+@import "_reset.css";

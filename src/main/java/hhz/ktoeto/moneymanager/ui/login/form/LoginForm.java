@@ -42,8 +42,6 @@ public class LoginForm extends VerticalLayout {
 
         this.loginButton.addClickShortcut(Key.ENTER);
 
-        this.applyStyling();
-
         errorBox.setVisible(false);
 
         this.add(errorBox, this.loginField, this.passwordField, buttonsLayout);
@@ -80,15 +78,6 @@ public class LoginForm extends VerticalLayout {
 
     public void setPasswordValue(String password) {
         this.passwordField.setValue(password);
-    }
-
-    private void applyStyling() {
-        this.addClassName("login-form");
-
-        this.openRegisterButton.addClassName("open-register-button");
-        this.loginButton.addClassName("login-button");
-        this.buttonsLayout.addClassName("buttons-layout");
-        this.errorBox.addClassName("error");
     }
 
     private void handleSubmit(ClickEvent<Button> e) {

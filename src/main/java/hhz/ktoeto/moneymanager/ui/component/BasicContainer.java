@@ -37,9 +37,7 @@ public class BasicContainer extends Composite<Div> {
     protected Div initContent() {
         Div root = new Div();
 
-        root.addClassName("component-container");
         root.add(this.header, this.content);
-
         return root;
     }
 }

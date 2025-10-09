@@ -31,12 +31,6 @@ public class TransactionCreateFormLayoutProvider implements LayoutProvider<Trans
 
         layout.add(firstRow, secondRow, buttonsLayout);
 
-        firstRow.addClassName("first-row");
-        secondRow.addClassName("second-row");
-        buttonsLayout.addClassName("buttons");
-        components.categorySelect().addClassName("category");
-        components.submitButton().addClassName("submit");
-
         return layout;
     }
 }

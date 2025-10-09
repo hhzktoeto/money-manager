@@ -23,7 +23,7 @@ public class MainView extends VerticalLayout {
                     TransactionsSummary summaryCards,
                     TransactionsGrid transactionsGrid) {
         Div container = new Div();
-        container.setWidth("100%");
+        container.setWidthFull();
         container.setMaxWidth("900px");
 
         container.add(

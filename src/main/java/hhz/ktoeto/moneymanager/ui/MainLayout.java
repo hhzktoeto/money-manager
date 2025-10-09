@@ -37,7 +37,6 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
 
     public MainLayout(ApplicationEventPublisher eventPublisher) {
         VerticalLayout root = this.getContent();
-        root.addClassName("root");
         root.setPadding(false);
         root.setSpacing(false);
 
@@ -55,7 +54,6 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
                 RouterUtils.createLink(PlanningView.class, "Планирование")
         );
         desktopRouters.forEach(router -> {
-            router.addClassName("router");
             router.setHighlightCondition(HighlightConditions.sameLocation());
             desktopNavigationContainer.add(router);
         });
@@ -66,18 +64,9 @@ public class MainLayout extends Composite<VerticalLayout> implements RouterLayou
                 RouterUtils.createLink(PlanningView.class, VaadinIcon.CALC_BOOK.create())
         );
         mobileRouters.forEach(router -> {
-            router.addClassName("router");
             router.setHighlightCondition(HighlightConditions.sameLocation());
             mobileNavigationContainer.add(router);
         });
-
-        appLogo.addClassName("logo");
-        headerContainer.addClassName("header");
-        desktopNavigationContainer.addClassName("desktop-nav");
-        mobileNavigationContainer.addClassName("mobile-nav");
-        desktopAddTransactionButton.addClassName("add-transaction-button");
-        mobileAddTransactionButton.addClassName("mobile-add-transaction-button");
-        contentContainer.addClassName("content");
 
         headerContainer.add(appLogo, desktopNavigationContainer, desktopAddTransactionButton);
         root.setFlexGrow(1, contentContainer);

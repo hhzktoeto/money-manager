@@ -1,10 +1,11 @@
-.root {
+.main-layout {
+    background-color: var(--dark3);
     width: 100vw;
     height: 100vh;
     align-items: stretch;
 }
 
-.root .header {
+.main-layout .header {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
@@ -18,38 +19,38 @@
     align-self: center;
 }
 
-.root .header .logo {
+.main-layout .header .logo {
     width: 11rem;
     cursor: pointer;
 }
 
-.root .header .desktop-nav {
+.main-layout .header .desktop-nav {
     align-self: center;
 }
 
-.root .header .desktop-nav .router {
+.main-layout .header .desktop-nav .router {
     color: var(--blue2);
 }
 
-.root .header .desktop-nav .router:hover,
-.root .header .desktop-nav .router[highlight] {
+.main-layout .header .desktop-nav .router:hover,
+.main-layout .header .desktop-nav .router[highlight] {
     color: var(--light1);
 }
 
-.root .header .add-transaction-button {
+.main-layout .header .add-transaction-button {
     justify-self: end;
     cursor: pointer;
     color: var(--blue5);
     background-color: var(--blue2);
 }
 
-.root .content {
+.main-layout .content {
     overflow: auto;
     padding: var(--lumo-space-m);
     min-height: 0; /* чтобы работал overflow в flex/grid родителях */
 }
 
-.root .mobile-nav {
+.main-layout .mobile-nav {
     width: 100vw;
     height: 5.5rem;
     display: none;
@@ -63,15 +64,15 @@
     padding: 0.75rem;
 }
 
-.root .mobile-nav .router {
+.main-layout .mobile-nav .router {
     color: var(--blue2);
 }
 
-.root .mobile-nav .router[highlight] {
+.main-layout .mobile-nav .router[highlight] {
     color: var(--light1);
 }
 
-.root .mobile-add-transaction-button {
+.main-layout .mobile-add-transaction-button {
     display: none;
     position: fixed;
     right: 0.5rem;
@@ -90,25 +91,25 @@
 }
 
 @media (max-width: 1023px) {
-    .root .header {
+    .main-layout .header {
         display: flex;
         justify-content: center;
         text-align: center;
     }
 
-    .root .header .add-transaction-button {
+    .main-layout .header .add-transaction-button {
         display: none;
     }
 
-    .root .desktop-nav {
+    .main-layout .desktop-nav {
         display: none;
     }
 
-    .root .mobile-nav {
+    .main-layout .mobile-nav {
         display: flex;
     }
 
-    .root .mobile-add-transaction-button {
+    .main-layout .mobile-add-transaction-button {
         display: flex;
     }
 }

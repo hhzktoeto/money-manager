@@ -28,8 +28,6 @@ public class RegisterForm extends VerticalLayout {
         this.emailField.setPlaceholder("e-mail@example.com");
         this.phoneField.setPlaceholder("+7");
 
-        this.applyStyling();
-
         this.add(this.loginField, this.passwordField, this.emailField, this.phoneField, buttonsLayout);
     }
 
@@ -62,16 +60,5 @@ public class RegisterForm extends VerticalLayout {
 
     public Optional<String> phone() {
         return this.phoneField.getOptionalValue();
-    }
-
-    private void applyStyling() {
-        this.openLoginButton.addClassName("open-login-button");
-        this.registerButton.addClassName("register-button");
-        this.buttonsLayout.addClassName("buttons-layout");
-        this.loginField.addClassName("login-field");
-        this.passwordField.addClassName("password-field");
-        this.emailField.addClassName("email-field");
-        this.phoneField.addClassName("phone-field");
-        this.addClassName("register-form");
     }
 }

@@ -28,6 +28,12 @@ public class CategoryCreateFormLogic implements CategoryFormLogic {
             return;
         }
 
+        if (categoryService.exist(form.name().trim(), userId)) {
+            form.components().nameField().setErrorMessage("Категория с таким именем уже существует");
+            form.components().nameField().setInvalid(true);
+            return;
+        }
+
         Category createdCategory = categoryService.create(category);
         eventPublisher.publishEvent(new CategoryCreatedEvent(this, createdCategory));
 
