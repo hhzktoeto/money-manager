@@ -58,7 +58,7 @@ public class LoginCard extends BasicContainer implements BeforeEnterObserver {
         });
 
         this.setHeader(new H1(new Span("M"), new Span("oney "), new Span("M"), new Span("anager")));
-        this.addClassName("login-container");
+        this.addClassName("login-card");
         this.setContent(loginForm, registerForm);
     }
 

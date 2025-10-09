@@ -88,8 +88,6 @@ public class LoginForm extends VerticalLayout {
         this.openRegisterButton.addClassName("open-register-button");
         this.loginButton.addClassName("login-button");
         this.buttonsLayout.addClassName("buttons-layout");
-        this.loginField.addClassName("login-field");
-        this.passwordField.addClassName("password-field");
         this.errorBox.addClassName("error");
     }
 

@@ -1,0 +1,23 @@
+.login-form {
+    display: flex;
+    align-items: stretch;
+
+    .buttons-layout {
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+
+        .login-button {
+            cursor: pointer;
+            background: var(--blue2);
+            color: var(--blue5);
+        }
+
+        .open-register-button {
+            cursor: pointer;
+            color: var(--blue2);
+            background: none;
+            border: none;
+        }
+    }
+}

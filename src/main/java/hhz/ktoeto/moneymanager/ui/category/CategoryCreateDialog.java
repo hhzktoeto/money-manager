@@ -43,7 +43,7 @@ public class CategoryCreateDialog extends Composite<Dialog> {
         closeButton.addClickListener(e -> this.close());
 
         root.setCloseOnOutsideClick(false);
-        root.addClassName("create-category-dialog");
+        root.addClassName("category-create-dialog");
         header.addClassName("header");
         categoryFormContainer.addClassName("content");
 

@@ -1,6 +1,8 @@
-@import 'components/index.css';
-@import "fonts/index.css";
+@import 'component/index.css';
 @import "base/index.css";
+@import "login/index.css";
+@import "transaction/index.css";
+@import "category/index.css";
 
 [theme~="dark"] {
     --lumo-tint-5pct: rgba(161, 198, 237, 0.05);

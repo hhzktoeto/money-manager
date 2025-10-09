@@ -1,8 +1,8 @@
-.create-category-dialog {
+.category-create-dialog {
     position: absolute;
     justify-self: center;
     align-items: stretch;
-    width: 40rem;
+    width: 22rem;
 
     .header {
         display: flex;
@@ -14,6 +14,7 @@
     .content {
         padding: 0;
         width: 100%;
+        align-items: stretch;
 
         .first-row {
             display: flex;
