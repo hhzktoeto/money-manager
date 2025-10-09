@@ -5,7 +5,7 @@ import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import hhz.ktoeto.moneymanager.backend.service.UserService;
 import hhz.ktoeto.moneymanager.ui.view.LoginView;
 import hhz.ktoeto.moneymanager.utils.CookieConstant;
-import hhz.ktoeto.moneymanager.utils.RouteName;
+import hhz.ktoeto.moneymanager.utils.RouterUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -68,12 +68,12 @@ public class SecurityConfig {
         requestCache.setMatchingRequestParameterName(null);
 
         return http
-                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(LoginView.class, RouteName.LOGIN))
+                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(LoginView.class, RouterUtils.RouteName.LOGIN))
                 .requestCache(configurer -> configurer.requestCache(requestCache))
                 .formLogin(configurer -> configurer
-                        .loginPage(RouteName.LOGIN)
-                        .loginProcessingUrl(RouteName.LOGIN)
-                        .defaultSuccessUrl(RouteName.MAIN, true)
+                        .loginPage(RouterUtils.RouteName.LOGIN)
+                        .loginProcessingUrl(RouterUtils.RouteName.LOGIN)
+                        .defaultSuccessUrl(RouterUtils.RouteName.MAIN, true)
                 )
                 .rememberMe(configurer -> configurer
                         .key(secret)

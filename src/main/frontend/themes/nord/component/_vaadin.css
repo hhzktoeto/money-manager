@@ -1,0 +1,16 @@
+html {
+    --lumo-border-radius: 0.5rem;
+}
+
+[theme~="dark"] vaadin-button:hover {
+    cursor: pointer;
+}
+
+[theme~="dark"] ::part(input-field) {
+    box-shadow: inset 0 0 0 1px var(--lumo-contrast-30pct);
+    background-color: var(--lumo-base-color);
+}
+
+[theme~="dark"][invalid] ::part(input-field) {
+    box-shadow: inset 0 0 0 1px var(--lumo-error-color);
+}

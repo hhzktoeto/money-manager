@@ -1,2 +1,6 @@
-@import 'component/index.css';
 @import "base/index.css";
+@import "component/index.css";
+
+.clickable {
+    cursor: pointer;
+}

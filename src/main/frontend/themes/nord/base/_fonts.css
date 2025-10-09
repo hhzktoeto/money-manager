@@ -3,7 +3,7 @@
     font-family: 'Fira Sans Condensed';
     font-style: normal;
     font-weight: 400;
-    src: url('fira-sans-condensed-v11-cyrillic_latin-regular.woff2') format('woff2');
+    src: url('fonts/fira-sans-condensed-v11-cyrillic_latin-regular.woff2') format('woff2');
 }
 
 @font-face {
@@ -11,7 +11,7 @@
     font-family: 'Fira Sans Condensed';
     font-style: normal;
     font-weight: 500;
-    src: url('fira-sans-condensed-v11-cyrillic_latin-500.woff2') format('woff2');
+    src: url('fonts/fira-sans-condensed-v11-cyrillic_latin-500.woff2') format('woff2');
 }
 
 @font-face {
@@ -19,7 +19,7 @@
     font-family: 'Fira Sans Condensed';
     font-style: normal;
     font-weight: 600;
-    src: url('fira-sans-condensed-v11-cyrillic_latin-600.woff2') format('woff2');
+    src: url('fonts/fira-sans-condensed-v11-cyrillic_latin-600.woff2') format('woff2');
 }
 
 @font-face {
@@ -27,7 +27,7 @@
     font-family: 'JetBrains Mono';
     font-style: normal;
     font-weight: 500;
-    src: url('JetBrainsMono-Medium.woff2') format('woff2');
+    src: url('fonts/JetBrainsMono-Medium.woff2') format('woff2');
 }
 
 @font-face {
@@ -35,7 +35,7 @@
     font-family: 'Material Symbols';
     font-style: normal;
     font-weight: 100 700;
-    src: url("Material-Symbols.woff2") format('woff2');
+    src: url("fonts/Material-Symbols.woff2") format('woff2');
 }
 
 html {

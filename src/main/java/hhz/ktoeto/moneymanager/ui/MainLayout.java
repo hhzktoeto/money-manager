@@ -2,82 +2,166 @@ package hhz.ktoeto.moneymanager.ui;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.HighlightConditions;
+import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.transaction.event.OpenTransactionCreateDialog;
 import hhz.ktoeto.moneymanager.ui.view.MainView;
-import hhz.ktoeto.moneymanager.ui.view.PlanningView;
-import hhz.ktoeto.moneymanager.ui.view.StatsView;
 import hhz.ktoeto.moneymanager.utils.RouterUtils;
+import hhz.ktoeto.moneymanager.utils.StylingUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-
-import java.util.List;
 
 @Slf4j
 @UIScope
 @SpringComponent
-public class MainLayout extends Composite<VerticalLayout> implements RouterLayout {
-    private final HorizontalLayout desktopNavigationContainer = new HorizontalLayout();
-    private final HorizontalLayout mobileNavigationContainer = new HorizontalLayout();
-    private final HorizontalLayout headerContainer = new HorizontalLayout();
-    private final Div contentContainer = new Div();
+public class MainLayout extends VerticalLayout implements RouterLayout {
 
-    private final Button desktopAddTransactionButton = new Button("Добавить транзакцию");
-    private final Button mobileAddTransactionButton = new Button(VaadinIcon.PLUS.create());
-    private final Image appLogo = new Image("logo.png", "Money Manager");
+    private final HorizontalLayout desktopNavigation;
+    private final HorizontalLayout mobileNavigation;
+    private final HorizontalLayout header;
+    private final VerticalLayout content;
+
+    private final Button addTransactionButtonDesktop;
+    private final Button addTransactionButtonMobile;
+    private final Image appLogo;
 
     public MainLayout(ApplicationEventPublisher eventPublisher) {
-        VerticalLayout root = this.getContent();
-        root.setPadding(false);
-        root.setSpacing(false);
-
-        appLogo.addClickListener(event -> UI.getCurrent().navigate(MainView.class));
-
-        ComponentEventListener<ClickEvent<Button>> openAddTransaction = e ->
+        ComponentEventListener<ClickEvent<Button>> openTransactionCreatingModal = e ->
                 eventPublisher.publishEvent(new OpenTransactionCreateDialog(this));
 
-        desktopAddTransactionButton.addClickListener(openAddTransaction);
-        mobileAddTransactionButton.addClickListener(openAddTransaction);
+        this.setPadding(false);
+        this.setSpacing(false);
+        this.setSizeFull();
+        this.setAlignItems(FlexComponent.Alignment.STRETCH);
 
-        List<RouterLink> desktopRouters = List.of(
-                RouterUtils.createLink(MainView.class, "Главная"),
-                RouterUtils.createLink(StatsView.class, "Статистика"),
-                RouterUtils.createLink(PlanningView.class, "Планирование")
+        header = new HorizontalLayout();
+        header.setWidth(70, Unit.REM);
+        header.addClassNames(
+                LumoUtility.AlignSelf.CENTER,
+                LumoUtility.Border.BOTTOM,
+                LumoUtility.BorderRadius.MEDIUM,
+                LumoUtility.BorderColor.PRIMARY,
+                LumoUtility.Background.TRANSPARENT,
+                LumoUtility.Padding.Horizontal.XLARGE,
+                LumoUtility.Padding.Vertical.MEDIUM
         );
-        desktopRouters.forEach(router -> {
-            router.setHighlightCondition(HighlightConditions.sameLocation());
-            desktopNavigationContainer.add(router);
-        });
 
-        List<RouterLink> mobileRouters = List.of(
-                RouterUtils.createLink(MainView.class, VaadinIcon.HOME.create()),
-                RouterUtils.createLink(StatsView.class, VaadinIcon.PIE_BAR_CHART.create()),
-                RouterUtils.createLink(PlanningView.class, VaadinIcon.CALC_BOOK.create())
+        appLogo = new Image("logo.png", "Money Manager");
+        appLogo.addClickListener(event -> UI.getCurrent().navigate(MainView.class));
+        appLogo.setWidth(11, Unit.REM);
+        appLogo.setClassName(StylingUtils.CLICKABLE);
+        header.add(appLogo);
+
+        desktopNavigation = new HorizontalLayout();
+        desktopNavigation.add(RouterUtils.desktopRouterLinks().toArray(RouterLink[]::new));
+        desktopNavigation.addClassNames(
+                LumoUtility.Gap.XLARGE,
+                LumoUtility.AlignSelf.CENTER
         );
-        mobileRouters.forEach(router -> {
-            router.setHighlightCondition(HighlightConditions.sameLocation());
-            mobileNavigationContainer.add(router);
-        });
+        header.add(desktopNavigation);
 
-        headerContainer.add(appLogo, desktopNavigationContainer, desktopAddTransactionButton);
-        root.setFlexGrow(1, contentContainer);
-        root.add(headerContainer, contentContainer, mobileAddTransactionButton, mobileNavigationContainer);
+        addTransactionButtonDesktop = new Button("Добавить транзакцию");
+        addTransactionButtonDesktop.addClickListener(openTransactionCreatingModal);
+        addTransactionButtonDesktop.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        addTransactionButtonDesktop.addClassName(LumoUtility.AlignSelf.END);
+        header.add(addTransactionButtonDesktop);
+
+        content = new VerticalLayout();
+        content.addClassNames(
+                LumoUtility.Overflow.AUTO,
+                LumoUtility.Padding.MEDIUM
+        );
+
+        mobileNavigation = new HorizontalLayout();
+        mobileNavigation.add(RouterUtils.mobileRouterLinks().toArray(RouterLink[]::new));
+        mobileNavigation.setSpacing(true);
+        mobileNavigation.setHeight(5.5f, Unit.REM);
+        mobileNavigation.getStyle().set("gap", "12rem");
+        mobileNavigation.addClassNames(
+                LumoUtility.Position.FIXED,
+                LumoUtility.Position.Bottom.NONE,
+                LumoUtility.Width.FULL,
+                LumoUtility.Height.LARGE,
+                LumoUtility.JustifyContent.CENTER,
+                LumoUtility.AlignItems.CENTER,
+                LumoUtility.FontSize.XLARGE,
+                LumoUtility.Padding.SMALL,
+                LumoUtility.Border.TOP,
+                LumoUtility.Background.SHADE
+        );
+        mobileNavigation.setVisible(false);
+
+        addTransactionButtonMobile = new Button(VaadinIcon.PLUS.create());
+        addTransactionButtonMobile.addClickListener(openTransactionCreatingModal);
+        addTransactionButtonMobile.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        addTransactionButtonMobile.getStyle().set("bottom", "6rem");
+        addTransactionButtonMobile.addClassNames(
+                LumoUtility.Position.FIXED,
+                LumoUtility.Position.End.SMALL,
+                LumoUtility.Width.XLARGE,
+                LumoUtility.Height.XLARGE,
+                LumoUtility.BoxShadow.MEDIUM,
+                LumoUtility.ZIndex.XLARGE,
+                LumoUtility.AlignItems.CENTER,
+                LumoUtility.JustifyContent.CENTER,
+                LumoUtility.Transition.TRANSFORM
+        );
+        addTransactionButtonMobile.setVisible(false);
+
+        header.add(appLogo, desktopNavigation, addTransactionButtonDesktop);
+
+        this.add(header, content);
+        this.add(addTransactionButtonMobile);
+        this.add(mobileNavigation);
+
+        addAttachListener(attachEvent -> {
+            Page page = attachEvent.getUI().getPage();
+            page.addBrowserWindowResizeListener(resizeEvent -> updateResponsive(resizeEvent.getWidth()));
+            page.retrieveExtendedClientDetails(details -> updateResponsive(details.getWindowInnerWidth()));
+        });
     }
 
     @Override
     public void showRouterLayoutContent(HasElement content) {
         if (content != null) {
-            contentContainer.getElement().removeAllChildren();
-            contentContainer.getElement().appendChild(content.getElement());
+            this.content.getElement().removeAllChildren();
+            this.content.getElement().appendChild(content.getElement());
+        }
+    }
+
+    private void updateResponsive(int screenWidth) {
+        if (screenWidth < 1024) {
+            desktopNavigation.setVisible(false);
+            addTransactionButtonDesktop.setVisible(false);
+
+            mobileNavigation.setVisible(true);
+            addTransactionButtonMobile.setVisible(true);
+
+            header.setJustifyContentMode(JustifyContentMode.CENTER);
+            header.addClassName(LumoUtility.TextAlignment.CENTER);
+
+            content.addClassName(LumoUtility.Padding.Bottom.XLARGE);
+        } else {
+            desktopNavigation.setVisible(true);
+            addTransactionButtonDesktop.setVisible(true);
+
+            mobileNavigation.setVisible(false);
+            addTransactionButtonMobile.setVisible(false);
+
+            header.setJustifyContentMode(JustifyContentMode.BETWEEN);
+            header.removeClassName(LumoUtility.TextAlignment.CENTER);
+
+            content.removeClassName(LumoUtility.Padding.Bottom.XLARGE);
         }
     }
 }

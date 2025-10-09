@@ -8,15 +8,15 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.MainLayout;
 import hhz.ktoeto.moneymanager.ui.transaction.TransactionCreateDialog;
-import hhz.ktoeto.moneymanager.ui.transaction.TransactionsSummary;
 import hhz.ktoeto.moneymanager.ui.transaction.TransactionsGrid;
-import hhz.ktoeto.moneymanager.utils.RouteName;
+import hhz.ktoeto.moneymanager.ui.transaction.TransactionsSummary;
+import hhz.ktoeto.moneymanager.utils.RouterUtils;
 import jakarta.annotation.security.PermitAll;
 
 @UIScope
 @SpringComponent
 @PermitAll
-@Route(value = RouteName.MAIN, layout = MainLayout.class)
+@Route(value = RouterUtils.RouteName.MAIN, layout = MainLayout.class)
 public class MainView extends VerticalLayout {
 
     public MainView(TransactionCreateDialog addTransactionModal,

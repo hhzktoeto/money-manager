@@ -4,14 +4,14 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.utils.RouteName;
 import hhz.ktoeto.moneymanager.ui.MainLayout;
+import hhz.ktoeto.moneymanager.utils.RouterUtils;
 import jakarta.annotation.security.PermitAll;
 
 @UIScope
 @SpringComponent
 @PermitAll
-@Route(value = RouteName.PLANNING, layout = MainLayout.class)
+@Route(value = RouterUtils.RouteName.PLANNING, layout = MainLayout.class)
 public class PlanningView extends VerticalLayout {
 
     public PlanningView() {
