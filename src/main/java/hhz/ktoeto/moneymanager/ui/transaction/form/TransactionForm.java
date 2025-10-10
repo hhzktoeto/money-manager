@@ -1,12 +1,19 @@
 package hhz.ktoeto.moneymanager.ui.transaction.form;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.backend.entity.Category;
 import hhz.ktoeto.moneymanager.backend.entity.Transaction;
 import hhz.ktoeto.moneymanager.ui.category.CategoryDataProvider;
@@ -18,57 +25,137 @@ import hhz.ktoeto.moneymanager.ui.transaction.validator.TransactionDescriptionVa
 
 import java.time.LocalDate;
 
-public final class TransactionForm {
+public final class TransactionForm extends Composite<FlexLayout> {
 
-    private final TransactionTypeToggleSwitch typeToggleSwitch = new TransactionTypeToggleSwitch();
-    private final ComboBox<Category> categorySelect = new ComboBox<>("Категория");
-    private final TextField amountField = new TextField("Сумма");
-    private final DatePicker datePicker = new RussianDatePicker("Дата", LocalDate.now());
-    private final TextArea descriptionArea = new TextArea("Описание");
-    private final Button addCategoryButton = new Button(VaadinIcon.PLUS.create());
-    private final Button submitButton = new Button("Сохранить");
-    private final Button cancelButton = new Button("Отмена");
+    private final TransactionFormLogic formLogic;
+    private final CategoryDataProvider categoryProvider;
 
-    private final Binder<Transaction> binder = new Binder<>(Transaction.class);
+    private TransactionTypeToggleSwitch typeToggleSwitch;
+    private ComboBox<Category> categorySelect;
+    private TextField amountField;
+    private DatePicker datePicker;
+    private TextArea descriptionArea;
+    private Button createCategoryButton;
+    private Button submitButton;
+    private Button cancelButton;
 
-    TransactionForm(CategoryDataProvider categoryProvider, TransactionFormLogic logic) {
-        addCategoryButton.addClickListener(e -> logic.onCategoryAdd(this));
-        submitButton.addClickListener(e -> logic.onSubmit(this));
-        cancelButton.addClickListener(e -> logic.onCancel(this));
+    private Binder<Transaction> binder;
 
+    TransactionForm(CategoryDataProvider categoryProvider, TransactionFormLogic formLogic) {
+        this.formLogic = formLogic;
+        this.categoryProvider = categoryProvider;
+    }
+
+    Transaction.Type selectedType() {
+        return typeToggleSwitch.getSelectedType();
+    }
+
+    boolean writeTo(Transaction transaction) {
+        return binder.writeBeanIfValid(transaction);
+    }
+
+    void readFrom(Transaction transaction) {
+        binder.readBean(transaction);
+    }
+
+    @Override
+    protected FlexLayout initContent() {
+        FlexLayout root = new FlexLayout();
+        root.setFlexDirection(FlexLayout.FlexDirection.COLUMN);
+
+        typeToggleSwitch = new TransactionTypeToggleSwitch();
+        typeToggleSwitch.setWidthFull();
+
+        categorySelect = new ComboBox<>("Категория");
         categorySelect.setItems(categoryProvider);
         categorySelect.setItemLabelGenerator(Category::getName);
+        categorySelect.setWidthFull();
 
-        binder.forField(categorySelect)
+        createCategoryButton = new Button(VaadinIcon.PLUS.create());
+        createCategoryButton.addClickListener(e -> formLogic.onCategoryAdd(this));
+        createCategoryButton.setTooltipText("Добавить категорию");
+
+        HorizontalLayout categoryWrapper = new HorizontalLayout(categorySelect, createCategoryButton);
+        categoryWrapper.setPadding(false);
+        categoryWrapper.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.AlignItems.BASELINE,
+                LumoUtility.JustifyContent.BETWEEN,
+                LumoUtility.Gap.XSMALL
+        );
+
+        FlexLayout firstRow = new FlexLayout(typeToggleSwitch, categoryWrapper);
+        firstRow.addClassNames(
+                LumoUtility.FlexDirection.COLUMN,
+                LumoUtility.FlexDirection.Breakpoint.Medium.ROW,
+                LumoUtility.AlignItems.BASELINE,
+                LumoUtility.Gap.XSMALL
+        );
+        root.add(firstRow);
+
+        amountField = new TextField("Сумма");
+        amountField.setWidthFull();
+
+        datePicker = new RussianDatePicker("Дата", LocalDate.now());
+        datePicker.setWidthFull();
+
+        FlexLayout secondRow = new FlexLayout(amountField, datePicker);
+        secondRow.addClassNames(
+                LumoUtility.FlexDirection.COLUMN,
+                LumoUtility.FlexDirection.Breakpoint.Medium.ROW,
+                LumoUtility.AlignItems.STRETCH,
+                LumoUtility.Gap.XSMALL
+        );
+        root.add(secondRow);
+
+        descriptionArea = new TextArea("Описание");
+        descriptionArea.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.AlignSelf.CENTER
+        );
+        root.add(descriptionArea);
+
+        submitButton = new Button("Сохранить");
+        submitButton.addClickListener(e -> formLogic.onSubmit(this));
+        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        cancelButton = new Button("Отмена");
+        cancelButton.addClickListener(e -> formLogic.onCancel(this));
+
+        HorizontalLayout buttons = new HorizontalLayout(cancelButton, submitButton);
+        buttons.addClassNames(
+                LumoUtility.Margin.Top.MEDIUM,
+                LumoUtility.JustifyContent.END,
+                LumoUtility.Gap.LARGE
+        );
+        root.add(buttons);
+
+        this.binder = new Binder<>(Transaction.class);
+        this.binder.forField(categorySelect)
                 .asRequired("Не выбрана категория")
                 .bind(Transaction::getCategory, Transaction::setCategory);
 
-        binder.forField(amountField)
+        this.binder.forField(amountField)
                 .asRequired("Не введена сумма")
                 .withConverter(new MathExpressionToBigDecimalConverter())
                 .withValidator(new TransactionAmountValidator())
                 .bind(Transaction::getAmount, Transaction::setAmount);
 
-        binder.forField(datePicker)
+        this.binder.forField(datePicker)
                 .asRequired("Не выбрана дата")
                 .bind(Transaction::getDate, Transaction::setDate);
 
-        binder.forField(descriptionArea)
+        this.binder.forField(descriptionArea)
                 .withValidator(new TransactionDescriptionValidator())
                 .bind(Transaction::getDescription, Transaction::setDescription);
-    }
 
-    public Transaction.Type selectedType() {
-        return typeToggleSwitch.getSelectedType();
-    }
 
-    public boolean writeTo(Transaction transaction) {
-        return binder.writeBeanIfValid(transaction);
+        return root;
     }
 
     Components components() {
         return new Components(
-                typeToggleSwitch, categorySelect, amountField, datePicker, descriptionArea, addCategoryButton,
+                typeToggleSwitch, categorySelect, amountField, datePicker, descriptionArea, createCategoryButton,
                 submitButton, cancelButton
         );
     }

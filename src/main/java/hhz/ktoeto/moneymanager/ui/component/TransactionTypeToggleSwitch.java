@@ -88,6 +88,10 @@ public class TransactionTypeToggleSwitch extends Composite<Div> {
         return incomeSelected.get() ? Transaction.Type.INCOME : Transaction.Type.EXPENSE;
     }
 
+    public void setWidthFull() {
+        this.getContent().setWidthFull();
+    }
+
     private void updateStyles() {
         boolean isIncome = incomeSelected.get();
         String containerBackground = isIncome

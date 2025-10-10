@@ -1,6 +1,5 @@
 package hhz.ktoeto.moneymanager.ui.transaction;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -10,12 +9,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.ui.LayoutProvider;
 import hhz.ktoeto.moneymanager.ui.transaction.event.OpenTransactionCreateDialog;
 import hhz.ktoeto.moneymanager.ui.transaction.event.TransactionCreationCancelledEvent;
 import hhz.ktoeto.moneymanager.ui.transaction.form.TransactionForm;
 import hhz.ktoeto.moneymanager.ui.transaction.form.TransactionFormFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
 
 @UIScope
@@ -23,15 +20,12 @@ import org.springframework.context.event.EventListener;
 public class TransactionCreateDialog extends Composite<Dialog> {
 
     private final TransactionFormFactory formFactory;
-    private final LayoutProvider<TransactionForm> formLayoutProvider;
 
     private Button closeButton;
     private HorizontalLayout header;
 
-    public TransactionCreateDialog(TransactionFormFactory formFactory,
-                                   @Qualifier("transactionCreate") LayoutProvider<TransactionForm> formLayoutProvider) {
+    public TransactionCreateDialog(TransactionFormFactory formFactory) {
         this.formFactory = formFactory;
-        this.formLayoutProvider = formLayoutProvider;
     }
 
     @Override
@@ -52,15 +46,14 @@ public class TransactionCreateDialog extends Composite<Dialog> {
         header.add(closeButton);
 
         TransactionForm form = formFactory.transactionCreateForm();
-        Component formLayout = formLayoutProvider.createLayout(form);
-        formLayout.addClassNames(
+        form.addClassNames(
                 LumoUtility.Padding.NONE,
                 LumoUtility.Width.FULL,
                 LumoUtility.AlignItems.STRETCH
         );
 
         root.add(header);
-        root.add(formLayout);
+        root.add(form);
 
         return root;
     }

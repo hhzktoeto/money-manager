@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 @SpringComponent
 @RequiredArgsConstructor
-public class TransactionCreateFormLogic implements TransactionFormLogic {
+public class TransactionCreateLogic implements TransactionFormLogic {
 
     private final TransactionService transactionService;
     private final ApplicationEventPublisher eventPublisher;
