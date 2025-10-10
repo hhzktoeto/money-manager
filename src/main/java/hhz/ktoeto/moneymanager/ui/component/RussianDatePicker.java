@@ -17,8 +17,12 @@ public class RussianDatePicker extends DatePicker {
 
         datePickerI18n.setMonthNames(List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"));
         datePickerI18n.setFirstDayOfWeek(1);
-        datePickerI18n.setWeekdays(Arrays.stream(symbols.getWeekdays()).filter(s -> !s.isEmpty()).toList());
-        datePickerI18n.setWeekdaysShort(Arrays.stream(symbols.getShortWeekdays()).filter(s -> !s.isEmpty()).toList());
+        datePickerI18n.setWeekdays(Arrays.stream(symbols.getWeekdays())
+                .filter(s -> !s.isEmpty())
+                .toList());
+        datePickerI18n.setWeekdaysShort(Arrays.stream(symbols.getShortWeekdays())
+                .filter(s -> !s.isEmpty())
+                .toList());
         datePickerI18n.setDateFormat("dd.MM.yyyy");
         datePickerI18n.setToday("Сегодня");
         datePickerI18n.setCancel("Закрыть");
