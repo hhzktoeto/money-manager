@@ -1,7 +1,8 @@
 package hhz.ktoeto.moneymanager.ui.login;
 
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -16,23 +17,35 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UIScope
 @SpringComponent
-public class LoginCard extends BasicContainer implements BeforeEnterObserver {
+public class LoginCard extends Composite<BasicContainer> implements BeforeEnterObserver {
 
-    private final LoginForm loginForm;
-    private final RegisterForm registerForm;
+    private final UserService userService;
+
+    private LoginForm loginForm;
+    private RegisterForm registerForm;
 
     public LoginCard(UserService userService) {
-        this.loginForm = new LoginForm();
-        this.registerForm = new RegisterForm();
+        this.userService = userService;
+    }
+
+    @Override
+    protected BasicContainer initContent() {
+        BasicContainer root = new BasicContainer();
+
+        Image appLogo = new Image("logo.png", "Money Manager");
+        appLogo.setWidth(6, Unit.REM);
+        root.setHeader(appLogo);
+
+        loginForm = new LoginForm();
+        registerForm = new RegisterForm();
 
         loginForm.setVisible(true);
-        registerForm.setVisible(false);
-
         loginForm.onOpenRegisterButtonClicked(e -> {
             loginForm.setVisible(false);
             registerForm.setVisible(true);
         });
 
+        registerForm.setVisible(false);
         registerForm.onOpenLoginButtonClicked(e -> {
             loginForm.setVisible(true);
             registerForm.setVisible(false);
@@ -56,10 +69,9 @@ public class LoginCard extends BasicContainer implements BeforeEnterObserver {
                 log.error("Exception occurred, while trying to register", ex);
             }
         });
+        root.setContent(loginForm, registerForm);
 
-        this.setHeader(new H1(new Span("M"), new Span("oney "), new Span("M"), new Span("anager")));
-        this.addClassName("login-card");
-        this.setContent(loginForm, registerForm);
+        return root;
     }
 
     @Override

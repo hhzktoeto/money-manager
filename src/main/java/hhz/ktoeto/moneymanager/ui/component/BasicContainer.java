@@ -4,13 +4,26 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 
-public class BasicContainer extends Composite<Div> {
+public class BasicContainer extends Div {
 
-    private final Div header = new Div();
-    private final Div content = new Div();
+    private final Div header;
+    private final Div content;
 
     public BasicContainer() {
+        this.header = new Div();
+        this.content = new Div();
+
+        this.addClassNames(
+                LumoUtility.Padding.MEDIUM,
+                LumoUtility.BorderRadius.MEDIUM,
+                LumoUtility.Border.ALL,
+                LumoUtility.BorderColor.PRIMARY,
+                LumoUtility.Background.TINT_5,
+                LumoUtility.BoxShadow.LARGE);
+
+        this.add(this.header, this.content);
     }
 
     public BasicContainer(String header) {
@@ -31,13 +44,5 @@ public class BasicContainer extends Composite<Div> {
     public void setContent(Component... components) {
         this.content.removeAll();
         this.content.add(components);
-    }
-
-    @Override
-    protected Div initContent() {
-        Div root = new Div();
-
-        root.add(this.header, this.content);
-        return root;
     }
 }

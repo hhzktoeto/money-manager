@@ -56,7 +56,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
                 LumoUtility.Padding.Vertical.MEDIUM
         );
 
-        appLogo = new Image("logo.png", "Money Manager");
+        appLogo = new Image("/logo.png", "Money Manager");
         appLogo.addClickListener(event -> UI.getCurrent().navigate(MainView.class));
         appLogo.setWidth(11, Unit.REM);
         appLogo.setClassName(StylingUtils.CLICKABLE);
