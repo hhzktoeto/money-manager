@@ -2,6 +2,7 @@ package hhz.ktoeto.moneymanager.ui.transaction;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -36,14 +37,17 @@ public class TransactionCreateDialog extends Composite<Dialog> {
         header = new HorizontalLayout();
         header.add(new H3("Добавить транзакцию"));
         header.addClassNames(
+                LumoUtility.Margin.Bottom.MEDIUM,
                 LumoUtility.Width.FULL,
                 LumoUtility.AlignItems.CENTER,
                 LumoUtility.JustifyContent.BETWEEN
         );
 
         closeButton = new Button(VaadinIcon.CLOSE.create());
+        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE, ButtonVariant.LUMO_ERROR);
         closeButton.addClickListener(e -> this.close());
         header.add(closeButton);
+        root.add(header);
 
         TransactionForm form = formFactory.transactionCreateForm();
         form.addClassNames(
@@ -52,7 +56,6 @@ public class TransactionCreateDialog extends Composite<Dialog> {
                 LumoUtility.AlignItems.STRETCH
         );
 
-        root.add(header);
         root.add(form);
 
         return root;

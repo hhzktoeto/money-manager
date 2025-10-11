@@ -1,12 +1,10 @@
 package hhz.ktoeto.moneymanager.ui.transaction.form;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -87,7 +85,7 @@ public final class TransactionForm extends Composite<FlexLayout> {
         FlexLayout firstRow = new FlexLayout(typeToggleSwitch, categoryWrapper);
         firstRow.addClassNames(
                 LumoUtility.FlexDirection.COLUMN,
-                LumoUtility.FlexDirection.Breakpoint.Medium.ROW,
+                LumoUtility.FlexDirection.Breakpoint.Small.ROW,
                 LumoUtility.AlignItems.BASELINE,
                 LumoUtility.Gap.XSMALL
         );
@@ -102,7 +100,7 @@ public final class TransactionForm extends Composite<FlexLayout> {
         FlexLayout secondRow = new FlexLayout(amountField, datePicker);
         secondRow.addClassNames(
                 LumoUtility.FlexDirection.COLUMN,
-                LumoUtility.FlexDirection.Breakpoint.Medium.ROW,
+                LumoUtility.FlexDirection.Breakpoint.Small.ROW,
                 LumoUtility.AlignItems.STRETCH,
                 LumoUtility.Gap.XSMALL
         );
