@@ -1,19 +1,19 @@
 package hhz.ktoeto.moneymanager.ui.component;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 public class BasicContainer extends Div {
 
-    private final Div header;
-    private final Div content;
+    private final FlexLayout header;
+    private final FlexLayout content;
 
     public BasicContainer() {
-        this.header = new Div();
-        this.content = new Div();
+        this.header = new FlexLayout();
+        this.content = new FlexLayout();
 
         this.addClassNames(
                 LumoUtility.Padding.MEDIUM,
@@ -29,6 +29,10 @@ public class BasicContainer extends Div {
     public BasicContainer(String header) {
         this();
         this.setHeader(header);
+    }
+
+    public void addClassNamesToHeader(String... classNames) {
+        this.header.addClassNames(classNames);
     }
 
     public void setHeader(String text) {

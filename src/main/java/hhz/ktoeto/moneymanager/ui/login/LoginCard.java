@@ -7,6 +7,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.backend.dto.RegisterRequest;
 import hhz.ktoeto.moneymanager.backend.service.UserService;
 import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
@@ -31,9 +32,10 @@ public class LoginCard extends Composite<BasicContainer> implements BeforeEnterO
     @Override
     protected BasicContainer initContent() {
         BasicContainer root = new BasicContainer();
+        root.addClassNamesToHeader(LumoUtility.JustifyContent.CENTER);
 
         Image appLogo = new Image("logo.png", "Money Manager");
-        appLogo.setWidth(6, Unit.REM);
+        appLogo.setWidth(12, Unit.REM);
         root.setHeader(appLogo);
 
         loginForm = new LoginForm();

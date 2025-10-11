@@ -2,8 +2,7 @@ package hhz.ktoeto.moneymanager.utils;
 
 public final class StylingUtils {
 
-    private StylingUtils() {
-    }
+    private StylingUtils() {}
 
     public static final String CLICKABLE = "clickable";
     public static final String LEFT = "left";
@@ -13,6 +12,11 @@ public final class StylingUtils {
     public static final String TRANSITION = "transition";
 
     public static final class Color {
+
+        private Color() {}
+
+        public static final String PRIMARY_CONTRAST_40 = "var(--lumo-primary-contrast-color-40pct)";
+
         public static final String SUCCESS = "var(--lumo-success-color)";
         public static final String SUCCESS_10 = "var(--lumo-success-color-10pct)" ;
 
@@ -26,6 +30,9 @@ public final class StylingUtils {
     }
 
     public static final class Transition {
+
+        private Transition() {}
+
         public static final String LEFT_03_EASE = "left 0.3s ease";
         public static final String BG_COLOR_03_EASE = "background-color 0.3s ease";
     }

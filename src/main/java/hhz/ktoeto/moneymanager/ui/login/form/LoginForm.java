@@ -14,6 +14,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.login.validator.UsernameValidator;
+import hhz.ktoeto.moneymanager.utils.StylingUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -58,14 +59,20 @@ public class LoginForm extends Composite<VerticalLayout> {
         root.add(passwordField);
 
         submitButton = new Button("Войти");
+        submitButton.setWidthFull();
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.addClickShortcut(Key.ENTER);
         submitButton.addClickListener(ignored -> handleSubmit());
+        root.add(submitButton);
 
         registerButton = new Button("Зарегистрироваться");
+        registerButton.addClassName(LumoUtility.FontWeight.LIGHT);
         registerButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
 
-        HorizontalLayout buttonsLayout = new HorizontalLayout(registerButton, submitButton);
+        Span span = new Span("Нет аккаунта?");
+        span.addClassName(LumoUtility.FontWeight.EXTRALIGHT);
+        span.getStyle().set(StylingUtils.COLOR, StylingUtils.Color.PRIMARY_CONTRAST_40);
+        HorizontalLayout buttonsLayout = new HorizontalLayout(span, registerButton);
         buttonsLayout.setWidthFull();
         buttonsLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         root.add(buttonsLayout);

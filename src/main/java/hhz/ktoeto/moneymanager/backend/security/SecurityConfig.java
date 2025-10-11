@@ -69,6 +69,7 @@ public class SecurityConfig {
 
         return http
                 .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(LoginView.class, RouterUtils.RouteName.LOGIN))
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/logo.png").permitAll())
                 .requestCache(configurer -> configurer.requestCache(requestCache))
                 .formLogin(configurer -> configurer
                         .loginPage(RouterUtils.RouteName.LOGIN)
