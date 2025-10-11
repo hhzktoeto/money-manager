@@ -18,6 +18,7 @@ import hhz.ktoeto.moneymanager.utils.StylingUtils;
 import lombok.Getter;
 import lombok.Setter;
 
+//TODO: убрать логику кнопок отсюда, сделать интерфейс
 public class LoginForm extends Composite<VerticalLayout> {
 
     private TextField loginField;
@@ -69,13 +70,15 @@ public class LoginForm extends Composite<VerticalLayout> {
         registerButton.addClassName(LumoUtility.FontWeight.LIGHT);
         registerButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
 
-        Span span = new Span("Нет аккаунта?");
-        span.addClassName(LumoUtility.FontWeight.EXTRALIGHT);
-        span.getStyle().set(StylingUtils.COLOR, StylingUtils.Color.PRIMARY_CONTRAST_40);
-        HorizontalLayout buttonsLayout = new HorizontalLayout(span, registerButton);
-        buttonsLayout.setWidthFull();
-        buttonsLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-        root.add(buttonsLayout);
+        Span noAccountSpan = new Span("Нет аккаунта?");
+        noAccountSpan.addClassName(LumoUtility.FontWeight.EXTRALIGHT);
+        noAccountSpan.getStyle().set(StylingUtils.COLOR, StylingUtils.Color.PRIMARY_CONTRAST_40);
+        HorizontalLayout noAccountLayout = new HorizontalLayout(noAccountSpan, registerButton);
+        noAccountLayout.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.JustifyContent.CENTER
+        );
+        root.add(noAccountLayout);
 
         springUsername = new Input();
         springUsername.setType("hidden");
@@ -134,8 +137,6 @@ public class LoginForm extends Composite<VerticalLayout> {
         disableWhileSubmitting(true);
         springUsername.setValue(loginRequest.getUsername());
         springPassword.setValue(loginRequest.getPassword());
-
-        System.out.println("Username: " + loginRequest.getUsername() + ", password: " + loginRequest.getPassword());
 
         springForm.getElement().callJsFunction("submit");
 
