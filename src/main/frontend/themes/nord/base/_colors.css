@@ -27,6 +27,7 @@
     --lumo-primary-color-10pct: rgba(136, 192, 208, 0.1);
     --lumo-primary-color: #88C0D0;
     --lumo-primary-contrast-color: #fcfcfc;
+    --lumo-primary-contrast-color-40pct: rgba(252, 252, 252, 0.4);
     --lumo-error-text-color: rgb(191, 97, 106);
     --lumo-error-color-50pct: rgba(191, 97, 106, 0.5);
     --lumo-error-color-10pct: rgba(191, 97, 106, 0.1);
