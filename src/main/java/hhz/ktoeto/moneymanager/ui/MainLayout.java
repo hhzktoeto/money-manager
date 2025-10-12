@@ -77,7 +77,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         header.add(addTransactionButtonDesktop);
 
         content = new VerticalLayout();
+        content.setSizeFull();
         content.addClassNames(
+                LumoUtility.AlignContent.STRETCH,
                 LumoUtility.Overflow.AUTO,
                 LumoUtility.Padding.MEDIUM
         );

@@ -1,19 +1,11 @@
 package hhz.ktoeto.moneymanager.backend.repository;
 
 import hhz.ktoeto.moneymanager.backend.entity.Transaction;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface TransactionsRepository extends JpaRepository<Transaction, Long> {
+public interface TransactionsRepository extends JpaRepository<Transaction, Long>, JpaSpecificationExecutor<Transaction> {
 
-    List<Transaction> findAllByUserId(long userId);
-
-    Page<Transaction> findByUserId(long userId, Pageable pageable);
-
-    long countByUserId(long userId);
 }

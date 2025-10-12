@@ -1,14 +1,18 @@
 package hhz.ktoeto.moneymanager.backend.service;
 
+import hhz.ktoeto.moneymanager.backend.dto.TransactionFilter;
 import hhz.ktoeto.moneymanager.backend.entity.Transaction;
 import hhz.ktoeto.moneymanager.backend.exception.EntityNotFoundException;
 import hhz.ktoeto.moneymanager.backend.exception.NonOwnerRequestException;
 import hhz.ktoeto.moneymanager.backend.repository.TransactionsRepository;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,12 +26,12 @@ public class TransactionService {
 
     public List<Transaction> getAll(long userId) {
         log.debug("Fetching all transactions for user with id {}", userId);
-        return repository.findAllByUserId(userId);
+        return repository.findAll(specification(userId, null));
     }
 
-    public Page<Transaction> getPage(long userId, Pageable pageable) {
+    public Page<Transaction> getPage(long userId, TransactionFilter filter, Pageable pageable) {
         log.debug("Fetching transactions for user with id {}, page {}, size {}", userId, pageable.getPageNumber(), pageable.getPageSize());
-        return repository.findByUserId(userId, pageable);
+        return repository.findAll(specification(userId, filter), pageable);
     }
 
     @Transactional
@@ -57,12 +61,34 @@ public class TransactionService {
         repository.delete(transaction);
     }
 
-    public long count(long userId) {
-        return repository.countByUserId(userId);
+    public long count(long userId, TransactionFilter filter) {
+        return repository.count(specification(userId, filter));
     }
 
     private Transaction getTransactionFromRepository(long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Could not find Transaction with id %d".formatted(id)));
+    }
+
+    private Specification<Transaction> specification(long userId, @Nullable TransactionFilter filter) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.equal(root.get("userId"), userId);
+            if (filter == null) {
+                return predicate;
+            }
+
+            if (filter.getFromDate() != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.greaterThanOrEqualTo(root.get("date"), filter.getFromDate())
+                );
+            }
+            if (filter.getToDate() != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.lessThanOrEqualTo(root.get("date"), filter.getToDate())
+                );
+            }
+
+            return predicate;
+        };
     }
 }
