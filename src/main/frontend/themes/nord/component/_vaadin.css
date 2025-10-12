@@ -1,6 +1,7 @@
 html {
     --lumo-border-radius: 0.5rem;
-    --vaadin-input-field-placeholder-color: var(--lumo-disabled-text-color)
+    --vaadin-input-field-placeholder-color: var(--lumo-disabled-text-color);
+    --vaadin-grid-cell-background: transparent;
 }
 
 ::part(input-field) {

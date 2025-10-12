@@ -41,7 +41,7 @@ public class LoginCard extends Composite<BasicContainer> implements BeforeEnterO
         BasicContainer root = new BasicContainer();
         root.setMinWidth(320, Unit.PIXELS);
         root.setMaxWidth(400, Unit.PIXELS);
-        root.addClassNamesToHeader(LumoUtility.JustifyContent.CENTER);
+        root.getHeader().addClassNames(LumoUtility.JustifyContent.CENTER);
 
         Image appLogo = new Image("logo.png", "Money Manager");
         appLogo.setWidth(12, Unit.REM);
