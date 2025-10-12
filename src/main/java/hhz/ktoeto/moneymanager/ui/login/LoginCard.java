@@ -8,25 +8,32 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.backend.dto.RegisterRequest;
-import hhz.ktoeto.moneymanager.backend.service.UserService;
 import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
+import hhz.ktoeto.moneymanager.ui.login.event.OpenLoginFormEvent;
+import hhz.ktoeto.moneymanager.ui.login.event.OpenRegisterFormEvent;
+import hhz.ktoeto.moneymanager.ui.login.event.UserRegisteredEvent;
 import hhz.ktoeto.moneymanager.ui.login.form.LoginForm;
+import hhz.ktoeto.moneymanager.ui.login.form.LoginFormFactory;
 import hhz.ktoeto.moneymanager.ui.login.form.RegisterForm;
+import hhz.ktoeto.moneymanager.ui.login.form.RegisterFormFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 
 @Slf4j
 @UIScope
 @SpringComponent
 public class LoginCard extends Composite<BasicContainer> implements BeforeEnterObserver {
 
-    private final UserService userService;
+    private final transient LoginFormFactory loginFormFactory;
+    private final transient RegisterFormFactory registerFormFactory;
 
     private LoginForm loginForm;
     private RegisterForm registerForm;
 
-    public LoginCard(UserService userService) {
-        this.userService = userService;
+    public LoginCard(LoginFormFactory loginFormFactory,
+                     RegisterFormFactory registerFormFactory) {
+        this.loginFormFactory = loginFormFactory;
+        this.registerFormFactory = registerFormFactory;
     }
 
     @Override
@@ -40,39 +47,12 @@ public class LoginCard extends Composite<BasicContainer> implements BeforeEnterO
         appLogo.setWidth(12, Unit.REM);
         root.setHeader(appLogo);
 
-        loginForm = new LoginForm();
-        registerForm = new RegisterForm();
+        loginForm = loginFormFactory.defaultLoginForm();
+        registerForm = registerFormFactory.defaultRegisterForm();
 
         loginForm.setVisible(true);
-        loginForm.onOpenRegisterButtonClicked(e -> {
-            loginForm.setVisible(false);
-            registerForm.setVisible(true);
-        });
-
         registerForm.setVisible(false);
-        registerForm.onOpenLoginButtonClicked(e -> {
-            loginForm.setVisible(true);
-            registerForm.setVisible(false);
-        });
-        registerForm.onRegisterButtonClicked(e -> {
-            try {
-                userService.register(new RegisterRequest(
-                        registerForm.login(),
-                        registerForm.password(),
-                        registerForm.email().orElse(null),
-                        registerForm.phone().orElse(null))
-                );
 
-                loginForm.setLoginValue(registerForm.login());
-                loginForm.setPasswordValue(registerForm.password());
-
-                registerForm.setVisible(false);
-                registerForm.clear();
-                loginForm.setVisible(true);
-            } catch (Exception ex) {
-                log.error("Exception occurred, while trying to register", ex);
-            }
-        });
         root.setContent(loginForm, registerForm);
 
         return root;
@@ -83,5 +63,26 @@ public class LoginCard extends Composite<BasicContainer> implements BeforeEnterO
         if (event.getLocation().getQueryParameters().getParameters().containsKey("error")) {
             loginForm.showErrorMessage("Неверный логин или пароль", "Попробуйте ещё раз");
         }
+    }
+
+    @EventListener(OpenRegisterFormEvent.class)
+    private void onOpenRegisterFormEvent() {
+        loginForm.setVisible(false);
+        registerForm.setVisible(true);
+    }
+
+    @EventListener(OpenLoginFormEvent.class)
+    private void onOpenLoginFormEvent() {
+        loginForm.setVisible(true);
+        registerForm.setVisible(false);
+    }
+
+    @EventListener(UserRegisteredEvent.class)
+    private void onUserRegisteredEvent(UserRegisteredEvent event) {
+        loginForm.setLoginValue(event.getUser().getLogin());
+
+        registerForm.setVisible(false);
+        registerForm.clear();
+        loginForm.setVisible(true);
     }
 }

@@ -3,10 +3,8 @@ package hhz.ktoeto.moneymanager.backend.dto;
 import lombok.Data;
 
 @Data
-public class RegisterRequest {
+public class LoginRequest {
 
     private String login;
     private String password;
-    private String email;
-    private String phone;
 }

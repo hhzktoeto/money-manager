@@ -18,9 +18,9 @@ public class UserValidator {
     private final UserRepository repository;
 
     public void validateRegistration(RegisterRequest registerRequest) {
-        String requestLogin = registerRequest.login();
-        String requestEmail = registerRequest.email();
-        String requestPhone = registerRequest.phone();
+        String requestLogin = registerRequest.getLogin();
+        String requestEmail = registerRequest.getEmail();
+        String requestPhone = registerRequest.getPhone();
 
         Set<String> errorMessages = HashSet.newHashSet(3);
         if (repository.existsByLogin(requestLogin)) {

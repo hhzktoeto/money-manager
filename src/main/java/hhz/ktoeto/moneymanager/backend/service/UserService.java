@@ -31,10 +31,10 @@ public class UserService {
         validator.validateRegistration(request);
 
         User user = new User();
-        user.setLogin(request.login());
-        user.setPassword(passwordEncoder.encode(request.password()));
-        user.setEmail(request.email());
-        user.setPhone(request.phone());
+        user.setLogin(request.getLogin());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setEmail(request.getEmail());
+        user.setPhone(request.getPhone());
 
         User savedUser = repository.save(user);
         log.info("User was created");

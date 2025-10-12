@@ -1,25 +1,27 @@
 package hhz.ktoeto.moneymanager.ui.login.form;
 
-import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.HtmlComponent;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Input;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.backend.dto.LoginRequest;
+import hhz.ktoeto.moneymanager.ui.login.validator.PasswordValidator;
 import hhz.ktoeto.moneymanager.ui.login.validator.UsernameValidator;
 import hhz.ktoeto.moneymanager.utils.StylingUtils;
-import lombok.Getter;
-import lombok.Setter;
 
-//TODO: убрать логику кнопок отсюда, сделать интерфейс
 public class LoginForm extends Composite<VerticalLayout> {
+
+    private final transient LoginFormLogic formLogic;
 
     private TextField loginField;
     private PasswordField passwordField;
@@ -32,6 +34,10 @@ public class LoginForm extends Composite<VerticalLayout> {
     private VerticalLayout errorBox;
 
     private Binder<LoginRequest> binder;
+
+    public LoginForm(LoginFormLogic formLogic) {
+        this.formLogic = formLogic;
+    }
 
     @Override
     protected VerticalLayout initContent() {
@@ -56,19 +62,20 @@ public class LoginForm extends Composite<VerticalLayout> {
         passwordField = new PasswordField("Пароль");
         passwordField.setWidthFull();
         passwordField.setPrefixComponent(VaadinIcon.KEY.create());
-        passwordField.addKeyPressListener(Key.ENTER, ignored -> handleSubmit());
+        passwordField.addKeyPressListener(Key.ENTER, ignored -> formLogic.onSubmit(this));
         root.add(passwordField);
 
         submitButton = new Button("Войти");
         submitButton.setWidthFull();
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.addClickShortcut(Key.ENTER);
-        submitButton.addClickListener(ignored -> handleSubmit());
+        submitButton.addClickListener(ignored -> formLogic.onSubmit(this));
         root.add(submitButton);
 
         registerButton = new Button("Зарегистрироваться");
         registerButton.addClassName(LumoUtility.FontWeight.LIGHT);
         registerButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        registerButton.addClickListener(ignored -> formLogic.onRegister(this));
 
         Span noAccountSpan = new Span("Нет аккаунта?");
         noAccountSpan.addClassName(LumoUtility.FontWeight.EXTRALIGHT);
@@ -98,9 +105,10 @@ public class LoginForm extends Composite<VerticalLayout> {
         binder.forField(loginField)
                 .asRequired("Не введён логин")
                 .withValidator(new UsernameValidator())
-                .bind(LoginRequest::getUsername, LoginRequest::setUsername);
+                .bind(LoginRequest::getLogin, LoginRequest::setLogin);
         binder.forField(passwordField)
                 .asRequired("Не введён пароль")
+                .withValidator(new PasswordValidator())
                 .bind(LoginRequest::getPassword, LoginRequest::setPassword);
 
         return root;
@@ -115,45 +123,24 @@ public class LoginForm extends Composite<VerticalLayout> {
         errorBox.setVisible(true);
     }
 
-    public void onOpenRegisterButtonClicked(ComponentEventListener<ClickEvent<Button>> event) {
-        this.registerButton.addClickListener(event);
-    }
-
     public void setLoginValue(String login) {
         this.loginField.setValue(login);
     }
 
-    public void setPasswordValue(String password) {
-        this.passwordField.setValue(password);
+    boolean writeTo(LoginRequest loginRequest) {
+        return binder.writeBeanIfValid(loginRequest);
     }
 
-    private void handleSubmit() {
-        LoginRequest loginRequest = new LoginRequest();
-        boolean valid = binder.writeBeanIfValid(loginRequest);
-        if (!valid) {
-            return;
-        }
-
-        disableWhileSubmitting(true);
-        springUsername.setValue(loginRequest.getUsername());
-        springPassword.setValue(loginRequest.getPassword());
-
-        springForm.getElement().callJsFunction("submit");
-
-        disableWhileSubmitting(false);
+    void setDisabled(boolean disabled) {
+        submitButton.setEnabled(!disabled);
+        registerButton.setEnabled(!disabled);
+        loginField.setReadOnly(disabled);
+        passwordField.setReadOnly(disabled);
     }
 
-    private void disableWhileSubmitting(boolean disable) {
-        submitButton.setEnabled(!disable);
-        registerButton.setEnabled(!disable);
-        loginField.setReadOnly(disable);
-        passwordField.setReadOnly(disable);
+    Components components() {
+        return new Components(springUsername, springPassword, springForm);
     }
 
-    @Getter
-    @Setter
-    private static final class LoginRequest {
-        private String username;
-        private String password;
-    }
+    record Components(Input usernameInput, Input passwordInput, HtmlComponent hiddenForm) {}
 }
