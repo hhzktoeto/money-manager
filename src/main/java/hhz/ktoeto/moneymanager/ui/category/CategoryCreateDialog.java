@@ -11,7 +11,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.ui.LayoutProvider;
 import hhz.ktoeto.moneymanager.ui.category.event.CategoryCreationCancelledEvent;
-import hhz.ktoeto.moneymanager.ui.category.event.OpenCategoryCreateDialog;
+import hhz.ktoeto.moneymanager.ui.category.event.OpenCategoryCreateDialogEvent;
 import hhz.ktoeto.moneymanager.ui.category.form.CategoryForm;
 import hhz.ktoeto.moneymanager.ui.category.form.CategoryFormFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,7 @@ public class CategoryCreateDialog extends Composite<Dialog> {
         return root;
     }
 
-    @EventListener(OpenCategoryCreateDialog.class)
+    @EventListener(OpenCategoryCreateDialogEvent.class)
     private void open() {
         if (this.getContent().isOpened()) {
             this.getContent().close();

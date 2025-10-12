@@ -9,7 +9,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.MainLayout;
 import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
 import hhz.ktoeto.moneymanager.ui.transaction.RecentTransactionsGrid;
-import hhz.ktoeto.moneymanager.ui.transaction.TransactionsSummary;
 import hhz.ktoeto.moneymanager.utils.RouterUtils;
 import jakarta.annotation.security.PermitAll;
 
@@ -19,8 +18,7 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = RouterUtils.RouteName.MAIN, layout = MainLayout.class)
 public class MainView extends VerticalLayout {
 
-    public MainView(TransactionsSummary summaryCards,
-                    RecentTransactionsGrid transactionsGrid) {
+    public MainView(RecentTransactionsGrid transactionsGrid) {
         setSizeFull();
         addClassNames(
                 LumoUtility.AlignItems.CENTER,
@@ -43,7 +41,6 @@ public class MainView extends VerticalLayout {
         transactionsGridContainer.getHeader().addClassName(LumoUtility.Margin.Bottom.MEDIUM);
 
         content.add(
-                summaryCards,
                 transactionsGridContainer
         );
 

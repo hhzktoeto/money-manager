@@ -2,9 +2,9 @@ package hhz.ktoeto.moneymanager.ui.transaction.event;
 
 import org.springframework.context.ApplicationEvent;
 
-public class OpenTransactionCreateDialog extends ApplicationEvent {
+public class OpenTransactionCreateDialogEvent extends ApplicationEvent {
 
-    public OpenTransactionCreateDialog(Object source) {
+    public OpenTransactionCreateDialogEvent(Object source) {
         super(source);
     }
 }

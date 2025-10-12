@@ -1,6 +1,7 @@
 package hhz.ktoeto.moneymanager.ui.transaction;
 
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -22,15 +23,16 @@ public class RecentTransactionsGrid extends Composite<Grid<Transaction>> {
         Grid<Transaction> root = new Grid<>();
         root.addClassNames(LumoUtility.Background.TRANSPARENT);
         root.addThemeVariants(GridVariant.LUMO_NO_BORDER);
-        root.addClassNames(LumoUtility.BorderRadius.LARGE);
         root.setAllRowsVisible(true);
 
         root.addColumn(transaction -> FormattingUtils.formatDate(transaction.getDate()))
                 .setKey("date");
         root.addColumn(transaction -> transaction.getCategory().getName())
-                .setKey("category");
-        root.addColumn(transaction -> FormattingUtils.formatAmount(transaction.getAmount()))
-                .setKey("amount");
+                .setKey("category")
+                .setTextAlign(ColumnTextAlign.CENTER);
+        root.addColumn(transaction -> FormattingUtils.formatAmount(transaction.getAmount()) + "₽")
+                .setKey("amount")
+                .setTextAlign(ColumnTextAlign.END);
 
         root.setDataProvider(dataProvider);
 

@@ -10,24 +10,22 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.ui.transaction.event.OpenTransactionCreateDialog;
+import hhz.ktoeto.moneymanager.ui.transaction.event.OpenTransactionCreateDialogEvent;
 import hhz.ktoeto.moneymanager.ui.transaction.event.TransactionCreationCancelledEvent;
 import hhz.ktoeto.moneymanager.ui.transaction.form.TransactionForm;
 import hhz.ktoeto.moneymanager.ui.transaction.form.TransactionFormFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 
 @UIScope
 @SpringComponent
+@RequiredArgsConstructor
 public class TransactionCreateDialog extends Composite<Dialog> {
 
-    private final TransactionFormFactory formFactory;
+    private final transient TransactionFormFactory formFactory;
 
     private Button closeButton;
     private HorizontalLayout header;
-
-    public TransactionCreateDialog(TransactionFormFactory formFactory) {
-        this.formFactory = formFactory;
-    }
 
     @Override
     protected Dialog initContent() {
@@ -61,7 +59,7 @@ public class TransactionCreateDialog extends Composite<Dialog> {
         return root;
     }
 
-    @EventListener(OpenTransactionCreateDialog.class)
+    @EventListener(OpenTransactionCreateDialogEvent.class)
     private void open() {
         if (this.getContent().isOpened()) {
             this.getContent().close();
