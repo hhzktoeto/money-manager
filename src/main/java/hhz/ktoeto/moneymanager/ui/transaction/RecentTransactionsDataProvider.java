@@ -8,11 +8,9 @@ import hhz.ktoeto.moneymanager.backend.entity.Transaction;
 import hhz.ktoeto.moneymanager.backend.service.TransactionService;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 
-@SpringComponent
+@SpringComponent("recentTransactionsProvider")
 @VaadinSessionScope
 public class RecentTransactionsDataProvider extends TransactionDataProvider {
-
-    private transient int quantity = 5;
 
     public RecentTransactionsDataProvider(TransactionService transactionService) {
         super(transactionService);
@@ -21,11 +19,6 @@ public class RecentTransactionsDataProvider extends TransactionDataProvider {
     @Override
     protected int sizeInBackEnd(Query<Transaction, TransactionFilter> query) {
         int safeCount = (int) Math.min(Integer.MAX_VALUE, transactionService.count(SecurityUtils.getCurrentUserId(), currentFilter));
-        return Math.min(safeCount, quantity);
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-        this.refreshAll();
+        return Math.min(safeCount, 5);
     }
 }

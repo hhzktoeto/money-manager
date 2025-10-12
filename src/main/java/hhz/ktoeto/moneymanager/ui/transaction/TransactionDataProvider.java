@@ -19,7 +19,7 @@ import org.springframework.data.domain.Sort;
 
 import java.util.stream.Stream;
 
-@SpringComponent
+@SpringComponent("allTransactionsProvider")
 @VaadinSessionScope
 @RequiredArgsConstructor
 public class TransactionDataProvider extends AbstractBackEndDataProvider<Transaction, TransactionFilter> {

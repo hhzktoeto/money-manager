@@ -88,8 +88,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         mobileNavigation.add(RouterUtils.mobileRouterLinks().toArray(RouterLink[]::new));
         mobileNavigation.setSpacing(true);
         mobileNavigation.setHeight(5.5f, Unit.REM);
-        mobileNavigation.getStyle().set("gap", "12rem");
         mobileNavigation.addClassNames(
+                LumoUtility.Gap.XLARGE,
                 LumoUtility.Position.FIXED,
                 LumoUtility.Position.Bottom.NONE,
                 LumoUtility.Width.FULL,

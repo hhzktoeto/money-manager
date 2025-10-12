@@ -1,7 +1,6 @@
 package hhz.ktoeto.moneymanager.ui.transaction;
 
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -13,11 +12,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 @UIScope
 @SpringComponent
-public class RecentTransactionsGrid extends Composite<Grid<Transaction>> {
+public class AllTransactionsGrid extends Composite<Grid<Transaction>> {
 
     private final transient TransactionDataProvider dataProvider;
 
-    public RecentTransactionsGrid(@Qualifier("recentTransactionsProvider") TransactionDataProvider dataProvider) {
+    public AllTransactionsGrid(@Qualifier("allTransactionsProvider") TransactionDataProvider dataProvider) {
         this.dataProvider = dataProvider;
     }
 
@@ -29,13 +28,17 @@ public class RecentTransactionsGrid extends Composite<Grid<Transaction>> {
         root.setAllRowsVisible(true);
 
         root.addColumn(transaction -> FormattingUtils.formatDate(transaction.getDate()))
+                .setHeader("Дата")
+                .setSortable(true)
                 .setKey("date");
         root.addColumn(transaction -> transaction.getCategory().getName())
-                .setKey("category")
-                .setTextAlign(ColumnTextAlign.CENTER);
-        root.addColumn(transaction -> FormattingUtils.formatAmount(transaction.getAmount()) + "₽")
-                .setKey("amount")
-                .setTextAlign(ColumnTextAlign.END);
+                .setHeader("Категория")
+                .setSortable(true)
+                .setKey("category");
+        root.addColumn(transaction -> FormattingUtils.formatAmount(transaction.getAmount()))
+                .setHeader("Сумма")
+                .setSortable(true)
+                .setKey("amount");
 
         root.setDataProvider(dataProvider);
 

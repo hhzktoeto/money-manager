@@ -10,6 +10,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.view.MainView;
 import hhz.ktoeto.moneymanager.ui.view.PlanningView;
 import hhz.ktoeto.moneymanager.ui.view.StatsView;
+import hhz.ktoeto.moneymanager.ui.view.TransactionsView;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -23,6 +24,7 @@ public final class RouterUtils {
     public static List<RouterLink> desktopRouterLinks() {
         return List.of(
                 createLink("Главная", MainView.class, null),
+                createLink("Транзакции", TransactionsView.class, null),
                 createLink("Статистика", StatsView.class, null),
                 createLink("Планирование", PlanningView.class, null)
         );
@@ -31,6 +33,7 @@ public final class RouterUtils {
     public static List<RouterLink> mobileRouterLinks() {
         return List.of(
                 createLink(null, MainView.class, VaadinIcon.HOME.create()),
+                createLink(null, TransactionsView.class, VaadinIcon.MONEY.create()),
                 createLink(null, StatsView.class, VaadinIcon.PIE_BAR_CHART.create()),
                 createLink(null, PlanningView.class, VaadinIcon.CALC_BOOK.create())
         );
@@ -56,6 +59,7 @@ public final class RouterUtils {
         public static final String LOGIN = "/login";
         public static final String STATS = "/stats";
         public static final String PLANNING = "/planning";
+        public static final String TRANSACTIONS = "/transactions";
 
         private RouteName() {
         }
