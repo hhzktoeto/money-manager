@@ -46,7 +46,7 @@ public class TransactionTypeToggleSwitch extends Composite<Div> {
         );
 
         knob = new Div();
-        knob.setWidth(6, Unit.REM);
+        knob.setWidth(7.5f, Unit.REM);
         knob.setHeight(2, Unit.REM);
         knob.addClassNames(
                 LumoUtility.Position.ABSOLUTE,
@@ -60,7 +60,7 @@ public class TransactionTypeToggleSwitch extends Composite<Div> {
         );
 
         container = new HorizontalLayout(expenseLabel, knob, incomeLabel);
-        container.setWidth(200, Unit.PIXELS);
+        container.setWidth(246, Unit.PIXELS);
         container.setHeight(40, Unit.PIXELS);
         container.addClassNames(
                 LumoUtility.Position.RELATIVE,
@@ -98,7 +98,7 @@ public class TransactionTypeToggleSwitch extends Composite<Div> {
                 ? StylingUtils.Color.SUCCESS_10
                 : StylingUtils.Color.ERROR_10;
         String knobLeftPosition = isIncome
-                ? "103px"
+                ? "123px"
                 : "3px";
         String knobBackground = isIncome
                 ? StylingUtils.Color.SUCCESS
