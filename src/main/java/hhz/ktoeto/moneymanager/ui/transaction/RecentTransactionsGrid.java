@@ -8,16 +8,21 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.backend.entity.Transaction;
+import hhz.ktoeto.moneymanager.ui.transaction.event.OpenTransactionEditDialogEvent;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationEventPublisher;
 
 @UIScope
 @SpringComponent
 public class RecentTransactionsGrid extends Composite<Grid<Transaction>> {
 
+    private final transient ApplicationEventPublisher eventPublisher;
     private final transient TransactionDataProvider dataProvider;
 
-    public RecentTransactionsGrid(@Qualifier("recentTransactionsProvider") TransactionDataProvider dataProvider) {
+    public RecentTransactionsGrid(ApplicationEventPublisher eventPublisher,
+                                  @Qualifier("recentTransactionsProvider") TransactionDataProvider dataProvider) {
+        this.eventPublisher = eventPublisher;
         this.dataProvider = dataProvider;
     }
 
@@ -36,6 +41,10 @@ public class RecentTransactionsGrid extends Composite<Grid<Transaction>> {
         root.addColumn(transaction -> FormattingUtils.formatAmount(transaction.getAmount()) + "₽")
                 .setKey("amount")
                 .setTextAlign(ColumnTextAlign.END);
+
+        root.addSelectionListener(event -> event.getFirstSelectedItem().ifPresent(transaction ->
+            eventPublisher.publishEvent(new OpenTransactionEditDialogEvent(this, transaction))
+        ));
 
         root.setDataProvider(dataProvider);
 

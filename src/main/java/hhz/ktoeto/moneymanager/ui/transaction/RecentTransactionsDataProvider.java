@@ -18,7 +18,7 @@ public class RecentTransactionsDataProvider extends TransactionDataProvider {
 
     @Override
     protected int sizeInBackEnd(Query<Transaction, TransactionFilter> query) {
-        int safeCount = (int) Math.min(Integer.MAX_VALUE, transactionService.count(SecurityUtils.getCurrentUserId(), currentFilter));
+        int safeCount = (int) Math.min(Integer.MAX_VALUE, transactionService.count(SecurityUtils.getCurrentUserId(), this.getCurrentFilter()));
         return Math.min(safeCount, 5);
     }
 }

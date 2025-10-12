@@ -12,6 +12,7 @@ import hhz.ktoeto.moneymanager.ui.transaction.event.TransactionCreatedEvent;
 import hhz.ktoeto.moneymanager.ui.transaction.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.ui.transaction.event.TransactionUpdatedEvent;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +27,13 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
 
     protected final transient TransactionService transactionService;
 
-    protected transient TransactionFilter currentFilter = new TransactionFilter();
+    @Getter
+    private transient TransactionFilter currentFilter = new TransactionFilter();
+
+    public void setFilter(TransactionFilter filter) {
+        this.currentFilter = filter != null ? filter : new TransactionFilter();
+        this.refreshAll();
+    }
 
     @Override
     protected Stream<Transaction> fetchFromBackEnd(Query<Transaction, TransactionFilter> query) {
@@ -56,26 +63,17 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
     @Override
     protected int sizeInBackEnd(Query<Transaction, TransactionFilter> query) {
         long userId = SecurityUtils.getCurrentUserId();
-        TransactionFilter filter = query.getFilter().orElse(new TransactionFilter());
+        TransactionFilter filter = query.getFilter().orElse(currentFilter);
 
         return (int) Math.min(Integer.MAX_VALUE, transactionService.count(userId, filter));
     }
 
-    public void setFilter(TransactionFilter filter) {
-        this.currentFilter = filter != null ? filter : new TransactionFilter();
-        this.refreshAll();
-    }
-
     @EventListener({
             TransactionCreatedEvent.class,
-            TransactionDeletedEvent.class
+            TransactionDeletedEvent.class,
+            TransactionUpdatedEvent.class
     })
     private void onTransactionCreatedDeleted() {
         this.refreshAll();
-    }
-
-    @EventListener(TransactionUpdatedEvent.class)
-    private void onTransactionUpdated(TransactionUpdatedEvent event) {
-        this.refreshItem(event.getTransaction());
     }
 }

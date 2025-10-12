@@ -25,7 +25,7 @@ import java.time.LocalDate;
 
 public final class TransactionForm extends Composite<FlexLayout> {
 
-    private final TransactionFormLogic formLogic;
+    private final transient TransactionFormLogic formLogic;
     private final CategoryDataProvider categoryProvider;
 
     private TransactionTypeToggleSwitch typeToggleSwitch;
@@ -38,10 +38,16 @@ public final class TransactionForm extends Composite<FlexLayout> {
     private Button cancelButton;
 
     private Binder<Transaction> binder;
+    private transient Transaction editableTransaction;
 
     TransactionForm(CategoryDataProvider categoryProvider, TransactionFormLogic formLogic) {
         this.formLogic = formLogic;
         this.categoryProvider = categoryProvider;
+    }
+
+    public void edit(Transaction transaction) {
+        editableTransaction = transaction;
+        binder.readBean(editableTransaction);
     }
 
     Transaction.Type selectedType() {
@@ -52,8 +58,8 @@ public final class TransactionForm extends Composite<FlexLayout> {
         return binder.writeBeanIfValid(transaction);
     }
 
-    void readFrom(Transaction transaction) {
-        binder.readBean(transaction);
+    Transaction getEditableTransaction() {
+        return editableTransaction;
     }
 
     @Override

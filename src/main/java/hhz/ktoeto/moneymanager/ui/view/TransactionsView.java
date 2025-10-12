@@ -1,7 +1,6 @@
 package hhz.ktoeto.moneymanager.ui.view;
 
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -35,9 +34,6 @@ public class TransactionsView extends VerticalLayout {
                 LumoUtility.Height.FULL,
                 LumoUtility.MaxWidth.SCREEN_LARGE
         );
-
-        HorizontalLayout header = new HorizontalLayout();
-
 
         BasicContainer transactionsGridContainer = new BasicContainer();
         transactionsGridContainer.setContent(transactionsGrid);

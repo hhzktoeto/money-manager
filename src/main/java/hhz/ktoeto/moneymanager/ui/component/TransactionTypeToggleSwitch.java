@@ -5,16 +5,12 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.backend.entity.Transaction;
 import hhz.ktoeto.moneymanager.utils.StylingUtils;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@UIScope
-@SpringComponent
 public class TransactionTypeToggleSwitch extends Composite<Div> {
 
     private final AtomicBoolean incomeSelected = new AtomicBoolean(false);

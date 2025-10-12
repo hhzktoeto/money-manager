@@ -4,7 +4,6 @@ import com.udojava.evalex.Expression;
 import com.vaadin.flow.data.binder.Result;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.converter.Converter;
-import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 
 import java.math.BigDecimal;
 
@@ -22,6 +21,6 @@ public class MathExpressionToBigDecimalConverter implements Converter<String, Bi
 
     @Override
     public String convertToPresentation(BigDecimal value, ValueContext context) {
-        return value == null ? "" : FormattingUtils.formatAmount(value);
+        return value == null ? "" : value.toString();
     }
 }
