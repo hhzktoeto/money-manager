@@ -3,6 +3,7 @@ package hhz.ktoeto.moneymanager.ui;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -36,15 +37,15 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
     public MainLayout(ApplicationEventPublisher eventPublisher) {
         ComponentEventListener<ClickEvent<Button>> openTransactionCreatingModal = e ->
                 eventPublisher.publishEvent(new OpenTransactionCreateDialogEvent(this));
-
         this.setPadding(false);
         this.setSpacing(false);
         this.setSizeFull();
         this.setAlignItems(FlexComponent.Alignment.STRETCH);
 
         header = new HorizontalLayout();
-        header.setWidth(70, Unit.REM);
         header.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.MaxWidth.SCREEN_XLARGE,
                 LumoUtility.AlignSelf.CENTER,
                 LumoUtility.Border.BOTTOM,
                 LumoUtility.BorderRadius.MEDIUM,
@@ -79,23 +80,23 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         content.addClassNames(
                 LumoUtility.AlignContent.STRETCH,
                 LumoUtility.Overflow.AUTO,
-                LumoUtility.Padding.MEDIUM
+                LumoUtility.Padding.XSMALL
         );
 
         mobileNavigation = new HorizontalLayout();
         mobileNavigation.add(RouterUtils.mobileRouterLinks().toArray(RouterLink[]::new));
         mobileNavigation.setSpacing(true);
-        mobileNavigation.setHeight(5.5f, Unit.REM);
+        mobileNavigation.setHeight(8, Unit.VH);
         mobileNavigation.addClassNames(
                 LumoUtility.Gap.XLARGE,
                 LumoUtility.Position.FIXED,
                 LumoUtility.Position.Bottom.NONE,
                 LumoUtility.Width.FULL,
                 LumoUtility.Height.LARGE,
-                LumoUtility.JustifyContent.CENTER,
+                LumoUtility.JustifyContent.BETWEEN,
                 LumoUtility.AlignItems.CENTER,
-                LumoUtility.FontSize.XLARGE,
-                LumoUtility.Padding.SMALL,
+                LumoUtility.FontSize.MEDIUM,
+                LumoUtility.Padding.Horizontal.XLARGE,
                 LumoUtility.Border.TOP,
                 LumoUtility.Background.SHADE
         );
@@ -104,7 +105,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         addTransactionButtonMobile = new Button(VaadinIcon.PLUS.create());
         addTransactionButtonMobile.addClickListener(openTransactionCreatingModal);
         addTransactionButtonMobile.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        addTransactionButtonMobile.getStyle().set("bottom", "6rem");
+        addTransactionButtonMobile.getStyle().set("bottom", "8.5vh");
         addTransactionButtonMobile.addClassNames(
                 LumoUtility.Position.FIXED,
                 LumoUtility.Position.End.SMALL,
