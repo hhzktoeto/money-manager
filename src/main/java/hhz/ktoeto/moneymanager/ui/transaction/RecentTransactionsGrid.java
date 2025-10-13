@@ -42,7 +42,7 @@ public class RecentTransactionsGrid extends Composite<Grid<Transaction>> {
         root.addColumn(transaction -> transaction.getCategory().getName())
                 .setKey("category")
                 .setTextAlign(ColumnTextAlign.CENTER);
-        root.addColumn(transaction -> FormattingUtils.formatAmount(transaction.getAmount()) + "₽")
+        root.addColumn(transaction -> FormattingUtils.formatAmount(transaction.getAmount()))
                 .setKey("amount")
                 .setTextAlign(ColumnTextAlign.END);
 

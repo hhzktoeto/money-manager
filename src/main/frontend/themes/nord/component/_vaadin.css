@@ -16,3 +16,17 @@ vaadin-dialog-overlay::part(backdrop) {
     backdrop-filter: blur(6px);
     background-color: rgba(0, 0, 0, 0.5);
 }
+
+vaadin-select-overlay::part(content) {
+    text-align: center;
+    height: 33vh;
+}
+
+vaadin-select-overlay vaadin-select-item[selected] {
+    background: var(--lumo-primary-color);
+    color: var(--lumo-primary-contrast-color);
+}
+
+vaadin-select-item::part(checkmark) {
+    display: none;
+}

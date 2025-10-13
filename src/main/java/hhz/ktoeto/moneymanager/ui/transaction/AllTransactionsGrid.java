@@ -1,7 +1,6 @@
 package hhz.ktoeto.moneymanager.ui.transaction;
 
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -13,7 +12,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.backend.dto.TransactionFilter;
 import hhz.ktoeto.moneymanager.backend.entity.Transaction;
 import hhz.ktoeto.moneymanager.ui.component.NoTransactionsImage;
-import hhz.ktoeto.moneymanager.ui.component.PeriodPicker;
+import hhz.ktoeto.moneymanager.ui.component.YearMonthPicker;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -39,18 +38,14 @@ public class AllTransactionsGrid extends Composite<VerticalLayout> {
         );
         root.add(header);
 
-        PeriodPicker periodPicker = new PeriodPicker();
-        periodPicker.onFromDateChange(event -> {
+        YearMonthPicker yearMonthPicker = new YearMonthPicker();
+        yearMonthPicker.addChangeEventHandler((from, to) -> {
             TransactionFilter filter = dataProvider.getCurrentFilter();
-            filter.setFromDate(periodPicker.fromDate());
+            filter.setFromDate(from);
+            filter.setToDate(to);
             dataProvider.setFilter(filter);
         });
-        periodPicker.onToDateChange(event -> {
-            TransactionFilter filter = dataProvider.getCurrentFilter();
-            filter.setToDate(periodPicker.toDate());
-            dataProvider.setFilter(filter);
-        });
-        header.add(periodPicker);
+        header.add(yearMonthPicker);
 
         Grid<Transaction> grid = new Grid<>();
         grid.addClassNames(LumoUtility.Background.TRANSPARENT);
