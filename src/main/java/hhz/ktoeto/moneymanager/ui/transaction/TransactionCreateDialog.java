@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.dialog.DialogVariant;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -31,6 +32,10 @@ public class TransactionCreateDialog extends Composite<Dialog> {
     protected Dialog initContent() {
         Dialog root = new Dialog();
         root.setCloseOnOutsideClick(false);
+        root.setWidthFull();
+        root.addClassNames(
+                LumoUtility.MaxWidth.SCREEN_SMALL
+        );
 
         header = new HorizontalLayout();
         header.add(new H3("Добавить транзакцию"));

@@ -31,6 +31,10 @@ public class TransactionEditDialog extends Composite<Dialog> {
     protected Dialog initContent() {
         Dialog root = new Dialog();
         root.setCloseOnOutsideClick(false);
+        root.setWidthFull();
+        root.addClassNames(
+                LumoUtility.MaxWidth.SCREEN_SMALL
+        );
 
         header = new HorizontalLayout();
         header.add(new H3("Редактировать транзакцию"));

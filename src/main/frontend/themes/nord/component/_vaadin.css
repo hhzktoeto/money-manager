@@ -11,3 +11,8 @@ vaadin-button:hover {
 vaadin-button[theme~="tertiary-inline"]:hover::part(label) {
     text-decoration: underline;
 }
+
+vaadin-dialog-overlay::part(backdrop) {
+    backdrop-filter: blur(6px);
+    background-color: rgba(0, 0, 0, 0.5);
+}
