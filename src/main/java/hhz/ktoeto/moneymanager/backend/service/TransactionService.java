@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +24,6 @@ import java.util.List;
 public class TransactionService {
 
     private final TransactionsRepository repository;
-
-    public List<Transaction> getAll(long userId) {
-        log.debug("Fetching all transactions for user with id {}", userId);
-        return repository.findAll(specification(userId, null));
-    }
 
     public Page<Transaction> getPage(long userId, TransactionFilter filter, Pageable pageable) {
         log.debug("Fetching transactions for user with id {}, page {}, size {}", userId, pageable.getPageNumber(), pageable.getPageSize());
@@ -70,12 +66,9 @@ public class TransactionService {
                 .orElseThrow(() -> new EntityNotFoundException("Could not find Transaction with id %d".formatted(id)));
     }
 
-    private Specification<Transaction> specification(long userId, @Nullable TransactionFilter filter) {
+    private Specification<Transaction> specification(long userId, @NonNull TransactionFilter filter) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.equal(root.get("userId"), userId);
-            if (filter == null) {
-                return predicate;
-            }
 
             if (filter.getFromDate() != null) {
                 predicate = criteriaBuilder.and(predicate,

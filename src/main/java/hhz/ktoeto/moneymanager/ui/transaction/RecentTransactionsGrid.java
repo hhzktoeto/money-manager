@@ -8,6 +8,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.backend.entity.Transaction;
+import hhz.ktoeto.moneymanager.ui.component.NoTransactionsImage;
 import hhz.ktoeto.moneymanager.ui.transaction.event.OpenTransactionEditDialogEvent;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,6 +33,9 @@ public class RecentTransactionsGrid extends Composite<Grid<Transaction>> {
         root.addClassNames(LumoUtility.Background.TRANSPARENT);
         root.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         root.setAllRowsVisible(true);
+        NoTransactionsImage noTransactionsImage = new NoTransactionsImage();
+        noTransactionsImage.setText("Нет недавних транзакций");
+        root.setEmptyStateComponent(noTransactionsImage);
 
         root.addColumn(transaction -> FormattingUtils.formatDate(transaction.getDate()))
                 .setKey("date");

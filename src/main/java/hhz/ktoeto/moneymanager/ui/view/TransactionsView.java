@@ -7,7 +7,6 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.MainLayout;
-import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
 import hhz.ktoeto.moneymanager.ui.transaction.AllTransactionsGrid;
 import hhz.ktoeto.moneymanager.utils.RouterUtils;
 import jakarta.annotation.security.PermitAll;
@@ -35,9 +34,7 @@ public class TransactionsView extends VerticalLayout {
                 LumoUtility.MaxWidth.SCREEN_LARGE
         );
 
-        BasicContainer transactionsGridContainer = new BasicContainer();
-        transactionsGridContainer.setContent(transactionsGrid);
-        content.add(transactionsGridContainer);
+        content.add(transactionsGrid);
 
         add(content);
     }

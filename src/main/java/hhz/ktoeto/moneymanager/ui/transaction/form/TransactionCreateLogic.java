@@ -30,13 +30,14 @@ public class TransactionCreateLogic implements TransactionFormLogic {
             return;
         }
 
-        transactionService.create(transaction);
+        Transaction saved = transactionService.create(transaction);
         eventPublisher.publishEvent(new TransactionCreatedEvent(this));
 
-        TransactionForm.Components formComponents = form.components();
-        formComponents.amountField().clear();
-        formComponents.descriptionArea().clear();
-        formComponents.amountField().setInvalid(false);
+        Transaction reset = new Transaction();
+        reset.setDate(saved.getDate());
+        reset.setCategory(saved.getCategory());
+
+        form.reset(reset);
     }
 
     @Override

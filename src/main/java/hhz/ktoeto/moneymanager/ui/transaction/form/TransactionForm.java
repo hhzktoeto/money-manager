@@ -45,23 +45,6 @@ public final class TransactionForm extends Composite<FlexLayout> {
         this.categoryProvider = categoryProvider;
     }
 
-    public void edit(Transaction transaction) {
-        editableTransaction = transaction;
-        binder.readBean(editableTransaction);
-    }
-
-    Transaction.Type selectedType() {
-        return typeToggleSwitch.getSelectedType();
-    }
-
-    boolean writeTo(Transaction transaction) {
-        return binder.writeBeanIfValid(transaction);
-    }
-
-    Transaction getEditableTransaction() {
-        return editableTransaction;
-    }
-
     @Override
     protected FlexLayout initContent() {
         FlexLayout root = new FlexLayout();
@@ -155,6 +138,31 @@ public final class TransactionForm extends Composite<FlexLayout> {
 
 
         return root;
+    }
+
+    public void edit(Transaction transaction) {
+        editableTransaction = transaction;
+        binder.setBean(editableTransaction);
+    }
+
+    Transaction.Type selectedType() {
+        return typeToggleSwitch.getSelectedType();
+    }
+
+    boolean writeTo(Transaction transaction) {
+        return binder.writeBeanIfValid(transaction);
+    }
+
+    Transaction getEditableTransaction() {
+        return editableTransaction;
+    }
+
+    void fullReset() {
+        this.binder.removeBean();
+    }
+
+    void reset(Transaction transaction) {
+        this.binder.setBean(transaction);
     }
 
     Components components() {

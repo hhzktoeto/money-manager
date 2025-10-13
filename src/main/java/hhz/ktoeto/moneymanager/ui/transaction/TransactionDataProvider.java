@@ -41,7 +41,10 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
         TransactionFilter filter = query.getFilter().orElse(currentFilter);
 
         Sort sort;
-        if (!query.getSortOrders().isEmpty()) {
+        if (query.getSortOrders().isEmpty()) {
+            sort = Sort.by(Sort.Order.desc("date"))
+                    .and(Sort.by(Sort.Order.desc("createdAt")));
+        } else {
             sort = query.getSortOrders().stream()
                     .map(order -> Sort.by(order.getDirection() == SortDirection.DESCENDING
                                     ? Sort.Direction.DESC
@@ -49,8 +52,6 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
                             order.getSorted())
                     )
                     .reduce(Sort.unsorted(), Sort::and);
-        } else {
-            sort = Sort.by(Sort.Direction.DESC, "date").and(Sort.by(Sort.Direction.DESC, "createdAt"));
         }
 
         int page = query.getOffset() / query.getLimit();
