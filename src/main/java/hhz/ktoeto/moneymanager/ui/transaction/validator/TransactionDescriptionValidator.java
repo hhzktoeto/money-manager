@@ -11,10 +11,13 @@ public class TransactionDescriptionValidator implements Validator<String> {
 
     @Override
     public ValidationResult apply(String value, ValueContext context) {
-        if (value == null || value.length() <= maxLength) {
+        if (value == null) {
             return ValidationResult.ok();
         }
+        if (value.length() > maxLength) {
+            return ValidationResult.error(errorMessage);
+        }
 
-        return ValidationResult.error(errorMessage);
+        return ValidationResult.ok();
     }
 }

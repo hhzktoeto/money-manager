@@ -8,8 +8,8 @@ import hhz.ktoeto.moneymanager.backend.entity.Transaction;
 import hhz.ktoeto.moneymanager.backend.service.TransactionService;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 
-@SpringComponent("recentTransactionsProvider")
 @VaadinSessionScope
+@SpringComponent("recentTransactionsProvider")
 public class RecentTransactionsDataProvider extends TransactionDataProvider {
 
     public RecentTransactionsDataProvider(TransactionService transactionService) {

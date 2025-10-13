@@ -16,10 +16,8 @@ import hhz.ktoeto.moneymanager.ui.login.form.LoginForm;
 import hhz.ktoeto.moneymanager.ui.login.form.LoginFormFactory;
 import hhz.ktoeto.moneymanager.ui.login.form.RegisterForm;
 import hhz.ktoeto.moneymanager.ui.login.form.RegisterFormFactory;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 
-@Slf4j
 @UIScope
 @SpringComponent
 public class LoginCard extends Composite<BasicContainer> implements BeforeEnterObserver {

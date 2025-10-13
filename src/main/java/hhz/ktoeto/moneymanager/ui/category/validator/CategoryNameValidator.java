@@ -7,6 +7,7 @@ import com.vaadin.flow.data.binder.ValueContext;
 public class CategoryNameValidator implements Validator<String> {
 
     private static final int MAX_LENGTH = 64;
+
     private static final String MAX_LENGTH_ERROR_MESSAGE = "Длина имени не может превышать 64 символа";
     private static final String EMPTY_ERROR_MESSAGE = "Имя категории не может быть пустым";
 

@@ -7,9 +7,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.ui.login.LoginCard;
 import hhz.ktoeto.moneymanager.utils.RouterUtils;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @UIScope
 @SpringComponent
 @AnonymousAllowed

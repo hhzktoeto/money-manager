@@ -18,7 +18,9 @@ import hhz.ktoeto.moneymanager.backend.dto.LoginRequest;
 import hhz.ktoeto.moneymanager.ui.login.validator.PasswordValidator;
 import hhz.ktoeto.moneymanager.ui.login.validator.UsernameValidator;
 import hhz.ktoeto.moneymanager.utils.StylingUtils;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class LoginForm extends Composite<VerticalLayout> {
 
     private final transient LoginFormLogic formLogic;
@@ -34,10 +36,6 @@ public class LoginForm extends Composite<VerticalLayout> {
     private VerticalLayout errorBox;
 
     private Binder<LoginRequest> binder;
-
-    public LoginForm(LoginFormLogic formLogic) {
-        this.formLogic = formLogic;
-    }
 
     @Override
     protected VerticalLayout initContent() {

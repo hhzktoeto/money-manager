@@ -9,8 +9,8 @@ import hhz.ktoeto.moneymanager.utils.RouterUtils;
 import jakarta.annotation.security.PermitAll;
 
 @UIScope
-@SpringComponent
 @PermitAll
+@SpringComponent
 @Route(value = RouterUtils.RouteName.PLANNING, layout = MainLayout.class)
 public class PlanningView extends VerticalLayout {
 

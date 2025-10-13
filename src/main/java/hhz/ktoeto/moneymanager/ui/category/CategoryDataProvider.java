@@ -62,12 +62,12 @@ public class CategoryDataProvider extends ListDataProvider<Category> {
 
     @EventListener(CategoryUpdatedEvent.class)
     private void onCategoryUpdated(CategoryUpdatedEvent event) {
-        Category oldCategory = this.getItems().stream()
+        List<Category> items = (List<Category>) this.getItems();
+        Category oldCategory = items.stream()
                 .filter(category -> Objects.equals(category.getId(), event.getCategory().getId()))
                 .findFirst()
                 .orElse(null);
         if (oldCategory != null) {
-            List<Category> items = (List<Category>) this.getItems();
             items.remove(oldCategory);
             items.add(event.getCategory());
             items.sort(Comparator.comparing(Category::getName, String.CASE_INSENSITIVE_ORDER));

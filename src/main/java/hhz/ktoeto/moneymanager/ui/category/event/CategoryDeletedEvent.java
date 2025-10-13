@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 public class CategoryDeletedEvent extends ApplicationEvent {
 
-    private final Category category;
+    private final transient Category category;
 
     public CategoryDeletedEvent(Object source, Category category) {
         super(source);

@@ -18,10 +18,8 @@ import hhz.ktoeto.moneymanager.ui.transaction.event.OpenTransactionCreateDialogE
 import hhz.ktoeto.moneymanager.ui.view.MainView;
 import hhz.ktoeto.moneymanager.utils.RouterUtils;
 import hhz.ktoeto.moneymanager.utils.StylingUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 
-@Slf4j
 @UIScope
 @SpringComponent
 public class MainLayout extends VerticalLayout implements RouterLayout {
@@ -120,13 +118,11 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         );
         addTransactionButtonMobile.setVisible(false);
 
-        header.add(appLogo, desktopNavigation, addTransactionButtonDesktop);
-
         this.add(header, content);
         this.add(addTransactionButtonMobile);
         this.add(mobileNavigation);
 
-        addAttachListener(attachEvent -> {
+        this.addAttachListener(attachEvent -> {
             Page page = attachEvent.getUI().getPage();
             page.addBrowserWindowResizeListener(resizeEvent -> updateResponsive(resizeEvent.getWidth()));
             page.retrieveExtendedClientDetails(details -> updateResponsive(details.getWindowInnerWidth()));

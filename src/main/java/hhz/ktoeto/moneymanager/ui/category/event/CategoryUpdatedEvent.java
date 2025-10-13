@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 public class CategoryUpdatedEvent extends ApplicationEvent {
 
-    private final Category category;
+    private final transient Category category;
 
     public CategoryUpdatedEvent(Object source, Category category) {
         super(source);

@@ -14,12 +14,10 @@ import hhz.ktoeto.moneymanager.ui.category.event.CategoryCreationCancelledEvent;
 import hhz.ktoeto.moneymanager.ui.category.event.OpenCategoryCreateDialogEvent;
 import hhz.ktoeto.moneymanager.ui.category.form.CategoryForm;
 import hhz.ktoeto.moneymanager.ui.category.form.CategoryFormFactory;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
 
 
-@Slf4j
 @UIScope
 @SpringComponent
 public class CategoryCreateDialog extends Composite<Dialog> {
