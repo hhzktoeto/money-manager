@@ -11,9 +11,9 @@ import hhz.ktoeto.moneymanager.backend.service.TransactionService;
 import hhz.ktoeto.moneymanager.ui.transaction.event.TransactionCreatedEvent;
 import hhz.ktoeto.moneymanager.ui.transaction.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.ui.transaction.event.TransactionUpdatedEvent;
+import hhz.ktoeto.moneymanager.utils.DateUtils;
 import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,14 +21,19 @@ import org.springframework.data.domain.Sort;
 import java.util.stream.Stream;
 
 @VaadinSessionScope
-@RequiredArgsConstructor
 @SpringComponent("allTransactionsProvider")
 public class TransactionDataProvider extends AbstractBackEndDataProvider<Transaction, TransactionFilter> {
 
     protected final transient TransactionService transactionService;
-
     @Getter
-    private transient TransactionFilter currentFilter = new TransactionFilter();
+    private transient TransactionFilter currentFilter;
+
+    public TransactionDataProvider(TransactionService transactionService) {
+        this.transactionService = transactionService;
+        this.currentFilter = new TransactionFilter();
+        currentFilter.setFromDate(DateUtils.currentMonthStart());
+        currentFilter.setToDate(DateUtils.currentMonthEnd());
+    }
 
     public void setFilter(TransactionFilter filter) {
         this.currentFilter = filter != null ? filter : new TransactionFilter();

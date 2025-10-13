@@ -30,14 +30,32 @@ public class AllTransactionsGrid extends Composite<VerticalLayout> {
     @Override
     protected VerticalLayout initContent() {
         VerticalLayout root = new VerticalLayout();
+
+        HorizontalLayout header = new HorizontalLayout();
+        header.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.AlignContent.END,
+                LumoUtility.JustifyContent.END
+        );
+        root.add(header);
+
+        PeriodPicker periodPicker = new PeriodPicker();
+        periodPicker.onFromDateChange(event -> {
+            TransactionFilter filter = dataProvider.getCurrentFilter();
+            filter.setFromDate(periodPicker.fromDate());
+            dataProvider.setFilter(filter);
+        });
+        periodPicker.onToDateChange(event -> {
+            TransactionFilter filter = dataProvider.getCurrentFilter();
+            filter.setToDate(periodPicker.toDate());
+            dataProvider.setFilter(filter);
+        });
+        header.add(periodPicker);
+
         Grid<Transaction> grid = new Grid<>();
         grid.addClassNames(LumoUtility.Background.TRANSPARENT);
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         grid.setAllRowsVisible(true);
-
-        NoTransactionsImage noTransactionsImage = new NoTransactionsImage();
-        noTransactionsImage.setText("Нет транзакций за выбранный период");
-        grid.setEmptyStateComponent(noTransactionsImage);
 
         grid.addColumn(transaction -> FormattingUtils.formatDate(transaction.getDate()))
                 .setHeader("Дата")
@@ -53,30 +71,13 @@ public class AllTransactionsGrid extends Composite<VerticalLayout> {
                 .setSortable(true)
                 .setKey("amount")
                 .setTextAlign(ColumnTextAlign.END);
-
         grid.setDataProvider(dataProvider);
 
-        HorizontalLayout header = new HorizontalLayout();
-        header.addClassNames(
-                LumoUtility.Width.FULL,
-                LumoUtility.AlignContent.END,
-                LumoUtility.JustifyContent.END
-        );
+        NoTransactionsImage noTransactionsImage = new NoTransactionsImage();
+        noTransactionsImage.setText("Нет транзакций за выбранный период");
+        grid.setEmptyStateComponent(noTransactionsImage);
 
-        PeriodPicker periodPicker = new PeriodPicker();
-        periodPicker.onFromDateChange(event -> {
-            TransactionFilter filter = dataProvider.getCurrentFilter();
-            filter.setFromDate(periodPicker.fromDate());
-            dataProvider.setFilter(filter);
-        });
-        periodPicker.onToDateChange(event -> {
-            TransactionFilter filter = dataProvider.getCurrentFilter();
-            filter.setToDate(periodPicker.toDate());
-            dataProvider.setFilter(filter);
-        });
-        header.add(periodPicker);
-
-        root.add(header, grid);
+        root.add(grid);
 
         return root;
     }

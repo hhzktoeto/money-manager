@@ -7,14 +7,15 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.utils.DateUtils;
 
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 
 public class PeriodPicker extends Composite<FlexLayout> {
 
-    private final DatePicker from = new RussianDatePicker(null, LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()));
-    private final DatePicker to = new RussianDatePicker(null, LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()));
+    private final DatePicker from = new RussianDatePicker(null, DateUtils.currentMonthStart());
+    private final DatePicker to = new RussianDatePicker(null, DateUtils.currentMonthEnd());
 
     @Override
     protected FlexLayout initContent() {

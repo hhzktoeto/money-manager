@@ -7,48 +7,59 @@ import com.vaadin.flow.router.HighlightActions;
 import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.ui.view.BudgetView;
 import hhz.ktoeto.moneymanager.ui.view.MainView;
-import hhz.ktoeto.moneymanager.ui.view.PlanningView;
 import hhz.ktoeto.moneymanager.ui.view.StatsView;
 import hhz.ktoeto.moneymanager.ui.view.TransactionsView;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 
 import java.util.List;
 
 public final class RouterUtils {
 
+    private static final String MAIN_VIEW_NAME = "Главная";
+    private static final String TRANSACTIONS_VIEW_NAME = "Транзакции";
+    private static final String STATS_VIEW_NAME = "Статистика";
+    private static final String BUDGET_VIEW_NAME = "Бюджет";
+
     private RouterUtils() {
     }
 
     public static List<RouterLink> desktopRouterLinks() {
-        return List.of(
-                createLink("Главная", MainView.class, null),
-                createLink("Транзакции", TransactionsView.class, null),
-                createLink("Статистика", StatsView.class, null),
-                createLink("Планирование", PlanningView.class, null)
+        List<RouterLink> links = List.of(
+                createLink(MAIN_VIEW_NAME, MainView.class, VaadinIcon.HOME.create()),
+                createLink(TRANSACTIONS_VIEW_NAME, TransactionsView.class, VaadinIcon.CASH.create()),
+                createLink(STATS_VIEW_NAME, StatsView.class, VaadinIcon.PIE_BAR_CHART.create()),
+                createLink(BUDGET_VIEW_NAME, BudgetView.class, VaadinIcon.CALC_BOOK.create())
         );
+        links.forEach(link -> link.addClassName(LumoUtility.FontSize.MEDIUM));
+        return links;
     }
 
     public static List<RouterLink> mobileRouterLinks() {
-        return List.of(
-                createLink(null, MainView.class, VaadinIcon.HOME.create()),
-                createLink(null, TransactionsView.class, VaadinIcon.MONEY.create()),
-                createLink(null, StatsView.class, VaadinIcon.PIE_BAR_CHART.create()),
-                createLink(null, PlanningView.class, VaadinIcon.CALC_BOOK.create())
+        List<RouterLink> links = List.of(
+                createLink(MAIN_VIEW_NAME, MainView.class, VaadinIcon.HOME.create()),
+                createLink(TRANSACTIONS_VIEW_NAME, TransactionsView.class, VaadinIcon.CASH.create()),
+                createLink(STATS_VIEW_NAME, StatsView.class, VaadinIcon.PIE_BAR_CHART.create()),
+                createLink(BUDGET_VIEW_NAME, BudgetView.class, VaadinIcon.CALC_BOOK.create())
         );
+        links.forEach(link -> link.addClassName(LumoUtility.FontSize.XSMALL));
+        return links;
     }
 
-    private static RouterLink createLink(@Nullable String viewName, @NonNull Class<? extends Component> viewClass, @Nullable Icon icon) {
+    private static RouterLink createLink(String viewName, Class<? extends Component> viewClass, Icon icon) {
         RouterLink link = new RouterLink(viewClass);
         link.setHighlightCondition(HighlightConditions.sameLocation());
         link.setHighlightAction(HighlightActions.toggleClassName(LumoUtility.TextColor.BODY));
-        if (icon != null) {
-            link.add(icon);
-        }
-        if (viewName != null) {
-            link.add(viewName);
-        }
+
+        link.addClassNames(
+                LumoUtility.Display.FLEX,
+                LumoUtility.FlexDirection.COLUMN,
+                LumoUtility.AlignItems.CENTER,
+                LumoUtility.TextAlignment.CENTER
+        );
+
+        link.add(icon);
+        link.add(viewName);
 
         return link;
     }
@@ -58,7 +69,7 @@ public final class RouterUtils {
         public static final String MAIN = "/";
         public static final String LOGIN = "/login";
         public static final String STATS = "/stats";
-        public static final String PLANNING = "/planning";
+        public static final String BUDGET = "/budget";
         public static final String TRANSACTIONS = "/transactions";
 
         private RouteName() {

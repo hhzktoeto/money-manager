@@ -11,10 +11,10 @@ import jakarta.annotation.security.PermitAll;
 @UIScope
 @PermitAll
 @SpringComponent
-@Route(value = RouterUtils.RouteName.PLANNING, layout = MainLayout.class)
-public class PlanningView extends VerticalLayout {
+@Route(value = RouterUtils.RouteName.BUDGET, layout = MainLayout.class)
+public class BudgetView extends VerticalLayout {
 
-    public PlanningView() {
+    public BudgetView() {
         setSizeFull();
     }
 }

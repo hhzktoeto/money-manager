@@ -86,7 +86,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         mobileNavigation = new HorizontalLayout();
         mobileNavigation.add(RouterUtils.mobileRouterLinks().toArray(RouterLink[]::new));
         mobileNavigation.setSpacing(true);
-        mobileNavigation.setHeight(8, Unit.VH);
+        mobileNavigation.setHeight(10, Unit.VH);
         mobileNavigation.addClassNames(
                 LumoUtility.Gap.XLARGE,
                 LumoUtility.Position.FIXED,
@@ -94,10 +94,10 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
                 LumoUtility.Width.FULL,
                 LumoUtility.Height.LARGE,
                 LumoUtility.JustifyContent.BETWEEN,
-                LumoUtility.AlignItems.CENTER,
-                LumoUtility.FontSize.MEDIUM,
-                LumoUtility.Padding.Horizontal.XLARGE,
+                LumoUtility.AlignItems.START,
+                LumoUtility.Padding.Top.SMALL,
                 LumoUtility.Border.TOP,
+                LumoUtility.Padding.Horizontal.LARGE,
                 LumoUtility.Background.SHADE
         );
         mobileNavigation.setVisible(false);
@@ -105,10 +105,10 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         addTransactionButtonMobile = new Button(VaadinIcon.PLUS.create());
         addTransactionButtonMobile.addClickListener(openTransactionCreatingModal);
         addTransactionButtonMobile.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        addTransactionButtonMobile.getStyle().set("bottom", "8.5vh");
+        addTransactionButtonMobile.getStyle().set("bottom", "11vh");
         addTransactionButtonMobile.addClassNames(
                 LumoUtility.Position.FIXED,
-                LumoUtility.Position.End.SMALL,
+                LumoUtility.Position.End.MEDIUM,
                 LumoUtility.Width.XLARGE,
                 LumoUtility.Height.XLARGE,
                 LumoUtility.BoxShadow.MEDIUM,
