@@ -19,11 +19,11 @@ public class BasicContainer extends FlexLayout {
 
         this.addClassNames(
                 LumoUtility.Padding.MEDIUM,
-                LumoUtility.BorderRadius.LARGE,
                 LumoUtility.Border.ALL,
-                LumoUtility.BorderColor.PRIMARY,
-                LumoUtility.Background.TINT_5,
-                LumoUtility.BoxShadow.LARGE
+                LumoUtility.BorderRadius.LARGE,
+                LumoUtility.BorderColor.PRIMARY_10,
+                LumoUtility.Background.SHADE,
+                LumoUtility.BoxShadow.MEDIUM
         );
 
         this.add(this.header, this.content);

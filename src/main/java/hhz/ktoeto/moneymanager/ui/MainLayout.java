@@ -48,7 +48,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
                 LumoUtility.MaxWidth.SCREEN_XLARGE,
                 LumoUtility.AlignSelf.CENTER,
                 LumoUtility.Border.BOTTOM,
-                LumoUtility.BorderRadius.MEDIUM,
+                LumoUtility.BorderRadius.LARGE,
                 LumoUtility.BorderColor.PRIMARY,
                 LumoUtility.Background.TRANSPARENT,
                 LumoUtility.Padding.Horizontal.XLARGE,

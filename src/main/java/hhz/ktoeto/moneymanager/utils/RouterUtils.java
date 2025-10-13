@@ -42,7 +42,7 @@ public final class RouterUtils {
     private static RouterLink createLink(@Nullable String viewName, @NonNull Class<? extends Component> viewClass, @Nullable Icon icon) {
         RouterLink link = new RouterLink(viewClass);
         link.setHighlightCondition(HighlightConditions.sameLocation());
-        link.setHighlightAction(HighlightActions.toggleClassName(LumoUtility.TextColor.PRIMARY_CONTRAST));
+        link.setHighlightAction(HighlightActions.toggleClassName(LumoUtility.TextColor.BODY));
         if (icon != null) {
             link.add(icon);
         }
