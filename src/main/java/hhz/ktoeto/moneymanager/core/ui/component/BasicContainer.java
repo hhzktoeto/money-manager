@@ -1,7 +1,6 @@
-package hhz.ktoeto.moneymanager.ui.component;
+package hhz.ktoeto.moneymanager.core.ui.component;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
@@ -28,11 +27,6 @@ public class BasicContainer extends FlexLayout {
         );
 
         this.add(this.header, this.content);
-    }
-
-    public BasicContainer(String header) {
-        this();
-        this.setHeader(header);
     }
 
     public void setHeader(String text) {

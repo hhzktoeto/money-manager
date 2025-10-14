@@ -1,14 +1,13 @@
-package hhz.ktoeto.moneymanager.utils;
+package hhz.ktoeto.moneymanager.core.constant;
 
-public final class StylingUtils {
+public final class StyleConstants {
 
-    private StylingUtils() {}
+    private StyleConstants() {}
 
     public static final String CLICKABLE = "clickable";
     public static final String LEFT = "left";
     public static final String BG_COLOR = "background-color";
     public static final String COLOR = "color";
-
     public static final String TRANSITION = "transition";
 
     public static final class Color {

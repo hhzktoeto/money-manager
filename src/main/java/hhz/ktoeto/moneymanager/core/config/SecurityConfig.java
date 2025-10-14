@@ -2,10 +2,10 @@ package hhz.ktoeto.moneymanager.core.config;
 
 import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
+import hhz.ktoeto.moneymanager.core.constant.Routes;
 import hhz.ktoeto.moneymanager.feature.user.domain.UserService;
 import hhz.ktoeto.moneymanager.core.security.AppUserDetails;
 import hhz.ktoeto.moneymanager.feature.user.LoginView;
-import hhz.ktoeto.moneymanager.utils.RouterUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,13 +70,13 @@ public class SecurityConfig {
         requestCache.setMatchingRequestParameterName(null);
 
         return http
-                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(LoginView.class, RouterUtils.RouteName.LOGIN))
+                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(LoginView.class, Routes.LOGIN.getPath()))
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/logo.png").permitAll())
                 .requestCache(configurer -> configurer.requestCache(requestCache))
                 .formLogin(configurer -> configurer
-                        .loginPage(RouterUtils.RouteName.LOGIN)
-                        .loginProcessingUrl(RouterUtils.RouteName.LOGIN)
-                        .defaultSuccessUrl(RouterUtils.RouteName.MAIN, true)
+                        .loginPage(Routes.LOGIN.getPath())
+                        .loginProcessingUrl(Routes.LOGIN.getPath())
+                        .defaultSuccessUrl(Routes.MAIN.getPath(), true)
                 )
                 .rememberMe(configurer -> configurer
                         .key(rememberMeKey)

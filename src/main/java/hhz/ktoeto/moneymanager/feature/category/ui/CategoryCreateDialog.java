@@ -9,7 +9,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.ui.LayoutProvider;
+import hhz.ktoeto.moneymanager.core.ui.LayoutProvider;
 import hhz.ktoeto.moneymanager.feature.category.event.CategoryCreationCancelledEvent;
 import hhz.ktoeto.moneymanager.feature.category.event.OpenCategoryCreateDialogEvent;
 import hhz.ktoeto.moneymanager.feature.category.ui.form.CategoryForm;

@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.component;
+package hhz.ktoeto.moneymanager.core.ui.component;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Unit;
@@ -9,8 +9,8 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 
 public class NoTransactionsImage extends Composite<VerticalLayout> {
 
-    private Image image = new Image("no_transactions.png","Пусто");
-    private Span text = new Span();
+    private final Image image = new Image("no_transactions.png","Пусто");
+    private final Span text = new Span();
 
     @Override
     protected VerticalLayout initContent() {

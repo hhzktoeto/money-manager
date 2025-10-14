@@ -5,7 +5,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.ui.LayoutProvider;
+import hhz.ktoeto.moneymanager.core.ui.LayoutProvider;
 
 @UIScope
 @SpringComponent("categoryCreate")

@@ -5,13 +5,13 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import hhz.ktoeto.moneymanager.core.constant.Routes;
 import hhz.ktoeto.moneymanager.feature.user.ui.LoginCard;
-import hhz.ktoeto.moneymanager.utils.RouterUtils;
 
 @UIScope
 @SpringComponent
 @AnonymousAllowed
-@Route(RouterUtils.RouteName.LOGIN)
+@Route(Routes.Path.LOGIN)
 public class LoginView extends VerticalLayout {
 
     public LoginView(LoginCard loginContainer) {

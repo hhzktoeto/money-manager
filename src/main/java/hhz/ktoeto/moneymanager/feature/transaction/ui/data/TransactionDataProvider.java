@@ -5,14 +5,14 @@ import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
+import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
+import hhz.ktoeto.moneymanager.core.service.DateService;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.feature.transaction.event.TransactionCreatedEvent;
 import hhz.ktoeto.moneymanager.feature.transaction.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.feature.transaction.event.TransactionUpdatedEvent;
-import hhz.ktoeto.moneymanager.utils.DateUtils;
-import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import lombok.Getter;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.PageRequest;
@@ -24,15 +24,21 @@ import java.util.stream.Stream;
 @SpringComponent("allTransactionsProvider")
 public class TransactionDataProvider extends AbstractBackEndDataProvider<Transaction, TransactionFilter> {
 
+    protected final transient UserContextHolder userContextHolder;
     protected final transient TransactionService transactionService;
-    @Getter
-    private transient TransactionFilter currentFilter;
 
-    public TransactionDataProvider(TransactionService transactionService) {
+    @Getter
+    protected transient TransactionFilter currentFilter;
+
+    public TransactionDataProvider(TransactionService transactionService,
+                                   UserContextHolder userContextHolder,
+                                   DateService dateService) {
+        this.userContextHolder = userContextHolder;
         this.transactionService = transactionService;
+
         this.currentFilter = new TransactionFilter();
-        currentFilter.setFromDate(DateUtils.currentMonthStart());
-        currentFilter.setToDate(DateUtils.currentMonthEnd());
+        currentFilter.setFromDate(dateService.currentMonthStart());
+        currentFilter.setToDate(dateService.currentMonthEnd());
     }
 
     public void setFilter(TransactionFilter filter) {
@@ -42,7 +48,7 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
 
     @Override
     protected Stream<Transaction> fetchFromBackEnd(Query<Transaction, TransactionFilter> query) {
-        long userId = SecurityUtils.getCurrentUserId();
+        long userId = userContextHolder.getCurrentUserId();
         TransactionFilter filter = query.getFilter().orElse(currentFilter);
 
         Sort sort;
@@ -68,7 +74,7 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
 
     @Override
     protected int sizeInBackEnd(Query<Transaction, TransactionFilter> query) {
-        long userId = SecurityUtils.getCurrentUserId();
+        long userId = userContextHolder.getCurrentUserId();
         TransactionFilter filter = query.getFilter().orElse(currentFilter);
 
         return (int) Math.min(Integer.MAX_VALUE, transactionService.count(userId, filter));

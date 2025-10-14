@@ -1,4 +1,6 @@
-package hhz.ktoeto.moneymanager.utils;
+package hhz.ktoeto.moneymanager.core.service;
+
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -10,34 +12,34 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.Locale;
 
-public final class FormattingUtils {
+@Service
+public class FormattingService {
 
-    private FormattingUtils() {}
+    private final DateTimeFormatter dateFormatter;
+    private final DecimalFormat amountFormatter;
 
+    public FormattingService() {
+        this.dateFormatter = new DateTimeFormatterBuilder()
+                .appendPattern("dd ")
+                .appendText(ChronoField.MONTH_OF_YEAR)
+                .appendPattern(" yyyy")
+                .toFormatter(Locale.of("ru"));
 
-    private static final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
-            .appendPattern("dd ")
-            .appendText(ChronoField.MONTH_OF_YEAR)
-            .appendPattern(" yyyy")
-            .toFormatter(Locale.of("ru"));
-
-    private static final DecimalFormat AMOUNT_FORMATTER;
-    static {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
         symbols.setDecimalSeparator(',');
         symbols.setGroupingSeparator(' ');
-        AMOUNT_FORMATTER = new DecimalFormat("#,##0.00", symbols);
+        amountFormatter = new DecimalFormat("#,##0.00", symbols);
     }
 
-    public static String formatDate(LocalDate date) {
-        return DATE_FORMATTER.format(date);
+    public String formatDate(LocalDate date) {
+        return dateFormatter.format(date);
     }
 
-    public static String formatAmount(BigDecimal amount) {
-        return AMOUNT_FORMATTER.format(amount).concat("₽");
+    public String formatAmount(BigDecimal amount) {
+        return amountFormatter.format(amount).concat("₽");
     }
 
-    public static String formatMonth(Month month) {
+    public String formatMonth(Month month) {
         return switch (month) {
             case JANUARY -> "Январь";
             case FEBRUARY -> "Февраль";

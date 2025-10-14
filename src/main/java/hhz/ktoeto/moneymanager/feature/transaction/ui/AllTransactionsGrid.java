@@ -9,21 +9,24 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.feature.transaction.ui.data.TransactionDataProvider;
-import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
+import hhz.ktoeto.moneymanager.core.service.FormattingService;
+import hhz.ktoeto.moneymanager.core.ui.component.NoTransactionsImage;
+import hhz.ktoeto.moneymanager.core.ui.component.YearMonthPicker;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
-import hhz.ktoeto.moneymanager.ui.component.NoTransactionsImage;
-import hhz.ktoeto.moneymanager.ui.component.YearMonthPicker;
-import hhz.ktoeto.moneymanager.utils.FormattingUtils;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
+import hhz.ktoeto.moneymanager.feature.transaction.ui.data.TransactionDataProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 @UIScope
 @SpringComponent
 public class AllTransactionsGrid extends Composite<VerticalLayout> {
 
+    private final transient FormattingService formattingService;
     private final transient TransactionDataProvider dataProvider;
 
-    public AllTransactionsGrid(@Qualifier("allTransactionsProvider") TransactionDataProvider dataProvider) {
+    public AllTransactionsGrid(FormattingService formattingService,
+                               @Qualifier("allTransactionsProvider") TransactionDataProvider dataProvider) {
+        this.formattingService = formattingService;
         this.dataProvider = dataProvider;
     }
 
@@ -39,7 +42,7 @@ public class AllTransactionsGrid extends Composite<VerticalLayout> {
         );
         root.add(header);
 
-        YearMonthPicker yearMonthPicker = new YearMonthPicker();
+        YearMonthPicker yearMonthPicker = new YearMonthPicker(formattingService);
         TransactionFilter currentFilter = dataProvider.getCurrentFilter();
         yearMonthPicker.setYear(currentFilter.getFromDate().getYear());
         yearMonthPicker.setMonth(currentFilter.getFromDate().getMonth());
@@ -56,7 +59,7 @@ public class AllTransactionsGrid extends Composite<VerticalLayout> {
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         grid.setAllRowsVisible(true);
 
-        grid.addColumn(transaction -> FormattingUtils.formatDate(transaction.getDate()))
+        grid.addColumn(transaction -> formattingService.formatDate(transaction.getDate()))
                 .setHeader("Дата")
                 .setSortable(true)
                 .setKey("date");
@@ -65,7 +68,7 @@ public class AllTransactionsGrid extends Composite<VerticalLayout> {
                 .setSortable(true)
                 .setKey("category")
                 .setTextAlign(ColumnTextAlign.CENTER);
-        grid.addColumn(transaction -> FormattingUtils.formatAmount(transaction.getAmount()))
+        grid.addColumn(transaction -> formattingService.formatAmount(transaction.getAmount()))
                 .setHeader("Сумма")
                 .setSortable(true)
                 .setKey("amount")

@@ -1,11 +1,12 @@
-package hhz.ktoeto.moneymanager.ui.component;
+package hhz.ktoeto.moneymanager.core.ui.component;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.utils.FormattingUtils;
+import hhz.ktoeto.moneymanager.core.service.FormattingService;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -13,7 +14,10 @@ import java.time.YearMonth;
 import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
 
+@RequiredArgsConstructor
 public class YearMonthPicker extends Composite<HorizontalLayout> {
+
+    private final FormattingService formattingService;
 
     private Integer initialYear = LocalDate.now().getYear();
     private Month initialMonth = LocalDate.now().getMonth();
@@ -51,7 +55,7 @@ public class YearMonthPicker extends Composite<HorizontalLayout> {
         monthPicker.setLabel("Месяц");
         monthPicker.setItems(Month.values());
         monthPicker.setValue(initialMonth);
-        monthPicker.setItemLabelGenerator(FormattingUtils::formatMonth);
+        monthPicker.setItemLabelGenerator(formattingService::formatMonth);
         root.add(monthPicker);
 
         yearPicker.addValueChangeListener(e -> updateDates());

@@ -17,7 +17,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.user.domain.LoginRequest;
 import hhz.ktoeto.moneymanager.feature.user.ui.form.validator.PasswordValidator;
 import hhz.ktoeto.moneymanager.feature.user.ui.form.validator.UsernameValidator;
-import hhz.ktoeto.moneymanager.utils.StylingUtils;
+import hhz.ktoeto.moneymanager.core.constant.StyleConstants;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -77,7 +77,7 @@ public class LoginForm extends Composite<VerticalLayout> {
 
         Span noAccountSpan = new Span("Нет аккаунта?");
         noAccountSpan.addClassName(LumoUtility.FontWeight.EXTRALIGHT);
-        noAccountSpan.getStyle().set(StylingUtils.COLOR, StylingUtils.Color.PRIMARY_CONTRAST_40);
+        noAccountSpan.getStyle().set(StyleConstants.COLOR, StyleConstants.Color.PRIMARY_CONTRAST_40);
         HorizontalLayout noAccountLayout = new HorizontalLayout(noAccountSpan, registerButton);
         noAccountLayout.addClassNames(
                 LumoUtility.Width.FULL,

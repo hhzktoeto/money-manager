@@ -4,12 +4,12 @@ import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
+import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryService;
 import hhz.ktoeto.moneymanager.feature.category.event.CategoryCreatedEvent;
 import hhz.ktoeto.moneymanager.feature.category.event.CategoryDeletedEvent;
 import hhz.ktoeto.moneymanager.feature.category.event.CategoryUpdatedEvent;
-import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.event.EventListener;
 
@@ -23,11 +23,13 @@ import java.util.stream.Collectors;
 @VaadinSessionScope
 public class CategoryDataProvider extends ListDataProvider<Category> {
 
-    private final CategoryService categoryService;
+    private final transient CategoryService categoryService;
+    private final transient UserContextHolder userContextHolder;
 
-    public CategoryDataProvider(CategoryService categoryService) {
+    public CategoryDataProvider(CategoryService categoryService, UserContextHolder userContextHolder) {
         super(new ArrayList<>());
         this.categoryService = categoryService;
+        this.userContextHolder = userContextHolder;
     }
 
     @PostConstruct
@@ -35,7 +37,7 @@ public class CategoryDataProvider extends ListDataProvider<Category> {
         VaadinSession.getCurrent().getUIs().forEach(ui -> ui.access(() -> {
             this.getItems().clear();
             this.getItems().addAll(
-                    categoryService.getAll(SecurityUtils.getCurrentUserId())
+                    categoryService.getAll(userContextHolder.getCurrentUserId())
                             .stream()
                             .sorted(Comparator.comparing(Category::getName, String.CASE_INSENSITIVE_ORDER))
                             .collect(Collectors.toList())

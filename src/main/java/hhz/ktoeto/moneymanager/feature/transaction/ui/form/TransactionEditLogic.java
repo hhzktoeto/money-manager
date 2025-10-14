@@ -1,12 +1,12 @@
 package hhz.ktoeto.moneymanager.feature.transaction.ui.form;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
+import hhz.ktoeto.moneymanager.feature.category.event.OpenCategoryCreateDialogEvent;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
-import hhz.ktoeto.moneymanager.feature.category.event.OpenCategoryCreateDialogEvent;
 import hhz.ktoeto.moneymanager.feature.transaction.event.TransactionEditCancelledEvent;
 import hhz.ktoeto.moneymanager.feature.transaction.event.TransactionUpdatedEvent;
-import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -14,8 +14,9 @@ import org.springframework.context.ApplicationEventPublisher;
 @RequiredArgsConstructor
 public class TransactionEditLogic implements TransactionFormLogic {
 
-    private final TransactionService transactionService;
-    private final ApplicationEventPublisher eventPublisher;
+    private final transient UserContextHolder userContextHolder;
+    private final transient TransactionService transactionService;
+    private final transient ApplicationEventPublisher eventPublisher;
 
     @Override
     public void onSubmit(TransactionForm form) {
@@ -27,7 +28,7 @@ public class TransactionEditLogic implements TransactionFormLogic {
             return;
         }
 
-        Transaction updated = transactionService.update(transaction, SecurityUtils.getCurrentUserId());
+        Transaction updated = transactionService.update(transaction, userContextHolder.getCurrentUserId());
         eventPublisher.publishEvent(new TransactionUpdatedEvent(this, updated));
     }
 

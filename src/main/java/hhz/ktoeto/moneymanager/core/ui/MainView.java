@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui;
+package hhz.ktoeto.moneymanager.core.ui;
 
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -6,15 +6,15 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
+import hhz.ktoeto.moneymanager.core.constant.Routes;
+import hhz.ktoeto.moneymanager.core.ui.component.BasicContainer;
 import hhz.ktoeto.moneymanager.feature.transaction.ui.RecentTransactionsGrid;
-import hhz.ktoeto.moneymanager.utils.RouterUtils;
 import jakarta.annotation.security.PermitAll;
 
 @UIScope
 @PermitAll
 @SpringComponent
-@Route(value = RouterUtils.RouteName.MAIN, layout = MainLayout.class)
+@Route(value = Routes.Path.MAIN, layout = MainLayout.class)
 public class MainView extends VerticalLayout {
 
     public MainView(RecentTransactionsGrid transactionsGrid) {

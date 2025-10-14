@@ -6,15 +6,15 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.ui.MainLayout;
+import hhz.ktoeto.moneymanager.core.constant.Routes;
+import hhz.ktoeto.moneymanager.core.ui.MainLayout;
 import hhz.ktoeto.moneymanager.feature.transaction.ui.AllTransactionsGrid;
-import hhz.ktoeto.moneymanager.utils.RouterUtils;
 import jakarta.annotation.security.PermitAll;
 
 @UIScope
 @PermitAll
 @SpringComponent
-@Route(value = RouterUtils.RouteName.TRANSACTIONS, layout = MainLayout.class)
+@Route(value = Routes.Path.TRANSACTIONS, layout = MainLayout.class)
 public class TransactionsView extends VerticalLayout {
 
     public TransactionsView(AllTransactionsGrid transactionsGrid) {

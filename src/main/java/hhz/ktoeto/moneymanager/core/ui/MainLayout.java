@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui;
+package hhz.ktoeto.moneymanager.core.ui;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
@@ -10,21 +10,20 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.router.RouterLayout;
-import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.core.ui.component.NavigationMenu;
 import hhz.ktoeto.moneymanager.feature.transaction.event.OpenTransactionCreateDialogEvent;
-import hhz.ktoeto.moneymanager.utils.RouterUtils;
-import hhz.ktoeto.moneymanager.utils.StylingUtils;
+import hhz.ktoeto.moneymanager.core.constant.StyleConstants;
 import org.springframework.context.ApplicationEventPublisher;
 
 @UIScope
 @SpringComponent
 public class MainLayout extends VerticalLayout implements RouterLayout {
 
-    private final HorizontalLayout desktopNavigation;
-    private final HorizontalLayout mobileNavigation;
+    private final NavigationMenu desktopNavigation;
+    private final NavigationMenu mobileNavigation;
     private final HorizontalLayout header;
     private final VerticalLayout content;
 
@@ -56,21 +55,16 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         appLogo = new Image("/logo.png", "Money Manager");
         appLogo.addClickListener(event -> UI.getCurrent().navigate(MainView.class));
         appLogo.setWidth(11, Unit.REM);
-        appLogo.setClassName(StylingUtils.CLICKABLE);
+        appLogo.setClassName(StyleConstants.CLICKABLE);
         header.add(appLogo);
 
-        desktopNavigation = new HorizontalLayout();
-        desktopNavigation.add(RouterUtils.desktopRouterLinks().toArray(RouterLink[]::new));
-        desktopNavigation.addClassNames(
-                LumoUtility.Gap.XLARGE,
-                LumoUtility.AlignSelf.CENTER
-        );
+        desktopNavigation = new NavigationMenu(NavigationMenu.Mode.DESKTOP);
         header.add(desktopNavigation);
 
         addTransactionButtonDesktop = new Button("Добавить транзакцию");
         addTransactionButtonDesktop.addClickListener(openTransactionCreatingModal);
         addTransactionButtonDesktop.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        addTransactionButtonDesktop.addClassName(LumoUtility.AlignSelf.END);
+        addTransactionButtonDesktop.addClassName(LumoUtility.AlignSelf.CENTER);
         header.add(addTransactionButtonDesktop);
 
         content = new VerticalLayout();
@@ -81,24 +75,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
                 LumoUtility.Padding.XSMALL
         );
 
-        mobileNavigation = new HorizontalLayout();
-        mobileNavigation.add(RouterUtils.mobileRouterLinks().toArray(RouterLink[]::new));
-        mobileNavigation.setSpacing(true);
-        mobileNavigation.setHeight(10, Unit.VH);
-        mobileNavigation.addClassNames(
-                LumoUtility.Gap.XLARGE,
-                LumoUtility.Position.FIXED,
-                LumoUtility.Position.Bottom.NONE,
-                LumoUtility.Width.FULL,
-                LumoUtility.Height.LARGE,
-                LumoUtility.JustifyContent.BETWEEN,
-                LumoUtility.AlignItems.START,
-                LumoUtility.Padding.Top.SMALL,
-                LumoUtility.Border.TOP,
-                LumoUtility.Padding.Horizontal.LARGE,
-                LumoUtility.Background.SHADE
-        );
-        mobileNavigation.setVisible(false);
+        mobileNavigation = new NavigationMenu(NavigationMenu.Mode.MOBILE);
 
         addTransactionButtonMobile = new Button(VaadinIcon.PLUS.create());
         addTransactionButtonMobile.addClickListener(openTransactionCreatingModal);

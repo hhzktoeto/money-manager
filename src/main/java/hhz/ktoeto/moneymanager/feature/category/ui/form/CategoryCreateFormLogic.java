@@ -1,11 +1,11 @@
 package hhz.ktoeto.moneymanager.feature.category.ui.form;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryService;
 import hhz.ktoeto.moneymanager.feature.category.event.CategoryCreatedEvent;
 import hhz.ktoeto.moneymanager.feature.category.event.CategoryCreationCancelledEvent;
-import hhz.ktoeto.moneymanager.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -13,12 +13,13 @@ import org.springframework.context.ApplicationEventPublisher;
 @RequiredArgsConstructor
 public class CategoryCreateFormLogic implements CategoryFormLogic {
 
-    private final CategoryService categoryService;
-    private final ApplicationEventPublisher eventPublisher;
+    private final transient CategoryService categoryService;
+    private final transient UserContextHolder userContextHolder;
+    private final transient ApplicationEventPublisher eventPublisher;
 
     @Override
     public void onSubmit(CategoryForm form) {
-        long userId = SecurityUtils.getCurrentUserId();
+        long userId = userContextHolder.getCurrentUserId();
 
         Category category = new Category();
         category.setUserId(userId);

@@ -8,7 +8,7 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
+import hhz.ktoeto.moneymanager.core.ui.component.BasicContainer;
 import hhz.ktoeto.moneymanager.feature.user.event.OpenLoginFormEvent;
 import hhz.ktoeto.moneymanager.feature.user.event.OpenRegisterFormEvent;
 import hhz.ktoeto.moneymanager.feature.user.event.UserRegisteredEvent;
