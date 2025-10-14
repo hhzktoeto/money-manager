@@ -48,6 +48,11 @@ public class TransactionForm extends Composite<FlexLayout> {
     protected FlexLayout initContent() {
         FlexLayout root = new FlexLayout();
         root.setFlexDirection(FlexLayout.FlexDirection.COLUMN);
+        root.addClassNames(
+                LumoUtility.Padding.NONE,
+                LumoUtility.Width.FULL,
+                LumoUtility.AlignItems.STRETCH
+        );
 
         typeToggleSwitch = new TransactionTypeToggleSwitch();
         typeToggleSwitch.setWidthFull();
