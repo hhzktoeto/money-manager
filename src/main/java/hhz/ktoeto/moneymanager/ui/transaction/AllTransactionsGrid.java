@@ -39,6 +39,9 @@ public class AllTransactionsGrid extends Composite<VerticalLayout> {
         root.add(header);
 
         YearMonthPicker yearMonthPicker = new YearMonthPicker();
+        TransactionFilter currentFilter = dataProvider.getCurrentFilter();
+        yearMonthPicker.setYear(currentFilter.getFromDate().getYear());
+        yearMonthPicker.setMonth(currentFilter.getFromDate().getMonth());
         yearMonthPicker.addChangeEventHandler((from, to) -> {
             TransactionFilter filter = dataProvider.getCurrentFilter();
             filter.setFromDate(from);

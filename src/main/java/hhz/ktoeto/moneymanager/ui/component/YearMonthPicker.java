@@ -18,6 +18,9 @@ import java.util.stream.IntStream;
 
 public class YearMonthPicker extends Composite<HorizontalLayout> {
 
+    private Integer initialYear = LocalDate.now().getYear();
+    private Month initialMonth = LocalDate.now().getMonth();
+
     private Select<Integer> yearPicker;
     private Select<Month> monthPicker;
 
@@ -42,7 +45,7 @@ public class YearMonthPicker extends Composite<HorizontalLayout> {
                 .boxed()
                 .toList()
         );
-        yearPicker.setValue(LocalDate.now().getYear());
+        yearPicker.setValue(initialYear);
         root.add(yearPicker);
 
         monthPicker = new Select<>();
@@ -50,7 +53,7 @@ public class YearMonthPicker extends Composite<HorizontalLayout> {
         monthPicker.setEmptySelectionAllowed(false);
         monthPicker.setLabel("Месяц");
         monthPicker.setItems(Month.values());
-        monthPicker.setValue(LocalDate.now().getMonth());
+        monthPicker.setValue(initialMonth);
         monthPicker.setItemLabelGenerator(FormattingUtils::formatMonth);
         root.add(monthPicker);
 
@@ -58,6 +61,14 @@ public class YearMonthPicker extends Composite<HorizontalLayout> {
         monthPicker.addValueChangeListener(e -> updateDates());
 
         return root;
+    }
+
+    public void setYear(Integer year) {
+        this.initialYear = year;
+    }
+
+    public void setMonth(Month month) {
+        this.initialMonth = month;
     }
 
     public void addChangeEventHandler(BiConsumer<LocalDate, LocalDate> changeEventHandler) {
