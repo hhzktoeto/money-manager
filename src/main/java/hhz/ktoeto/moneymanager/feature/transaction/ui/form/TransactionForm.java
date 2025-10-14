@@ -35,7 +35,7 @@ public class TransactionForm extends Composite<FlexLayout> {
 
     private final Binder<Transaction> binder = new Binder<>(Transaction.class);
 
-    private TransactionTypeToggleSwitch typeToggleSwitch;
+    private final TransactionTypeToggleSwitch typeToggleSwitch = new TransactionTypeToggleSwitch();
     private ComboBox<Category> categorySelect;
     private TextField amountField;
     private DatePicker datePicker;
@@ -54,7 +54,6 @@ public class TransactionForm extends Composite<FlexLayout> {
                 LumoUtility.AlignItems.STRETCH
         );
 
-        typeToggleSwitch = new TransactionTypeToggleSwitch();
         typeToggleSwitch.setWidthFull();
 
         categorySelect = new ComboBox<>("Категория");
@@ -141,6 +140,7 @@ public class TransactionForm extends Composite<FlexLayout> {
 
     public void edit(Transaction transaction) {
         binder.setBean(transaction);
+        typeToggleSwitch.setSelectedType(transaction.getType());
     }
 
     Transaction getEditedTransaction() {

@@ -43,7 +43,10 @@ public class TransactionFormLogic {
     }
 
     void submitEdit(TransactionForm form) {
-        Transaction updated = transactionService.update(form.getEditedTransaction(), userContextHolder.getCurrentUserId());
+        Transaction transaction = form.getEditedTransaction();
+        transaction.setType(form.selectedType());
+
+        Transaction updated = transactionService.update(transaction, userContextHolder.getCurrentUserId());
         eventPublisher.publishEvent(new TransactionUpdatedEvent(this, updated));
     }
 

@@ -8,23 +8,24 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.core.constant.StyleConstants;
+import lombok.Getter;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TransactionTypeToggleSwitch extends Composite<Div> {
 
-    private final AtomicBoolean incomeSelected = new AtomicBoolean(false);
+    private final HorizontalLayout container = new HorizontalLayout();
+    private final Div knob = new Div();
+    private final Span expenseLabel = new Span("Расход");
+    private final Span incomeLabel = new Span("Доход");
 
-    private HorizontalLayout container;
-    private Div knob;
-    private Span expenseLabel;
-    private Span incomeLabel;
+    @Getter
+    private Transaction.Type selectedType = Transaction.Type.EXPENSE;
 
     @Override
     protected Div initContent() {
         Div root = new Div();
 
-        expenseLabel = new Span("Расход");
         expenseLabel.addClassNames(
                 LumoUtility.Width.FULL,
                 LumoUtility.TextAlignment.CENTER,
@@ -32,7 +33,7 @@ public class TransactionTypeToggleSwitch extends Composite<Div> {
                 LumoUtility.ZIndex.XSMALL,
                 LumoUtility.Transition.COLORS
         );
-        incomeLabel = new Span("Доход");
+
         incomeLabel.addClassNames(
                 LumoUtility.Width.FULL,
                 LumoUtility.TextAlignment.CENTER,
@@ -41,7 +42,6 @@ public class TransactionTypeToggleSwitch extends Composite<Div> {
                 LumoUtility.Transition.COLORS
         );
 
-        knob = new Div();
         knob.setWidth(7.5f, Unit.REM);
         knob.setHeight(2, Unit.REM);
         knob.addClassNames(
@@ -55,7 +55,6 @@ public class TransactionTypeToggleSwitch extends Composite<Div> {
                 + StyleConstants.Transition.BG_COLOR_03_EASE
         );
 
-        container = new HorizontalLayout(expenseLabel, knob, incomeLabel);
         container.setWidth(246, Unit.PIXELS);
         container.setHeight(40, Unit.PIXELS);
         container.addClassNames(
@@ -66,22 +65,24 @@ public class TransactionTypeToggleSwitch extends Composite<Div> {
                 LumoUtility.Gap.XSMALL
         );
         container.getStyle().set(StyleConstants.TRANSITION, StyleConstants.Transition.BG_COLOR_03_EASE);
+        container.add(expenseLabel, knob, incomeLabel);
 
         root.add(container);
         root.setWidth(200, Unit.PIXELS);
         root.setHeight(40, Unit.PIXELS);
         root.addClickListener(e -> {
-            incomeSelected.set(!incomeSelected.get());
-            updateStyles();
+            selectedType = (selectedType == Transaction.Type.INCOME) ? Transaction.Type.EXPENSE : Transaction.Type.INCOME;
+            this.updateStyles();
         });
 
-        updateStyles();
+        this.updateStyles();
 
         return root;
     }
 
-    public Transaction.Type getSelectedType() {
-        return incomeSelected.get() ? Transaction.Type.INCOME : Transaction.Type.EXPENSE;
+    public void setSelectedType(Transaction.Type selectedType) {
+        this.selectedType = selectedType;
+        this.updateStyles();
     }
 
     public void setWidthFull() {
@@ -89,7 +90,7 @@ public class TransactionTypeToggleSwitch extends Composite<Div> {
     }
 
     private void updateStyles() {
-        boolean isIncome = incomeSelected.get();
+        boolean isIncome = selectedType == Transaction.Type.INCOME;
         String containerBackground = isIncome
                 ? StyleConstants.Color.SUCCESS_10
                 : StyleConstants.Color.ERROR_10;
