@@ -12,14 +12,23 @@ public class TransactionFormFactory {
 
     private final CategoryDataProvider categoryDataProvider;
 
-    private final TransactionFormLogic transactionCreateLogic;
-    private final TransactionFormLogic transactionEditLogic;
+    private final TransactionFormLogic formLogic;
 
     public TransactionForm transactionCreateForm() {
-        return new TransactionForm(categoryDataProvider, transactionCreateLogic);
+        return new TransactionForm(
+                categoryDataProvider,
+                form -> formLogic.addCategory(),
+                formLogic::submitCreate,
+                form -> formLogic.cancelCreate()
+        );
     }
 
     public TransactionForm transactionEditForm() {
-        return new TransactionForm(categoryDataProvider, transactionEditLogic);
+        return new TransactionForm(
+                categoryDataProvider,
+                form -> formLogic.addCategory(),
+                formLogic::submitEdit,
+                form -> formLogic.cancelEdit()
+        );
     }
 }

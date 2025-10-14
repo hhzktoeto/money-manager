@@ -12,21 +12,28 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.feature.category.domain.Category;
-import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
-import hhz.ktoeto.moneymanager.feature.category.ui.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.core.ui.component.RussianDatePicker;
 import hhz.ktoeto.moneymanager.core.ui.component.TransactionTypeToggleSwitch;
+import hhz.ktoeto.moneymanager.feature.category.domain.Category;
+import hhz.ktoeto.moneymanager.feature.category.ui.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.ui.form.converter.MathExpressionToBigDecimalConverter;
 import hhz.ktoeto.moneymanager.feature.transaction.ui.form.validator.TransactionAmountValidator;
 import hhz.ktoeto.moneymanager.feature.transaction.ui.form.validator.TransactionDescriptionValidator;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.function.Consumer;
 
-public final class TransactionForm extends Composite<FlexLayout> {
+@RequiredArgsConstructor
+public class TransactionForm extends Composite<FlexLayout> {
 
-    private final transient TransactionFormLogic formLogic;
     private final CategoryDataProvider categoryProvider;
+    private final Consumer<TransactionForm> categoryAddAction;
+    private final Consumer<TransactionForm> submitAction;
+    private final Consumer<TransactionForm> cancelAction;
+
+    private final Binder<Transaction> binder = new Binder<>(Transaction.class);
 
     private TransactionTypeToggleSwitch typeToggleSwitch;
     private ComboBox<Category> categorySelect;
@@ -36,14 +43,6 @@ public final class TransactionForm extends Composite<FlexLayout> {
     private Button createCategoryButton;
     private Button submitButton;
     private Button cancelButton;
-
-    private Binder<Transaction> binder;
-    private transient Transaction editableTransaction;
-
-    TransactionForm(CategoryDataProvider categoryProvider, TransactionFormLogic formLogic) {
-        this.formLogic = formLogic;
-        this.categoryProvider = categoryProvider;
-    }
 
     @Override
     protected FlexLayout initContent() {
@@ -59,7 +58,7 @@ public final class TransactionForm extends Composite<FlexLayout> {
         categorySelect.setWidthFull();
 
         createCategoryButton = new Button(VaadinIcon.PLUS.create());
-        createCategoryButton.addClickListener(e -> formLogic.onCategoryAdd(this));
+        createCategoryButton.addClickListener(e -> categoryAddAction.accept(this));
         createCategoryButton.setTooltipText("Добавить категорию");
 
         HorizontalLayout categoryWrapper = new HorizontalLayout(categorySelect, createCategoryButton);
@@ -103,11 +102,11 @@ public final class TransactionForm extends Composite<FlexLayout> {
         root.add(descriptionArea);
 
         submitButton = new Button("Сохранить");
-        submitButton.addClickListener(e -> formLogic.onSubmit(this));
+        submitButton.addClickListener(e -> submitAction.accept(this));
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         cancelButton = new Button("Отмена");
-        cancelButton.addClickListener(e -> formLogic.onCancel(this));
+        cancelButton.addClickListener(e -> cancelAction.accept(this));
 
         HorizontalLayout buttons = new HorizontalLayout(cancelButton, submitButton);
         buttons.addClassNames(
@@ -117,32 +116,30 @@ public final class TransactionForm extends Composite<FlexLayout> {
         );
         root.add(buttons);
 
-        this.binder = new Binder<>(Transaction.class);
         this.binder.forField(categorySelect)
                 .asRequired("Не выбрана категория")
                 .bind(Transaction::getCategory, Transaction::setCategory);
-
         this.binder.forField(amountField)
                 .asRequired("Не введена сумма")
                 .withConverter(new MathExpressionToBigDecimalConverter())
                 .withValidator(new TransactionAmountValidator())
                 .bind(Transaction::getAmount, Transaction::setAmount);
-
         this.binder.forField(datePicker)
                 .asRequired("Не выбрана дата")
                 .bind(Transaction::getDate, Transaction::setDate);
-
         this.binder.forField(descriptionArea)
                 .withValidator(new TransactionDescriptionValidator())
                 .bind(Transaction::getDescription, Transaction::setDescription);
-
 
         return root;
     }
 
     public void edit(Transaction transaction) {
-        editableTransaction = transaction;
-        binder.setBean(editableTransaction);
+        binder.setBean(transaction);
+    }
+
+    Transaction getEditedTransaction() {
+        return binder.getBean();
     }
 
     Transaction.Type selectedType() {
@@ -151,10 +148,6 @@ public final class TransactionForm extends Composite<FlexLayout> {
 
     boolean writeTo(Transaction transaction) {
         return binder.writeBeanIfValid(transaction);
-    }
-
-    Transaction getEditableTransaction() {
-        return editableTransaction;
     }
 
     void reset(Transaction transaction) {

@@ -75,7 +75,6 @@ public class TransactionCreateDialog extends Composite<Dialog> {
     private void close() {
         this.getContent().close();
     }
-
 }
 
 

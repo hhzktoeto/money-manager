@@ -21,6 +21,6 @@ public class MathExpressionToBigDecimalConverter implements Converter<String, Bi
 
     @Override
     public String convertToPresentation(BigDecimal value, ValueContext context) {
-        return value == null ? "" : value.toString();
+        return value == null ? "" : value.toPlainString();
     }
 }
