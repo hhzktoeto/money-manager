@@ -4,7 +4,6 @@ import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyC
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import hhz.ktoeto.moneymanager.backend.service.UserService;
 import hhz.ktoeto.moneymanager.ui.view.LoginView;
-import hhz.ktoeto.moneymanager.utils.CookieConstant;
 import hhz.ktoeto.moneymanager.utils.RouterUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -63,7 +62,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            UserDetailsService userDetailsService,
                                            PersistentTokenRepository persistentTokenRepository,
-                                           @Value("${spring.security.remember-me}") String secret) throws Exception {
+                                           @Value("${spring.security.remember-me.key}") String rememberMeKey,
+                                           @Value("${spring.security.remember-me.cookie-name}") String rememberMeCookieName,
+                                           @Value("${spring.security.remember-me.max-age}") Integer rememberMeMaxAge) throws Exception {
         HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
         requestCache.setMatchingRequestParameterName(null);
 
@@ -77,11 +78,11 @@ public class SecurityConfig {
                         .defaultSuccessUrl(RouterUtils.RouteName.MAIN, true)
                 )
                 .rememberMe(configurer -> configurer
-                        .key(secret)
+                        .key(rememberMeKey)
                         .userDetailsService(userDetailsService)
                         .tokenRepository(persistentTokenRepository)
-                        .rememberMeCookieName(CookieConstant.REMEMBER_ME)
-                        .tokenValiditySeconds(CookieConstant.REMEMBER_ME_MAX_AGE)
+                        .rememberMeCookieName(rememberMeCookieName)
+                        .tokenValiditySeconds(rememberMeMaxAge)
                         .useSecureCookie(true)
                         .alwaysRemember(true)
                 )

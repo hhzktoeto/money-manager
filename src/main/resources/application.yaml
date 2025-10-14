@@ -16,7 +16,10 @@ spring:
       username: default
       password: ${REDIS_PASSWORD}
   security:
-    remember-me: ${REMEMBER_ME_KEY}
+    remember-me:
+      key: ${REMEMBER_ME_KEY}
+      cookie-name: ${REMEMBER_ME_COOKIE_NAME}
+      max-age: ${REMEMBER_ME_MAX_AGE}
 
 vaadin:
   allowed-packages: com.vaadin,org.vaadin,com.flowingcode,hhz.ktoeto
