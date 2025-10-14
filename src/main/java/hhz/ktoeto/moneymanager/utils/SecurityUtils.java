@@ -1,6 +1,6 @@
 package hhz.ktoeto.moneymanager.utils;
 
-import hhz.ktoeto.moneymanager.backend.security.AppUserDetails;
+import hhz.ktoeto.moneymanager.core.security.AppUserDetails;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
