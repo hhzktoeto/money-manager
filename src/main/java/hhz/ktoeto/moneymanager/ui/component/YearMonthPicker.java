@@ -2,17 +2,14 @@ package hhz.ktoeto.moneymanager.ui.component;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.utils.DateUtils;
 import hhz.ktoeto.moneymanager.utils.FormattingUtils;
 
-import java.time.*;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.YearMonth;
 import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
 
