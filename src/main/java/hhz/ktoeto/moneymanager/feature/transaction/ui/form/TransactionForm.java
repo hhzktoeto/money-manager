@@ -11,6 +11,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.ui.component.RussianDatePicker;
 import hhz.ktoeto.moneymanager.core.ui.component.TransactionTypeToggleSwitch;
@@ -21,10 +22,12 @@ import hhz.ktoeto.moneymanager.feature.transaction.ui.form.converter.MathExpress
 import hhz.ktoeto.moneymanager.feature.transaction.ui.form.validator.TransactionAmountValidator;
 import hhz.ktoeto.moneymanager.feature.transaction.ui.form.validator.TransactionDescriptionValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
+@Slf4j
 @RequiredArgsConstructor
 public class TransactionForm extends Composite<FlexLayout> {
 
@@ -53,8 +56,6 @@ public class TransactionForm extends Composite<FlexLayout> {
                 LumoUtility.Width.FULL,
                 LumoUtility.AlignItems.STRETCH
         );
-
-        typeToggleSwitch.setWidthFull();
 
         categorySelect = new ComboBox<>("Категория");
         categorySelect.setItems(categoryProvider);
@@ -120,6 +121,9 @@ public class TransactionForm extends Composite<FlexLayout> {
         );
         root.add(buttons);
 
+        this.binder.forField(typeToggleSwitch)
+                .asRequired("Не выбран тип")
+                .bind(Transaction::getType, Transaction::setType);
         this.binder.forField(categorySelect)
                 .asRequired("Не выбрана категория")
                 .bind(Transaction::getCategory, Transaction::setCategory);
@@ -140,22 +144,29 @@ public class TransactionForm extends Composite<FlexLayout> {
 
     public void edit(Transaction transaction) {
         binder.setBean(transaction);
-        typeToggleSwitch.setSelectedType(transaction.getType());
     }
 
     Transaction getEditedTransaction() {
         return binder.getBean();
     }
 
-    Transaction.Type selectedType() {
-        return typeToggleSwitch.getSelectedType();
+    boolean writeToIfValid(Transaction transaction) {
+        try {
+            binder.writeBean(transaction);
+            return true;
+        } catch (ValidationException e) {
+            log.error("Failed to validate the transaction");
+            log.error(e.getValidationErrors().toString());
+            return false;
+        }
     }
 
-    boolean writeTo(Transaction transaction) {
-        return binder.writeBeanIfValid(transaction);
-    }
+    void reset(LocalDate date, Category category, Transaction.Type type) {
+        Transaction reset = new Transaction();
+        reset.setType(type);
+        reset.setDate(date);
+        reset.setCategory(category);
 
-    void reset(Transaction transaction) {
-        this.binder.setBean(transaction);
+        binder.setBean(reset);
     }
 }

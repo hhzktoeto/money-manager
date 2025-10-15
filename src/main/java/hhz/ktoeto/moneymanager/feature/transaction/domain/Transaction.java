@@ -18,7 +18,11 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     public enum Type {
-        INCOME, EXPENSE
+        INCOME, EXPENSE;
+
+        public Type opposite() {
+            return this == INCOME ? EXPENSE : INCOME;
+        }
     }
 
     @Id

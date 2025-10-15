@@ -10,8 +10,10 @@ import hhz.ktoeto.moneymanager.feature.transaction.event.TransactionCreationCanc
 import hhz.ktoeto.moneymanager.feature.transaction.event.TransactionEditCancelledEvent;
 import hhz.ktoeto.moneymanager.feature.transaction.event.TransactionUpdatedEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 
+@Slf4j
 @SpringComponent
 @RequiredArgsConstructor
 public class TransactionFormLogic {
@@ -24,10 +26,9 @@ public class TransactionFormLogic {
         long userId = userContextHolder.getCurrentUserId();
 
         Transaction transaction = new Transaction();
-        transaction.setType(form.selectedType());
         transaction.setUserId(userId);
 
-        boolean valid = form.writeTo(transaction);
+        boolean valid = form.writeToIfValid(transaction);
         if (!valid) {
             return;
         }
@@ -35,16 +36,16 @@ public class TransactionFormLogic {
         Transaction saved = transactionService.create(transaction);
         eventPublisher.publishEvent(new TransactionCreatedEvent(this));
 
-        Transaction reset = new Transaction();
-        reset.setDate(saved.getDate());
-        reset.setCategory(saved.getCategory());
-
-        form.reset(reset);
+        form.reset(saved.getDate(), saved.getCategory(), saved.getType());
     }
 
     void submitEdit(TransactionForm form) {
         Transaction transaction = form.getEditedTransaction();
-        transaction.setType(form.selectedType());
+
+        boolean valid = form.writeToIfValid(transaction);
+        if (!valid) {
+            return;
+        }
 
         Transaction updated = transactionService.update(transaction, userContextHolder.getCurrentUserId());
         eventPublisher.publishEvent(new TransactionUpdatedEvent(this, updated));
