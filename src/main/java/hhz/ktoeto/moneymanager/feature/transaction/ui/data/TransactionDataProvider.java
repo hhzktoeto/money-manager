@@ -3,8 +3,6 @@ package hhz.ktoeto.moneymanager.feature.transaction.ui.data;
 import com.vaadin.flow.data.provider.AbstractBackEndDataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.provider.SortDirection;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.DateService;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
@@ -20,25 +18,28 @@ import org.springframework.data.domain.Sort;
 
 import java.util.stream.Stream;
 
-@VaadinSessionScope
-@SpringComponent("allTransactionsProvider")
 public class TransactionDataProvider extends AbstractBackEndDataProvider<Transaction, TransactionFilter> {
 
-    protected final transient UserContextHolder userContextHolder;
-    protected final transient TransactionService transactionService;
+    private final transient UserContextHolder userContextHolder;
+    private final transient TransactionService transactionService;
+
+    private final Integer maxSize;
 
     @Getter
     protected transient TransactionFilter currentFilter;
 
     public TransactionDataProvider(TransactionService transactionService,
                                    UserContextHolder userContextHolder,
-                                   DateService dateService) {
+                                   DateService dateService,
+                                   Integer maxSize) {
         this.userContextHolder = userContextHolder;
         this.transactionService = transactionService;
 
         this.currentFilter = new TransactionFilter();
         currentFilter.setFromDate(dateService.currentMonthStart());
         currentFilter.setToDate(dateService.currentMonthEnd());
+
+        this.maxSize = maxSize;
     }
 
     public void setFilter(TransactionFilter filter) {
@@ -66,7 +67,7 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
         }
 
         int page = query.getOffset() / query.getLimit();
-        int limit = query.getLimit();
+        int limit = Math.min(maxSize, query.getLimit());
         PageRequest pageRequest = PageRequest.of(page, limit, sort);
 
         return transactionService.getPage(userId, filter, pageRequest).getContent().stream();
@@ -77,7 +78,7 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
         long userId = userContextHolder.getCurrentUserId();
         TransactionFilter filter = query.getFilter().orElse(currentFilter);
 
-        return (int) Math.min(Integer.MAX_VALUE, transactionService.count(userId, filter));
+        return Math.min(maxSize, transactionService.count(userId, filter));
     }
 
     @EventListener({
@@ -85,7 +86,7 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
             TransactionDeletedEvent.class,
             TransactionUpdatedEvent.class
     })
-    private void onTransactionCreatedDeleted() {
+    private void onAnyUpdates() {
         this.refreshAll();
     }
 }

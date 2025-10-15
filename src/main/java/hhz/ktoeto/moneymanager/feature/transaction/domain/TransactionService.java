@@ -51,8 +51,9 @@ public class TransactionService {
         repository.delete(transaction);
     }
 
-    public long count(long userId, TransactionFilter filter) {
-        return repository.count(specification(userId, filter));
+    public int count(long userId, TransactionFilter filter) {
+        long count = repository.count(specification(userId, filter));
+        return (int) Math.min(Integer.MAX_VALUE, count);
     }
 
     private Transaction getTransactionFromRepository(long id) {
