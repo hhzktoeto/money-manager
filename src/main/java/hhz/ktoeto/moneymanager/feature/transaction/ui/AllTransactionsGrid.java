@@ -14,8 +14,10 @@ import hhz.ktoeto.moneymanager.core.ui.component.NoTransactionsImage;
 import hhz.ktoeto.moneymanager.core.ui.component.YearMonthPicker;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
+import hhz.ktoeto.moneymanager.feature.transaction.event.OpenTransactionEditDialogEvent;
 import hhz.ktoeto.moneymanager.feature.transaction.ui.data.TransactionDataProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationEventPublisher;
 
 @UIScope
 @SpringComponent
@@ -23,11 +25,14 @@ public class AllTransactionsGrid extends Composite<VerticalLayout> {
 
     private final transient FormattingService formattingService;
     private final transient TransactionDataProvider dataProvider;
+    private final transient ApplicationEventPublisher eventPublisher;
 
     public AllTransactionsGrid(FormattingService formattingService,
-                               @Qualifier("allTransactionsProvider") TransactionDataProvider dataProvider) {
+                               @Qualifier("allTransactionsProvider") TransactionDataProvider dataProvider,
+                               ApplicationEventPublisher eventPublisher) {
         this.formattingService = formattingService;
         this.dataProvider = dataProvider;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -58,6 +63,7 @@ public class AllTransactionsGrid extends Composite<VerticalLayout> {
         grid.addClassNames(LumoUtility.Background.TRANSPARENT);
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         grid.setAllRowsVisible(true);
+        grid.setSelectionMode(Grid.SelectionMode.NONE);
 
         grid.addColumn(transaction -> formattingService.formatDate(transaction.getDate()))
                 .setHeader("Дата")
@@ -74,6 +80,8 @@ public class AllTransactionsGrid extends Composite<VerticalLayout> {
                 .setKey("amount")
                 .setTextAlign(ColumnTextAlign.END);
         grid.setDataProvider(dataProvider);
+
+        grid.addItemClickListener(event -> eventPublisher.publishEvent(new OpenTransactionEditDialogEvent(this, event.getItem())));
 
         NoTransactionsImage noTransactionsImage = new NoTransactionsImage();
         noTransactionsImage.setText("Нет транзакций за выбранный период");

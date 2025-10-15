@@ -37,6 +37,8 @@ public class RecentTransactionsGrid extends Composite<Grid<Transaction>> {
         root.addClassNames(LumoUtility.Background.TRANSPARENT);
         root.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         root.setAllRowsVisible(true);
+        root.setSelectionMode(Grid.SelectionMode.NONE);
+
         NoTransactionsImage noTransactionsImage = new NoTransactionsImage();
         noTransactionsImage.setText("Нет недавних транзакций");
         root.setEmptyStateComponent(noTransactionsImage);
@@ -50,9 +52,7 @@ public class RecentTransactionsGrid extends Composite<Grid<Transaction>> {
                 .setKey("amount")
                 .setTextAlign(ColumnTextAlign.END);
 
-        root.addSelectionListener(event -> event.getFirstSelectedItem().ifPresent(transaction ->
-                eventPublisher.publishEvent(new OpenTransactionEditDialogEvent(this, transaction))
-        ));
+        root.addItemClickListener(event -> eventPublisher.publishEvent(new OpenTransactionEditDialogEvent(this, event.getItem())));
 
         root.setDataProvider(dataProvider);
 
