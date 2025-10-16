@@ -82,7 +82,7 @@ public class NavigationMenu extends Composite<HorizontalLayout> {
                     LumoUtility.Padding.Top.SMALL,
                     LumoUtility.Border.TOP,
                     LumoUtility.Padding.Horizontal.LARGE,
-                    LumoUtility.Background.SHADE_40
+                    LumoUtility.Background.SHADE
             } ;
         };
     }

@@ -31,3 +31,7 @@ vaadin-select-overlay vaadin-select-item[selected] {
 vaadin-select-item::part(checkmark) {
     display: none;
 }
+
+vaadin-grid::part(header-cell) {
+    background-color: var(--lumo-shade);
+}

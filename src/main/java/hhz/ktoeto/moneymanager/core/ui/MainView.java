@@ -45,7 +45,8 @@ public class MainView extends VerticalLayout {
         HorizontalLayout gridHeaderLayout = new HorizontalLayout();
         gridHeaderLayout.addClassNames(
                 LumoUtility.Width.FULL,
-                LumoUtility.JustifyContent.BETWEEN
+                LumoUtility.AlignContent.END,
+                LumoUtility.JustifyContent.END
         );
 
         YearMonthPicker yearMonthPicker = new YearMonthPicker(formattingService);
@@ -58,7 +59,7 @@ public class MainView extends VerticalLayout {
             filter.setToDate(to);
             transactionsGrid.setCurrentFilter(filter);
         });
-        gridHeaderLayout.add(new H3("История транзакций"), yearMonthPicker);
+        gridHeaderLayout.add(yearMonthPicker);
 
         transactionsGridContainer.setHeader(gridHeaderLayout);
         transactionsGridContainer.setContent(transactionsGrid);
