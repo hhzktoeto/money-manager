@@ -1,13 +1,18 @@
 package hhz.ktoeto.moneymanager.core.ui;
 
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.constant.Routes;
+import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.core.ui.component.BasicContainer;
+import hhz.ktoeto.moneymanager.core.ui.component.YearMonthPicker;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.ui.TransactionsGrid;
 import hhz.ktoeto.moneymanager.feature.transaction.ui.TransactionsSummary;
 import jakarta.annotation.security.PermitAll;
@@ -18,7 +23,7 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = Routes.Path.MAIN, layout = MainLayout.class)
 public class MainView extends VerticalLayout {
 
-    public MainView(TransactionsGrid recentTransactionsGrid, TransactionsSummary transactionsSummary) {
+    public MainView(TransactionsGrid transactionsGrid, TransactionsSummary transactionsSummary, FormattingService formattingService) {
         setSizeFull();
         addClassNames(
                 LumoUtility.AlignItems.CENTER,
@@ -36,8 +41,27 @@ public class MainView extends VerticalLayout {
         );
 
         BasicContainer transactionsGridContainer = new BasicContainer();
-        transactionsGridContainer.setHeader("Недавние транзакции");
-        transactionsGridContainer.setContent(recentTransactionsGrid);
+
+        HorizontalLayout gridHeaderLayout = new HorizontalLayout();
+        gridHeaderLayout.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.JustifyContent.BETWEEN
+        );
+
+        YearMonthPicker yearMonthPicker = new YearMonthPicker(formattingService);
+        TransactionFilter currentFilter = transactionsGrid.getCurrentFilter();
+        yearMonthPicker.setYear(currentFilter.getFromDate().getYear());
+        yearMonthPicker.setMonth(currentFilter.getFromDate().getMonth());
+        yearMonthPicker.addChangeEventHandler((from, to) -> {
+            TransactionFilter filter = transactionsGrid.getCurrentFilter();
+            filter.setFromDate(from);
+            filter.setToDate(to);
+            transactionsGrid.setCurrentFilter(filter);
+        });
+        gridHeaderLayout.add(new H3("История транзакций"), yearMonthPicker);
+
+        transactionsGridContainer.setHeader(gridHeaderLayout);
+        transactionsGridContainer.setContent(transactionsGrid);
         transactionsGridContainer.getHeader().addClassName(LumoUtility.Margin.Bottom.MEDIUM);
 
         content.add(

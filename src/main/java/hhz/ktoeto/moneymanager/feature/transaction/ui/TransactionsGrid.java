@@ -4,28 +4,26 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.core.ui.component.NoTransactionsImage;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.event.OpenTransactionEditDialogEvent;
-import hhz.ktoeto.moneymanager.feature.transaction.ui.data.TransactionDataProvider;
-import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 
-@Builder
+
+@UIScope
+@SpringComponent
+@RequiredArgsConstructor
 public class TransactionsGrid extends Composite<Grid<Transaction>> {
 
     private final transient FormattingService formattingService;
     private final transient TransactionDataProvider dataProvider;
     private final transient ApplicationEventPublisher eventPublisher;
-    private final Mode mode;
-
-    public enum Mode {
-        RECENT,
-        ALL
-    }
 
     @Override
     protected Grid<Transaction> initContent() {
@@ -36,29 +34,21 @@ public class TransactionsGrid extends Composite<Grid<Transaction>> {
         root.setSelectionMode(Grid.SelectionMode.NONE);
 
         NoTransactionsImage noTransactionsImage = new NoTransactionsImage();
-        noTransactionsImage.setText(mode == Mode.RECENT
-                ? "Нет недавних транзакций"
-                : "Нет транзакций за выбранный период");
+        noTransactionsImage.setText("Нет транзакций за выбранный период");
         root.setEmptyStateComponent(noTransactionsImage);
 
         root.addColumn(transaction -> formattingService.formatDate(transaction.getDate()))
-                .setHeader(mode == Mode.ALL
-                        ? "Дата"
-                        : null)
-                .setSortable(mode == Mode.ALL)
+                .setHeader("Дата")
+                .setSortable(true)
                 .setKey("date");
         root.addColumn(transaction -> transaction.getCategory().getName())
-                .setHeader(mode == Mode.ALL
-                        ? "Категория"
-                        : null)
-                .setSortable(mode == Mode.ALL)
+                .setHeader("Категория")
+                .setSortable(true)
                 .setKey("category")
                 .setTextAlign(ColumnTextAlign.CENTER);
         root.addColumn(transaction -> formattingService.formatAmount(transaction.getAmount()))
-                .setHeader(mode == Mode.ALL
-                        ? "Сумма"
-                        : null)
-                .setSortable(mode == Mode.ALL)
+                .setHeader("Сумма")
+                .setSortable(true)
                 .setKey("amount")
                 .setTextAlign(ColumnTextAlign.END);
 

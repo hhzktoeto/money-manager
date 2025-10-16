@@ -1,8 +1,10 @@
-package hhz.ktoeto.moneymanager.feature.transaction.ui.data;
+package hhz.ktoeto.moneymanager.feature.transaction.ui;
 
 import com.vaadin.flow.data.provider.AbstractBackEndDataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.provider.SortDirection;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.DateService;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
@@ -16,40 +18,25 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
+@SpringComponent
+@VaadinSessionScope
 public class TransactionDataProvider extends AbstractBackEndDataProvider<Transaction, TransactionFilter> {
 
-    private static final int UNLIMITED = Integer.MAX_VALUE;
-
-    private final transient DateService dateService;
     private final transient UserContextHolder userContextHolder;
     private final transient TransactionService transactionService;
     @Getter
     protected transient TransactionFilter currentFilter;
 
-    private int maxSize;
-
-    public TransactionDataProvider(TransactionService transactionService,
-                                   UserContextHolder userContextHolder,
-                                   DateService dateService,
-                                   int maxSize) {
-        this.dateService = dateService;
+    public TransactionDataProvider(TransactionService transactionService, UserContextHolder userContextHolder, DateService dateService) {
         this.userContextHolder = userContextHolder;
         this.transactionService = transactionService;
 
         this.currentFilter = new TransactionFilter();
         currentFilter.setFromDate(dateService.currentMonthStart());
         currentFilter.setToDate(dateService.currentMonthEnd());
-
-        this.maxSize = maxSize;
-    }
-
-    public void setMaxSize(int maxSize) {
-        this.maxSize = maxSize;
-        this.refreshAll();
     }
 
     public void setCurrentFilter(TransactionFilter filter) {
@@ -57,13 +44,8 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
         this.refreshAll();
     }
 
-    public List<Transaction> getCurrentMonthsTransactions() {
-        long userId = userContextHolder.getCurrentUserId();
-        TransactionFilter filter = new TransactionFilter();
-        filter.setFromDate(dateService.currentMonthStart());
-        filter.setToDate(dateService.currentMonthEnd());
-
-        return this.fetchFromBackEnd(new Query<>(filter)).toList();
+    public List<Transaction> getTransactions() {
+        return this.fetchFromBackEnd(new Query<>(currentFilter)).toList();
     }
 
     @Override
@@ -72,8 +54,7 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
         TransactionFilter filter = query.getFilter().orElse(currentFilter);
 
         Sort sort;
-        boolean isLimited = maxSize < UNLIMITED;
-        if (isLimited || query.getSortOrders().isEmpty()) {
+        if (query.getSortOrders().isEmpty()) {
             sort = Sort.by(Sort.Order.desc("date"))
                     .and(Sort.by(Sort.Order.desc("createdAt")));
         } else {
@@ -88,10 +69,6 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
 
         int limit = query.getLimit();
         int page = query.getOffset() / query.getLimit();
-        if (isLimited) {
-            page = 0;
-            limit = Math.min(limit, maxSize);
-        }
         PageRequest pageRequest = PageRequest.of(page, limit, sort);
 
         return transactionService.getPage(userId, filter, pageRequest).getContent().stream();
@@ -101,9 +78,8 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
     protected int sizeInBackEnd(Query<Transaction, TransactionFilter> query) {
         long userId = userContextHolder.getCurrentUserId();
         TransactionFilter filter = query.getFilter().orElse(currentFilter);
-        int count = transactionService.count(userId, filter);
 
-        return Math.min(maxSize, count);
+        return transactionService.count(userId, filter);
     }
 
     @EventListener({

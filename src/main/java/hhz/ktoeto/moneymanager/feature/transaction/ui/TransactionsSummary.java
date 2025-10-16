@@ -10,7 +10,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.core.ui.component.TransactionsSummaryCard;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
-import hhz.ktoeto.moneymanager.feature.transaction.ui.data.TransactionDataProvider;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
@@ -34,7 +33,7 @@ public class TransactionsSummary extends Composite<FlexLayout> {
                 LumoUtility.FlexDirection.Breakpoint.Small.ROW
         );
 
-        List<Transaction> transactions = allTransactionsProvider.getCurrentMonthsTransactions();
+        List<Transaction> transactions = allTransactionsProvider.getTransactions();
 
         BigDecimal income = transactions.stream()
                 .filter(transaction -> transaction.getType() == Transaction.Type.INCOME)
