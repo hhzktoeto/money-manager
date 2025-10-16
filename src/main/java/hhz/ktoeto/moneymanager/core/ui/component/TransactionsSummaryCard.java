@@ -1,7 +1,6 @@
 package hhz.ktoeto.moneymanager.core.ui.component;
 
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -20,7 +19,13 @@ public class TransactionsSummaryCard extends Composite<BasicContainer> {
     private final H3 title;
     private final Mode mode;
     private final VaadinIcon icon;
-    private final BigDecimal amount;
+    private final BigDecimal initialAmount;
+
+    private Span amountSpan;
+
+    public void setAmount(BigDecimal amount) {
+        this.amountSpan.setText(formattingService.formatAmount(amount));
+    }
 
     @Override
     protected BasicContainer initContent() {
@@ -43,7 +48,7 @@ public class TransactionsSummaryCard extends Composite<BasicContainer> {
         header.add(title, iconSpan);
         root.setHeader(header);
 
-        Span amountSpan = new Span(formattingService.formatAmount(amount));
+        amountSpan = new Span(formattingService.formatAmount(initialAmount));
         amountSpan.addClassNames(
                 LumoUtility.FontWeight.BOLD,
                 LumoUtility.FontSize.XXXLARGE,
@@ -55,10 +60,10 @@ public class TransactionsSummaryCard extends Composite<BasicContainer> {
         if (mode != Mode.BALANCE) {
             amountSpan.addClassName(
                     mode == Mode.EXPENSE
-                            ? amount.compareTo(BigDecimal.ZERO) > 0
+                            ? initialAmount.compareTo(BigDecimal.ZERO) > 0
                                 ? LumoUtility.TextColor.ERROR
                                 : LumoUtility.TextColor.BODY
-                            : amount.compareTo(BigDecimal.ZERO) > 0
+                            : initialAmount.compareTo(BigDecimal.ZERO) > 0
                                 ? LumoUtility.TextColor.SUCCESS
                                 : LumoUtility.TextColor.BODY
             );

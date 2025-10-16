@@ -7,11 +7,18 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
+import hhz.ktoeto.moneymanager.core.service.DateService;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.core.ui.component.TransactionsSummaryCard;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
-import hhz.ktoeto.moneymanager.feature.transaction.ui.data.TransactionDataProvider;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
+import hhz.ktoeto.moneymanager.feature.transaction.event.TransactionCreatedEvent;
+import hhz.ktoeto.moneymanager.feature.transaction.event.TransactionDeletedEvent;
+import hhz.ktoeto.moneymanager.feature.transaction.event.TransactionUpdatedEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,8 +28,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TransactionsSummary extends Composite<FlexLayout> {
 
+    private final transient DateService dateService;
+    private final transient UserContextHolder userContextHolder;
     private final transient FormattingService formattingService;
-    private final transient TransactionDataProvider allTransactionsProvider;
+    private final transient TransactionService transactionService;
+
+    private TransactionsSummaryCard incomesCard;
+    private TransactionsSummaryCard expensesCard;
+    private TransactionsSummaryCard balanceCard;
 
     @Override
     protected FlexLayout initContent() {
@@ -34,7 +47,53 @@ public class TransactionsSummary extends Composite<FlexLayout> {
                 LumoUtility.FlexDirection.Breakpoint.Small.ROW
         );
 
-        List<Transaction> transactions = allTransactionsProvider.getCurrentMonthsTransactions();
+        Totals totals = calculateTotals();
+
+        incomesCard = TransactionsSummaryCard.builder()
+                .formattingService(formattingService)
+                .title(new H3("Доходы"))
+                .mode(TransactionsSummaryCard.Mode.INCOME)
+                .icon(VaadinIcon.TRENDING_UP)
+                .initialAmount(totals.income())
+                .build();
+        expensesCard = TransactionsSummaryCard.builder()
+                .formattingService(formattingService)
+                .title(new H3("Расходы"))
+                .mode(TransactionsSummaryCard.Mode.EXPENSE)
+                .icon(VaadinIcon.TRENDING_DOWN)
+                .initialAmount(totals.expense())
+                .build();
+        balanceCard = TransactionsSummaryCard.builder()
+                .formattingService(formattingService)
+                .title(new H3("Баланс"))
+                .mode(TransactionsSummaryCard.Mode.BALANCE)
+                .icon(VaadinIcon.WALLET)
+                .initialAmount(totals.balance())
+                .build();
+
+        root.add(incomesCard, expensesCard, balanceCard);
+
+        return root;
+    }
+
+    @EventListener({
+            TransactionCreatedEvent.class,
+            TransactionUpdatedEvent.class,
+            TransactionDeletedEvent.class
+    })
+    private void updateSummary() {
+        Totals totals = calculateTotals();
+
+        incomesCard.setAmount(totals.income());
+        expensesCard.setAmount(totals.expense());
+        balanceCard.setAmount(totals.balance());
+    }
+
+    private Totals calculateTotals() {
+        TransactionFilter currentMonthFilter = new TransactionFilter();
+        currentMonthFilter.setFromDate(dateService.currentMonthStart());
+        currentMonthFilter.setToDate(dateService.currentMonthEnd());
+        List<Transaction> transactions = transactionService.getFiltered(userContextHolder.getCurrentUserId(), currentMonthFilter);
 
         BigDecimal income = transactions.stream()
                 .filter(transaction -> transaction.getType() == Transaction.Type.INCOME)
@@ -44,33 +103,10 @@ public class TransactionsSummary extends Composite<FlexLayout> {
                 .filter(transaction -> transaction.getType() == Transaction.Type.EXPENSE)
                 .map(Transaction::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal balance = income.subtract(expense);
 
+        return new Totals(income, expense, income.subtract(expense));
+    }
 
-        TransactionsSummaryCard incomesCard = TransactionsSummaryCard.builder()
-                .formattingService(formattingService)
-                .title(new H3("Доходы"))
-                .mode(TransactionsSummaryCard.Mode.INCOME)
-                .icon(VaadinIcon.TRENDING_UP)
-                .amount(income)
-                .build();
-        TransactionsSummaryCard expensesCard = TransactionsSummaryCard.builder()
-                .formattingService(formattingService)
-                .title(new H3("Расходы"))
-                .mode(TransactionsSummaryCard.Mode.EXPENSE)
-                .icon(VaadinIcon.TRENDING_DOWN)
-                .amount(expense)
-                .build();
-        TransactionsSummaryCard balanceCard = TransactionsSummaryCard.builder()
-                .formattingService(formattingService)
-                .title(new H3("Баланс"))
-                .mode(TransactionsSummaryCard.Mode.BALANCE)
-                .icon(VaadinIcon.WALLET)
-                .amount(balance)
-                .build();
-
-        root.add(incomesCard, expensesCard, balanceCard);
-
-        return root;
+    private record Totals(BigDecimal income, BigDecimal expense, BigDecimal balance) {
     }
 }

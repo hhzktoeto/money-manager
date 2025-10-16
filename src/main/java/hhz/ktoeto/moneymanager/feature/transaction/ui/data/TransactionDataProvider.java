@@ -24,7 +24,6 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
 
     private static final int UNLIMITED = Integer.MAX_VALUE;
 
-    private final transient DateService dateService;
     private final transient UserContextHolder userContextHolder;
     private final transient TransactionService transactionService;
     @Getter
@@ -32,11 +31,8 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
 
     private int maxSize;
 
-    public TransactionDataProvider(TransactionService transactionService,
-                                   UserContextHolder userContextHolder,
-                                   DateService dateService,
-                                   int maxSize) {
-        this.dateService = dateService;
+    public TransactionDataProvider(TransactionService transactionService, UserContextHolder userContextHolder,
+                                   DateService dateService, int maxSize) {
         this.userContextHolder = userContextHolder;
         this.transactionService = transactionService;
 
@@ -47,23 +43,9 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
         this.maxSize = maxSize;
     }
 
-    public void setMaxSize(int maxSize) {
-        this.maxSize = maxSize;
-        this.refreshAll();
-    }
-
     public void setCurrentFilter(TransactionFilter filter) {
         this.currentFilter = filter != null ? filter : new TransactionFilter();
         this.refreshAll();
-    }
-
-    public List<Transaction> getCurrentMonthsTransactions() {
-        long userId = userContextHolder.getCurrentUserId();
-        TransactionFilter filter = new TransactionFilter();
-        filter.setFromDate(dateService.currentMonthStart());
-        filter.setToDate(dateService.currentMonthEnd());
-
-        return this.fetchFromBackEnd(new Query<>(filter)).toList();
     }
 
     @Override

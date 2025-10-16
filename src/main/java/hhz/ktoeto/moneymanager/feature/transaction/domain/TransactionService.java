@@ -12,12 +12,20 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TransactionService {
 
     private final TransactionsRepository repository;
+
+    public List<Transaction> getFiltered(long userId, TransactionFilter filter) {
+        log.debug("Fetching transactions for user with id {}. With filter: {}", userId, filter);
+        return repository.findAll(specification(userId, filter));
+    }
 
     public Page<Transaction> getPage(long userId, TransactionFilter filter, Pageable pageable) {
         log.debug("Fetching transactions for user with id {}, page {}, size {}", userId, pageable.getPageNumber(), pageable.getPageSize());
