@@ -32,7 +32,7 @@ public class TransactionsGrid extends Composite<Grid<Transaction>> {
         Grid<Transaction> root = new Grid<>();
         root.addClassNames(LumoUtility.Background.TRANSPARENT);
         root.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_WRAP_CELL_CONTENT);
-        root.setPageSize(10);
+        root.setAllRowsVisible(true);
         root.setSelectionMode(Grid.SelectionMode.NONE);
 
         NoTransactionsImage noTransactionsImage = new NoTransactionsImage();
