@@ -46,7 +46,9 @@ public class TransactionsSummaryCard extends Composite<BasicContainer> {
         Span amountSpan = new Span(formattingService.formatAmount(amount));
         amountSpan.addClassNames(
                 LumoUtility.FontWeight.BOLD,
-                LumoUtility.FontSize.XXLARGE,
+                LumoUtility.FontSize.XXXLARGE,
+                LumoUtility.FontSize.Breakpoint.Small.XLARGE,
+                LumoUtility.FontSize.Breakpoint.Large.XXXLARGE,
                 LumoUtility.Padding.Top.SMALL,
                 LumoUtility.Padding.Left.SMALL
         );
