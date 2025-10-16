@@ -12,11 +12,9 @@ import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.event.OpenTransactionEditDialogEvent;
 import hhz.ktoeto.moneymanager.feature.transaction.ui.data.TransactionDataProvider;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 
 @Builder
-@RequiredArgsConstructor
 public class TransactionsGrid extends Composite<Grid<Transaction>> {
 
     private final transient FormattingService formattingService;

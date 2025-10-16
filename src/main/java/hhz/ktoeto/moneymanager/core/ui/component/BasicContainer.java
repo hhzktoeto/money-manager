@@ -17,8 +17,8 @@ public class BasicContainer extends FlexLayout {
         header = new FlexLayout();
         header.addClassNames(
                 LumoUtility.Border.BOTTOM,
-                LumoUtility.BorderColor.PRIMARY,
-                LumoUtility.BorderRadius.MEDIUM,
+                LumoUtility.BorderColor.PRIMARY_50,
+                LumoUtility.BorderRadius.SMALL,
                 LumoUtility.Padding.Bottom.SMALL,
                 LumoUtility.Padding.Left.SMALL
         );

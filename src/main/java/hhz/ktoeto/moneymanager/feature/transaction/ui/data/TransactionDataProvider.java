@@ -16,12 +16,15 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class TransactionDataProvider extends AbstractBackEndDataProvider<Transaction, TransactionFilter> {
 
     private static final int UNLIMITED = Integer.MAX_VALUE;
 
+    private final transient DateService dateService;
     private final transient UserContextHolder userContextHolder;
     private final transient TransactionService transactionService;
     @Getter
@@ -33,6 +36,7 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
                                    UserContextHolder userContextHolder,
                                    DateService dateService,
                                    int maxSize) {
+        this.dateService = dateService;
         this.userContextHolder = userContextHolder;
         this.transactionService = transactionService;
 
@@ -51,6 +55,15 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
     public void setCurrentFilter(TransactionFilter filter) {
         this.currentFilter = filter != null ? filter : new TransactionFilter();
         this.refreshAll();
+    }
+
+    public List<Transaction> getCurrentMonthsTransactions() {
+        long userId = userContextHolder.getCurrentUserId();
+        TransactionFilter filter = new TransactionFilter();
+        filter.setFromDate(dateService.currentMonthStart());
+        filter.setToDate(dateService.currentMonthEnd());
+
+        return this.fetchFromBackEnd(new Query<>(filter)).toList();
     }
 
     @Override
