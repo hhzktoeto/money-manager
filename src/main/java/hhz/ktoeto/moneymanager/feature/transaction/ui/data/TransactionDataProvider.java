@@ -20,20 +20,14 @@ import java.util.stream.Stream;
 
 public class TransactionDataProvider extends AbstractBackEndDataProvider<Transaction, TransactionFilter> {
 
-    private final transient UserContextHolder userContextHolder;
-    private final transient TransactionService transactionService;
-
-    private int maxSize;
-
     private static final int UNLIMITED = Integer.MAX_VALUE;
 
+    private final transient UserContextHolder userContextHolder;
+    private final transient TransactionService transactionService;
     @Getter
     protected transient TransactionFilter currentFilter;
 
-    public void setMaxSize(int maxSize) {
-        this.maxSize = maxSize;
-        this.refreshAll();
-    }
+    private int maxSize;
 
     public TransactionDataProvider(TransactionService transactionService,
                                    UserContextHolder userContextHolder,
@@ -49,7 +43,12 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
         this.maxSize = maxSize;
     }
 
-    public void setFilter(TransactionFilter filter) {
+    public void setMaxSize(int maxSize) {
+        this.maxSize = maxSize;
+        this.refreshAll();
+    }
+
+    public void setCurrentFilter(TransactionFilter filter) {
         this.currentFilter = filter != null ? filter : new TransactionFilter();
         this.refreshAll();
     }

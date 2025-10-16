@@ -19,7 +19,8 @@ vaadin-dialog-overlay::part(backdrop) {
 
 vaadin-select-overlay::part(content) {
     text-align: center;
-    height: 33vh;
+    max-height: 33vh;
+    background-color: var(--lumo-shade-40pct);
 }
 
 vaadin-select-overlay vaadin-select-item[selected] {

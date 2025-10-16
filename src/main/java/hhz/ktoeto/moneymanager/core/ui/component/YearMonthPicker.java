@@ -42,7 +42,7 @@ public class YearMonthPicker extends Composite<HorizontalLayout> {
         yearPicker.setEmptySelectionAllowed(false);
         yearPicker.setLabel("Год");
         yearPicker.setItems(IntStream
-                .range(2024, 2099)
+                .range(2024, LocalDate.now().getYear() + 10)
                 .boxed()
                 .toList()
         );

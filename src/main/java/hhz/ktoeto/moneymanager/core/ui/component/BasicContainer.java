@@ -15,6 +15,13 @@ public class BasicContainer extends FlexLayout {
     public BasicContainer() {
         this.setFlexDirection(FlexDirection.COLUMN);
         header = new FlexLayout();
+        header.addClassNames(
+                LumoUtility.Border.BOTTOM,
+                LumoUtility.BorderColor.PRIMARY,
+                LumoUtility.BorderRadius.MEDIUM,
+                LumoUtility.Padding.Bottom.SMALL,
+                LumoUtility.Padding.Left.SMALL
+        );
         content = new FlexLayout();
 
         this.addClassNames(
