@@ -23,15 +23,22 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
     private final transient UserContextHolder userContextHolder;
     private final transient TransactionService transactionService;
 
-    private final Integer maxSize;
+    private int maxSize;
+
+    private static final int UNLIMITED = Integer.MAX_VALUE;
 
     @Getter
     protected transient TransactionFilter currentFilter;
 
+    public void setMaxSize(int maxSize) {
+        this.maxSize = maxSize;
+        this.refreshAll();
+    }
+
     public TransactionDataProvider(TransactionService transactionService,
                                    UserContextHolder userContextHolder,
                                    DateService dateService,
-                                   Integer maxSize) {
+                                   int maxSize) {
         this.userContextHolder = userContextHolder;
         this.transactionService = transactionService;
 
@@ -53,7 +60,8 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
         TransactionFilter filter = query.getFilter().orElse(currentFilter);
 
         Sort sort;
-        if (query.getSortOrders().isEmpty()) {
+        boolean isLimited = maxSize < UNLIMITED;
+        if (isLimited || query.getSortOrders().isEmpty()) {
             sort = Sort.by(Sort.Order.desc("date"))
                     .and(Sort.by(Sort.Order.desc("createdAt")));
         } else {
@@ -66,8 +74,12 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
                     .reduce(Sort.unsorted(), Sort::and);
         }
 
+        int limit = query.getLimit();
         int page = query.getOffset() / query.getLimit();
-        int limit = Math.min(maxSize, query.getLimit());
+        if (isLimited) {
+            page = 0;
+            limit = Math.min(limit, maxSize);
+        }
         PageRequest pageRequest = PageRequest.of(page, limit, sort);
 
         return transactionService.getPage(userId, filter, pageRequest).getContent().stream();
@@ -77,8 +89,9 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
     protected int sizeInBackEnd(Query<Transaction, TransactionFilter> query) {
         long userId = userContextHolder.getCurrentUserId();
         TransactionFilter filter = query.getFilter().orElse(currentFilter);
+        int count = transactionService.count(userId, filter);
 
-        return Math.min(maxSize, transactionService.count(userId, filter));
+        return Math.min(maxSize, count);
     }
 
     @EventListener({
