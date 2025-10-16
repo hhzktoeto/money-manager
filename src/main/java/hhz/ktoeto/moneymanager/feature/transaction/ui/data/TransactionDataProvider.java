@@ -4,7 +4,6 @@ import com.vaadin.flow.data.provider.AbstractBackEndDataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.provider.SortDirection;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
-import hhz.ktoeto.moneymanager.core.service.DateService;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
@@ -15,9 +14,8 @@ import lombok.Getter;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.NonNull;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.stream.Stream;
 
 public class TransactionDataProvider extends AbstractBackEndDataProvider<Transaction, TransactionFilter> {
@@ -31,20 +29,15 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
 
     private int maxSize;
 
-    public TransactionDataProvider(TransactionService transactionService, UserContextHolder userContextHolder,
-                                   DateService dateService, int maxSize) {
+    public TransactionDataProvider(TransactionService transactionService, UserContextHolder userContextHolder, int maxSize) {
         this.userContextHolder = userContextHolder;
         this.transactionService = transactionService;
-
-        this.currentFilter = new TransactionFilter();
-        currentFilter.setFromDate(dateService.currentMonthStart());
-        currentFilter.setToDate(dateService.currentMonthEnd());
-
+        this.currentFilter = TransactionFilter.currentMonthFilter();
         this.maxSize = maxSize;
     }
 
-    public void setCurrentFilter(TransactionFilter filter) {
-        this.currentFilter = filter != null ? filter : new TransactionFilter();
+    public void setCurrentFilter(@NonNull TransactionFilter filter) {
+        this.currentFilter = filter;
         this.refreshAll();
     }
 

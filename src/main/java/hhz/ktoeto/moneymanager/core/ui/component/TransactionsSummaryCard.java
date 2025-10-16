@@ -19,12 +19,15 @@ public class TransactionsSummaryCard extends Composite<BasicContainer> {
     private final H3 title;
     private final Mode mode;
     private final VaadinIcon icon;
-    private final BigDecimal initialAmount;
+    private BigDecimal amount;
 
     private Span amountSpan;
 
     public void setAmount(BigDecimal amount) {
+        this.amount = amount;
         this.amountSpan.setText(formattingService.formatAmount(amount));
+
+        this.reloadColors();
     }
 
     @Override
@@ -36,6 +39,7 @@ public class TransactionsSummaryCard extends Composite<BasicContainer> {
         header.addClassNames(
                 LumoUtility.JustifyContent.BETWEEN
         );
+        header.add(title);
 
         String colorClassName = switch (mode) {
             case EXPENSE -> LumoUtility.TextColor.ERROR;
@@ -44,11 +48,11 @@ public class TransactionsSummaryCard extends Composite<BasicContainer> {
         };
         Span iconSpan = new Span(icon.create());
         iconSpan.addClassName(colorClassName);
+        header.add(iconSpan);
 
-        header.add(title, iconSpan);
         root.setHeader(header);
 
-        amountSpan = new Span(formattingService.formatAmount(initialAmount));
+        amountSpan = new Span(formattingService.formatAmount(amount));
         amountSpan.addClassNames(
                 LumoUtility.FontWeight.BOLD,
                 LumoUtility.FontSize.XXXLARGE,
@@ -57,22 +61,30 @@ public class TransactionsSummaryCard extends Composite<BasicContainer> {
                 LumoUtility.Padding.Top.SMALL,
                 LumoUtility.Padding.Left.SMALL
         );
-        if (mode != Mode.BALANCE) {
-            amountSpan.addClassName(
-                    mode == Mode.EXPENSE
-                            ? initialAmount.compareTo(BigDecimal.ZERO) > 0
-                                ? LumoUtility.TextColor.ERROR
-                                : LumoUtility.TextColor.BODY
-                            : initialAmount.compareTo(BigDecimal.ZERO) > 0
-                                ? LumoUtility.TextColor.SUCCESS
-                                : LumoUtility.TextColor.BODY
-            );
-        }
+        this.reloadColors();
 
         root.setContent(amountSpan);
 
         return root;
     }
 
-    public enum Mode {EXPENSE, INCOME, BALANCE}
+    private void reloadColors() {
+        String className = switch (mode) {
+            case EXPENSE -> amount.compareTo(BigDecimal.ZERO) > 0
+                    ? LumoUtility.TextColor.ERROR
+                    : LumoUtility.TextColor.BODY;
+            case INCOME -> amount.compareTo(BigDecimal.ZERO) > 0
+                    ? LumoUtility.TextColor.SUCCESS
+                    : LumoUtility.TextColor.BODY;
+            default -> LumoUtility.TextColor.BODY;
+        };
+        amountSpan.addClassName(className);
+
+    }
+
+    public enum Mode {
+        EXPENSE,
+        INCOME,
+        BALANCE
+    }
 }
