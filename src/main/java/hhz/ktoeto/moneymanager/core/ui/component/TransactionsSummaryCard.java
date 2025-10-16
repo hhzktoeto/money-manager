@@ -1,6 +1,7 @@
 package hhz.ktoeto.moneymanager.core.ui.component;
 
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -24,11 +25,10 @@ public class TransactionsSummaryCard extends Composite<BasicContainer> {
     @Override
     protected BasicContainer initContent() {
         BasicContainer root = new BasicContainer();
-        root.setWidthFull();
 
         HorizontalLayout header = new HorizontalLayout();
+        header.setWidthFull();
         header.addClassNames(
-                LumoUtility.Width.FULL,
                 LumoUtility.JustifyContent.BETWEEN
         );
 

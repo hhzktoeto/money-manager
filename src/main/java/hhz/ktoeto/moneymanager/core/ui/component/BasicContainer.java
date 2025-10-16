@@ -16,6 +16,7 @@ public class BasicContainer extends FlexLayout {
         this.setFlexDirection(FlexDirection.COLUMN);
         header = new FlexLayout();
         header.addClassNames(
+                LumoUtility.Width.FULL,
                 LumoUtility.Border.BOTTOM,
                 LumoUtility.BorderColor.PRIMARY_50,
                 LumoUtility.BorderRadius.SMALL,
@@ -23,14 +24,17 @@ public class BasicContainer extends FlexLayout {
                 LumoUtility.Padding.Left.SMALL
         );
         content = new FlexLayout();
+        content.addClassName(LumoUtility.Width.FULL);
 
         this.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.BoxSizing.BORDER,
                 LumoUtility.Padding.MEDIUM,
                 LumoUtility.Border.ALL,
                 LumoUtility.BorderRadius.LARGE,
                 LumoUtility.BorderColor.PRIMARY_10,
                 LumoUtility.Background.SHADE_40,
-                LumoUtility.BoxShadow.MEDIUM
+                LumoUtility.BoxShadow.LARGE
         );
 
         this.add(this.header, this.content);
