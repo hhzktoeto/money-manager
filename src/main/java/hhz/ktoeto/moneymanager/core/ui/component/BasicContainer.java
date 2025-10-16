@@ -22,7 +22,7 @@ public class BasicContainer extends FlexLayout {
                 LumoUtility.Border.ALL,
                 LumoUtility.BorderRadius.LARGE,
                 LumoUtility.BorderColor.PRIMARY_10,
-                LumoUtility.Background.SHADE,
+                LumoUtility.Background.SHADE_40,
                 LumoUtility.BoxShadow.MEDIUM
         );
 
