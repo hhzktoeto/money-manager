@@ -1,6 +1,5 @@
-package hhz.ktoeto.moneymanager.feature.goals.domain;
+package hhz.ktoeto.moneymanager.feature.category.domain;
 
-import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,8 +12,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "budget_goals")
-public class BudgetGoal {
+@Table(name = "category_goals")
+public class CategoryGoal {
 
     public enum Type{
         INCOME, EXPENSE

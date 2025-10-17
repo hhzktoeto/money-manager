@@ -11,3 +11,5 @@ databaseChangeLog:
       file: db/changelog/changes/users_V001__add-budget-goal.sql
   - include:
       file: db/changelog/changes/persistent_logins_V000__initial.sql
+  - include:
+      file: db/changelog/changes/budget-goals_V002__rename-to-category-goals.sql

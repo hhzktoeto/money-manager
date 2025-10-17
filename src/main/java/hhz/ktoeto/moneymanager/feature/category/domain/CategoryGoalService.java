@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.goals.domain;
+package hhz.ktoeto.moneymanager.feature.category.domain;
 
 import hhz.ktoeto.moneymanager.core.exception.EntityNotFoundException;
 import hhz.ktoeto.moneymanager.core.exception.NonOwnerRequestException;
@@ -12,25 +12,25 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BudgetGoalService {
+public class CategoryGoalService {
 
-    private final BudgetGoalRepository repository;
+    private final CategoryGoalRepository repository;
 
-    public Page<BudgetGoal> getPage(long userId, Pageable pageable) {
+    public Page<CategoryGoal> getPage(long userId, Pageable pageable) {
         log.debug("Fetching budget goals for user with id {}, page {}, size {}", userId, pageable.getPageNumber(), pageable.getPageSize());
         return repository.findByUserId(userId, pageable);
     }
 
     @Transactional
-    public BudgetGoal create(BudgetGoal goal) {
+    public CategoryGoal create(CategoryGoal goal) {
         log.debug("Creating budget goal for user with id {}. Budget goal: {}", goal.getUserId(), goal);
         return repository.save(goal);
     }
 
     @Transactional
-    public BudgetGoal update(BudgetGoal updated, long userId) {
+    public CategoryGoal update(CategoryGoal updated, long userId) {
         log.debug("Updating budget goal for user with id {}. Budget goal: {}", updated.getUserId(), updated);
-        BudgetGoal goal = getGoalFromRepository(updated.getId());
+        CategoryGoal goal = getGoalFromRepository(updated.getId());
         if (goal.getUserId() != userId) {
             throw new NonOwnerRequestException("User with id %d requested budget goal update, which owner is user with id %d".formatted(userId, goal.getUserId()));
         }
@@ -41,14 +41,14 @@ public class BudgetGoalService {
     @Transactional
     public void delete(long id, long userId) {
         log.debug("Deleting budget goal for user with id {}. Budget goal ID: {}", userId, id);
-        BudgetGoal goal = getGoalFromRepository(id);
+        CategoryGoal goal = getGoalFromRepository(id);
         if (goal.getUserId() != userId) {
             throw new NonOwnerRequestException("User with id %d requested budget goal deletion, which owner is user with id %d".formatted(userId, goal.getUserId()));
         }
         repository.delete(goal);
     }
 
-    private BudgetGoal getGoalFromRepository(long id) {
+    private CategoryGoal getGoalFromRepository(long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Could not find Budget goal with id %d".formatted(id)));
     }

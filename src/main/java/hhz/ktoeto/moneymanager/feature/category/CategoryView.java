@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.goals;
+package hhz.ktoeto.moneymanager.feature.category;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -11,10 +11,10 @@ import jakarta.annotation.security.PermitAll;
 @UIScope
 @PermitAll
 @SpringComponent
-@Route(value = Routes.Path.GOALS, layout = MainLayout.class)
-public class GoalsView extends VerticalLayout {
+@Route(value = Routes.Path.CATEGORIES, layout = MainLayout.class)
+public class CategoryView extends VerticalLayout {
 
-    public GoalsView() {
+    public CategoryView() {
         setSizeFull();
     }
 }
