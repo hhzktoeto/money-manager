@@ -7,6 +7,7 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -19,8 +20,10 @@ public class YearMonthPicker extends Composite<HorizontalLayout> {
 
     private final FormattingService formattingService;
 
-    private Integer initialYear = LocalDate.now().getYear();
-    private Month initialMonth = LocalDate.now().getMonth();
+    @Setter
+    private Integer year = LocalDate.now().getYear();
+    @Setter
+    private Month month = LocalDate.now().getMonth();
 
     private Select<Integer> yearPicker;
     private Select<Month> monthPicker;
@@ -46,7 +49,7 @@ public class YearMonthPicker extends Composite<HorizontalLayout> {
                 .boxed()
                 .toList()
         );
-        yearPicker.setValue(initialYear);
+        yearPicker.setValue(year);
         root.add(yearPicker);
 
         monthPicker = new Select<>();
@@ -54,7 +57,7 @@ public class YearMonthPicker extends Composite<HorizontalLayout> {
         monthPicker.setEmptySelectionAllowed(false);
         monthPicker.setLabel("Месяц");
         monthPicker.setItems(Month.values());
-        monthPicker.setValue(initialMonth);
+        monthPicker.setValue(month);
         monthPicker.setItemLabelGenerator(formattingService::formatMonth);
         root.add(monthPicker);
 
@@ -62,14 +65,6 @@ public class YearMonthPicker extends Composite<HorizontalLayout> {
         monthPicker.addValueChangeListener(e -> updateDates());
 
         return root;
-    }
-
-    public void setYear(Integer year) {
-        this.initialYear = year;
-    }
-
-    public void setMonth(Month month) {
-        this.initialMonth = month;
     }
 
     public void addChangeEventHandler(BiConsumer<LocalDate, LocalDate> changeEventHandler) {
