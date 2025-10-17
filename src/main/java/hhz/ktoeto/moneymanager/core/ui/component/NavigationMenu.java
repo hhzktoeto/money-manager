@@ -2,88 +2,96 @@ package hhz.ktoeto.moneymanager.core.ui.component;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.router.HighlightActions;
-import com.vaadin.flow.router.HighlightConditions;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.constant.Routes;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
+@RequiredArgsConstructor
 public class NavigationMenu extends Composite<HorizontalLayout> {
 
-    public enum Mode {
-        DESKTOP,
-        MOBILE
-    }
-
     private final Mode mode;
-
-    public NavigationMenu(Mode mode) {
-        this.mode = mode;
-    }
 
     @Override
     protected HorizontalLayout initContent() {
         HorizontalLayout root = new HorizontalLayout();
-        root.addClassNames(classNames());
+        root.addClassNames(rootClassNames());
+
+        Tabs tabs = new Tabs();
+        tabs.addThemeVariants(TabsVariant.LUMO_EQUAL_WIDTH_TABS, TabsVariant.LUMO_MINIMAL);
+        tabs.addClassNames(
+                LumoUtility.BoxSizing.BORDER,
+                LumoUtility.Width.FULL,
+                LumoUtility.Gap.MEDIUM
+        );
+        root.add(tabs);
 
         if (mode == Mode.MOBILE) {
-            root.setSpacing(true);
-            root.setHeight(10, Unit.VH);
             root.setVisible(false);
+            root.setHeight(10, Unit.VH);
         }
 
-        RouterLink[] links = Arrays.stream(Routes.values())
+        Arrays.stream(Routes.values())
                 .filter(Routes::isMenuItem)
                 .map(this::createLink)
-                .toArray(RouterLink[]::new);
-        root.add(links);
+                .forEach(link -> tabs.add(new Tab(link)));
 
         return root;
     }
 
     private RouterLink createLink(Routes route) {
         RouterLink link = new RouterLink(route.getViewClass());
-        link.setHighlightCondition(HighlightConditions.sameLocation());
-        link.setHighlightAction(HighlightActions.toggleClassName(LumoUtility.TextColor.BODY));
-
         link.addClassNames(
                 LumoUtility.Display.FLEX,
+                LumoUtility.Gap.XSMALL,
                 LumoUtility.FlexDirection.COLUMN,
+                LumoUtility.AlignContent.CENTER,
+                LumoUtility.JustifyContent.CENTER,
                 LumoUtility.AlignItems.CENTER,
-                LumoUtility.TextAlignment.CENTER,
-                mode == Mode.DESKTOP
-                        ? LumoUtility.FontSize.MEDIUM
-                        : LumoUtility.FontSize.XSMALL
+                LumoUtility.TextAlignment.CENTER
         );
 
-        link.add(route.getIcon().create());
-        link.add(route.getName());
+        Icon icon = route.getIcon().create();
+        icon.addClassName(LumoUtility.IconSize.MEDIUM);
+        link.add(icon);
+
+        Span routeNameSpan = new Span(route.getName());
+        routeNameSpan.addClassName(LumoUtility.FontSize.XXSMALL);
+        link.add(routeNameSpan);
 
         return link;
     }
 
-    private String[] classNames() {
+    private String[] rootClassNames() {
         return switch (mode) {
-            case DESKTOP -> new String[] {
+            case DESKTOP -> new String[]{
                     LumoUtility.Gap.XLARGE,
                     LumoUtility.AlignSelf.CENTER
             };
-            case MOBILE -> new String[] {
-                    LumoUtility.Gap.XLARGE,
+            case MOBILE -> new String[]{
+                    LumoUtility.ZIndex.LARGE,
+                    LumoUtility.Gap.MEDIUM,
                     LumoUtility.Position.FIXED,
                     LumoUtility.Position.Bottom.NONE,
-                    LumoUtility.Width.FULL,
-                    LumoUtility.Height.LARGE,
-                    LumoUtility.JustifyContent.BETWEEN,
                     LumoUtility.AlignItems.START,
-                    LumoUtility.Padding.Top.SMALL,
-                    LumoUtility.Border.TOP,
-                    LumoUtility.Padding.Horizontal.LARGE,
+                    LumoUtility.Padding.Top.XSMALL,
+                    LumoUtility.Width.FULL,
                     LumoUtility.Background.SHADE
-            } ;
+            };
         };
     }
+
+    public enum Mode {
+        DESKTOP,
+        MOBILE
+    }
 }
+

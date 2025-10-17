@@ -72,7 +72,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         content.addClassNames(
                 LumoUtility.AlignContent.STRETCH,
                 LumoUtility.Overflow.AUTO,
-                LumoUtility.Padding.XSMALL
+                LumoUtility.Padding.Horizontal.NONE
         );
 
         mobileNavigation = new NavigationMenu(NavigationMenu.Mode.MOBILE);
@@ -124,7 +124,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
             header.setJustifyContentMode(JustifyContentMode.CENTER);
             header.addClassName(LumoUtility.TextAlignment.CENTER);
 
-            content.addClassName(LumoUtility.Padding.Bottom.XLARGE);
+            content.getStyle().set("margin-bottom", "10vh");
         } else {
             desktopNavigation.setVisible(true);
             addTransactionButtonDesktop.setVisible(true);
@@ -135,7 +135,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
             header.setJustifyContentMode(JustifyContentMode.BETWEEN);
             header.removeClassName(LumoUtility.TextAlignment.CENTER);
 
-            content.removeClassName(LumoUtility.Padding.Bottom.XLARGE);
+            content.getStyle().remove("margin-bottom");
         }
     }
 }
