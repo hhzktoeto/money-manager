@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.budget.domain;
+package hhz.ktoeto.moneymanager.feature.goals.domain;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

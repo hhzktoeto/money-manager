@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.budget.domain;
+package hhz.ktoeto.moneymanager.feature.goals.domain;
 
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import jakarta.persistence.*;

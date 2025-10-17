@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.budget;
+package hhz.ktoeto.moneymanager.feature.goals;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -11,6 +11,10 @@ import jakarta.annotation.security.PermitAll;
 @UIScope
 @PermitAll
 @SpringComponent
-@Route(value = Routes.Path.BUDGET, layout = MainLayout.class)
-public class BudgetView extends VerticalLayout {
+@Route(value = Routes.Path.GOALS, layout = MainLayout.class)
+public class GoalsView extends VerticalLayout {
+
+    public GoalsView() {
+        setSizeFull();
+    }
 }
