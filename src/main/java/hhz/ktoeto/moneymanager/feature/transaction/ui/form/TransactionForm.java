@@ -32,9 +32,9 @@ import java.util.function.Consumer;
 public class TransactionForm extends Composite<FlexLayout> {
 
     private final CategoryDataProvider categoryProvider;
-    private final Consumer<TransactionForm> categoryAddAction;
-    private final Consumer<TransactionForm> submitAction;
-    private final Consumer<TransactionForm> cancelAction;
+    private final transient Consumer<TransactionForm> categoryAddAction;
+    private final transient Consumer<TransactionForm> submitAction;
+    private final transient Consumer<TransactionForm> cancelAction;
 
     private final Binder<Transaction> binder = new Binder<>(Transaction.class);
 

@@ -9,9 +9,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryFormFactory {
 
-    private final CategoryCreateFormLogic createLogic;
+    private final CategoryFormLogic logic;
 
-    public CategoryForm createCategoryForm() {
-        return new CategoryForm(createLogic);
+    public CategoryForm categoryCreateForm() {
+        return new CategoryForm(logic::submitCreate, form -> logic.cancelCreation());
     }
 }

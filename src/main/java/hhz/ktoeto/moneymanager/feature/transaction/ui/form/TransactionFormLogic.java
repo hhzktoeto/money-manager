@@ -18,9 +18,9 @@ import org.springframework.context.ApplicationEventPublisher;
 @RequiredArgsConstructor
 public class TransactionFormLogic {
 
-    private final transient UserContextHolder userContextHolder;
-    private final transient TransactionService transactionService;
-    private final transient ApplicationEventPublisher eventPublisher;
+    private final UserContextHolder userContextHolder;
+    private final TransactionService transactionService;
+    private final ApplicationEventPublisher eventPublisher;
 
     void submitCreate(TransactionForm form) {
         long userId = userContextHolder.getCurrentUserId();

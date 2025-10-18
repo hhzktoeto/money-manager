@@ -4,6 +4,7 @@ import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -25,12 +26,15 @@ public class Category {
     @Column(name = "user_id", nullable = false)
     private long userId;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "category")
     private List<CategoryGoal> goals;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "category")
     private List<Transaction> transactions;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "categories")
     private List<Budget> budgets;
 
