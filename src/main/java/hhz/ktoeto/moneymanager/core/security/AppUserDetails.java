@@ -1,6 +1,6 @@
 package hhz.ktoeto.moneymanager.core.security;
 
-import hhz.ktoeto.moneymanager.feature.user.domain.User;
+import hhz.ktoeto.moneymanager.ui.feature.user.domain.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

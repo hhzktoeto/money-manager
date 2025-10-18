@@ -3,9 +3,9 @@ package hhz.ktoeto.moneymanager.core.config;
 import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import hhz.ktoeto.moneymanager.core.constant.Routes;
-import hhz.ktoeto.moneymanager.feature.user.domain.UserService;
+import hhz.ktoeto.moneymanager.ui.feature.user.domain.UserService;
 import hhz.ktoeto.moneymanager.core.security.AppUserDetails;
-import hhz.ktoeto.moneymanager.feature.user.LoginView;
+import hhz.ktoeto.moneymanager.ui.feature.user.LoginView;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -76,7 +76,7 @@ public class SecurityConfig {
                 .formLogin(configurer -> configurer
                         .loginPage(Routes.LOGIN.getPath())
                         .loginProcessingUrl(Routes.LOGIN.getPath())
-                        .defaultSuccessUrl(Routes.MAIN.getPath(), true)
+                        .defaultSuccessUrl(Routes.HOME.getPath(), true)
                 )
                 .rememberMe(configurer -> configurer
                         .key(rememberMeKey)
