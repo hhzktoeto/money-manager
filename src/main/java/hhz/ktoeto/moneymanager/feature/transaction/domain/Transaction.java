@@ -31,7 +31,7 @@ public class Transaction {
     private long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false, length = 10)
+    @Column(name = "type", nullable = false, length = 7)
     private Type type;
 
     @Column(name = "user_id", nullable = false)
