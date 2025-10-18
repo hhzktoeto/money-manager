@@ -13,8 +13,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
 import hhz.ktoeto.moneymanager.ui.component.RussianDatePicker;
-import hhz.ktoeto.moneymanager.ui.component.TransactionTypeToggleSwitch;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.feature.category.ui.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
@@ -38,7 +38,7 @@ public class TransactionForm extends Composite<FlexLayout> {
 
     private final Binder<Transaction> binder = new Binder<>(Transaction.class);
 
-    private final TransactionTypeToggleSwitch typeToggleSwitch = new TransactionTypeToggleSwitch();
+    private IncomeExpenseToggle<Transaction.Type> typeToggle;
     private ComboBox<Category> categorySelect;
     private TextField amountField;
     private DatePicker datePicker;
@@ -75,7 +75,8 @@ public class TransactionForm extends Composite<FlexLayout> {
                 LumoUtility.Gap.XSMALL
         );
 
-        FlexLayout firstRow = new FlexLayout(typeToggleSwitch, categoryWrapper);
+        typeToggle = new IncomeExpenseToggle<>(Transaction.Type.EXPENSE, Transaction.Type.INCOME);
+        FlexLayout firstRow = new FlexLayout(typeToggle, categoryWrapper);
         firstRow.addClassNames(
                 LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.FlexDirection.Breakpoint.Small.ROW,
@@ -121,7 +122,7 @@ public class TransactionForm extends Composite<FlexLayout> {
         );
         root.add(buttons);
 
-        this.binder.forField(typeToggleSwitch)
+        this.binder.forField(typeToggle)
                 .asRequired("Не выбран тип")
                 .bind(Transaction::getType, Transaction::setType);
         this.binder.forField(categorySelect)
