@@ -1,5 +1,6 @@
 package hhz.ktoeto.moneymanager.feature.category.domain;
 
+import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -25,10 +26,13 @@ public class Category {
     private long userId;
 
     @OneToMany(mappedBy = "category")
-    List<CategoryGoal> goals;
+    private List<CategoryGoal> goals;
 
     @OneToMany(mappedBy = "category")
-    List<Transaction> transactions;
+    private List<Transaction> transactions;
+
+    @ManyToMany(mappedBy = "categories")
+    private List<Budget> budgets;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
