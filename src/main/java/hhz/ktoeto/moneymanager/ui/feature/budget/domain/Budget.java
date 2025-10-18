@@ -17,11 +17,42 @@ import java.util.List;
 public class Budget {
 
     public enum Type {
-        INCOME, EXPENSE
+        INCOME, EXPENSE;
+
+        @Override
+        public String toString() {
+            return switch (this) {
+                case INCOME -> "Доход";
+                case EXPENSE -> "Расход";
+            };
+        }
     }
 
-    public enum PeriodType {
-        MONTHLY, YEARLY, UNLIMITED, CUSTOM
+    public enum Scope {
+        ALL, BY_CATEGORIES;
+
+        @Override
+        public String toString() {
+            return switch (this) {
+                case ALL -> "Все";
+                case BY_CATEGORIES -> "По категориям";
+            };
+        }
+    }
+
+    public enum ActivePeriod {
+        DAY, WEEK, MONTH, QUARTER, YEAR;
+
+        @Override
+        public String toString() {
+            return switch (this) {
+                case DAY -> "День";
+                case WEEK -> "Неделя";
+                case MONTH -> "Месяц";
+                case QUARTER -> "Квартал";
+                case YEAR -> "Год";
+            };
+        }
     }
 
     @Id
@@ -32,21 +63,28 @@ public class Budget {
     @Column(name = "name", nullable = false, length = 64)
     private String name;
 
+    @Column(name = "is_renewable", nullable = false)
+    private boolean isRenewable;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, length = 7)
     private Type type;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "period_type", nullable = false, length = 9)
-    private PeriodType periodType;
+    @Column(name = "scope", nullable = false, length = 13)
+    private Scope scope;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "active_period", nullable = false, length = 7)
+    private ActivePeriod activePeriod;
 
     @Column(name = "goal_amount", nullable = false, precision = 12, scale = 2)
     private BigDecimal goalAmount;
 
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
     @Column(name = "user_id", nullable = false)
