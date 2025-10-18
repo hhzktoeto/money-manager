@@ -37,7 +37,7 @@ public class Transaction {
     @Column(name = "user_id", nullable = false)
     private long userId;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
