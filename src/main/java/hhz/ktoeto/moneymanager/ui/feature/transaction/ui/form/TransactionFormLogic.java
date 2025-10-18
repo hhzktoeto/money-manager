@@ -10,10 +10,8 @@ import hhz.ktoeto.moneymanager.ui.feature.transaction.event.TransactionCreationC
 import hhz.ktoeto.moneymanager.ui.feature.transaction.event.TransactionEditCancelledEvent;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.event.TransactionUpdatedEvent;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 
-@Slf4j
 @SpringComponent
 @RequiredArgsConstructor
 public class TransactionFormLogic {
