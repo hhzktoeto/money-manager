@@ -116,8 +116,9 @@ public class TransactionForm extends Composite<FlexLayout> {
 
         HorizontalLayout buttons = new HorizontalLayout(cancelButton, submitButton);
         buttons.addClassNames(
+                LumoUtility.AlignItems.STRETCH,
                 LumoUtility.Margin.Top.MEDIUM,
-                LumoUtility.JustifyContent.END,
+                LumoUtility.JustifyContent.BETWEEN,
                 LumoUtility.Gap.LARGE
         );
         root.add(buttons);
