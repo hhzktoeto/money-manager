@@ -1,19 +1,18 @@
 package hhz.ktoeto.moneymanager.ui.component;
 
-import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.componentfactory.EnhancedDateRangePicker;
 
 import java.text.DateFormatSymbols;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class RussianDatePicker extends DatePicker {
+public class RussianDateRangePicker extends EnhancedDateRangePicker {
 
-    public RussianDatePicker(String label, LocalDate initialDate) {
-        super(label, initialDate);
+    public RussianDateRangePicker(String label) {
+        super(label);
         DateFormatSymbols symbols = new DateFormatSymbols(Locale.of("ru", "RU"));
-        DatePicker.DatePickerI18n datePickerI18n = new DatePicker.DatePickerI18n()
+        DatePickerI18n datePickerI18n = new DatePickerI18n()
                 .setMonthNames(List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"))
                 .setFirstDayOfWeek(1)
                 .setWeekdays(Arrays.stream(symbols.getWeekdays())
@@ -22,10 +21,15 @@ public class RussianDatePicker extends DatePicker {
                 .setWeekdaysShort(Arrays.stream(symbols.getShortWeekdays())
                         .filter(s -> !s.isEmpty())
                         .toList())
-                .setDateFormat("dd.MM.yyyy")
                 .setToday("Сегодня")
-                .setCancel("Закрыть");
+                .setThisWeek("Эта неделя")
+                .setThisMonth("Этот месяц")
+                .setThisYear("Этот год")
+                .setCancel("Закрыть")
+                .setClear("Очистить");
 
         this.setI18n(datePickerI18n);
+        this.setPattern("dd.MM.yyyy");
+        this.setClearButtonVisible(true);
     }
 }

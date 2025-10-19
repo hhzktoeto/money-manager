@@ -8,11 +8,17 @@ import java.math.BigDecimal;
 
 public class TransactionAmountValidator implements Validator<BigDecimal> {
 
+    private static final BigDecimal MIN_VALUE = BigDecimal.ZERO;
     private static final BigDecimal MAX_VALUE = new BigDecimal(99999999999L);
-    private static final String MAX_VALUE_ERROR_MESSAGE = "Сумма одной транзакции не может превышать 99 999 999 999,00";
+
+    private static final String MIN_VALUE_ERROR_MESSAGE = "Сумма транзакции не может быть меньше 0,01";
+    private static final String MAX_VALUE_ERROR_MESSAGE = "Сумма транзакции не может превышать 99 999 999 999,00";
 
     @Override
     public ValidationResult apply(BigDecimal value, ValueContext context) {
+        if (value == null || value.equals(MIN_VALUE)) {
+            return ValidationResult.error(MIN_VALUE_ERROR_MESSAGE);
+        }
         if (value.compareTo(MAX_VALUE) > 0) {
             return ValidationResult.error(MAX_VALUE_ERROR_MESSAGE);
         }

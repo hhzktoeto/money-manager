@@ -79,7 +79,7 @@ public class Budget {
     private Scope scope = Scope.ALL;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "active_period", nullable = false, length = 7)
+    @Column(name = "active_period", length = 7)
     private ActivePeriod activePeriod = ActivePeriod.MONTH;
 
     @Column(name = "goal_amount", nullable = false, precision = 12, scale = 2)

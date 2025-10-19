@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
+import hhz.ktoeto.moneymanager.ui.feature.budget.event.BudgetCreationCancelledEvent;
 import hhz.ktoeto.moneymanager.ui.feature.budget.event.OpenBudgetCreateDialogEvent;
 import hhz.ktoeto.moneymanager.ui.feature.budget.ui.form.BudgetForm;
 import hhz.ktoeto.moneymanager.ui.feature.budget.ui.form.BudgetFormFactory;
@@ -24,5 +25,10 @@ public class BudgetDialog extends Composite<CustomDialog> {
         this.getContent().setTitle("Создать бюджет");
         BudgetForm form = formFactory.budgetCreateForm();
         this.getContent().addBody(form);
+    }
+
+    @EventListener(BudgetCreationCancelledEvent.class)
+    private void cancelBudgetCreation() {
+        this.getContent().close();
     }
 }

@@ -1,5 +1,6 @@
 package hhz.ktoeto.moneymanager.ui.feature.transaction;
 
+import com.vaadin.componentfactory.DateRange;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -8,9 +9,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.constant.Routes;
-import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.ui.MainLayout;
-import hhz.ktoeto.moneymanager.ui.component.YearMonthPicker;
+import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.ui.TransactionsGrid;
 import jakarta.annotation.security.PermitAll;
@@ -21,7 +21,7 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = Routes.Path.TRANSACTIONS, layout = MainLayout.class)
 public class TransactionsView extends VerticalLayout {
 
-    public TransactionsView(TransactionsGrid allTransactionsGrid, FormattingService formattingService) {
+    public TransactionsView(TransactionsGrid allTransactionsGrid) {
         setSizeFull();
         addClassNames(
                 LumoUtility.AlignItems.CENTER,
@@ -36,17 +36,17 @@ public class TransactionsView extends VerticalLayout {
                 LumoUtility.JustifyContent.END
         );
 
-        YearMonthPicker yearMonthPicker = new YearMonthPicker(formattingService);
-        TransactionFilter currentFilter = allTransactionsGrid.getCurrentFilter();
-        yearMonthPicker.setYear(currentFilter.getFromDate().getYear());
-        yearMonthPicker.setMonth(currentFilter.getFromDate().getMonth());
-        yearMonthPicker.addChangeEventHandler((from, to) -> {
+        RussianDateRangePicker dateRangePicker = new RussianDateRangePicker("Период");
+        TransactionFilter transactionFilter = allTransactionsGrid.getCurrentFilter();
+        dateRangePicker.setValue(new DateRange(transactionFilter.getFromDate(), transactionFilter.getToDate()));
+        dateRangePicker.addValueChangeListener(event -> {
             TransactionFilter filter = allTransactionsGrid.getCurrentFilter();
-            filter.setFromDate(from);
-            filter.setToDate(to);
+            DateRange selectedRange = dateRangePicker.getValue();
+            filter.setFromDate(selectedRange.getStartDate());
+            filter.setToDate(selectedRange.getEndDate());
             allTransactionsGrid.setCurrentFilter(filter);
         });
-        header.add(yearMonthPicker);
+        header.add(dateRangePicker);
 
         FlexLayout content = new FlexLayout();
         content.setFlexDirection(FlexLayout.FlexDirection.COLUMN);

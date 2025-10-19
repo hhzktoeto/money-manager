@@ -2,7 +2,9 @@ package hhz.ktoeto.moneymanager.ui.feature.budget.ui.form;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
+import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.BudgetService;
+import hhz.ktoeto.moneymanager.ui.feature.budget.event.BudgetCreationCancelledEvent;
 import hhz.ktoeto.moneymanager.ui.feature.category.event.OpenCategoryCreateDialogEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +20,22 @@ public class BudgetFormLogic {
     private final ApplicationEventPublisher eventPublisher;
 
     void submitCreate(BudgetForm form) {
+        long userId = userContextHolder.getCurrentUserId();
 
+        Budget budget = new Budget();
+        budget.setUserId(userId);
+
+        boolean valid = form.writeToIfValid(budget);
+        if (!valid) {
+            return;
+        }
+
+        log.info("Бюджет вроде сделался");
+        log.info("{}", budget);
     }
 
     void cancelCreate() {
-
+        eventPublisher.publishEvent(new BudgetCreationCancelledEvent(this));
     }
 
     void addCategory() {

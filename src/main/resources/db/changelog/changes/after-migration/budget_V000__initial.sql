@@ -7,8 +7,8 @@ CREATE TABLE budgets
         CHECK (type IN ('INCOME', 'EXPENSE')),
     scope         VARCHAR(13)    NOT NULL
         CHECK (scope IN ('ALL', 'BY_CATEGORIES')),
-    active_period VARCHAR(7)     NOT NULL
-        CHECK (active_period in ('DAY', 'WEEK', 'MONTH', 'QUARTER', 'YEAR')),
+    active_period VARCHAR(7)
+        CHECK (active_period IN ('DAY', 'WEEK', 'MONTH', 'QUARTER', 'YEAR') OR active_period IS NULL ),
     goal_amount   DECIMAL(12, 2) NOT NULL,
     start_date    DATE           NOT NULL,
     end_date      DATE           NOT NULL,

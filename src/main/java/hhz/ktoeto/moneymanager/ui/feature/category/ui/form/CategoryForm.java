@@ -60,7 +60,6 @@ public class CategoryForm extends Composite<FlexLayout> {
         root.add(buttons);
 
         binder.forField(nameField)
-                .asRequired("Имя категории не может быть пустым")
                 .withValidator(new CategoryNameValidator())
                 .bind(Category::getName, Category::setName);
 
