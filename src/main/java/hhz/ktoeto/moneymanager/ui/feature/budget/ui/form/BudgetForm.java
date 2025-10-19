@@ -2,20 +2,21 @@ package hhz.ktoeto.moneymanager.ui.feature.budget.ui.form;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
+import hhz.ktoeto.moneymanager.ui.component.ToggleButtonGroup;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.feature.category.ui.data.CategoryDataProvider;
 import lombok.RequiredArgsConstructor;
-import org.vaadin.addons.taefi.component.ToggleButtonGroup;
 
 import java.util.function.Consumer;
 
@@ -32,7 +33,10 @@ public class BudgetForm extends Composite<FlexLayout> {
     private final Button createCategoryButton;
     private final ToggleButtonGroup<Budget.Scope> scopeToggle;
     private final Checkbox renewableCheckbox;
-    private final Select<Budget.ActivePeriod> activePeriodToggle;
+    private final ToggleButtonGroup<Budget.ActivePeriod> activePeriodToggle;
+
+    private final Button submitButton;
+    private final Button cancelButton;
 
     private final Binder<Budget> binder;
 
@@ -50,7 +54,9 @@ public class BudgetForm extends Composite<FlexLayout> {
         this.createCategoryButton = new Button(VaadinIcon.PLUS.create());
         this.scopeToggle = new ToggleButtonGroup<>("Учитываемые транзакции");
         this.renewableCheckbox = new Checkbox("Обновлять автоматически", true);
-        this.activePeriodToggle = new Select<>();
+        this.activePeriodToggle = new ToggleButtonGroup<>();
+        this.submitButton = new Button("Сохранить");
+        this.cancelButton = new Button("Отмена");
         this.binder = new Binder<>(Budget.class);
     }
 
@@ -67,11 +73,13 @@ public class BudgetForm extends Composite<FlexLayout> {
 
         FlexLayout firstRowLayout = this.configureFirstRow();
         FlexLayout secondRowLayout = this.configureSecondRow();
+        HorizontalLayout buttonsLayout = this.configureButtonsLayout();
 
         root.add(
                 typeToggle,
                 firstRowLayout,
-                secondRowLayout
+                secondRowLayout,
+                buttonsLayout
         );
 
         return root;
@@ -118,17 +126,39 @@ public class BudgetForm extends Composite<FlexLayout> {
         activePeriodToggle.setItems(Budget.ActivePeriod.values());
         activePeriodToggle.setValue(Budget.ActivePeriod.MONTH);
         activePeriodToggle.setItemLabelGenerator(Budget.ActivePeriod::toString);
+        activePeriodToggle.setToggleable(false);
+
+        Scroller activePeriodScroller = new Scroller(activePeriodToggle);
+        activePeriodScroller.setScrollDirection(Scroller.ScrollDirection.HORIZONTAL);
 
         renewableCheckbox.addValueChangeListener(event ->
                 activePeriodToggle.setVisible(event.getValue())
         );
 
-        FlexLayout row = new FlexLayout(renewableCheckbox, activePeriodToggle);
+        FlexLayout row = new FlexLayout(renewableCheckbox, activePeriodScroller);
         row.addClassNames(
                 LumoUtility.Gap.SMALL,
                 LumoUtility.FlexDirection.COLUMN
         );
 
         return row;
+    }
+
+    private HorizontalLayout configureButtonsLayout() {
+        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        submitButton.addClickListener(event -> this.submitAction.accept(this));
+
+        cancelButton.addClickListener(event -> this.cancelAction.accept(this));
+
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.add(cancelButton, submitButton);
+        layout.addClassNames(
+                LumoUtility.AlignItems.STRETCH,
+                LumoUtility.Margin.Top.MEDIUM,
+                LumoUtility.JustifyContent.BETWEEN,
+                LumoUtility.Gap.LARGE
+        );
+
+        return layout;
     }
 }

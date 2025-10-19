@@ -5,8 +5,10 @@ import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.ui.feature.category.event.OpenCategoryCreateDialogEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 
+@Slf4j
 @SpringComponent
 @RequiredArgsConstructor
 public class BudgetFormLogic {

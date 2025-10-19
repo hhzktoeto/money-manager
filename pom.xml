@@ -107,12 +107,6 @@
             <artifactId>mapstruct-processor</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.vaadin.addons.taefi</groupId>
-            <artifactId>toggle-button-group</artifactId>
-            <version>2.2.1</version>
-        </dependency>
     </dependencies>
 
     <build>
