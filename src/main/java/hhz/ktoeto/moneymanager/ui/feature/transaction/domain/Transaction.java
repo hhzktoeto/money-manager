@@ -3,6 +3,7 @@ package hhz.ktoeto.moneymanager.ui.feature.transaction.domain;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.Category;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -15,24 +16,22 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "transactions")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Transaction {
 
     public enum Type {
-        INCOME, EXPENSE;
-
-        public Type opposite() {
-            return this == INCOME ? EXPENSE : INCOME;
-        }
+        INCOME, EXPENSE
     }
 
     @Id
+    @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, length = 7)
-    private Type type;
+    private Type type = Type.EXPENSE;
 
     @Column(name = "user_id", nullable = false)
     private long userId;
@@ -43,7 +42,7 @@ public class Transaction {
     private Category category;
 
     @Column(name = "date", nullable = false)
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
 
     @Column(name = "amount", nullable = false, precision = 12, scale = 2)
     private BigDecimal amount;

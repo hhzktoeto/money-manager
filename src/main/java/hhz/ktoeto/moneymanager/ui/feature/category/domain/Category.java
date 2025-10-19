@@ -4,18 +4,22 @@ import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "categories")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Category {
     @Id
+    @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private long id;
@@ -28,15 +32,15 @@ public class Category {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "category")
-    private List<CategoryGoal> goals;
+    private Set<CategoryGoal> goals = new HashSet<>();
 
     @ToString.Exclude
     @OneToMany(mappedBy = "category")
-    private List<Transaction> transactions;
+    private Set<Transaction> transactions = new HashSet<>();
 
     @ToString.Exclude
     @ManyToMany(mappedBy = "categories")
-    private List<Budget> budgets;
+    private Set<Budget> budgets = new HashSet<>();
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)

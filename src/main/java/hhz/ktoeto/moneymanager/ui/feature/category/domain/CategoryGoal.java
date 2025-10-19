@@ -2,6 +2,7 @@ package hhz.ktoeto.moneymanager.ui.feature.category.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "category_goals")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class CategoryGoal {
 
     public enum Type{
@@ -20,6 +22,7 @@ public class CategoryGoal {
     }
 
     @Id
+    @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private long id;
