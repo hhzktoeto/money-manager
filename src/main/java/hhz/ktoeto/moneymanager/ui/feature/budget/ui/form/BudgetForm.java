@@ -1,5 +1,6 @@
 package hhz.ktoeto.moneymanager.ui.feature.budget.ui.form;
 
+import com.vaadin.componentfactory.EnhancedDateRangePicker;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -11,7 +12,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
 import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
+import hhz.ktoeto.moneymanager.ui.component.RussianDatePicker;
 import hhz.ktoeto.moneymanager.ui.component.ToggleButtonGroup;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.Category;
@@ -34,6 +37,8 @@ public class BudgetForm extends Composite<FlexLayout> {
     private final ToggleButtonGroup<Budget.Scope> scopeToggle;
     private final Checkbox renewableCheckbox;
     private final ToggleButtonGroup<Budget.ActivePeriod> activePeriodToggle;
+    private final EnhancedDateRangePicker dateRangePicker;
+    private final AmountInputCalculator amountInputCalculator;
 
     private final Button submitButton;
     private final Button cancelButton;
@@ -55,6 +60,8 @@ public class BudgetForm extends Composite<FlexLayout> {
         this.scopeToggle = new ToggleButtonGroup<>("Учитываемые транзакции");
         this.renewableCheckbox = new Checkbox("Обновлять автоматически", true);
         this.activePeriodToggle = new ToggleButtonGroup<>();
+        this.dateRangePicker = new EnhancedDateRangePicker("Период активности бюджета");
+        this.amountInputCalculator = new AmountInputCalculator();
         this.submitButton = new Button("Сохранить");
         this.cancelButton = new Button("Отмена");
         this.binder = new Binder<>(Budget.class);
@@ -75,10 +82,12 @@ public class BudgetForm extends Composite<FlexLayout> {
         FlexLayout secondRowLayout = this.configureSecondRow();
         HorizontalLayout buttonsLayout = this.configureButtonsLayout();
 
+
         root.add(
                 typeToggle,
                 firstRowLayout,
                 secondRowLayout,
+                amountInputCalculator,
                 buttonsLayout
         );
 
@@ -128,14 +137,20 @@ public class BudgetForm extends Composite<FlexLayout> {
         activePeriodToggle.setItemLabelGenerator(Budget.ActivePeriod::toString);
         activePeriodToggle.setToggleable(false);
 
+        dateRangePicker.setI18n(new RussianDatePicker.RussianEnhancedDateRangePickerI18n());
+        dateRangePicker.setVisible(false);
+
         Scroller activePeriodScroller = new Scroller(activePeriodToggle);
         activePeriodScroller.setScrollDirection(Scroller.ScrollDirection.HORIZONTAL);
 
-        renewableCheckbox.addValueChangeListener(event ->
-                activePeriodToggle.setVisible(event.getValue())
+        renewableCheckbox.addValueChangeListener(event -> {
+                    boolean autoRenew = event.getValue();
+                    activePeriodScroller.setVisible(autoRenew);
+                    dateRangePicker.setVisible(!autoRenew);
+                }
         );
 
-        FlexLayout row = new FlexLayout(renewableCheckbox, activePeriodScroller);
+        FlexLayout row = new FlexLayout(renewableCheckbox, activePeriodScroller, dateRangePicker);
         row.addClassNames(
                 LumoUtility.Gap.SMALL,
                 LumoUtility.FlexDirection.COLUMN

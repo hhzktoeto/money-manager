@@ -4,6 +4,7 @@
   "type": "module",
   "dependencies": {
     "@polymer/polymer": "3.5.2",
+    "@vaadin-component-factory/vcf-date-range-picker": "5.0.2",
     "@vaadin/bundles": "24.9.2",
     "@vaadin/common-frontend": "0.0.19",
     "@vaadin/polymer-legacy-adapter": "24.9.2",
@@ -116,11 +117,13 @@
     "date-fns": "$date-fns",
     "@vaadin/vaadin-themable-mixin": "$@vaadin/vaadin-themable-mixin",
     "@vaadin/vaadin-lumo-styles": "$@vaadin/vaadin-lumo-styles",
-    "@vaadin/vaadin-material-styles": "$@vaadin/vaadin-material-styles"
+    "@vaadin/vaadin-material-styles": "$@vaadin/vaadin-material-styles",
+    "@vaadin-component-factory/vcf-date-range-picker": "$@vaadin-component-factory/vcf-date-range-picker"
   },
   "vaadin": {
     "dependencies": {
       "@polymer/polymer": "3.5.2",
+      "@vaadin-component-factory/vcf-date-range-picker": "5.0.2",
       "@vaadin/bundles": "24.9.2",
       "@vaadin/common-frontend": "0.0.19",
       "@vaadin/polymer-legacy-adapter": "24.9.2",
@@ -158,6 +161,6 @@
       "workbox-core": "7.3.0",
       "workbox-precaching": "7.3.0"
     },
-    "hash": "641891fbc50d321232313fd9b8f59f86c4129a25589bfbd8b521a1494c08e054"
+    "hash": "f5d0cc80dae94b9b1fd6b5e65668f81b808b9f41be2136840637a27486a57da6"
   }
 }

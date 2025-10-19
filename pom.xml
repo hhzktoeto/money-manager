@@ -107,6 +107,12 @@
             <artifactId>mapstruct-processor</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.vaadin.componentfactory</groupId>
+            <artifactId>vcf-date-range-picker</artifactId>
+            <version>5.0.2</version>
+        </dependency>
     </dependencies>
 
     <build>
