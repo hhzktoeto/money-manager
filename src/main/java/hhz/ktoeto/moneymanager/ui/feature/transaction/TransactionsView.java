@@ -45,6 +45,7 @@ public class TransactionsView extends VerticalLayout {
             filter.setFromDate(selectedRange.getStartDate());
             filter.setToDate(selectedRange.getEndDate());
             allTransactionsGrid.setCurrentFilter(filter);
+            dateRangePicker.suppressKeyboard();
         });
         header.add(dateRangePicker);
 

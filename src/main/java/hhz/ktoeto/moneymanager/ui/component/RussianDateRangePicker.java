@@ -31,5 +31,20 @@ public class RussianDateRangePicker extends EnhancedDateRangePicker {
         this.setI18n(datePickerI18n);
         this.setPattern("dd.MM.yyyy");
         this.setClearButtonVisible(true);
+        this.suppressKeyboard();
+    }
+
+    public void suppressKeyboard() {
+        getElement().executeJs(
+                "const inputs = this.shadowRoot.querySelectorAll('input');" +
+                        "inputs.forEach(i => {" +
+                        "  i.setAttribute('readonly','');" +
+                        "  i.setAttribute('inputmode','none');" +   // iOS/Android: не показывать клавиатуру
+                        "});" +
+                        "this.addEventListener('focusin', e => {" +
+                        "  const t = e.composedPath().find(n => n.tagName==='INPUT');" +
+                        "  if (t) { t.blur(); }" +                  // мгновенно снимаем фокус
+                        "}, true);"
+        );
     }
 }

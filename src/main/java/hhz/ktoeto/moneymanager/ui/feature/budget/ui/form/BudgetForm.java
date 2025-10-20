@@ -172,6 +172,7 @@ public class BudgetForm extends Composite<FlexLayout> {
                     boolean autoRenew = event.getValue();
                     activePeriodScroller.setVisible(autoRenew);
                     dateRangePicker.setVisible(!autoRenew);
+                    dateRangePicker.suppressKeyboard();
 
                     if (autoRenew) {
                         activePeriodToggle.setValue(previousActivePeriod);
