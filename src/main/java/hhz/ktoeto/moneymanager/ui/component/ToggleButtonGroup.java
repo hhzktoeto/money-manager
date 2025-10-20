@@ -31,7 +31,6 @@ public class ToggleButtonGroup<T> extends CustomField<T> {
 
     @Getter
     private List<T> items;
-    @Getter
     private T selected;
     private SerializableFunction<T, String> itemLabelGenerator = Object::toString;
     @Getter
