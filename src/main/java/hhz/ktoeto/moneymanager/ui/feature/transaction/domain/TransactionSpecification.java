@@ -20,6 +20,7 @@ public class TransactionSpecification implements Specification<Transaction> {
         if (filter == null) {
             return predicate;
         }
+
         if (filter.getFromDate() != null) {
             predicate = criteriaBuilder.and(predicate,
                     criteriaBuilder.greaterThanOrEqualTo(root.get("date"), filter.getFromDate())

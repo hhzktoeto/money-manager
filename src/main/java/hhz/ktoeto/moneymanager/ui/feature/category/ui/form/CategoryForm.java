@@ -61,13 +61,9 @@ public class CategoryForm extends Composite<FlexLayout> {
 
         binder.forField(nameField)
                 .withValidator(new CategoryNameValidator())
-                .bind(Category::getName, Category::setName);
+                .bind(Category::getName, (category, name) -> category.setName(name.trim()));
 
         return root;
-    }
-
-    String name() {
-        return nameField.getValue();
     }
 
     boolean writeTo(Category category) {

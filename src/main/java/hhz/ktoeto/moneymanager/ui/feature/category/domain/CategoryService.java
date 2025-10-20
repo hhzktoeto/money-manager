@@ -18,7 +18,11 @@ public class CategoryService {
 
     public List<Category> getAll(long userId) {
         log.debug("Fetching all categories for user with id {}", userId);
-        return repository.findAllByUserId(userId);
+        CategorySpecification specification = CategorySpecification.builder()
+                .userId(userId)
+                .build();
+
+        return repository.findAll(specification);
     }
 
     @Transactional
@@ -48,9 +52,14 @@ public class CategoryService {
         repository.delete(category);
     }
 
-    public boolean exist(String name, long userId) {
-        log.debug("Checking if category with name {} exists for user with id {}", name, userId);
-        return repository.existsByNameAndUserId(name, userId);
+    public boolean exist(long userId, CategoryFilter filter) {
+        log.debug("Checking if category with filter {} exists for user with id {}", filter, userId);
+        CategorySpecification specification = CategorySpecification.builder()
+                .userId(userId)
+                .filter(filter)
+                .build();
+
+        return repository.exists(specification);
     }
 
     private Category getCategoryFromRepository(long id) {

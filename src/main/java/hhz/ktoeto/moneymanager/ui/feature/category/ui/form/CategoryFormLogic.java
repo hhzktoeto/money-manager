@@ -3,6 +3,7 @@ package hhz.ktoeto.moneymanager.ui.feature.category.ui.form;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.Category;
+import hhz.ktoeto.moneymanager.ui.feature.category.domain.CategoryFilter;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.CategoryService;
 import hhz.ktoeto.moneymanager.ui.feature.category.event.CategoryCreatedEvent;
 import hhz.ktoeto.moneymanager.ui.feature.category.event.CategoryCreationCancelledEvent;
@@ -28,7 +29,10 @@ public class CategoryFormLogic {
             return;
         }
 
-        if (categoryService.exist(form.name().trim(), userId)) {
+        CategoryFilter nameFilter = new CategoryFilter();
+        nameFilter.setName(category.getName());
+
+        if (categoryService.exist(userId, nameFilter)) {
             form.getNameField().setErrorMessage("Категория с таким именем уже существует");
             form.getNameField().setInvalid(true);
             return;
