@@ -19,6 +19,8 @@
 
         <eval.ex.version>2.7</eval.ex.version>
         <mapstruct.version>1.6.3</mapstruct.version>
+
+        <date.range.picker.version>5.0.2</date.range.picker.version>
     </properties>
 
     <repositories>
@@ -111,7 +113,7 @@
         <dependency>
             <groupId>com.vaadin.componentfactory</groupId>
             <artifactId>vcf-date-range-picker</artifactId>
-            <version>5.0.2</version>
+            <version>${date.range.picker.version}</version>
         </dependency>
     </dependencies>
 
