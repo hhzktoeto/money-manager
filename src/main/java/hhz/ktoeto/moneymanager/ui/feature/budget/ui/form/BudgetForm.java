@@ -12,6 +12,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
@@ -222,14 +223,14 @@ public class BudgetForm extends Composite<FlexLayout> {
                 .asRequired("Не выбраны учитываемые транзакции")
                 .bind(Budget::getScope, Budget::setScope);
         binder.forField(categoriesSelect)
-                .withValidator(new BudgetCategoriesValidator())
+                .withValidator(new BudgetCategoriesValidator(scopeToggle))
                 .bind(Budget::getCategories, Budget::setCategories);
         binder.forField(renewableCheckbox)
                 .bind(Budget::isRenewable, Budget::setRenewable);
         binder.forField(activePeriodToggle)
                 .bind(Budget::getActivePeriod, Budget::setActivePeriod);
         binder.forField(dateRangePicker)
-                .withValidator(new BudgetDateRangeValidator())
+                .withValidator(new BudgetDateRangeValidator(renewableCheckbox))
                 .bind(budget -> new DateRange(budget.getStartDate(), budget.getEndDate()),
                         (budget, dateRange) -> {
                             budget.setStartDate(dateRange.getStartDate());

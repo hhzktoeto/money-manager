@@ -1,14 +1,16 @@
 package hhz.ktoeto.moneymanager.ui.feature.budget.ui.form.validator;
 
 import com.vaadin.componentfactory.DateRange;
-import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.binder.ValueContext;
-import hhz.ktoeto.moneymanager.core.exception.InternalServerException;
-import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class BudgetDateRangeValidator implements Validator<DateRange> {
+
+    private final Checkbox renewableCheckbox;
 
     private static final String END_BEFORE_START_ERROR_MESSAGE = "Конец периода не может быть раньше, чем его начало";
     private static final String NO_RANGE_ERROR_MESSAGE = "Не выбран период действия бюджета";
@@ -17,23 +19,20 @@ public class BudgetDateRangeValidator implements Validator<DateRange> {
 
     @Override
     public ValidationResult apply(DateRange dateRange, ValueContext valueContext) {
-        Binder<Budget> binder = (Binder<Budget>) valueContext.getBinder().orElseThrow(
-                () -> new InternalServerException("Биндер не найден при валидации категорий в бюджете")
-        );
-        Budget budget = binder.getBean();
-        if (budget.isRenewable()) {
+        boolean isRenewable = renewableCheckbox.getValue();
+        if (isRenewable) {
             return ValidationResult.ok();
         }
-        if (budget.getStartDate() == null && budget.getEndDate() == null) {
+        if (dateRange.getStartDate() == null && dateRange.getEndDate() == null) {
             return ValidationResult.error(NO_RANGE_ERROR_MESSAGE);
         }
-        if (budget.getStartDate() == null) {
+        if (dateRange.getStartDate() == null) {
             return ValidationResult.error(NO_START_ERROR_MESSAGE);
         }
-        if (budget.getEndDate() == null) {
+        if (dateRange.getEndDate() == null) {
             return ValidationResult.error(NO_END_ERROR_MESSAGE);
         }
-        if (budget.getEndDate().isBefore(budget.getStartDate())) {
+        if (dateRange.getEndDate().isBefore(dateRange.getStartDate())) {
             return ValidationResult.error(END_BEFORE_START_ERROR_MESSAGE);
         }
 
