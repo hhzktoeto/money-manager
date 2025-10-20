@@ -2,14 +2,11 @@ package hhz.ktoeto.moneymanager.ui.feature.transaction.domain;
 
 import hhz.ktoeto.moneymanager.core.exception.EntityNotFoundException;
 import hhz.ktoeto.moneymanager.core.exception.NonOwnerRequestException;
-import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,12 +21,22 @@ public class TransactionService {
 
     public Page<Transaction> getPage(long userId, TransactionFilter filter, Pageable pageable) {
         log.debug("Fetching transactions for user with id {}, page {}, size {}", userId, pageable.getPageNumber(), pageable.getPageSize());
-        return repository.findAll(specification(userId, filter), pageable);
+        TransactionSpecification specification = TransactionSpecification.builder()
+                .userId(userId)
+                .filter(filter)
+                .build();
+
+        return repository.findAll(specification, pageable);
     }
 
     public TransactionsSummaries getSummaries(long userId, TransactionFilter filter) {
         log.debug("Calculating total transaction summaries for user with id {}. With filter: {}", userId, filter);
-        List<Transaction> transactions = repository.findAll(specification(userId, filter));
+        TransactionSpecification specification = TransactionSpecification.builder()
+                .userId(userId)
+                .filter(filter)
+                .build();
+
+        List<Transaction> transactions = repository.findAll(specification);
 
         BigDecimal income = transactions.stream()
                 .filter(transaction -> transaction.getType() == Transaction.Type.INCOME)
@@ -71,31 +78,16 @@ public class TransactionService {
     }
 
     public int count(long userId, TransactionFilter filter) {
-        long count = repository.count(specification(userId, filter));
+        TransactionSpecification specification = TransactionSpecification.builder()
+                .userId(userId)
+                .filter(filter)
+                .build();
+        long count = repository.count(specification);
         return (int) Math.min(Integer.MAX_VALUE, count);
     }
 
     private Transaction getTransactionFromRepository(long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Could not find Transaction with id %d".formatted(id)));
-    }
-
-    private Specification<Transaction> specification(long userId, @NonNull TransactionFilter filter) {
-        return (root, query, criteriaBuilder) -> {
-            Predicate predicate = criteriaBuilder.equal(root.get("userId"), userId);
-
-            if (filter.getFromDate() != null) {
-                predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.greaterThanOrEqualTo(root.get("date"), filter.getFromDate())
-                );
-            }
-            if (filter.getToDate() != null) {
-                predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.lessThanOrEqualTo(root.get("date"), filter.getToDate())
-                );
-            }
-
-            return predicate;
-        };
     }
 }
