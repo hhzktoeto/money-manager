@@ -9,16 +9,15 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
 import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
 import hhz.ktoeto.moneymanager.ui.component.RussianDatePicker;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.feature.category.ui.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.ui.form.converter.MathExpressionToBigDecimalConverter;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.ui.form.validator.TransactionAmountValidator;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.ui.form.validator.TransactionDescriptionValidator;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,7 @@ public class TransactionForm extends Composite<FlexLayout> {
 
     private IncomeExpenseToggle<Transaction.Type> typeToggle;
     private ComboBox<Category> categorySelect;
-    private TextField amountField;
+    private AmountInputCalculator amountInput;
     private DatePicker datePicker;
     private TextArea descriptionArea;
     private Button createCategoryButton;
@@ -85,13 +84,13 @@ public class TransactionForm extends Composite<FlexLayout> {
         );
         root.add(firstRow);
 
-        amountField = new TextField("Сумма");
-        amountField.setWidthFull();
+        amountInput = new AmountInputCalculator();
+        amountInput.setWidthFull();
 
         datePicker = new RussianDatePicker("Дата", LocalDate.now());
         datePicker.setWidthFull();
 
-        FlexLayout secondRow = new FlexLayout(amountField, datePicker);
+        FlexLayout secondRow = new FlexLayout(amountInput, datePicker);
         secondRow.addClassNames(
                 LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.FlexDirection.Breakpoint.Small.ROW,
@@ -129,9 +128,8 @@ public class TransactionForm extends Composite<FlexLayout> {
         this.binder.forField(categorySelect)
                 .asRequired("Не выбрана категория")
                 .bind(Transaction::getCategory, Transaction::setCategory);
-        this.binder.forField(amountField)
+        this.binder.forField(amountInput)
                 .asRequired("Не введена сумма")
-                .withConverter(new MathExpressionToBigDecimalConverter())
                 .withValidator(new TransactionAmountValidator())
                 .bind(Transaction::getAmount, Transaction::setAmount);
         this.binder.forField(datePicker)
