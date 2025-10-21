@@ -21,7 +21,7 @@ public class IncomeExpenseToggle<T> extends CustomField<T> {
         this.incomeValue = incomeValue;
         setWidthFull();
 
-        expenseSpan = new Span("Расход");
+        expenseSpan = new Span(expenseValue.toString());
         expenseSpan.addClassNames(
                 LumoUtility.Flex.ONE,
                 LumoUtility.TextAlignment.CENTER,
@@ -30,7 +30,7 @@ public class IncomeExpenseToggle<T> extends CustomField<T> {
                 LumoUtility.Transition.COLORS
         );
 
-        incomeSpan = new Span("Доход");
+        incomeSpan = new Span(incomeValue.toString());
         incomeSpan.addClassNames(
                 LumoUtility.Flex.ONE,
                 LumoUtility.TextAlignment.CENTER,

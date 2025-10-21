@@ -20,7 +20,16 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     public enum Type {
-        INCOME, EXPENSE
+        INCOME, EXPENSE;
+
+
+        @Override
+        public String toString() {
+            return switch (this) {
+                case INCOME -> "Доход";
+                case EXPENSE -> "Расход";
+            };
+        }
     }
 
     @Id
