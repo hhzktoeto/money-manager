@@ -36,7 +36,7 @@ public class ActiveBudgets extends Composite<Scroller> implements DataProviderLi
                 LumoUtility.AlignItems.STRETCH
         );
 
-        dataProvider.getItems().forEach(budget -> cardsLayout.add(new BudgetCard(budget)));
+        updateCards();
         root.setContent(cardsLayout);
 
         return root;
@@ -44,9 +44,11 @@ public class ActiveBudgets extends Composite<Scroller> implements DataProviderLi
 
     @Override
     public void onDataChange(DataChangeEvent<BudgetsDataProvider> dataChangeEvent) {
-        UI.getCurrent().access(() ->
-                dataProvider.getItems()
-                        .forEach(budget -> cardsLayout.add(new BudgetCard(budget)))
-        );
+        UI.getCurrent().access(this::updateCards);
+    }
+
+    private void updateCards() {
+        cardsLayout.removeAll();
+        dataProvider.getItems().forEach(budget -> cardsLayout.add(new BudgetCard(budget)));
     }
 }

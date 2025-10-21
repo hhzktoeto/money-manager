@@ -1,7 +1,6 @@
 package hhz.ktoeto.moneymanager.ui.feature.category.ui.data;
 
 import com.vaadin.flow.data.provider.ListDataProvider;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
@@ -34,16 +33,14 @@ public class CategoryDataProvider extends ListDataProvider<Category> {
 
     @PostConstruct
     private void loadData() {
-        VaadinSession.getCurrent().getUIs().forEach(ui -> ui.access(() -> {
-            this.getItems().clear();
-            this.getItems().addAll(
-                    categoryService.getAll(userContextHolder.getCurrentUserId())
-                            .stream()
-                            .sorted(Comparator.comparing(Category::getName, String.CASE_INSENSITIVE_ORDER))
-                            .collect(Collectors.toList())
-            );
-            this.refreshAll();
-        }));
+        this.getItems().clear();
+        this.getItems().addAll(
+                categoryService.getAll(userContextHolder.getCurrentUserId())
+                        .stream()
+                        .sorted(Comparator.comparing(Category::getName, String.CASE_INSENSITIVE_ORDER))
+                        .collect(Collectors.toList())
+        );
+        this.refreshAll();
     }
 
     @EventListener(CategoryCreatedEvent.class)
