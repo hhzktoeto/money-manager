@@ -9,7 +9,7 @@ import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.NumberField;
+import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
@@ -18,19 +18,18 @@ import java.util.function.Consumer;
 
 public class AmountInputCalculator extends CustomField<BigDecimal> {
 
-    private final NumberField numberField;
+    private final BigDecimalField numberField;
     private final ExpressionDialog expressionDialog;
-    private final Button calculateButton;
 
     public AmountInputCalculator() {
         setWidthFull();
 
-        numberField = new NumberField("Сумма");
+        numberField = new BigDecimalField("Сумма");
         numberField.setWidthFull();
 
         expressionDialog = new ExpressionDialog(this::setValue);
 
-        calculateButton = new Button(VaadinIcon.CALC.create());
+        Button calculateButton = new Button(VaadinIcon.CALC.create());
         calculateButton.setTooltipText("Режим калькулятора");
         calculateButton.addClickListener(event -> expressionDialog.open());
 
@@ -48,13 +47,12 @@ public class AmountInputCalculator extends CustomField<BigDecimal> {
 
     @Override
     protected BigDecimal generateModelValue() {
-        Double value = numberField.getValue();
-        return value != null ? BigDecimal.valueOf(value) : null;
+        return numberField.getValue();
     }
 
     @Override
     protected void setPresentationValue(BigDecimal bigDecimal) {
-        numberField.setValue(bigDecimal != null ? bigDecimal.doubleValue() : null);
+        numberField.setValue(bigDecimal);
     }
 
     private static class ExpressionDialog extends Composite<Dialog> {
@@ -96,12 +94,12 @@ public class AmountInputCalculator extends CustomField<BigDecimal> {
             return root;
         }
 
-        void open() {
+        private void open() {
             this.getContent().open();
             expressionField.focus();
         }
 
-        void close() {
+        private void close() {
             this.getContent().close();
             expressionField.clear();
         }
