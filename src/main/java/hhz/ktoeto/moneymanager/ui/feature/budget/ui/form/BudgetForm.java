@@ -91,11 +91,14 @@ public class BudgetForm extends Composite<FlexLayout> {
 
         nameField.setWidthFull();
 
-        FlexLayout firstRowLayout = this.configureFirstRow();
-        FlexLayout secondRowLayout = this.configureSecondRow();
-        HorizontalLayout buttonsLayout = this.configureButtonsLayout();
-        this.configureBinder();
+        FlexLayout firstRowLayout = new FlexLayout();
+        FlexLayout secondRowLayout = new FlexLayout();
+        HorizontalLayout buttonsLayout = new HorizontalLayout();
 
+        this.configureFirstRow(firstRowLayout);
+        this.configureSecondRow(secondRowLayout);
+        this.configureButtonsLayout(buttonsLayout);
+        this.configureBinder();
 
         root.add(
                 typeToggle,
@@ -120,7 +123,7 @@ public class BudgetForm extends Composite<FlexLayout> {
         }
     }
 
-    private FlexLayout configureFirstRow() {
+    private void configureFirstRow(FlexLayout row) {
         categoriesSelect.setItems(categoryProvider);
         categoriesSelect.setItemLabelGenerator(Category::getName);
         categoriesSelect.setWidthFull();
@@ -147,17 +150,15 @@ public class BudgetForm extends Composite<FlexLayout> {
                 categoriesWrapper.setVisible(event.getValue() == Budget.Scope.BY_CATEGORIES)
         );
 
-        FlexLayout row = new FlexLayout(scopeToggle, categoriesWrapper);
         row.addClassNames(
                 LumoUtility.Gap.SMALL,
                 LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.FlexDirection.Breakpoint.Small.ROW
         );
-
-        return row;
+        row.add(scopeToggle, categoriesWrapper);
     }
 
-    private FlexLayout configureSecondRow() {
+    private void configureSecondRow(FlexLayout row) {
         activePeriodToggle.setItems(Budget.ActivePeriod.values());
         activePeriodToggle.setValue(Budget.ActivePeriod.MONTH);
         activePeriodToggle.setItemLabelGenerator(Budget.ActivePeriod::toString);
@@ -183,22 +184,19 @@ public class BudgetForm extends Composite<FlexLayout> {
                 }
         );
 
-        FlexLayout row = new FlexLayout(renewableCheckbox, activePeriodScroller, dateRangePicker);
         row.addClassNames(
                 LumoUtility.Gap.SMALL,
                 LumoUtility.FlexDirection.COLUMN
         );
-
-        return row;
+        row.add(renewableCheckbox, activePeriodScroller, dateRangePicker);
     }
 
-    private HorizontalLayout configureButtonsLayout() {
+    private void configureButtonsLayout(HorizontalLayout layout) {
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.addClickListener(event -> this.submitAction.accept(this));
 
         cancelButton.addClickListener(event -> this.cancelAction.accept(this));
 
-        HorizontalLayout layout = new HorizontalLayout();
         layout.add(cancelButton, submitButton);
         layout.addClassNames(
                 LumoUtility.AlignItems.STRETCH,
@@ -206,8 +204,6 @@ public class BudgetForm extends Composite<FlexLayout> {
                 LumoUtility.JustifyContent.BETWEEN,
                 LumoUtility.Gap.LARGE
         );
-
-        return layout;
     }
 
     private void configureBinder() {

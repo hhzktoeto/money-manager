@@ -43,4 +43,12 @@ public final class StyleConstants {
         public static final String TRANSFORM_03_EASE = "transform 0.3s ease";
         public static final String BG_COLOR_03_EASE = "background-color 0.3s ease";
     }
+
+    public static final class Badge {
+
+        private Badge() {}
+
+        public static final String ERROR = "badge error";
+        public static final String SUCCESS = "badge success";
+    }
 }

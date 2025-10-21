@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.Builder;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
 
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 public class BudgetSpecification implements Specification<Budget> {
 
     private final long userId;
+    @Nullable
     private final BudgetFilter filter;
 
     @Override

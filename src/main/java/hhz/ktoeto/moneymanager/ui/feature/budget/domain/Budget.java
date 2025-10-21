@@ -109,4 +109,12 @@ public class Budget {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @Transient
+    private BigDecimal currentAmount;
+
+    @Transient
+    public BigDecimal getRemainingAmount(){
+        return goalAmount.subtract(currentAmount);
+    }
 }

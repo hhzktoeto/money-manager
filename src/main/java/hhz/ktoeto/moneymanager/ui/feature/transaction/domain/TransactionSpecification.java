@@ -31,6 +31,16 @@ public class TransactionSpecification implements Specification<Transaction> {
                     criteriaBuilder.lessThanOrEqualTo(root.get("date"), filter.getToDate())
             );
         }
+        if (filter.getCategoriesIds() != null && !filter.getCategoriesIds().isEmpty()) {
+            predicate = criteriaBuilder.and(predicate,
+                    root.get("category").get("id").in(filter.getCategoriesIds())
+            );
+        }
+        if (filter.getType() != null) {
+            predicate = criteriaBuilder.and(predicate,
+                    criteriaBuilder.equal(root.get("type"), filter.getType())
+            );
+        }
         return predicate;
     }
 }

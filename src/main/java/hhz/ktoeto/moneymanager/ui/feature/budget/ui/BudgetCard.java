@@ -1,28 +1,157 @@
 package hhz.ktoeto.moneymanager.ui.feature.budget.ui;
 
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.progressbar.ProgressBar;
+import com.vaadin.flow.component.progressbar.ProgressBarVariant;
+import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.core.constant.StyleConstants;
+import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
 import lombok.RequiredArgsConstructor;
+
+import java.math.BigDecimal;
 
 @RequiredArgsConstructor
 public class BudgetCard extends Composite<BasicContainer> {
 
     private final Budget budget;
+    private final FormattingService formattingService;
 
     @Override
     protected BasicContainer initContent() {
         BasicContainer root = new BasicContainer();
-        root.setHeader(budget.getName());
 
-        root.setWidthFull();
-        root.setMaxWidth(400, Unit.PIXELS);
-        root.setMinWidth(285, Unit.PIXELS);
+        FlexLayout header = root.getHeader();
+        FlexLayout content = root.getContent();
 
-        root.setContent(new Span(budget.toString()));
+        this.configureHeader(header);
+        this.configureContent(content);
 
         return root;
+    }
+
+    private void configureHeader(FlexLayout header) {
+        H3 title = new H3(budget.getName());
+
+        Span type = new Span(budget.getType().toString());
+        type.getElement().getThemeList().add(
+                Budget.Type.EXPENSE == budget.getType()
+                        ? StyleConstants.Badge.ERROR
+                        : StyleConstants.Badge.SUCCESS
+        );
+
+        HorizontalLayout titleTypeLayout = new HorizontalLayout(title, type);
+        titleTypeLayout.setSpacing(false);
+        titleTypeLayout.setPadding(false);
+        titleTypeLayout.addClassNames(
+                LumoUtility.Gap.MEDIUM,
+                LumoUtility.AlignItems.CENTER
+        );
+
+        Span current = new Span(formattingService.formatAmount(budget.getCurrentAmount()));
+        current.addClassNames(
+                LumoUtility.FontSize.LARGE,
+                LumoUtility.FontWeight.BOLD
+        );
+
+        Span goal = new Span("из " + formattingService.formatAmount(budget.getGoalAmount()));
+        goal.addClassNames(
+                LumoUtility.FontSize.SMALL,
+                LumoUtility.FontWeight.LIGHT,
+                LumoUtility.TextColor.SECONDARY
+        );
+
+        HorizontalLayout amountsLayout = new HorizontalLayout(current, goal);
+        amountsLayout.setSpacing(false);
+        amountsLayout.setPadding(false);
+        amountsLayout.addClassNames(
+                LumoUtility.Gap.SMALL,
+                LumoUtility.AlignItems.BASELINE
+        );
+
+        header.add(titleTypeLayout, amountsLayout);
+        header.addClassNames(
+                LumoUtility.FlexDirection.COLUMN,
+                LumoUtility.Gap.SMALL
+        );
+    }
+
+    private void configureContent(FlexLayout content) {
+        content.setFlexDirection(FlexLayout.FlexDirection.COLUMN);
+        boolean isExpense = budget.getType() == Budget.Type.EXPENSE;
+        BigDecimal currentAmount = budget.getCurrentAmount();
+        BigDecimal maxAmount = budget.getGoalAmount();
+        BigDecimal safeAmount = currentAmount.min(maxAmount);
+        BigDecimal leftOver = currentAmount.subtract(safeAmount);
+
+        Div progressBarWrapper = new Div();
+        progressBarWrapper.addClassNames(
+                LumoUtility.BoxSizing.BORDER,
+                LumoUtility.Position.RELATIVE,
+                LumoUtility.TextAlignment.CENTER
+        );
+
+        ProgressBar progressBar = new ProgressBar(0, maxAmount.doubleValue());
+        progressBar.setValue(safeAmount.doubleValue());
+        progressBar.addClassName(LumoUtility.Height.XSMALL);
+        progressBarWrapper.add(progressBar);
+
+        StringBuilder progressTextBuilder = new StringBuilder();
+        if (isExpense) {
+            progressTextBuilder.append("Можно потратить");
+        } else {
+            progressTextBuilder.append("Осталось получить");
+        }
+        progressTextBuilder
+                .append(" ")
+                .append(formattingService.formatAmount(budget.getRemainingAmount()))
+                .append(" до ")
+                .append(formattingService.formatDate(budget.getEndDate()));
+        Span progressSpan = new Span(progressTextBuilder.toString());
+        progressSpan.addClassNames(
+                LumoUtility.FontSize.XSMALL,
+                LumoUtility.FontSize.Breakpoint.Medium.SMALL,
+                LumoUtility.TextColor.DISABLED
+        );
+
+        progressBarWrapper.add(progressSpan);
+
+        if (leftOver.compareTo(BigDecimal.ZERO) > 0) {
+            progressBar.addThemeVariants(ProgressBarVariant.LUMO_CONTRAST);
+            ProgressBar overflowBar = new ProgressBar(0, maxAmount.doubleValue());
+            overflowBar.addClassNames(
+                    LumoUtility.Position.ABSOLUTE,
+                    LumoUtility.Position.Top.NONE,
+                    LumoUtility.Height.XSMALL
+            );
+            overflowBar.addThemeVariants(isExpense
+                    ? ProgressBarVariant.LUMO_ERROR
+                    : ProgressBarVariant.LUMO_SUCCESS
+            );
+            overflowBar.setValue(leftOver.min(maxAmount).doubleValue());
+
+            progressBarWrapper.add(overflowBar);
+
+            StringBuilder overflowText = new StringBuilder(budget.getType().toString())
+                    .append(" превышен на ")
+                    .append(formattingService.formatAmount(leftOver))
+                    .append(" ");
+            if (isExpense) {
+                overflowText.append("\uD83D\uDE22");
+            } else {
+                overflowText.append("\uD83D\uDC4D");
+            }
+
+            progressSpan.setText(overflowText.toString());
+            progressSpan.getElement().getThemeList().add(isExpense ? StyleConstants.Badge.ERROR : StyleConstants.Badge.SUCCESS);
+        }
+
+        content.add(progressBarWrapper);
     }
 }

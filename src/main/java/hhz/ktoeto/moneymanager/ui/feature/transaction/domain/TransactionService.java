@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -18,6 +19,15 @@ import java.util.List;
 public class TransactionService {
 
     private final TransactionsRepository repository;
+
+    public List<Transaction> getAll(long userId, TransactionFilter filter) {
+        TransactionSpecification specification = TransactionSpecification.builder()
+                .userId(userId)
+                .filter(filter)
+                .build();
+
+        return repository.findAll(specification);
+    }
 
     public Page<Transaction> getPage(long userId, TransactionFilter filter, Pageable pageable) {
         log.debug("Fetching transactions for user with id {}, page {}, size {}", userId, pageable.getPageNumber(), pageable.getPageSize());
@@ -84,6 +94,13 @@ public class TransactionService {
                 .build();
         long count = repository.count(specification);
         return (int) Math.min(Integer.MAX_VALUE, count);
+    }
+
+    public BigDecimal calculateTotal(Collection<Transaction> transactions) {
+        return transactions
+                .stream()
+                .map(Transaction::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private Transaction getTransactionFromRepository(long id) {

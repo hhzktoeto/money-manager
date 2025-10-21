@@ -36,7 +36,7 @@ public class FormattingService {
     }
 
     public String formatAmount(BigDecimal amount) {
-        return amountFormatter.format(amount).concat("₽");
+        return amountFormatter.format(amount).concat(" ₽");
     }
 
     public String formatMonth(Month month) {
