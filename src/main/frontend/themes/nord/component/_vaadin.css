@@ -45,3 +45,15 @@ vaadin-tab[selected] {
     background: var(--lumo-primary-color-10pct);
     color: var(--lumo-primary-color);
 }
+
+vaadin-grid::part(amount-column) {
+    font-family: 'JetBrains Mono';
+}
+
+vaadin-grid::part(expense) {
+    color: var(--lumo-error-color);
+}
+
+vaadin-grid::part(income) {
+    color: var(--lumo-success-color);
+}

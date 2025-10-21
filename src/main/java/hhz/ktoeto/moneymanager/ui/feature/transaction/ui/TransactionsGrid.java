@@ -22,11 +22,6 @@ public class TransactionsGrid extends Composite<Grid<Transaction>> {
     private final transient ApplicationEventPublisher eventPublisher;
     private final Mode mode;
 
-    public enum Mode {
-        RECENT,
-        ALL
-    }
-
     @Override
     protected Grid<Transaction> initContent() {
         Grid<Transaction> root = new Grid<>();
@@ -60,7 +55,15 @@ public class TransactionsGrid extends Composite<Grid<Transaction>> {
                         : null)
                 .setSortable(mode == Mode.ALL)
                 .setKey("amount")
-                .setTextAlign(ColumnTextAlign.END);
+                .setTextAlign(ColumnTextAlign.END)
+                .setPartNameGenerator(transaction -> {
+                    StringBuilder stringBuilder = new StringBuilder("amount-column ");
+                    switch (transaction.getType()) {
+                        case EXPENSE -> stringBuilder.append("expense");
+                        case INCOME -> stringBuilder.append("income");
+                    }
+                    return stringBuilder.toString();
+                });
 
         root.setDataProvider(dataProvider);
         root.addItemClickListener(event ->
@@ -76,5 +79,10 @@ public class TransactionsGrid extends Composite<Grid<Transaction>> {
 
     public void setCurrentFilter(TransactionFilter filter) {
         dataProvider.setCurrentFilter(filter);
+    }
+
+    public enum Mode {
+        RECENT,
+        ALL
     }
 }
