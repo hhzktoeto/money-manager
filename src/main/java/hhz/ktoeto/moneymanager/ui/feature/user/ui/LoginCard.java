@@ -3,6 +3,7 @@ package hhz.ktoeto.moneymanager.ui.feature.user.ui;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -39,11 +40,9 @@ public class LoginCard extends Composite<BasicContainer> implements BeforeEnterO
         BasicContainer root = new BasicContainer();
         root.setMinWidth(320, Unit.PIXELS);
         root.setMaxWidth(400, Unit.PIXELS);
-        root.getHeader().addClassNames(LumoUtility.JustifyContent.CENTER);
 
-        Image appLogo = new Image("logo.png", "Money Manager");
-        appLogo.setWidth(12, Unit.REM);
-        root.setHeader(appLogo);
+        FlexLayout header = root.getHeader();
+        this.configureHeader(header);
 
         loginForm = loginFormFactory.defaultLoginForm();
         registerForm = registerFormFactory.defaultRegisterForm();
@@ -82,5 +81,13 @@ public class LoginCard extends Composite<BasicContainer> implements BeforeEnterO
         registerForm.setVisible(false);
         registerForm.clear();
         loginForm.setVisible(true);
+    }
+
+    private void configureHeader(FlexLayout header) {
+        header.addClassNames(LumoUtility.JustifyContent.CENTER);
+
+        Image appLogo = new Image("logo.png", "Money Manager");
+        appLogo.setWidth(12, Unit.REM);
+        header.add(appLogo);
     }
 }
