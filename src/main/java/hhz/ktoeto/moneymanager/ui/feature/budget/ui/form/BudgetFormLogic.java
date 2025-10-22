@@ -1,14 +1,14 @@
 package hhz.ktoeto.moneymanager.ui.feature.budget.ui.form;
 
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.BudgetService;
-import hhz.ktoeto.moneymanager.ui.feature.budget.event.BudgetCreatedEvent;
-import hhz.ktoeto.moneymanager.ui.feature.budget.event.BudgetCreationCancelledEvent;
-import hhz.ktoeto.moneymanager.ui.feature.budget.event.BudgetEditCancelledEvent;
-import hhz.ktoeto.moneymanager.ui.feature.budget.event.BudgetUpdatedEvent;
+import hhz.ktoeto.moneymanager.ui.feature.budget.event.*;
 import hhz.ktoeto.moneymanager.ui.feature.category.event.OpenCategoryCreateDialogEvent;
+import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
+import hhz.ktoeto.moneymanager.ui.feature.transaction.event.TransactionDeletedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -49,6 +49,25 @@ public class BudgetFormLogic {
 
         Budget updated = budgetService.update(budget, userContextHolder.getCurrentUserId());
         eventPublisher.publishEvent(new BudgetUpdatedEvent(this, updated));
+    }
+
+    void delete(BudgetForm form) {
+        ConfirmDialog dialog = new ConfirmDialog();
+        dialog.setHeader("Удалить Бюджет?");
+
+        dialog.setCancelable(true);
+        dialog.setCancelText("Ой, нет");
+
+        dialog.setConfirmText("Да");
+        dialog.addConfirmListener(event -> {
+            Budget budget = form.getEditedBudget();
+
+            budgetService.delete(budget.getId(), userContextHolder.getCurrentUserId());
+            eventPublisher.publishEvent(new BudgetDeletedEvent(this));
+            dialog.close();
+        });
+
+        dialog.open();
     }
 
     void cancelCreate() {

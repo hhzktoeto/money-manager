@@ -14,20 +14,28 @@ public class BudgetFormFactory {
     private final BudgetFormLogic formLogic;
 
     public BudgetForm budgetCreateForm() {
-        return new BudgetForm(
+        BudgetForm createForm = new BudgetForm(
                 categoryDataProvider,
                 form -> formLogic.addCategory(),
                 formLogic::submitCreate,
-                form -> formLogic.cancelCreate()
+                form -> formLogic.cancelCreate(),
+                formLogic::delete
         );
+        createForm.showDeleteButton(false);
+
+        return createForm;
     }
 
     public BudgetForm budgetEditForm() {
-        return new BudgetForm(
+        BudgetForm editForm = new BudgetForm(
                 categoryDataProvider,
                 form -> formLogic.addCategory(),
                 formLogic::submitEdit,
-                form -> formLogic.cancelEdit()
+                form -> formLogic.cancelEdit(),
+                formLogic::delete
         );
+        editForm.showDeleteButton(true);
+
+        return editForm;
     }
 }

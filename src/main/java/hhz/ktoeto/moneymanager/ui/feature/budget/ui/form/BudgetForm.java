@@ -27,6 +27,7 @@ import hhz.ktoeto.moneymanager.ui.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.feature.category.ui.data.CategoryDataProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.util.function.Consumer;
 
@@ -38,6 +39,7 @@ public class BudgetForm extends Composite<FlexLayout> {
     private final transient Consumer<BudgetForm> categoryAddAction;
     private final transient Consumer<BudgetForm> submitAction;
     private final transient Consumer<BudgetForm> cancelAction;
+    private final transient Consumer<BudgetForm> deleteAction;
 
     private final IncomeExpenseToggle<Budget.Type> typeToggle;
     private final TextField nameField;
@@ -51,6 +53,7 @@ public class BudgetForm extends Composite<FlexLayout> {
 
     private final Button submitButton;
     private final Button cancelButton;
+    private final Button deleteButton;
 
     private final Binder<Budget> binder;
 
@@ -59,11 +62,13 @@ public class BudgetForm extends Composite<FlexLayout> {
     public BudgetForm(CategoryDataProvider categoryProvider,
                       Consumer<BudgetForm> categoryAddAction,
                       Consumer<BudgetForm> submitAction,
-                      Consumer<BudgetForm> cancelAction) {
+                      Consumer<BudgetForm> cancelAction,
+                      Consumer<BudgetForm> deleteAction) {
         this.categoryProvider = categoryProvider;
         this.categoryAddAction = categoryAddAction;
         this.submitAction = submitAction;
         this.cancelAction = cancelAction;
+        this.deleteAction = deleteAction;
 
         this.typeToggle = new IncomeExpenseToggle<>(Budget.Type.EXPENSE, Budget.Type.INCOME);
         this.nameField = new TextField("Название");
@@ -76,6 +81,8 @@ public class BudgetForm extends Composite<FlexLayout> {
         this.amountInputCalculator = new AmountInputCalculator();
         this.submitButton = new Button("Сохранить");
         this.cancelButton = new Button("Отмена");
+        this.deleteButton = new Button(MaterialIcons.DELETE.create());
+
         this.binder = new Binder<>(Budget.class);
     }
 
@@ -90,15 +97,14 @@ public class BudgetForm extends Composite<FlexLayout> {
                 LumoUtility.Gap.MEDIUM
         );
 
-        nameField.setWidthFull();
-
         FlexLayout firstRowLayout = new FlexLayout();
         FlexLayout secondRowLayout = new FlexLayout();
-        HorizontalLayout buttonsLayout = new HorizontalLayout();
+        HorizontalLayout buttonsRow = new HorizontalLayout();
 
+        this.configureNameField();
         this.configureFirstRow(firstRowLayout);
         this.configureSecondRow(secondRowLayout);
-        this.configureButtonsLayout(buttonsLayout);
+        this.configureButtonsRow(buttonsRow);
         this.configureBinder();
 
         root.add(
@@ -107,7 +113,7 @@ public class BudgetForm extends Composite<FlexLayout> {
                 firstRowLayout,
                 secondRowLayout,
                 amountInputCalculator,
-                buttonsLayout
+                buttonsRow
         );
 
         return root;
@@ -134,6 +140,14 @@ public class BudgetForm extends Composite<FlexLayout> {
 
     void reset() {
         binder.setBean(new Budget());
+    }
+
+    void showDeleteButton(boolean show) {
+        deleteButton.setVisible(show);
+    }
+
+    private void configureNameField() {
+        nameField.setWidthFull();
     }
 
     private void configureFirstRow(FlexLayout row) {
@@ -204,18 +218,27 @@ public class BudgetForm extends Composite<FlexLayout> {
         row.add(renewableCheckbox, activePeriodScroller, dateRangePicker);
     }
 
-    private void configureButtonsLayout(HorizontalLayout layout) {
+    private void configureButtonsRow(HorizontalLayout row) {
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        submitButton.addClickListener(event -> this.submitAction.accept(this));
+        submitButton.addClickListener(event -> submitAction.accept(this));
 
-        cancelButton.addClickListener(event -> this.cancelAction.accept(this));
+        cancelButton.addClickListener(event -> cancelAction.accept(this));
 
-        layout.add(cancelButton, submitButton);
-        layout.addClassNames(
+        deleteButton.addClickListener(e -> deleteAction.accept(this));
+        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
+
+        HorizontalLayout submitCancelLayout = new HorizontalLayout(cancelButton, submitButton);
+        submitCancelLayout.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.JustifyContent.END,
+                LumoUtility.Gap.MEDIUM
+        );
+
+        row.add(deleteButton, submitCancelLayout);
+        row.addClassNames(
                 LumoUtility.AlignItems.STRETCH,
                 LumoUtility.Margin.Top.MEDIUM,
-                LumoUtility.JustifyContent.BETWEEN,
-                LumoUtility.Gap.LARGE
+                LumoUtility.JustifyContent.BETWEEN
         );
     }
 

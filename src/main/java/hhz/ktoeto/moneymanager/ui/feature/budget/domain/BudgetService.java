@@ -78,6 +78,16 @@ public class BudgetService {
         return repository.save(updated);
     }
 
+    @Transactional
+    public void delete(long id, long userId) {
+        Budget budget = getBudgetFromRepository(id);
+        if (budget.getUserId() != userId) {
+            throw new NonOwnerRequestException("User with id %d requested budget deletion, which owner is user with id %d".formatted(userId, budget.getUserId()));
+        }
+
+        repository.delete(budget);
+    }
+
     public int count(long userId, BudgetFilter filter) {
         BudgetSpecification specification = BudgetSpecification.builder()
                 .userId(userId)

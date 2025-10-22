@@ -39,6 +39,7 @@ public class BudgetDialog extends Composite<CustomDialog> {
     @EventListener({
             BudgetCreatedEvent.class,
             BudgetUpdatedEvent.class,
+            BudgetDeletedEvent.class,
             BudgetCreationCancelledEvent.class,
             BudgetEditCancelledEvent.class
     })
