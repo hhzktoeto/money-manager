@@ -205,7 +205,7 @@ public class BudgetForm extends Composite<FlexLayout> {
                     if (autoRenew) {
                         activePeriodToggle.setValue(previousActivePeriod);
                     } else {
-                        previousActivePeriod = binder.getBean().getActivePeriod();
+                        previousActivePeriod = activePeriodToggle.getValue();
                         activePeriodToggle.setValue(null);
                     }
                 }
