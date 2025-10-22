@@ -19,6 +19,7 @@ import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
 import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
 import hhz.ktoeto.moneymanager.ui.component.ToggleButtonGroup;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
+import hhz.ktoeto.moneymanager.ui.feature.budget.ui.form.validator.BudgetActivePeriodValidator;
 import hhz.ktoeto.moneymanager.ui.feature.budget.ui.form.validator.BudgetCategoriesValidator;
 import hhz.ktoeto.moneymanager.ui.feature.budget.ui.form.validator.BudgetDateRangeValidator;
 import hhz.ktoeto.moneymanager.ui.feature.budget.ui.form.validator.BudgetNameValidator;
@@ -234,6 +235,7 @@ public class BudgetForm extends Composite<FlexLayout> {
         binder.forField(renewableCheckbox)
                 .bind(Budget::isRenewable, Budget::setRenewable);
         binder.forField(activePeriodToggle)
+                .withValidator(new BudgetActivePeriodValidator(renewableCheckbox))
                 .bind(Budget::getActivePeriod, Budget::setActivePeriod);
         binder.forField(dateRangePicker)
                 .withValidator(new BudgetDateRangeValidator(renewableCheckbox))
