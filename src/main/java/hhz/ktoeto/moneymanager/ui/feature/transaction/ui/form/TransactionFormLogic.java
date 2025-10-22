@@ -3,6 +3,7 @@ package hhz.ktoeto.moneymanager.ui.feature.transaction.ui.form;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
+import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.feature.category.event.OpenCategoryCreateDialogEvent;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.TransactionService;
@@ -48,13 +49,9 @@ public class TransactionFormLogic {
     }
 
     void delete(TransactionForm form) {
-        ConfirmDialog dialog = new ConfirmDialog();
+        DeleteConfirmDialog dialog = new DeleteConfirmDialog();
         dialog.setHeader("Удалить транзакцию?");
 
-        dialog.setCancelable(true);
-        dialog.setCancelText("Ой, нет");
-
-        dialog.setConfirmText("Да");
         dialog.addConfirmListener(event -> {
             Transaction transaction = form.getEditedTransaction();
 

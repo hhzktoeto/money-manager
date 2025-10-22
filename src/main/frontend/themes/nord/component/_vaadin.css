@@ -17,6 +17,11 @@ vaadin-dialog-overlay::part(backdrop) {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+vaadin-confirm-dialog-overlay::part(backdrop) {
+    backdrop-filter: blur(6px);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 vaadin-select-overlay::part(content) {
     text-align: center;
     max-height: 33vh;

@@ -1,8 +1,10 @@
 package hhz.ktoeto.moneymanager.ui.feature.budget.ui.form;
 
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
+import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.ui.feature.budget.event.*;
@@ -52,13 +54,9 @@ public class BudgetFormLogic {
     }
 
     void delete(BudgetForm form) {
-        ConfirmDialog dialog = new ConfirmDialog();
-        dialog.setHeader("Удалить Бюджет?");
+        DeleteConfirmDialog dialog = new DeleteConfirmDialog();
+        dialog.setHeader("Удалить бюджет?");
 
-        dialog.setCancelable(true);
-        dialog.setCancelText("Ой, нет");
-
-        dialog.setConfirmText("Да");
         dialog.addConfirmListener(event -> {
             Budget budget = form.getEditedBudget();
 
