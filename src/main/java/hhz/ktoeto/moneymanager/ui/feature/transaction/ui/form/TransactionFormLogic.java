@@ -1,6 +1,5 @@
 package hhz.ktoeto.moneymanager.ui.feature.transaction.ui.form;
 
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;

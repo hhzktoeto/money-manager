@@ -15,22 +15,28 @@ public class TransactionFormFactory {
     private final TransactionFormLogic formLogic;
 
     public TransactionForm transactionCreateForm() {
-        return new TransactionForm(
+        TransactionForm createForm = new TransactionForm(
                 categoryDataProvider,
                 form -> formLogic.addCategory(),
                 formLogic::submitCreate,
                 form -> formLogic.cancelCreate(),
                 formLogic::delete
         );
+        createForm.showDeleteButton(false);
+
+        return createForm;
     }
 
     public TransactionForm transactionEditForm() {
-        return new TransactionForm(
+        TransactionForm editForm = new TransactionForm(
                 categoryDataProvider,
                 form -> formLogic.addCategory(),
                 formLogic::submitEdit,
                 form -> formLogic.cancelEdit(),
                 formLogic::delete
         );
+        editForm.showDeleteButton(true);
+
+        return editForm;
     }
 }

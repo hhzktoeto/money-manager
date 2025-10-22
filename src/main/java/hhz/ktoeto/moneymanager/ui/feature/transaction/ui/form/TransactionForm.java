@@ -20,7 +20,6 @@ import hhz.ktoeto.moneymanager.ui.feature.category.ui.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.ui.form.validator.TransactionAmountValidator;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.ui.form.validator.TransactionDescriptionValidator;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
@@ -28,7 +27,6 @@ import java.time.LocalDate;
 import java.util.function.Consumer;
 
 @Slf4j
-@RequiredArgsConstructor
 public class TransactionForm extends Composite<FlexLayout> {
 
     private final CategoryDataProvider categoryProvider;
@@ -37,17 +35,41 @@ public class TransactionForm extends Composite<FlexLayout> {
     private final transient Consumer<TransactionForm> cancelAction;
     private final transient Consumer<TransactionForm> deleteAction;
 
-    private final Binder<Transaction> binder = new Binder<>(Transaction.class);
+    private final IncomeExpenseToggle<Transaction.Type> typeToggle;
+    private final ComboBox<Category> categorySelect;
+    private final AmountInputCalculator amountInput;
+    private final DatePicker datePicker;
+    private final TextArea descriptionArea;
+    private final Button createCategoryButton;
+    private final Button submitButton;
+    private final Button cancelButton;
+    private final Button deleteButton;
 
-    private IncomeExpenseToggle<Transaction.Type> typeToggle;
-    private ComboBox<Category> categorySelect;
-    private AmountInputCalculator amountInput;
-    private DatePicker datePicker;
-    private TextArea descriptionArea;
-    private Button createCategoryButton;
-    private Button submitButton;
-    private Button cancelButton;
-    private Button deleteButton;
+    private final Binder<Transaction> binder;
+
+    public TransactionForm(CategoryDataProvider categoryProvider,
+                           Consumer<TransactionForm> categoryAddAction,
+                           Consumer<TransactionForm> submitAction,
+                           Consumer<TransactionForm> cancelAction,
+                           Consumer<TransactionForm> deleteAction) {
+        this.categoryProvider = categoryProvider;
+        this.categoryAddAction = categoryAddAction;
+        this.submitAction = submitAction;
+        this.cancelAction = cancelAction;
+        this.deleteAction = deleteAction;
+
+        this.typeToggle = new IncomeExpenseToggle<>(Transaction.Type.EXPENSE, Transaction.Type.INCOME);
+        this.categorySelect = new ComboBox<>("Категория");
+        this.amountInput = new AmountInputCalculator();
+        this.datePicker = new RussianDatePicker("Дата", LocalDate.now());
+        this.descriptionArea = new TextArea("Описание");
+        this.createCategoryButton = new Button(VaadinIcon.PLUS.create());
+        this.submitButton = new Button("Сохранить");
+        this.cancelButton = new Button("Отмена");
+        this.deleteButton = new Button(MaterialIcons.DELETE.create());
+
+        this.binder = new Binder<>(Transaction.class);
+    }
 
     @Override
     protected FlexLayout initContent() {
@@ -59,96 +81,23 @@ public class TransactionForm extends Composite<FlexLayout> {
                 LumoUtility.AlignItems.STRETCH
         );
 
-        categorySelect = new ComboBox<>("Категория");
-        categorySelect.setItems(categoryProvider);
-        categorySelect.setItemLabelGenerator(Category::getName);
-        categorySelect.setWidthFull();
+        FlexLayout firstRow = new FlexLayout();
+        FlexLayout secondRow = new FlexLayout();
+        HorizontalLayout buttonsRow = new HorizontalLayout();
 
-        createCategoryButton = new Button(VaadinIcon.PLUS.create());
-        createCategoryButton.addClickListener(e -> categoryAddAction.accept(this));
-        createCategoryButton.setTooltipText("Добавить категорию");
+        this.configureFirstRow(firstRow);
+        this.configureSecondRow(secondRow);
+        this.configureDescriptionArea();
+        this.configureButtonsRow(buttonsRow);
 
-        HorizontalLayout categoryWrapper = new HorizontalLayout(categorySelect, createCategoryButton);
-        categoryWrapper.setPadding(false);
-        categoryWrapper.addClassNames(
-                LumoUtility.Width.FULL,
-                LumoUtility.AlignItems.BASELINE,
-                LumoUtility.JustifyContent.BETWEEN,
-                LumoUtility.Gap.XSMALL
+        root.add(
+                firstRow,
+                secondRow,
+                descriptionArea,
+                buttonsRow
         );
 
-        typeToggle = new IncomeExpenseToggle<>(Transaction.Type.EXPENSE, Transaction.Type.INCOME);
-        FlexLayout firstRow = new FlexLayout(typeToggle, categoryWrapper);
-        firstRow.addClassNames(
-                LumoUtility.FlexDirection.COLUMN,
-                LumoUtility.FlexDirection.Breakpoint.Small.ROW,
-                LumoUtility.AlignItems.BASELINE,
-                LumoUtility.Gap.XSMALL
-        );
-        root.add(firstRow);
-
-        amountInput = new AmountInputCalculator();
-        amountInput.setWidthFull();
-
-        datePicker = new RussianDatePicker("Дата", LocalDate.now());
-        datePicker.setWidthFull();
-
-        FlexLayout secondRow = new FlexLayout(amountInput, datePicker);
-        secondRow.addClassNames(
-                LumoUtility.FlexDirection.COLUMN,
-                LumoUtility.FlexDirection.Breakpoint.Small.ROW,
-                LumoUtility.AlignItems.STRETCH,
-                LumoUtility.Gap.XSMALL
-        );
-        root.add(secondRow);
-
-        descriptionArea = new TextArea("Описание");
-        descriptionArea.addClassNames(
-                LumoUtility.Width.FULL,
-                LumoUtility.AlignSelf.CENTER
-        );
-        root.add(descriptionArea);
-
-        submitButton = new Button("Сохранить");
-        submitButton.addClickListener(e -> submitAction.accept(this));
-        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
-        cancelButton = new Button("Отмена");
-        cancelButton.addClickListener(e -> cancelAction.accept(this));
-
-        deleteButton = new Button(MaterialIcons.DELETE.create());
-        deleteButton.addClickListener(e -> deleteAction.accept(this));
-        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
-
-        HorizontalLayout submitCancelButtons = new HorizontalLayout(cancelButton, submitButton);
-        submitCancelButtons.addClassNames(
-                LumoUtility.JustifyContent.END,
-                LumoUtility.Gap.MEDIUM
-        );
-        HorizontalLayout buttons = new HorizontalLayout(deleteButton, submitCancelButtons);
-        buttons.addClassNames(
-                LumoUtility.AlignItems.STRETCH,
-                LumoUtility.Margin.Top.MEDIUM,
-                LumoUtility.JustifyContent.BETWEEN
-        );
-        root.add(buttons);
-
-        this.binder.forField(typeToggle)
-                .asRequired("Не выбран тип")
-                .bind(Transaction::getType, Transaction::setType);
-        this.binder.forField(categorySelect)
-                .asRequired("Не выбрана категория")
-                .bind(Transaction::getCategory, Transaction::setCategory);
-        this.binder.forField(amountInput)
-                .asRequired("Не введена сумма")
-                .withValidator(new TransactionAmountValidator())
-                .bind(Transaction::getAmount, Transaction::setAmount);
-        this.binder.forField(datePicker)
-                .asRequired("Не выбрана дата")
-                .bind(Transaction::getDate, Transaction::setDate);
-        this.binder.forField(descriptionArea)
-                .withValidator(new TransactionDescriptionValidator())
-                .bind(Transaction::getDescription, Transaction::setDescription);
+        this.configureBinder();
 
         return root;
     }
@@ -179,5 +128,98 @@ public class TransactionForm extends Composite<FlexLayout> {
         reset.setCategory(category);
 
         binder.setBean(reset);
+    }
+
+    void showDeleteButton(boolean show) {
+        deleteButton.setVisible(show);
+    }
+
+    private void configureFirstRow(FlexLayout row) {
+        categorySelect.setItems(categoryProvider);
+        categorySelect.setItemLabelGenerator(Category::getName);
+        categorySelect.setWidthFull();
+
+        createCategoryButton.addClickListener(e -> categoryAddAction.accept(this));
+        createCategoryButton.setTooltipText("Добавить категорию");
+
+        HorizontalLayout categoryWrapper = new HorizontalLayout(categorySelect, createCategoryButton);
+        categoryWrapper.setPadding(false);
+        categoryWrapper.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.AlignItems.BASELINE,
+                LumoUtility.JustifyContent.BETWEEN,
+                LumoUtility.Gap.XSMALL
+        );
+
+        row.add(typeToggle, categoryWrapper);
+        row.addClassNames(
+                LumoUtility.FlexDirection.COLUMN,
+                LumoUtility.FlexDirection.Breakpoint.Small.ROW,
+                LumoUtility.AlignItems.BASELINE,
+                LumoUtility.Gap.XSMALL
+        );
+    }
+
+    private void configureSecondRow(FlexLayout row) {
+        amountInput.setWidthFull();
+        datePicker.setWidthFull();
+
+        row.add(amountInput, datePicker);
+        row.addClassNames(
+                LumoUtility.FlexDirection.COLUMN,
+                LumoUtility.FlexDirection.Breakpoint.Small.ROW,
+                LumoUtility.AlignItems.STRETCH,
+                LumoUtility.Gap.XSMALL
+        );
+    }
+
+    private void configureDescriptionArea() {
+        descriptionArea.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.AlignSelf.CENTER
+        );
+    }
+
+    private void configureButtonsRow(HorizontalLayout row) {
+        submitButton.addClickListener(e -> submitAction.accept(this));
+        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        cancelButton.addClickListener(e -> cancelAction.accept(this));
+
+        deleteButton.addClickListener(e -> deleteAction.accept(this));
+        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
+
+        HorizontalLayout submitCancelLayout = new HorizontalLayout(cancelButton, submitButton);
+        submitCancelLayout.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.JustifyContent.END,
+                LumoUtility.Gap.MEDIUM
+        );
+
+        row.add(deleteButton, submitCancelLayout);
+        row.addClassNames(
+                LumoUtility.AlignItems.STRETCH,
+                LumoUtility.Margin.Top.MEDIUM,
+                LumoUtility.JustifyContent.BETWEEN
+        );
+    }
+
+    private void configureBinder() {
+        binder.forField(typeToggle)
+                .asRequired("Не выбран тип")
+                .bind(Transaction::getType, Transaction::setType);
+        binder.forField(categorySelect)
+                .asRequired("Не выбрана категория")
+                .bind(Transaction::getCategory, Transaction::setCategory);
+        binder.forField(amountInput)
+                .asRequired("Не введена сумма")
+                .withValidator(new TransactionAmountValidator())
+                .bind(Transaction::getAmount, Transaction::setAmount);
+        binder.forField(datePicker)
+                .asRequired("Не выбрана дата")
+                .bind(Transaction::getDate, Transaction::setDate);
+        binder.forField(descriptionArea)
+                .withValidator(new TransactionDescriptionValidator())
+                .bind(Transaction::getDescription, Transaction::setDescription);
     }
 }
