@@ -7,10 +7,17 @@ import com.vaadin.flow.theme.Theme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@Theme(value = "nord", variant = "dark")
-@PWA(name = "Money Manager", shortName = "MM", iconPath = "icons/icon-192x192.png")
 @Viewport("width=device-width, initial-scale=1")
-@SpringBootApplication(scanBasePackages = "hhz.ktoeto.moneymanager")
+@Theme(
+        value = "nord",
+        variant = "dark"
+)
+@PWA(
+        name = "Money Manager",
+        shortName = "MM",
+        iconPath = "icons/icon-192x192.png"
+)
+@SpringBootApplication
 public class Launcher implements AppShellConfigurator {
 
     public static void main(String[] args) {
