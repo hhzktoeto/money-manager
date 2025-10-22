@@ -161,10 +161,9 @@ public class BudgetForm extends Composite<FlexLayout> {
         HorizontalLayout categoriesWrapper = new HorizontalLayout(categoriesSelect, createCategoryButton);
         categoriesWrapper.setVisible(false);
         categoriesWrapper.setPadding(false);
-        categoriesWrapper.setSpacing(false);
         categoriesWrapper.addClassNames(
                 LumoUtility.Width.FULL,
-                LumoUtility.AlignItems.BASELINE,
+                LumoUtility.AlignItems.END,
                 LumoUtility.JustifyContent.BETWEEN,
                 LumoUtility.Gap.XSMALL
         );

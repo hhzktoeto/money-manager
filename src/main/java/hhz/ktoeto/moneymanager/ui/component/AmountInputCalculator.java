@@ -34,10 +34,10 @@ public class AmountInputCalculator extends CustomField<BigDecimal> {
         calculateButton.addClickListener(event -> expressionDialog.open());
 
         HorizontalLayout container = new HorizontalLayout(numberField, calculateButton);
+        container.setPadding(false);
         container.addClassNames(
                 LumoUtility.Width.FULL,
-                LumoUtility.Margin.Bottom.XSMALL,
-                LumoUtility.AlignItems.BASELINE,
+                LumoUtility.AlignItems.END,
                 LumoUtility.JustifyContent.BETWEEN,
                 LumoUtility.Gap.XSMALL
         );

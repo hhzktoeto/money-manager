@@ -140,13 +140,14 @@ public class TransactionForm extends Composite<FlexLayout> {
         categorySelect.setWidthFull();
 
         createCategoryButton.addClickListener(e -> categoryAddAction.accept(this));
+        createCategoryButton.setHeight(categorySelect.getHeight());
         createCategoryButton.setTooltipText("Добавить категорию");
 
         HorizontalLayout categoryWrapper = new HorizontalLayout(categorySelect, createCategoryButton);
         categoryWrapper.setPadding(false);
         categoryWrapper.addClassNames(
                 LumoUtility.Width.FULL,
-                LumoUtility.AlignItems.BASELINE,
+                LumoUtility.AlignItems.END,
                 LumoUtility.JustifyContent.BETWEEN,
                 LumoUtility.Gap.XSMALL
         );
