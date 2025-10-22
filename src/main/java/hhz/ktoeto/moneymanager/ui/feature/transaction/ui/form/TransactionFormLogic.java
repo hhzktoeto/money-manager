@@ -1,14 +1,13 @@
 package hhz.ktoeto.moneymanager.ui.feature.transaction.ui.form;
 
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.ui.feature.category.event.OpenCategoryCreateDialogEvent;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.TransactionService;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.event.TransactionCreatedEvent;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.event.TransactionCreationCancelledEvent;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.event.TransactionEditCancelledEvent;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.event.TransactionUpdatedEvent;
+import hhz.ktoeto.moneymanager.ui.feature.transaction.event.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -47,6 +46,25 @@ public class TransactionFormLogic {
 
         Transaction updated = transactionService.update(transaction, userContextHolder.getCurrentUserId());
         eventPublisher.publishEvent(new TransactionUpdatedEvent(this, updated));
+    }
+
+    void delete(TransactionForm form) {
+        ConfirmDialog dialog = new ConfirmDialog();
+        dialog.setHeader("Удалить транзакцию?");
+
+        dialog.setCancelable(true);
+        dialog.setCancelText("Ой, нет");
+
+        dialog.setConfirmText("Да");
+        dialog.addConfirmListener(event -> {
+            Transaction transaction = form.getEditedTransaction();
+
+            transactionService.delete(transaction.getId(), userContextHolder.getCurrentUserId());
+            eventPublisher.publishEvent(new TransactionDeletedEvent(this));
+            dialog.close();
+        });
+
+        dialog.open();
     }
 
     void cancelCreate() {

@@ -3,6 +3,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
+    "@gl0b3/materialicons": "3.0.2",
     "@polymer/polymer": "3.5.2",
     "@vaadin-component-factory/vcf-date-range-picker": "5.0.2",
     "@vaadin/bundles": "24.9.2",
@@ -118,10 +119,12 @@
     "@vaadin/vaadin-themable-mixin": "$@vaadin/vaadin-themable-mixin",
     "@vaadin/vaadin-lumo-styles": "$@vaadin/vaadin-lumo-styles",
     "@vaadin/vaadin-material-styles": "$@vaadin/vaadin-material-styles",
-    "@vaadin-component-factory/vcf-date-range-picker": "$@vaadin-component-factory/vcf-date-range-picker"
+    "@vaadin-component-factory/vcf-date-range-picker": "$@vaadin-component-factory/vcf-date-range-picker",
+    "@gl0b3/materialicons": "$@gl0b3/materialicons"
   },
   "vaadin": {
     "dependencies": {
+      "@gl0b3/materialicons": "3.0.2",
       "@polymer/polymer": "3.5.2",
       "@vaadin-component-factory/vcf-date-range-picker": "5.0.2",
       "@vaadin/bundles": "24.9.2",
@@ -161,6 +164,6 @@
       "workbox-core": "7.3.0",
       "workbox-precaching": "7.3.0"
     },
-    "hash": "f5d0cc80dae94b9b1fd6b5e65668f81b808b9f41be2136840637a27486a57da6"
+    "hash": "5c93f5b3c3db16878305aad46dccbba9f021e2e604abc9255673cc087fe27e7a"
   }
 }

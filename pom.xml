@@ -21,6 +21,7 @@
         <mapstruct.version>1.6.3</mapstruct.version>
 
         <date.range.picker.version>5.0.2</date.range.picker.version>
+        <material.icons.version>3.0.1</material.icons.version>
     </properties>
 
     <repositories>
@@ -114,6 +115,11 @@
             <groupId>com.vaadin.componentfactory</groupId>
             <artifactId>vcf-date-range-picker</artifactId>
             <version>${date.range.picker.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.addons.gl0b3</groupId>
+            <artifactId>materialicons-flow</artifactId>
+            <version>${material.icons.version}</version>
         </dependency>
     </dependencies>
 

@@ -19,7 +19,8 @@ public class TransactionFormFactory {
                 categoryDataProvider,
                 form -> formLogic.addCategory(),
                 formLogic::submitCreate,
-                form -> formLogic.cancelCreate()
+                form -> formLogic.cancelCreate(),
+                formLogic::delete
         );
     }
 
@@ -28,7 +29,8 @@ public class TransactionFormFactory {
                 categoryDataProvider,
                 form -> formLogic.addCategory(),
                 formLogic::submitEdit,
-                form -> formLogic.cancelEdit()
+                form -> formLogic.cancelEdit(),
+                formLogic::delete
         );
     }
 }

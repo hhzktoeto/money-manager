@@ -39,7 +39,8 @@ public class TransactionDialog extends Composite<CustomDialog> {
     @EventListener({
             TransactionCreationCancelledEvent.class,
             TransactionEditCancelledEvent.class,
-            TransactionUpdatedEvent.class
+            TransactionUpdatedEvent.class,
+            TransactionDeletedEvent.class
     })
     private void close() {
         this.getContent().close();

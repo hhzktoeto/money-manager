@@ -22,6 +22,7 @@ import hhz.ktoeto.moneymanager.ui.feature.transaction.ui.form.validator.Transact
 import hhz.ktoeto.moneymanager.ui.feature.transaction.ui.form.validator.TransactionDescriptionValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.time.LocalDate;
 import java.util.function.Consumer;
@@ -34,6 +35,7 @@ public class TransactionForm extends Composite<FlexLayout> {
     private final transient Consumer<TransactionForm> categoryAddAction;
     private final transient Consumer<TransactionForm> submitAction;
     private final transient Consumer<TransactionForm> cancelAction;
+    private final transient Consumer<TransactionForm> deleteAction;
 
     private final Binder<Transaction> binder = new Binder<>(Transaction.class);
 
@@ -45,6 +47,7 @@ public class TransactionForm extends Composite<FlexLayout> {
     private Button createCategoryButton;
     private Button submitButton;
     private Button cancelButton;
+    private Button deleteButton;
 
     @Override
     protected FlexLayout initContent() {
@@ -113,12 +116,20 @@ public class TransactionForm extends Composite<FlexLayout> {
         cancelButton = new Button("Отмена");
         cancelButton.addClickListener(e -> cancelAction.accept(this));
 
-        HorizontalLayout buttons = new HorizontalLayout(cancelButton, submitButton);
+        deleteButton = new Button(MaterialIcons.DELETE.create());
+        deleteButton.addClickListener(e -> deleteAction.accept(this));
+        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
+
+        HorizontalLayout submitCancelButtons = new HorizontalLayout(cancelButton, submitButton);
+        submitCancelButtons.addClassNames(
+                LumoUtility.JustifyContent.END,
+                LumoUtility.Gap.MEDIUM
+        );
+        HorizontalLayout buttons = new HorizontalLayout(deleteButton, submitCancelButtons);
         buttons.addClassNames(
                 LumoUtility.AlignItems.STRETCH,
                 LumoUtility.Margin.Top.MEDIUM,
-                LumoUtility.JustifyContent.BETWEEN,
-                LumoUtility.Gap.LARGE
+                LumoUtility.JustifyContent.BETWEEN
         );
         root.add(buttons);
 
