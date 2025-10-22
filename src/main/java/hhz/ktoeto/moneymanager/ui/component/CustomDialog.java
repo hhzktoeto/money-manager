@@ -25,7 +25,7 @@ public class CustomDialog extends Dialog {
 
         header = new HorizontalLayout();
         header.addClassNames(
-                LumoUtility.Margin.Bottom.MEDIUM,
+                LumoUtility.Margin.Bottom.XLARGE,
                 LumoUtility.Width.FULL,
                 LumoUtility.AlignItems.CENTER,
                 LumoUtility.JustifyContent.BETWEEN
@@ -35,7 +35,7 @@ public class CustomDialog extends Dialog {
         header.add(title);
 
         closeButton = new Button(VaadinIcon.CLOSE.create());
-        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE, ButtonVariant.LUMO_ERROR);
+        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE, ButtonVariant.LUMO_LARGE);
         closeButton.addClickListener(e -> this.close());
         header.add(closeButton);
         this.add(header);
