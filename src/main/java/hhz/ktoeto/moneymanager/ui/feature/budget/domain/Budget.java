@@ -8,8 +8,10 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -116,5 +118,41 @@ public class Budget {
     @Transient
     public BigDecimal getRemainingAmount(){
         return goalAmount.subtract(currentAmount);
+    }
+
+    @Transient
+    public void calculateActiveDates() {
+        LocalDate today = LocalDate.now();
+        LocalDate startDate;
+        LocalDate endDate;
+
+        switch (activePeriod) {
+            case DAY -> {
+                startDate = today;
+                endDate = today.plusDays(1);
+            }
+            case WEEK -> {
+                startDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+                endDate = startDate.plusDays(6);
+            }
+            case MONTH -> {
+                startDate = today.with(TemporalAdjusters.firstDayOfMonth());
+                endDate = today.with(TemporalAdjusters.lastDayOfMonth());
+            }
+            case QUARTER -> {
+                int month = today.getMonthValue();
+                int quarterStartMonth = ((month - 1) / 3 * 3) + 1;
+                startDate = today.withMonth(quarterStartMonth).with(TemporalAdjusters.firstDayOfMonth());
+                endDate = startDate.plusMonths(3).with(TemporalAdjusters.lastDayOfMonth());
+            }
+            case YEAR -> {
+                startDate = today.with(TemporalAdjusters.firstDayOfYear());
+                endDate = today.with(TemporalAdjusters.lastDayOfYear());
+            }
+            default -> throw new IllegalStateException("Unexpected value on budget active period: " + activePeriod);
+        }
+
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 }

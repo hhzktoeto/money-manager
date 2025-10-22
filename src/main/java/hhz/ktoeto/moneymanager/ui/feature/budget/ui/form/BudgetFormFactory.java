@@ -21,4 +21,13 @@ public class BudgetFormFactory {
                 form -> formLogic.cancelCreate()
         );
     }
+
+    public BudgetForm budgetEditForm() {
+        return new BudgetForm(
+                categoryDataProvider,
+                form -> formLogic.addCategory(),
+                formLogic::submitEdit,
+                form -> formLogic.cancelEdit()
+        );
+    }
 }

@@ -17,6 +17,7 @@ import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.BudgetFilter;
 import hhz.ktoeto.moneymanager.ui.feature.budget.event.OpenBudgetCreateDialogEvent;
+import hhz.ktoeto.moneymanager.ui.feature.budget.event.OpenBudgetEditDialogEvent;
 import hhz.ktoeto.moneymanager.ui.feature.budget.ui.data.BudgetsDataProvider;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -84,8 +85,13 @@ public class ActiveBudgets extends Composite<Div> implements DataProviderListene
         Div root = this.getContent();
         root.removeAll();
         Query<Budget, BudgetFilter> query = new Query<>(BudgetFilter.activeBudgetsFilter());
-        dataProvider.fetch(query).forEach(budget ->
-                root.add(new BudgetCard(budget, formattingService), new BudgetCard(budget, formattingService))
+        dataProvider.fetch(query).forEach(budget -> {
+                    BudgetCard card = new BudgetCard(budget, formattingService);
+                    card.addClickListener(event ->
+                            eventPublisher.publishEvent(new OpenBudgetEditDialogEvent(this, budget))
+                    );
+                    root.add(card);
+                }
         );
         root.add(addNewBudgetButton);
     }

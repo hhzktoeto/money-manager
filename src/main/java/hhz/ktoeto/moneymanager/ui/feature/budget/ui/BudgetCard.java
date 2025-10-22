@@ -1,5 +1,7 @@
 package hhz.ktoeto.moneymanager.ui.feature.budget.ui;
 
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
@@ -34,6 +36,10 @@ public class BudgetCard extends Composite<BasicContainer> {
         this.configureContent(content);
 
         return root;
+    }
+
+    public void addClickListener(ComponentEventListener<ClickEvent<FlexLayout>> listener) {
+        this.getContent().addClickListener(listener);
     }
 
     private void configureHeader(FlexLayout header) {

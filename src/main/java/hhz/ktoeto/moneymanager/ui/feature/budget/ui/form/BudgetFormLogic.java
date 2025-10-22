@@ -4,7 +4,10 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.BudgetService;
+import hhz.ktoeto.moneymanager.ui.feature.budget.event.BudgetCreatedEvent;
 import hhz.ktoeto.moneymanager.ui.feature.budget.event.BudgetCreationCancelledEvent;
+import hhz.ktoeto.moneymanager.ui.feature.budget.event.BudgetEditCancelledEvent;
+import hhz.ktoeto.moneymanager.ui.feature.budget.event.BudgetUpdatedEvent;
 import hhz.ktoeto.moneymanager.ui.feature.category.event.OpenCategoryCreateDialogEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,12 +33,30 @@ public class BudgetFormLogic {
             return;
         }
 
-        log.info("Бюджет вроде сделался");
-        log.info("{}", budget);
+        Budget created = budgetService.create(budget);
+        eventPublisher.publishEvent(new BudgetCreatedEvent(this, created));
+
+        form.reset();
+    }
+
+    void submitEdit(BudgetForm form) {
+        Budget budget = form.getEditedBudget();
+
+        boolean valid = form.writeToIfValid(budget);
+        if (!valid) {
+            return;
+        }
+
+        Budget updated = budgetService.update(budget, userContextHolder.getCurrentUserId());
+        eventPublisher.publishEvent(new BudgetUpdatedEvent(this, updated));
     }
 
     void cancelCreate() {
         eventPublisher.publishEvent(new BudgetCreationCancelledEvent(this));
+    }
+
+    void cancelEdit() {
+        eventPublisher.publishEvent(new BudgetEditCancelledEvent(this));
     }
 
     void addCategory() {

@@ -112,6 +112,14 @@ public class BudgetForm extends Composite<FlexLayout> {
         return root;
     }
 
+    public void edit(Budget budget) {
+        binder.setBean(budget);
+    }
+
+    Budget getEditedBudget() {
+        return binder.getBean();
+    }
+
     boolean writeToIfValid(Budget budget) {
         try {
             binder.writeBean(budget);
@@ -121,6 +129,10 @@ public class BudgetForm extends Composite<FlexLayout> {
             log.error(e.getValidationErrors().toString());
             return false;
         }
+    }
+
+    void reset() {
+        binder.setBean(new Budget());
     }
 
     private void configureFirstRow(FlexLayout row) {
@@ -207,8 +219,6 @@ public class BudgetForm extends Composite<FlexLayout> {
     }
 
     private void configureBinder() {
-        binder.setBean(new Budget());
-
         binder.forField(nameField)
                 .withValidator(new BudgetNameValidator())
                 .bind(Budget::getName, Budget::setName);

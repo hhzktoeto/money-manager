@@ -1,5 +1,7 @@
 package hhz.ktoeto.moneymanager.ui.feature.budget.domain;
 
+import hhz.ktoeto.moneymanager.core.exception.EntityNotFoundException;
+import hhz.ktoeto.moneymanager.core.exception.NonOwnerRequestException;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.TransactionFilter;
@@ -31,26 +33,49 @@ public class BudgetService {
 
         List<Budget> budgets = repository.findAll(specification);
         budgets.forEach(budget -> {
-                    TransactionFilter transactionFilter = new TransactionFilter();
-                    transactionFilter.setFromDate(budget.getStartDate());
-                    transactionFilter.setToDate(budget.getEndDate());
-                    transactionFilter.setCategoriesIds(
-                            budget.getCategories().stream()
-                                    .map(Category::getId)
-                                    .collect(Collectors.toSet())
-                    );
-                    transactionFilter.setType(
-                            Budget.Type.EXPENSE == budget.getType()
-                                    ? Transaction.Type.EXPENSE
-                                    : Transaction.Type.INCOME
-                    );
-                    List<Transaction> transactions = transactionService.getAll(userId, transactionFilter);
-                    BigDecimal currentAmount = transactionService.calculateTotal(transactions);
+            TransactionFilter transactionFilter = new TransactionFilter();
+            transactionFilter.setFromDate(budget.getStartDate());
+            transactionFilter.setToDate(budget.getEndDate());
+            transactionFilter.setCategoriesIds(
+                    budget.getCategories().stream()
+                            .map(Category::getId)
+                            .collect(Collectors.toSet())
+            );
+            transactionFilter.setType(
+                    Budget.Type.EXPENSE == budget.getType()
+                            ? Transaction.Type.EXPENSE
+                            : Transaction.Type.INCOME
+            );
+            List<Transaction> transactions = transactionService.getAll(userId, transactionFilter);
+            BigDecimal currentAmount = transactionService.calculateTotal(transactions);
 
-                    budget.setCurrentAmount(currentAmount);
-                });
+            budget.setCurrentAmount(currentAmount);
+        });
 
         return repository.findAll(specification);
+    }
+
+    @Transactional
+    public Budget create(Budget budget) {
+        if (budget.isRenewable()) {
+            budget.calculateActiveDates();
+        }
+        log.debug("Creating budget for user with id {}. Budget: {}", budget.getUserId(), budget);
+        return repository.save(budget);
+    }
+
+    @Transactional
+    public Budget update(Budget updated, long userId) {
+        log.debug("Updating budget for user with id {}. Budget: {}", updated.getUserId(), updated);
+        Budget budget = getBudgetFromRepository(updated.getId());
+        if (budget.getUserId() != userId) {
+            throw new NonOwnerRequestException("User with id %d requested budget update, which owner is user with id %d".formatted(userId, budget.getUserId()));
+        }
+        if (updated.isRenewable()) {
+            updated.calculateActiveDates();
+        }
+
+        return repository.save(updated);
     }
 
     public int count(long userId, BudgetFilter filter) {
@@ -62,8 +87,8 @@ public class BudgetService {
         return (int) Math.min(Integer.MAX_VALUE, count);
     }
 
-    @Transactional
-    public List<Budget> getAll() {
-        return repository.findAll();
+    private Budget getBudgetFromRepository(long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not find Budget with id %d".formatted(id)));
     }
 }
