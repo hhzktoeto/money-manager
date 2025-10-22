@@ -9,6 +9,7 @@ import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.BudgetFilter;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.ui.feature.budget.event.BudgetCreatedEvent;
+import hhz.ktoeto.moneymanager.ui.feature.budget.event.BudgetDeletedEvent;
 import hhz.ktoeto.moneymanager.ui.feature.budget.event.BudgetUpdatedEvent;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.event.TransactionCreatedEvent;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.event.TransactionDeletedEvent;
@@ -48,6 +49,7 @@ public class BudgetsDataProvider extends AbstractBackEndDataProvider<Budget, Bud
     @EventListener({
             BudgetCreatedEvent.class,
             BudgetUpdatedEvent.class,
+            BudgetDeletedEvent.class,
             TransactionCreatedEvent.class,
             TransactionUpdatedEvent.class,
             TransactionDeletedEvent.class
