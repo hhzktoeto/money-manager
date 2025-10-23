@@ -73,6 +73,9 @@ public class Budget {
     @Column(name = "is_renewable", nullable = false)
     private boolean isRenewable = true;
 
+    @Column(name = "is_favourite", nullable = false)
+    private boolean isFavourite = false;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, length = 7)
     private Type type = Type.EXPENSE;
