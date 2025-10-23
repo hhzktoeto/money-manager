@@ -6,16 +6,24 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.Builder;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 @Builder
 public class TransactionSpecification implements Specification<Transaction> {
 
-    private final long userId;
+    @Nullable
+    private final Long userId;
+    @Nullable
     private final TransactionFilter filter;
 
     @Override
-    public Predicate toPredicate(Root<Transaction> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        Predicate predicate = criteriaBuilder.equal(root.get("userId"), userId);
+    public Predicate toPredicate(@NonNull Root<Transaction> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+        Predicate predicate = criteriaBuilder.conjunction();
+
+        if (userId != null) {
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("userId"), userId));
+        }
 
         if (filter == null) {
             return predicate;
