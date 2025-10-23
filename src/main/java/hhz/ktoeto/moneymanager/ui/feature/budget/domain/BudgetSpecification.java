@@ -25,9 +25,20 @@ public class BudgetSpecification implements Specification<Budget> {
             return predicate;
         }
 
-        if (filter.isActive()) {
+        if (filter.getIsActive() != null) {
+            if (filter.getIsActive()) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.greaterThanOrEqualTo(root.get("endDate"), LocalDate.now()));
+            } else {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.lessThan(root.get("endDate"), LocalDate.now())
+                );
+            }
+        }
+        if (filter.getIsRenewable() != null) {
             predicate = criteriaBuilder.and(predicate,
-                    criteriaBuilder.greaterThanOrEqualTo(root.get("endDate"), LocalDate.now()));
+                    criteriaBuilder.equal(root.get("renewable"), filter.getIsRenewable())
+            );
         }
 
         return predicate;

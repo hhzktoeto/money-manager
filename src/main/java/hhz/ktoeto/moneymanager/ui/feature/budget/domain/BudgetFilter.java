@@ -5,11 +5,20 @@ import lombok.Data;
 @Data
 public class BudgetFilter {
 
-    private boolean isActive;
+    private Boolean isActive;
+    private Boolean isRenewable;
+
+    public static BudgetFilter expiredRenewableBudgetsFilter() {
+        BudgetFilter filter = new BudgetFilter();
+        filter.setIsActive(false);
+        filter.setIsRenewable(true);
+
+        return filter;
+    }
 
     public static BudgetFilter activeBudgetsFilter() {
         BudgetFilter filter = new BudgetFilter();
-        filter.setActive(true);
+        filter.setIsActive(true);
 
         return filter;
     }

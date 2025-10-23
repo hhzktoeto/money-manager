@@ -6,6 +6,7 @@ import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Viewport("width=device-width, initial-scale=1")
 @Theme(
@@ -17,6 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         shortName = "MM",
         iconPath = "icons/icon-192x192.png"
 )
+@EnableScheduling
 @SpringBootApplication
 public class Launcher implements AppShellConfigurator {
 
