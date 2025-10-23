@@ -1,0 +1,9 @@
+vaadin-tab {
+    color: var(--lumo-tint-40pct);
+}
+
+vaadin-tab[selected] {
+    border-radius: 1rem;
+    background: var(--lumo-primary-color-10pct);
+    color: var(--lumo-primary-color);
+}

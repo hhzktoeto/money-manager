@@ -1,0 +1,7 @@
+vaadin-button:hover {
+    cursor: pointer;
+}
+
+vaadin-button[theme~="tertiary-inline"]:hover::part(label) {
+    text-decoration: underline;
+}

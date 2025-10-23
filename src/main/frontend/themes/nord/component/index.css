@@ -1,1 +1,6 @@
 @import "_vaadin.css";
+@import "_vaadin-button.css";
+@import "_vaadin-dialog.css";
+@import "_vaadin-select.css";
+@import "_vaadin-tab.css";
+@import "_vaadin-grid.css";

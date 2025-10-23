@@ -1,0 +1,20 @@
+vaadin-grid::part(cell) {
+    cursor: pointer;
+}
+
+vaadin-grid::part(row):hover {
+    border-radius: 1rem;
+    background-color: var(--lumo-shade-50pct);
+}
+
+vaadin-grid::part(amount-column) {
+    font-family: 'JetBrains Mono';
+}
+
+vaadin-grid::part(expense) {
+    color: var(--lumo-error-color);
+}
+
+vaadin-grid::part(income) {
+    color: var(--lumo-success-color);
+}
