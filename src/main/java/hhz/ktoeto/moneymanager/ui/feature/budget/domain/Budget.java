@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
 import java.util.HashSet;
 import java.util.Set;
@@ -129,11 +130,11 @@ public class Budget {
         switch (activePeriod) {
             case DAY -> {
                 startDate = today;
-                endDate = today.plusDays(1);
+                endDate = today;
             }
             case WEEK -> {
                 startDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-                endDate = startDate.plusDays(6);
+                endDate = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
             }
             case MONTH -> {
                 startDate = today.with(TemporalAdjusters.firstDayOfMonth());
@@ -141,9 +142,9 @@ public class Budget {
             }
             case QUARTER -> {
                 int month = today.getMonthValue();
-                int quarterStartMonth = ((month - 1) / 3 * 3) + 1;
+                int quarterStartMonth = ((month - 1) / 3) * 3 + 1;
                 startDate = today.withMonth(quarterStartMonth).with(TemporalAdjusters.firstDayOfMonth());
-                endDate = startDate.plusMonths(3).with(TemporalAdjusters.lastDayOfMonth());
+                endDate = startDate.plusMonths(2).with(TemporalAdjusters.lastDayOfMonth());
             }
             case YEAR -> {
                 startDate = today.with(TemporalAdjusters.firstDayOfYear());
