@@ -9,12 +9,6 @@ spring:
     password: ${POSTGRES_PASSWORD}
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
-  data:
-    redis:
-      host: localhost
-      port: 6397
-      username: default
-      password: ${REDIS_PASSWORD}
   security:
     remember-me:
       key: ${REMEMBER_ME_KEY}
