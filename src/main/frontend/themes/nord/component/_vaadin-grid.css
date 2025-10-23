@@ -8,7 +8,7 @@ vaadin-grid::part(row):hover {
 }
 
 vaadin-grid::part(amount-column) {
-    font-family: 'JetBrains Mono';
+    font-family: 'JetBrains Mono', monospace;
 }
 
 vaadin-grid::part(expense) {
