@@ -10,7 +10,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.NumberRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.ui.component.NoTransactionsImage;
+import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.TransactionFilter;
@@ -49,7 +49,7 @@ public class TransactionsGrid extends Composite<Grid<Transaction>> {
         }
         root.setSelectionMode(Grid.SelectionMode.NONE);
 
-        NoTransactionsImage noTransactionsImage = new NoTransactionsImage();
+        EmptyDataImage noTransactionsImage = new EmptyDataImage();
         noTransactionsImage.setText(mode == Mode.RECENT
                 ? "Нет недавних транзакций"
                 : "Нет транзакций за выбранный период");
