@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.feature.budget.ui;
+package hhz.ktoeto.moneymanager.ui.component;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -13,7 +13,6 @@ import com.vaadin.flow.component.progressbar.ProgressBarVariant;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.constant.StyleConstants;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
-import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
 import lombok.RequiredArgsConstructor;
 
