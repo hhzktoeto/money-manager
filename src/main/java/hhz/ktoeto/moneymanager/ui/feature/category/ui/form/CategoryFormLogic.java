@@ -8,6 +8,7 @@ import hhz.ktoeto.moneymanager.ui.feature.category.domain.CategoryService;
 import hhz.ktoeto.moneymanager.ui.feature.category.event.CategoryCreatedEvent;
 import hhz.ktoeto.moneymanager.ui.feature.category.event.CategoryCreationCancelledEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.context.ApplicationEventPublisher;
 
 @SpringComponent
@@ -18,7 +19,10 @@ public class CategoryFormLogic {
     private final UserContextHolder userContextHolder;
     private final ApplicationEventPublisher eventPublisher;
 
-    public void submitCreate(CategoryForm form) {
+    @Setter
+    private CategoryForm form;
+
+    public void submitCreate() {
         long userId = userContextHolder.getCurrentUserId();
 
         Category category = new Category();

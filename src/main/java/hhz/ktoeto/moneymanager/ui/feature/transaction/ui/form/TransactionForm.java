@@ -24,16 +24,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.time.LocalDate;
-import java.util.function.Consumer;
 
 @Slf4j
 public class TransactionForm extends Composite<FlexLayout> {
 
     private final CategoryDataProvider categoryProvider;
-    private final transient Consumer<TransactionForm> categoryAddAction;
-    private final transient Consumer<TransactionForm> submitAction;
-    private final transient Consumer<TransactionForm> cancelAction;
-    private final transient Consumer<TransactionForm> deleteAction;
+    private final transient Runnable categoryAddAction;
+    private final transient Runnable submitAction;
+    private final transient Runnable cancelAction;
+    private final transient Runnable deleteAction;
 
     private final IncomeExpenseToggle<Transaction.Type> typeToggle;
     private final ComboBox<Category> categorySelect;
@@ -48,10 +47,10 @@ public class TransactionForm extends Composite<FlexLayout> {
     private final Binder<Transaction> binder;
 
     public TransactionForm(CategoryDataProvider categoryProvider,
-                           Consumer<TransactionForm> categoryAddAction,
-                           Consumer<TransactionForm> submitAction,
-                           Consumer<TransactionForm> cancelAction,
-                           Consumer<TransactionForm> deleteAction) {
+                           Runnable categoryAddAction,
+                           Runnable submitAction,
+                           Runnable cancelAction,
+                           Runnable deleteAction) {
         this.categoryProvider = categoryProvider;
         this.categoryAddAction = categoryAddAction;
         this.submitAction = submitAction;
@@ -139,7 +138,7 @@ public class TransactionForm extends Composite<FlexLayout> {
         categorySelect.setItemLabelGenerator(Category::getName);
         categorySelect.setWidthFull();
 
-        createCategoryButton.addClickListener(e -> categoryAddAction.accept(this));
+        createCategoryButton.addClickListener(e -> categoryAddAction.run());
         createCategoryButton.setHeight(categorySelect.getHeight());
         createCategoryButton.setTooltipText("Добавить категорию");
 
@@ -182,12 +181,12 @@ public class TransactionForm extends Composite<FlexLayout> {
     }
 
     private void configureButtonsRow(HorizontalLayout row) {
-        submitButton.addClickListener(e -> submitAction.accept(this));
+        submitButton.addClickListener(e -> submitAction.run());
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        cancelButton.addClickListener(e -> cancelAction.accept(this));
+        cancelButton.addClickListener(e -> cancelAction.run());
 
-        deleteButton.addClickListener(e -> deleteAction.accept(this));
+        deleteButton.addClickListener(e -> deleteAction.run());
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
 
         HorizontalLayout submitCancelLayout = new HorizontalLayout(cancelButton, submitButton);

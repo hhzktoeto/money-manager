@@ -16,12 +16,13 @@ public class BudgetFormFactory {
     public BudgetForm budgetCreateForm() {
         BudgetForm createForm = new BudgetForm(
                 categoryDataProvider,
-                form -> formLogic.addCategory(),
+                formLogic::addCategory,
                 formLogic::submitCreate,
-                form -> formLogic.cancelCreate(),
+                formLogic::cancelCreate,
                 formLogic::delete
         );
         createForm.showDeleteButton(false);
+        formLogic.setForm(createForm);
 
         return createForm;
     }
@@ -29,12 +30,13 @@ public class BudgetFormFactory {
     public BudgetForm budgetEditForm() {
         BudgetForm editForm = new BudgetForm(
                 categoryDataProvider,
-                form -> formLogic.addCategory(),
+                formLogic::addCategory,
                 formLogic::submitEdit,
-                form -> formLogic.cancelEdit(),
+                formLogic::cancelEdit,
                 formLogic::delete
         );
         editForm.showDeleteButton(true);
+        formLogic.setForm(editForm);
 
         return editForm;
     }

@@ -13,20 +13,27 @@ import hhz.ktoeto.moneymanager.ui.feature.category.ui.form.validator.CategoryNam
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.function.Consumer;
-
 @RequiredArgsConstructor
 public class CategoryForm extends Composite<FlexLayout> {
 
-    private final transient Consumer<CategoryForm> submitAction;
-    private final transient Consumer<CategoryForm> cancelAction;
-
-    private final Binder<Category> binder = new Binder<>(Category.class);
+    private final transient Runnable submitAction;
+    private final transient Runnable cancelAction;
 
     @Getter
-    private TextField nameField;
-    private Button submitButton;
-    private Button cancelButton;
+    private final TextField nameField;
+    private final Button submitButton;
+    private final Button cancelButton;
+
+    private final Binder<Category> binder;
+
+    public CategoryForm(Runnable submitAction, Runnable cancelAction) {
+        this.submitAction = submitAction;
+        this.cancelAction = cancelAction;
+        this.binder = new Binder<>(Category.class);
+        this.nameField = new TextField("Имя");
+        this.submitButton = new Button("Сохранить");
+        this.cancelButton = new Button("Отмена");
+    }
 
     @Override
     protected FlexLayout initContent() {
@@ -39,16 +46,14 @@ public class CategoryForm extends Composite<FlexLayout> {
                 LumoUtility.AlignItems.STRETCH
         );
 
-        nameField = new TextField("Имя");
+
         nameField.setWidthFull();
         root.add(nameField);
 
-        submitButton = new Button("Сохранить");
-        submitButton.addClickListener(e -> submitAction.accept(this));
+        submitButton.addClickListener(e -> submitAction.run());
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        cancelButton = new Button("Отмена");
-        cancelButton.addClickListener(e -> cancelAction.accept(this));
+        cancelButton.addClickListener(e -> cancelAction.run());
 
         HorizontalLayout buttons = new HorizontalLayout(cancelButton, submitButton);
         buttons.addClassNames(

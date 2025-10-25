@@ -8,6 +8,7 @@ import hhz.ktoeto.moneymanager.ui.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.ui.feature.budget.event.*;
 import hhz.ktoeto.moneymanager.ui.feature.category.event.OpenCategoryCreateDialogEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -20,7 +21,10 @@ public class BudgetFormLogic {
     private final UserContextHolder userContextHolder;
     private final ApplicationEventPublisher eventPublisher;
 
-    void submitCreate(BudgetForm form) {
+    @Setter
+    private BudgetForm form;
+
+    void submitCreate() {
         long userId = userContextHolder.getCurrentUserId();
 
         Budget budget = new Budget();
@@ -37,7 +41,7 @@ public class BudgetFormLogic {
         form.reset();
     }
 
-    void submitEdit(BudgetForm form) {
+    void submitEdit() {
         Budget budget = form.getEditedBudget();
 
         boolean valid = form.writeToIfValid(budget);
@@ -49,7 +53,7 @@ public class BudgetFormLogic {
         eventPublisher.publishEvent(new BudgetUpdatedEvent(this, updated));
     }
 
-    void delete(BudgetForm form) {
+    void delete() {
         DeleteConfirmDialog dialog = new DeleteConfirmDialog();
         dialog.setHeader("Удалить бюджет?");
 

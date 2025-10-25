@@ -12,6 +12,9 @@ public class CategoryFormFactory {
     private final CategoryFormLogic logic;
 
     public CategoryForm categoryCreateForm() {
-        return new CategoryForm(logic::submitCreate, form -> logic.cancelCreation());
+        CategoryForm form = new CategoryForm(logic::submitCreate, logic::cancelCreation);
+        logic.setForm(form);
+
+        return form;
     }
 }

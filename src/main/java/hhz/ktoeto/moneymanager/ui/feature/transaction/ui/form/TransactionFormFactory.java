@@ -17,12 +17,13 @@ public class TransactionFormFactory {
     public TransactionForm transactionCreateForm() {
         TransactionForm createForm = new TransactionForm(
                 categoryDataProvider,
-                form -> formLogic.addCategory(),
+                formLogic::addCategory,
                 formLogic::submitCreate,
-                form -> formLogic.cancelCreate(),
+                formLogic::cancelCreate,
                 formLogic::delete
         );
         createForm.showDeleteButton(false);
+        formLogic.setForm(createForm);
 
         return createForm;
     }
@@ -30,12 +31,13 @@ public class TransactionFormFactory {
     public TransactionForm transactionEditForm() {
         TransactionForm editForm = new TransactionForm(
                 categoryDataProvider,
-                form -> formLogic.addCategory(),
+                formLogic::addCategory,
                 formLogic::submitEdit,
-                form -> formLogic.cancelEdit(),
+                formLogic::cancelEdit,
                 formLogic::delete
         );
         editForm.showDeleteButton(true);
+        formLogic.setForm(editForm);
 
         return editForm;
     }

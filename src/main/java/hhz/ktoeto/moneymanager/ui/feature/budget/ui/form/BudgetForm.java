@@ -29,17 +29,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
-import java.util.function.Consumer;
-
 @Slf4j
 @RequiredArgsConstructor
 public class BudgetForm extends Composite<FlexLayout> {
 
     private final CategoryDataProvider categoryProvider;
-    private final transient Consumer<BudgetForm> categoryAddAction;
-    private final transient Consumer<BudgetForm> submitAction;
-    private final transient Consumer<BudgetForm> cancelAction;
-    private final transient Consumer<BudgetForm> deleteAction;
+    private final transient Runnable categoryAddAction;
+    private final transient Runnable submitAction;
+    private final transient Runnable cancelAction;
+    private final transient Runnable deleteAction;
 
     private final IncomeExpenseToggle<Budget.Type> typeToggle;
     private final TextField nameField;
@@ -60,10 +58,10 @@ public class BudgetForm extends Composite<FlexLayout> {
     private Budget.ActivePeriod previousActivePeriod;
 
     public BudgetForm(CategoryDataProvider categoryProvider,
-                      Consumer<BudgetForm> categoryAddAction,
-                      Consumer<BudgetForm> submitAction,
-                      Consumer<BudgetForm> cancelAction,
-                      Consumer<BudgetForm> deleteAction) {
+                      Runnable categoryAddAction,
+                      Runnable submitAction,
+                      Runnable cancelAction,
+                      Runnable deleteAction) {
         this.categoryProvider = categoryProvider;
         this.categoryAddAction = categoryAddAction;
         this.submitAction = submitAction;
@@ -155,7 +153,7 @@ public class BudgetForm extends Composite<FlexLayout> {
         categoriesSelect.setItemLabelGenerator(Category::getName);
         categoriesSelect.setWidthFull();
 
-        createCategoryButton.addClickListener(e -> categoryAddAction.accept(this));
+        createCategoryButton.addClickListener(e -> categoryAddAction.run());
         createCategoryButton.setTooltipText("Добавить категорию");
 
         HorizontalLayout categoriesWrapper = new HorizontalLayout(categoriesSelect, createCategoryButton);
@@ -219,11 +217,11 @@ public class BudgetForm extends Composite<FlexLayout> {
 
     private void configureButtonsRow(HorizontalLayout row) {
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        submitButton.addClickListener(event -> submitAction.accept(this));
+        submitButton.addClickListener(event -> submitAction.run());
 
-        cancelButton.addClickListener(event -> cancelAction.accept(this));
+        cancelButton.addClickListener(event -> cancelAction.run());
 
-        deleteButton.addClickListener(e -> deleteAction.accept(this));
+        deleteButton.addClickListener(e -> deleteAction.run());
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
 
         HorizontalLayout submitCancelLayout = new HorizontalLayout(cancelButton, submitButton);

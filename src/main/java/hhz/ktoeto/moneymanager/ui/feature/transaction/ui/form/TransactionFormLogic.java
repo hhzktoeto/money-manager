@@ -8,6 +8,7 @@ import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.event.*;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.context.ApplicationEventPublisher;
 
 @SpringComponent
@@ -18,7 +19,10 @@ public class TransactionFormLogic {
     private final TransactionService transactionService;
     private final ApplicationEventPublisher eventPublisher;
 
-    void submitCreate(TransactionForm form) {
+    @Setter
+    private TransactionForm form;
+
+    void submitCreate() {
         long userId = userContextHolder.getCurrentUserId();
 
         Transaction transaction = new Transaction();
@@ -35,7 +39,7 @@ public class TransactionFormLogic {
         form.reset(saved.getDate(), saved.getCategory(), saved.getType());
     }
 
-    void submitEdit(TransactionForm form) {
+    void submitEdit() {
         Transaction transaction = form.getEditedTransaction();
 
         boolean valid = form.writeToIfValid(transaction);
@@ -47,7 +51,7 @@ public class TransactionFormLogic {
         eventPublisher.publishEvent(new TransactionUpdatedEvent(this, updated));
     }
 
-    void delete(TransactionForm form) {
+    void delete() {
         DeleteConfirmDialog dialog = new DeleteConfirmDialog();
         dialog.setHeader("Удалить транзакцию?");
 
