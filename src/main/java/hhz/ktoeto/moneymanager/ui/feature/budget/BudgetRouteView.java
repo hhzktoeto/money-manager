@@ -8,8 +8,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.constant.Routes;
 import hhz.ktoeto.moneymanager.ui.MainLayout;
-import hhz.ktoeto.moneymanager.ui.feature.budget.view.ActiveBudgetsView;
-import hhz.ktoeto.moneymanager.ui.feature.budget.view.ActiveBudgetsViewPresenter;
+import hhz.ktoeto.moneymanager.ui.feature.budget.view.ActiveBudgets;
 import jakarta.annotation.security.PermitAll;
 
 @UIScope
@@ -18,7 +17,7 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = Routes.Path.BUDGET, layout = MainLayout.class)
 public class BudgetRouteView extends VerticalLayout {
 
-    public BudgetRouteView(ActiveBudgetsView activeBudgetsView) {
+    public BudgetRouteView(ActiveBudgets activeBudgets) {
         setSizeFull();
         addClassNames(
                 LumoUtility.AlignItems.CENTER,
@@ -35,7 +34,7 @@ public class BudgetRouteView extends VerticalLayout {
                 LumoUtility.MaxWidth.SCREEN_LARGE
         );
 
-        content.add(activeBudgetsView);
+        content.add(activeBudgets);
 
         add(content);
     }

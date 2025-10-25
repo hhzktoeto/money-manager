@@ -11,21 +11,23 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.constant.StyleConstants;
 import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
+import hhz.ktoeto.moneymanager.ui.feature.budget.ActiveBudgetsView;
+import hhz.ktoeto.moneymanager.ui.feature.budget.ActiveBudgetsViewPresenter;
 
 import java.util.List;
 
 @UIScope
 @SpringComponent
-public class ActiveBudgetsView extends Composite<Div> {
+public class ActiveBudgets extends Composite<Div> implements ActiveBudgetsView {
 
-    private final ActiveBudgetsViewPresenter presenter;
+    private final transient ActiveBudgetsViewPresenter presenter;
 
-    public ActiveBudgetsView(ActiveBudgetsViewPresenter presenter) {
+    private final FlexLayout addNewBudgetButton = new FlexLayout(VaadinIcon.PLUS.create(), new Span("Новый бюджет"));
+
+    public ActiveBudgets(ActiveBudgetsViewPresenter presenter) {
         this.presenter = presenter;
         this.presenter.setView(this);
     }
-
-    private final FlexLayout addNewBudgetButton = new FlexLayout(VaadinIcon.PLUS.create(), new Span("Новый бюджет"));
 
     @Override
     protected Div initContent() {
@@ -63,7 +65,8 @@ public class ActiveBudgetsView extends Composite<Div> {
         return root;
     }
 
-    void updateCards(List<BudgetCard> cards) {
+    @Override
+    public void updateCards(List<BudgetCard> cards) {
         Div root = this.getContent();
         root.removeAll();
         cards.forEach(card -> {
