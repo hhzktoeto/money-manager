@@ -3,18 +3,19 @@ package hhz.ktoeto.moneymanager.ui.feature.budget.view.form;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
+import hhz.ktoeto.moneymanager.ui.FormView;
+import hhz.ktoeto.moneymanager.ui.FormViewPresenter;
 import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.ui.feature.category.ui.data.CategoryDataProvider;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @UIScope
 @SpringComponent
 @RequiredArgsConstructor
-public class BudgetFormViewPresenter {
+public class BudgetFormPresenter implements FormViewPresenter<Budget, FormView<Budget>> {
 
     private final BudgetService budgetService;
     private final UserContextHolder userContextHolder;
@@ -22,27 +23,34 @@ public class BudgetFormViewPresenter {
 
     private final CustomDialog budgetFormDialog = new CustomDialog();
 
-    @Setter
-    private BudgetFormView view;
+    private FormView<Budget> view;
 
+    @Override
+    public void setView(FormView<Budget> view) {
+        this.view = view;
+    }
+
+    @Override
     public void openCreateForm() {
-        BudgetFormView form = new BudgetFormView(categoryDataProvider, this, BudgetFormView.Mode.CREATE);
+        BudgetForm form = new BudgetForm(categoryDataProvider, this, BudgetForm.Mode.CREATE);
 
         this.budgetFormDialog.setTitle("Создать бюджет");
         this.budgetFormDialog.addBody(form);
         this.budgetFormDialog.open();
     }
 
+    @Override
     public void openEditForm(Budget budget) {
-        BudgetFormView form = new BudgetFormView(categoryDataProvider, this, BudgetFormView.Mode.EDIT);
-        form.setEditedBudget(budget);
+        BudgetForm form = new BudgetForm(categoryDataProvider, this, BudgetForm.Mode.EDIT);
+        form.setEditedEntity(budget);
 
         this.budgetFormDialog.setTitle("Редактировать бюджет");
         this.budgetFormDialog.addBody(form);
         this.budgetFormDialog.open();
     }
 
-    void onSubmit() {
+    @Override
+    public void onSubmit() {
         if (view.isCreateMode()) {
             this.submitCreate();
         } else {
@@ -50,15 +58,19 @@ public class BudgetFormViewPresenter {
         }
     }
 
-    void onCancel() {
+    @Override
+    public void onCancel() {
         view.reset();
         this.budgetFormDialog.close();
     }
 
-    void onDelete(Budget budget) {
+    @Override
+    public void onDelete() {
+
         DeleteConfirmDialog confirmDialog = new DeleteConfirmDialog();
         confirmDialog.setHeader("Удалить бюджет?");
         confirmDialog.addConfirmListener(event -> {
+            Budget budget = view.getEditedEntity();
             budgetService.delete(budget.getId(), userContextHolder.getCurrentUserId());
             confirmDialog.close();
             this.budgetFormDialog.close();
@@ -83,7 +95,7 @@ public class BudgetFormViewPresenter {
     }
 
     private void submitEdit() {
-        Budget budget = view.getEditedBudget();
+        Budget budget = view.getEditedEntity();
 
         boolean valid = view.writeToIfValid(budget);
         if (!valid) {

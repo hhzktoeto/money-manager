@@ -7,29 +7,32 @@ import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
+import hhz.ktoeto.moneymanager.ui.FormView;
+import hhz.ktoeto.moneymanager.ui.FormViewPresenter;
 import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
+import hhz.ktoeto.moneymanager.ui.feature.budget.ActiveBudgetsView;
+import hhz.ktoeto.moneymanager.ui.feature.budget.ActiveBudgetsViewPresenter;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.BudgetFilter;
 import hhz.ktoeto.moneymanager.ui.feature.budget.view.data.BudgetsDataProvider;
-import hhz.ktoeto.moneymanager.ui.feature.budget.view.form.BudgetFormViewPresenter;
 import lombok.Setter;
 
 import java.util.List;
 
 @UIScope
 @SpringComponent
-public class ActiveBudgetsViewPresenter implements DataProviderListener<Budget> {
+public class ActiveBudgetsPresenter implements DataProviderListener<Budget>, ActiveBudgetsViewPresenter {
 
     private final BudgetsDataProvider dataProvider;
-    private final transient BudgetFormViewPresenter formPresenter;
+    private final transient FormViewPresenter<Budget, FormView<Budget>> formPresenter;
     private final transient FormattingService formattingService;
 
     @Setter
-    private ActiveBudgetsView view;
+    private transient ActiveBudgetsView view;
 
-    public ActiveBudgetsViewPresenter(BudgetsDataProvider dataProvider,
-                                      BudgetFormViewPresenter formPresenter,
-                                      FormattingService formattingService) {
+    public ActiveBudgetsPresenter(BudgetsDataProvider dataProvider,
+                                  FormViewPresenter<Budget, FormView<Budget>> formPresenter,
+                                  FormattingService formattingService) {
         this.dataProvider = dataProvider;
         this.formPresenter = formPresenter;
         this.formattingService = formattingService;
@@ -42,15 +45,18 @@ public class ActiveBudgetsViewPresenter implements DataProviderListener<Budget> 
         this.refresh();
     }
 
-    void onCreateRequested() {
+    @Override
+    public void onCreateRequested() {
         formPresenter.openCreateForm();
     }
 
-    void onEditRequested(Budget budget) {
+    @Override
+    public void onEditRequested(Budget budget) {
         formPresenter.openEditForm(budget);
     }
 
-    void init() {
+    @Override
+    public void init() {
         this.refresh();
     }
 

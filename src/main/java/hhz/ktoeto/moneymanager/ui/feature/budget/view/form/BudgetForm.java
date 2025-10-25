@@ -14,6 +14,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.ui.FormView;
+import hhz.ktoeto.moneymanager.ui.FormViewPresenter;
 import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
 import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
 import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
@@ -29,9 +31,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 @Slf4j
-public class BudgetFormView extends Composite<FlexLayout> {
+public class BudgetForm extends Composite<FlexLayout> implements FormView<Budget> {
 
-    private final transient BudgetFormViewPresenter presenter;
+    private final transient FormViewPresenter<Budget, FormView<Budget>> presenter;
     private final CategoryDataProvider categoryProvider;
     private final Mode mode;
 
@@ -57,7 +59,7 @@ public class BudgetFormView extends Composite<FlexLayout> {
         CREATE, EDIT
     }
 
-    public BudgetFormView(CategoryDataProvider categoryProvider, BudgetFormViewPresenter presenter, Mode mode) {
+    public BudgetForm(CategoryDataProvider categoryProvider, FormViewPresenter<Budget, FormView<Budget>> presenter, Mode mode) {
         this.categoryProvider = categoryProvider;
         this.mode = mode;
         this.presenter = presenter;
@@ -112,23 +114,28 @@ public class BudgetFormView extends Composite<FlexLayout> {
         return root;
     }
 
-    boolean isCreateMode() {
+    @Override
+    public boolean isCreateMode() {
         return mode == Mode.CREATE;
     }
 
-    void setEditedBudget(Budget budget) {
+    @Override
+    public void setEditedEntity(Budget budget) {
         binder.setBean(budget);
     }
 
-    void reset() {
-        binder.setBean(new Budget());
-    }
-
-    Budget getEditedBudget() {
+    @Override
+    public Budget getEditedEntity() {
         return binder.getBean();
     }
 
-    boolean writeToIfValid(Budget budget) {
+    @Override
+    public void reset() {
+        binder.setBean(new Budget());
+    }
+
+    @Override
+    public boolean writeToIfValid(Budget budget) {
         try {
             binder.writeBean(budget);
             return true;
@@ -215,7 +222,7 @@ public class BudgetFormView extends Composite<FlexLayout> {
 
         cancelButton.addClickListener(event -> presenter.onCancel());
 
-        deleteButton.addClickListener(event -> presenter.onDelete(binder.getBean()));
+        deleteButton.addClickListener(event -> presenter.onDelete());
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
         deleteButton.setVisible(mode == Mode.EDIT);
 

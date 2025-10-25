@@ -8,8 +8,6 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.constant.Routes;
 import hhz.ktoeto.moneymanager.ui.MainLayout;
-import hhz.ktoeto.moneymanager.ui.feature.budget.view.ActiveBudgetsView;
-import hhz.ktoeto.moneymanager.ui.feature.budget.view.ActiveBudgetsViewPresenter;
 import jakarta.annotation.security.PermitAll;
 
 @UIScope
@@ -35,7 +33,7 @@ public class BudgetRouteView extends VerticalLayout {
                 LumoUtility.MaxWidth.SCREEN_LARGE
         );
 
-        content.add(activeBudgetsView);
+        content.add(activeBudgetsView.asComponent());
 
         add(content);
     }
