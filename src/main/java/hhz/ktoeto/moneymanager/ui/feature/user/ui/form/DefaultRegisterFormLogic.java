@@ -4,8 +4,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import hhz.ktoeto.moneymanager.ui.feature.user.domain.RegisterRequest;
 import hhz.ktoeto.moneymanager.ui.feature.user.domain.User;
 import hhz.ktoeto.moneymanager.ui.feature.user.domain.UserService;
-import hhz.ktoeto.moneymanager.ui.feature.user.event.OpenLoginFormEvent;
-import hhz.ktoeto.moneymanager.ui.feature.user.event.UserRegisteredEvent;
+import hhz.ktoeto.moneymanager.ui.event.OpenLoginFormEvent;
+import hhz.ktoeto.moneymanager.ui.event.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 

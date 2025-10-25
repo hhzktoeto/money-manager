@@ -3,7 +3,7 @@ package hhz.ktoeto.moneymanager.core.constant;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import hhz.ktoeto.moneymanager.ui.HomeView;
-import hhz.ktoeto.moneymanager.ui.feature.budget.BudgetView;
+import hhz.ktoeto.moneymanager.ui.feature.budget.BudgetRouteView;
 import hhz.ktoeto.moneymanager.ui.feature.category.CategoryView;
 import hhz.ktoeto.moneymanager.ui.feature.statistics.StatisticsView;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.TransactionsView;
@@ -14,7 +14,7 @@ import lombok.Getter;
 public enum Routes {
 
     HOME(Path.HOME, Name.HOME, HomeView.class, VaadinIcon.HOME),
-    BUDGET(Path.BUDGET, Name.BUDGET, BudgetView.class, VaadinIcon.CALC_BOOK),
+    BUDGET(Path.BUDGET, Name.BUDGET, BudgetRouteView.class, VaadinIcon.CALC_BOOK),
     TRANSACTIONS(Path.TRANSACTIONS, Name.TRANSACTIONS, TransactionsView.class, VaadinIcon.CASH),
     CATEGORIES(Path.CATEGORIES, Name.CATEGORIES, CategoryView.class, VaadinIcon.RECORDS),
     STATS(Path.STATISTICS, Name.STATISTICS, StatisticsView.class, VaadinIcon.PIE_BAR_CHART),

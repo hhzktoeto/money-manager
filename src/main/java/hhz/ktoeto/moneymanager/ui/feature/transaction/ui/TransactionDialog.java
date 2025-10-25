@@ -4,7 +4,7 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.event.*;
+import hhz.ktoeto.moneymanager.ui.event.*;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.ui.form.TransactionForm;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.ui.form.TransactionFormFactory;
 import lombok.RequiredArgsConstructor;

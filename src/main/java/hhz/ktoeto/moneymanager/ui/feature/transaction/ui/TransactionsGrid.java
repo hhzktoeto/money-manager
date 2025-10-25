@@ -14,7 +14,7 @@ import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.TransactionFilter;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.event.OpenTransactionEditDialogEvent;
+import hhz.ktoeto.moneymanager.ui.event.OpenTransactionEditDialogEvent;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.ui.data.TransactionDataProvider;
 import lombok.Builder;
 import org.springframework.context.ApplicationEventPublisher;

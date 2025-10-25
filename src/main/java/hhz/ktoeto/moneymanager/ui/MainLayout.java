@@ -14,7 +14,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.component.NavigationMenu;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.event.OpenTransactionCreateDialogEvent;
+import hhz.ktoeto.moneymanager.ui.event.OpenTransactionCreateDialogEvent;
 import hhz.ktoeto.moneymanager.core.constant.StyleConstants;
 import org.springframework.context.ApplicationEventPublisher;
 

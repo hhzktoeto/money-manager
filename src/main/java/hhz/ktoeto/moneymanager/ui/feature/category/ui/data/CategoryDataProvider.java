@@ -6,9 +6,9 @@ import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.CategoryService;
-import hhz.ktoeto.moneymanager.ui.feature.category.event.CategoryCreatedEvent;
-import hhz.ktoeto.moneymanager.ui.feature.category.event.CategoryDeletedEvent;
-import hhz.ktoeto.moneymanager.ui.feature.category.event.CategoryUpdatedEvent;
+import hhz.ktoeto.moneymanager.ui.event.CategoryCreatedEvent;
+import hhz.ktoeto.moneymanager.ui.event.CategoryDeletedEvent;
+import hhz.ktoeto.moneymanager.ui.event.CategoryUpdatedEvent;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.event.EventListener;
 

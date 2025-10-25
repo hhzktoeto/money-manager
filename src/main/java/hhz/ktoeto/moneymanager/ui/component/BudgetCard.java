@@ -14,6 +14,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.constant.StyleConstants;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
@@ -21,8 +22,9 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class BudgetCard extends Composite<BasicContainer> {
 
-    private final Budget budget;
-    private final FormattingService formattingService;
+    @Getter
+    private final transient Budget budget;
+    private final transient FormattingService formattingService;
 
     @Override
     protected BasicContainer initContent() {
@@ -88,7 +90,6 @@ public class BudgetCard extends Composite<BasicContainer> {
     }
 
     private void configureContent(FlexLayout content) {
-        content.setFlexDirection(FlexLayout.FlexDirection.COLUMN);
         boolean isExpense = budget.getType() == Budget.Type.EXPENSE;
         BigDecimal currentAmount = budget.getCurrentAmount();
         BigDecimal maxAmount = budget.getGoalAmount();
@@ -157,6 +158,8 @@ public class BudgetCard extends Composite<BasicContainer> {
             progressSpan.getElement().getThemeList().add(isExpense ? StyleConstants.Badge.ERROR : StyleConstants.Badge.SUCCESS);
         }
 
+        content.addClassName(StyleConstants.CLICKABLE);
+        content.setFlexDirection(FlexLayout.FlexDirection.COLUMN);
         content.add(progressBarWrapper);
     }
 }

@@ -13,9 +13,9 @@ import hhz.ktoeto.moneymanager.ui.component.TransactionsSummaryCard;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.TransactionsSummaries;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.event.TransactionCreatedEvent;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.event.TransactionDeletedEvent;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.event.TransactionUpdatedEvent;
+import hhz.ktoeto.moneymanager.ui.event.TransactionCreatedEvent;
+import hhz.ktoeto.moneymanager.ui.event.TransactionDeletedEvent;
+import hhz.ktoeto.moneymanager.ui.event.TransactionUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 

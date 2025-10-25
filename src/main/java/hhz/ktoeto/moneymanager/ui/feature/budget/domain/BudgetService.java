@@ -2,6 +2,9 @@ package hhz.ktoeto.moneymanager.ui.feature.budget.domain;
 
 import hhz.ktoeto.moneymanager.core.exception.EntityNotFoundException;
 import hhz.ktoeto.moneymanager.core.exception.NonOwnerRequestException;
+import hhz.ktoeto.moneymanager.ui.event.BudgetCreatedEvent;
+import hhz.ktoeto.moneymanager.ui.event.BudgetDeletedEvent;
+import hhz.ktoeto.moneymanager.ui.event.BudgetUpdatedEvent;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.TransactionFilter;
@@ -9,6 +12,7 @@ import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.TransactionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,8 +24,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BudgetService {
 
-    private final TransactionService transactionService;
     private final BudgetRepository repository;
+    private final TransactionService transactionService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public List<Budget> getAll(long userId, BudgetFilter filter) {
@@ -61,7 +66,10 @@ public class BudgetService {
             budget.calculateActiveDates();
         }
         log.debug("Creating budget for user with id {}. Budget: {}", budget.getUserId(), budget);
-        return repository.save(budget);
+        Budget created = repository.save(budget);
+        eventPublisher.publishEvent(new BudgetCreatedEvent(this, created));
+
+        return created;
     }
 
     @Transactional
@@ -75,7 +83,10 @@ public class BudgetService {
             updated.calculateActiveDates();
         }
 
-        return repository.save(updated);
+        Budget saved = repository.save(updated);
+        eventPublisher.publishEvent(new BudgetUpdatedEvent(this, saved));
+
+        return saved;
     }
 
     @Transactional
@@ -86,6 +97,7 @@ public class BudgetService {
         }
 
         repository.delete(budget);
+        eventPublisher.publishEvent(new BudgetDeletedEvent(this));
     }
 
     public int count(long userId, BudgetFilter filter) {

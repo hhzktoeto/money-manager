@@ -2,7 +2,7 @@ package hhz.ktoeto.moneymanager.ui.feature.user.ui.form;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import hhz.ktoeto.moneymanager.ui.feature.user.domain.LoginRequest;
-import hhz.ktoeto.moneymanager.ui.feature.user.event.OpenRegisterFormEvent;
+import hhz.ktoeto.moneymanager.ui.event.OpenRegisterFormEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 

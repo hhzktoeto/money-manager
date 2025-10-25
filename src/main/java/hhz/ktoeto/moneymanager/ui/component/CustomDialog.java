@@ -62,7 +62,9 @@ public class CustomDialog extends Dialog {
 
     @Override
     public void close() {
-        super.close();
+        if (this.isOpened()) {
+            super.close();
+        }
         body.removeAll();
     }
 }
