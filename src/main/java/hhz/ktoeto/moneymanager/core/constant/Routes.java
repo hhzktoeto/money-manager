@@ -2,12 +2,12 @@ package hhz.ktoeto.moneymanager.core.constant;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import hhz.ktoeto.moneymanager.ui.HomeView;
-import hhz.ktoeto.moneymanager.ui.feature.budget.BudgetRouteView;
-import hhz.ktoeto.moneymanager.ui.feature.category.CategoryView;
-import hhz.ktoeto.moneymanager.ui.feature.statistics.StatisticsView;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.TransactionsRouteView;
-import hhz.ktoeto.moneymanager.ui.feature.user.LoginView;
+import hhz.ktoeto.moneymanager.feature.HomeView;
+import hhz.ktoeto.moneymanager.feature.budget.BudgetRouteView;
+import hhz.ktoeto.moneymanager.feature.category.CategoryView;
+import hhz.ktoeto.moneymanager.feature.statistics.StatisticsView;
+import hhz.ktoeto.moneymanager.feature.transaction.TransactionsRouteView;
+import hhz.ktoeto.moneymanager.feature.user.LoginView;
 import lombok.Getter;
 
 @Getter

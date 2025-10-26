@@ -1,14 +1,8 @@
 package hhz.ktoeto.moneymanager.ui;
 
-public interface FormView<T> {
+public interface FormView<T> extends View, CanEdit<T>, Resettable<T> {
 
     boolean isCreateMode();
-
-    void setEditedEntity(T editedEntity);
-
-    T getEditedEntity();
-
-    void reset(T resetEntity);
 
     boolean writeToIfValid(T entity);
 }

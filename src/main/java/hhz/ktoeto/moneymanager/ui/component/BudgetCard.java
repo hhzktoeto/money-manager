@@ -13,7 +13,7 @@ import com.vaadin.flow.component.progressbar.ProgressBarVariant;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.constant.StyleConstants;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
-import hhz.ktoeto.moneymanager.ui.feature.budget.domain.Budget;
+import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
