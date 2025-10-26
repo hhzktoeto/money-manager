@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.transaction.view.form;
+package hhz.ktoeto.moneymanager.feature.transaction.view;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
@@ -13,7 +13,9 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.core.constant.FormMode;
+import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormView;
+import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormViewPresenter;
+import hhz.ktoeto.moneymanager.ui.constant.FormMode;
 import hhz.ktoeto.moneymanager.ui.FormView;
 import hhz.ktoeto.moneymanager.ui.FormViewPresenter;
 import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
@@ -22,17 +24,17 @@ import hhz.ktoeto.moneymanager.ui.component.RussianDatePicker;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.ui.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
-import hhz.ktoeto.moneymanager.feature.transaction.view.form.validator.TransactionAmountValidator;
-import hhz.ktoeto.moneymanager.feature.transaction.view.form.validator.TransactionDescriptionValidator;
+import hhz.ktoeto.moneymanager.feature.transaction.validator.TransactionAmountValidator;
+import hhz.ktoeto.moneymanager.feature.transaction.validator.TransactionDescriptionValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.time.LocalDate;
 
 @Slf4j
-public class TransactionForm extends Composite<FlexLayout> implements FormView<Transaction> {
+public class TransactionForm extends Composite<FlexLayout> implements TransactionFormView {
 
-    private final transient FormViewPresenter<Transaction, FormView<Transaction>> presenter;
+    private final transient TransactionFormViewPresenter presenter;
     private final CategoryDataProvider categoryProvider;
     private final FormMode mode;
 
@@ -48,7 +50,7 @@ public class TransactionForm extends Composite<FlexLayout> implements FormView<T
 
     private final Binder<Transaction> binder;
 
-    public TransactionForm(CategoryDataProvider categoryProvider, FormViewPresenter<Transaction, FormView<Transaction>> presenter, FormMode mode) {
+    public TransactionForm(CategoryDataProvider categoryProvider, TransactionFormViewPresenter presenter, FormMode mode) {
         this.categoryProvider = categoryProvider;
         this.mode = mode;
         this.presenter = presenter;
@@ -140,6 +142,7 @@ public class TransactionForm extends Composite<FlexLayout> implements FormView<T
         categorySelect.setItemLabelGenerator(Category::getName);
         categorySelect.setWidthFull();
 
+        createCategoryButton.addClickListener(event -> presenter.onCategoryAdd());
         createCategoryButton.setHeight(categorySelect.getHeight());
         createCategoryButton.setTooltipText("Добавить категорию");
 

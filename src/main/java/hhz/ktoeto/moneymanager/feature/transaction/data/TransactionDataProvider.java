@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.transaction.view.data;
+package hhz.ktoeto.moneymanager.feature.transaction.data;
 
 import com.vaadin.flow.data.provider.AbstractBackEndDataProvider;
 import com.vaadin.flow.data.provider.Query;

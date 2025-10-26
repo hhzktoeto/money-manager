@@ -15,7 +15,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.core.constant.FormMode;
+import hhz.ktoeto.moneymanager.ui.constant.FormMode;
 import hhz.ktoeto.moneymanager.feature.budget.BudgetFormView;
 import hhz.ktoeto.moneymanager.feature.budget.BudgetFormViewPresenter;
 import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
@@ -158,6 +158,7 @@ public class BudgetForm extends Composite<FlexLayout> implements BudgetFormView 
         categoriesSelect.setItemLabelGenerator(Category::getName);
         categoriesSelect.setWidthFull();
 
+        createCategoryButton.addClickListener(event -> presenter.onCategoryAdd());
         createCategoryButton.setTooltipText("Добавить категорию");
 
         HorizontalLayout categoriesWrapper = new HorizontalLayout(categoriesSelect, createCategoryButton);

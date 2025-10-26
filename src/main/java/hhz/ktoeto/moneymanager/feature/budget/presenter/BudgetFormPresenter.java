@@ -2,16 +2,16 @@ package hhz.ktoeto.moneymanager.feature.budget.presenter;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.core.constant.FormMode;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
-import hhz.ktoeto.moneymanager.ui.FormView;
+import hhz.ktoeto.moneymanager.feature.budget.BudgetFormView;
 import hhz.ktoeto.moneymanager.feature.budget.BudgetFormViewPresenter;
-import hhz.ktoeto.moneymanager.feature.budget.view.BudgetForm;
-import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
-import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
+import hhz.ktoeto.moneymanager.feature.budget.view.BudgetForm;
 import hhz.ktoeto.moneymanager.feature.category.ui.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
+import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
+import hhz.ktoeto.moneymanager.ui.constant.FormMode;
 import lombok.RequiredArgsConstructor;
 
 @UIScope
@@ -25,10 +25,10 @@ public class BudgetFormPresenter implements BudgetFormViewPresenter {
 
     private final CustomDialog budgetFormDialog = new CustomDialog();
 
-    private FormView<Budget> view;
+    private BudgetFormView view;
 
     @Override
-    public void setView(FormView<Budget> view) {
+    public void setView(BudgetFormView view) {
         this.view = view;
     }
 
@@ -78,6 +78,12 @@ public class BudgetFormPresenter implements BudgetFormViewPresenter {
         });
 
         confirmDialog.open();
+    }
+
+
+    @Override
+    public void onCategoryAdd() {
+        throw new RuntimeException("Напиши реализацию чухан");
     }
 
     private void submitCreate() {

@@ -17,7 +17,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.user.domain.LoginRequest;
 import hhz.ktoeto.moneymanager.feature.user.ui.form.validator.PasswordValidator;
 import hhz.ktoeto.moneymanager.feature.user.ui.form.validator.UsernameValidator;
-import hhz.ktoeto.moneymanager.core.constant.StyleConstants;
+import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

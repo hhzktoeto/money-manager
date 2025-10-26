@@ -1,10 +1,9 @@
-package hhz.ktoeto.moneymanager.core.config;
+package hhz.ktoeto.moneymanager.core.security;
 
 import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
-import hhz.ktoeto.moneymanager.core.constant.Routes;
+import hhz.ktoeto.moneymanager.ui.constant.Routes;
 import hhz.ktoeto.moneymanager.feature.user.domain.UserService;
-import hhz.ktoeto.moneymanager.core.security.AppUserDetails;
 import hhz.ktoeto.moneymanager.feature.user.LoginView;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

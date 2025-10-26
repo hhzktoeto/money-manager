@@ -1,22 +1,23 @@
-package hhz.ktoeto.moneymanager.feature.transaction.view.form;
+package hhz.ktoeto.moneymanager.feature.transaction.presenter;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.core.constant.FormMode;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
-import hhz.ktoeto.moneymanager.ui.FormView;
-import hhz.ktoeto.moneymanager.ui.FormViewPresenter;
-import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
-import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.feature.category.ui.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormView;
+import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
+import hhz.ktoeto.moneymanager.feature.transaction.view.TransactionForm;
+import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
+import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
+import hhz.ktoeto.moneymanager.ui.constant.FormMode;
 import lombok.RequiredArgsConstructor;
 
 @UIScope
 @SpringComponent
 @RequiredArgsConstructor
-public class TransactionFormPresenter implements FormViewPresenter<Transaction, FormView<Transaction>> {
+public class TransactionFormPresenter implements TransactionFormViewPresenter {
 
     private final UserContextHolder userContextHolder;
     private final TransactionService transactionService;
@@ -24,10 +25,10 @@ public class TransactionFormPresenter implements FormViewPresenter<Transaction, 
 
     private final CustomDialog transactionFormDialog = new CustomDialog();
 
-    private FormView<Transaction> view;
+    private TransactionFormView view;
 
     @Override
-    public void setView(FormView<Transaction> view) {
+    public void setView(TransactionFormView view) {
         this.view = view;
     }
 
@@ -76,6 +77,11 @@ public class TransactionFormPresenter implements FormViewPresenter<Transaction, 
         });
 
         confirmDialog.open();
+    }
+
+    @Override
+    public void onCategoryAdd() {
+        throw new RuntimeException("Напиши реализацию чухан");
     }
 
     private void submitCreate() {

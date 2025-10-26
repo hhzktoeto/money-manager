@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.core.constant;
+package hhz.ktoeto.moneymanager.ui.constant;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.icon.VaadinIcon;

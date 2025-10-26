@@ -20,7 +20,7 @@ import hhz.ktoeto.moneymanager.feature.user.ui.form.converter.PhoneConverter;
 import hhz.ktoeto.moneymanager.feature.user.ui.form.validator.PasswordValidator;
 import hhz.ktoeto.moneymanager.feature.user.ui.form.validator.PhoneValidator;
 import hhz.ktoeto.moneymanager.feature.user.ui.form.validator.UsernameValidator;
-import hhz.ktoeto.moneymanager.core.constant.StyleConstants;
+import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 
 public class RegisterForm extends Composite<VerticalLayout> {
 

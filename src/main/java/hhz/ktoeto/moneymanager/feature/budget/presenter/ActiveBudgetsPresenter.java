@@ -7,14 +7,13 @@ import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
-import hhz.ktoeto.moneymanager.ui.FormView;
-import hhz.ktoeto.moneymanager.ui.FormViewPresenter;
-import hhz.ktoeto.moneymanager.feature.budget.ActiveBudgetsViewPresenter;
-import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
 import hhz.ktoeto.moneymanager.feature.budget.ActiveBudgetsView;
+import hhz.ktoeto.moneymanager.feature.budget.ActiveBudgetsViewPresenter;
+import hhz.ktoeto.moneymanager.feature.budget.BudgetFormViewPresenter;
+import hhz.ktoeto.moneymanager.feature.budget.data.BudgetsDataProvider;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetFilter;
-import hhz.ktoeto.moneymanager.feature.budget.data.BudgetsDataProvider;
+import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
 import lombok.Setter;
 
 import java.util.List;
@@ -24,14 +23,14 @@ import java.util.List;
 public class ActiveBudgetsPresenter implements ActiveBudgetsViewPresenter, DataProviderListener<Budget> {
 
     private final BudgetsDataProvider dataProvider;
-    private final transient FormViewPresenter<Budget, FormView<Budget>> formPresenter;
+    private final transient BudgetFormViewPresenter formPresenter;
     private final transient FormattingService formattingService;
 
     @Setter
     private transient ActiveBudgetsView view;
 
     public ActiveBudgetsPresenter(BudgetsDataProvider dataProvider,
-                                  FormViewPresenter<Budget, FormView<Budget>> formPresenter,
+                                  BudgetFormViewPresenter formPresenter,
                                   FormattingService formattingService) {
         this.dataProvider = dataProvider;
         this.formPresenter = formPresenter;

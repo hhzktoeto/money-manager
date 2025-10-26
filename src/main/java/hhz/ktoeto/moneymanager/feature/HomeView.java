@@ -6,7 +6,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.core.constant.Routes;
+import hhz.ktoeto.moneymanager.ui.constant.Routes;
 import hhz.ktoeto.moneymanager.ui.layout.MainLayout;
 import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;

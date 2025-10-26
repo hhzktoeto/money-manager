@@ -1,16 +1,15 @@
-package hhz.ktoeto.moneymanager.feature.transaction.view;
+package hhz.ktoeto.moneymanager.feature.transaction.presenter;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.data.provider.DataChangeEvent;
 import com.vaadin.flow.data.provider.DataProviderListener;
 import com.vaadin.flow.data.provider.Query;
-import hhz.ktoeto.moneymanager.ui.FormView;
-import hhz.ktoeto.moneymanager.ui.FormViewPresenter;
+import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
+import hhz.ktoeto.moneymanager.feature.transaction.data.TransactionDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
-import hhz.ktoeto.moneymanager.feature.transaction.view.data.TransactionDataProvider;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +19,7 @@ import java.util.List;
 public class TransactionsGridPresenter implements TransactionsGridViewPresenter, DataProviderListener<Transaction> {
 
     private final TransactionDataProvider dataProvider;
-    private final transient FormViewPresenter<Transaction, FormView<Transaction>> formPresenter;
+    private final transient TransactionFormViewPresenter formPresenter;
 
     private transient TransactionsGridView view;
 

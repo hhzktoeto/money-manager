@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.core.constant;
+package hhz.ktoeto.moneymanager.ui.constant;
 
 public final class StyleConstants {
 

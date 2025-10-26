@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.transaction.view.data;
+package hhz.ktoeto.moneymanager.feature.transaction.data;
 
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
