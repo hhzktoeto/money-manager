@@ -3,28 +3,35 @@ package hhz.ktoeto.moneymanager.feature.transaction.view;
 import com.vaadin.componentfactory.DateRange;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.NumberRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
-import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
+import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
+import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
 
 import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
-import java.util.List;
+import java.util.Collections;
 import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TransactionsGrid extends Composite<VerticalLayout> implements TransactionsGridView {
 
@@ -46,7 +53,7 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
 
         this.dateRangePicker = new RussianDateRangePicker("Период");
         this.grid = new Grid<>();
-        this.grid.setDataProvider(this.presenter.getDataProvider());
+        this.grid.setDataProvider(this.presenter.getTransactionsProvider());
     }
 
     @Override
@@ -54,22 +61,15 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
         VerticalLayout root = new VerticalLayout();
         root.setSizeFull();
 
-        if (this.mode == Mode.ALL) {
-            HorizontalLayout header = new HorizontalLayout();
-            this.configureHeader(header);
-            root.add(header);
-        }
+        Div header = new Div();
+        this.configureHeader(header);
+        root.add(header);
 
         this.configureGrid(this.grid);
 
         root.add(this.grid);
 
         return root;
-    }
-
-    @Override
-    public void updateItems(List<Transaction> transactions) {
-        this.grid.setItems(transactions);
     }
 
     @Override
@@ -86,6 +86,7 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
             grid.setPageSize(25);
         }
         grid.setSelectionMode(Grid.SelectionMode.NONE);
+        grid.addItemClickListener(event -> presenter.onEditRequested(event.getItem()));
 
         EmptyDataImage noTransactionsImage = new EmptyDataImage();
         noTransactionsImage.setText(mode == Mode.RECENT
@@ -93,11 +94,15 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
                 : "Нет транзакций за выбранный период");
         grid.setEmptyStateComponent(noTransactionsImage);
 
-        grid.addItemClickListener(event -> presenter.onEditRequested(event.getItem()));
-        grid.addColumn(new TransactionCategoryDateRenderer());
+        Grid.Column<Transaction> categoryDateColumn = grid.addColumn(new TransactionCategoryDateRenderer())
+                .setKey("date")
+                .setSortable(mode == Mode.ALL)
+                .setHeader(mode == Mode.ALL ? "По дате" : null);
         grid.addColumn(new NumberRenderer<>(Transaction::getAmount, NumberFormat.getCurrencyInstance(Locale.getDefault())))
                 .setKey("amount")
                 .setTextAlign(ColumnTextAlign.END)
+                .setSortable(mode == Mode.ALL)
+                .setHeader(mode == Mode.ALL ? "По сумме" : null)
                 .setPartNameGenerator(transaction -> {
                     StringBuilder stringBuilder = new StringBuilder("amount-column ");
                     switch (transaction.getType()) {
@@ -106,14 +111,42 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
                     }
                     return stringBuilder.toString();
                 });
+
+        if (mode == Mode.ALL) {
+            grid.sort(Collections.singletonList(
+                    new GridSortOrder<>(categoryDateColumn, SortDirection.DESCENDING))
+            );
+        }
     }
 
-    private void configureHeader(HorizontalLayout header) {
-        header.addClassNames(
-                LumoUtility.Width.FULL,
-                LumoUtility.AlignContent.END,
-                LumoUtility.JustifyContent.END
-        );
+    //TODO: вот это надо рефакторить
+    private void configureHeader(Div header) {
+        MultiSelectComboBox<Category> categoryMultiSelect = new MultiSelectComboBox<>("Категории");
+        categoryMultiSelect.setItemLabelGenerator(Category::getName);
+        categoryMultiSelect.setClearButtonVisible(true);
+        categoryMultiSelect.addValueChangeListener(event -> {
+            TransactionFilter filter = presenter.getFilter();
+            Set<Long> selectedCategoriesIds = event.getValue().stream()
+                    .map(Category::getId)
+                    .collect(Collectors.toSet());
+            filter.setCategoriesIds(selectedCategoriesIds);
+            presenter.setFilter(filter);
+        });
+        categoryMultiSelect.setItems(presenter.getCategoriesProvider());
+
+        RadioButtonGroup<String> typeGroup = new RadioButtonGroup<>("Тип");
+        typeGroup.setItems("Все", "Доход", "Расход");
+        typeGroup.addValueChangeListener(event -> {
+            TransactionFilter filter = presenter.getFilter();
+            Transaction.Type type = switch (event.getValue()) {
+                case "Доход" -> Transaction.Type.INCOME;
+                case "Расход" -> Transaction.Type.EXPENSE;
+                default -> null;
+            };
+            filter.setType(type);
+            presenter.setFilter(filter);
+        });
+        typeGroup.setValue("Все");
 
         TransactionFilter transactionFilter = this.presenter.getFilter();
         this.dateRangePicker.setValue(new DateRange(transactionFilter.getFromDate(), transactionFilter.getToDate()));
@@ -125,7 +158,20 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
             this.presenter.setFilter(filter);
             this.dateRangePicker.suppressKeyboard();
         });
-        header.add(this.dateRangePicker);
+
+        header.setVisible(mode == Mode.ALL);
+        header.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.Gap.SMALL,
+                LumoUtility.Display.GRID,
+                LumoUtility.Grid.FLOW_ROW,
+                LumoUtility.Grid.Column.COLUMNS_1,
+                LumoUtility.Grid.Breakpoint.Small.COLUMNS_2,
+                LumoUtility.Grid.Breakpoint.Medium.COLUMNS_3,
+                LumoUtility.AlignItems.STRETCH,
+                LumoUtility.AlignContent.START
+        );
+        header.add(typeGroup, categoryMultiSelect, this.dateRangePicker);
     }
 
     private static final class TransactionCategoryDateRenderer extends ComponentRenderer<HorizontalLayout, Transaction> {

@@ -1,10 +1,15 @@
 vaadin-grid::part(cell) {
     cursor: pointer;
+    background: transparent;
+}
+
+vaadin-grid::part(header-cell) {
+    background: var(--lumo-base-color);
 }
 
 vaadin-grid::part(row):hover {
     border-radius: 1rem;
-    background-color: var(--lumo-shade-50pct);
+    background: var(--lumo-shade-50pct);
 }
 
 vaadin-grid::part(amount-column) {

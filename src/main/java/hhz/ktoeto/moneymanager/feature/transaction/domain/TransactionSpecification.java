@@ -8,6 +8,7 @@ import lombok.Builder;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.util.CollectionUtils;
 
 @Builder
 public class TransactionSpecification implements Specification<Transaction> {
@@ -15,7 +16,7 @@ public class TransactionSpecification implements Specification<Transaction> {
     @Nullable
     private final Long userId;
     @Nullable
-    private final TransactionFilter filter;
+    private final transient TransactionFilter filter;
 
     @Override
     public Predicate toPredicate(@NonNull Root<Transaction> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -39,7 +40,7 @@ public class TransactionSpecification implements Specification<Transaction> {
                     criteriaBuilder.lessThanOrEqualTo(root.get("date"), filter.getToDate())
             );
         }
-        if (filter.getCategoriesIds() != null && !filter.getCategoriesIds().isEmpty()) {
+        if (!CollectionUtils.isEmpty(filter.getCategoriesIds())) {
             predicate = criteriaBuilder.and(predicate,
                     root.get("category").get("id").in(filter.getCategoriesIds())
             );
@@ -49,6 +50,7 @@ public class TransactionSpecification implements Specification<Transaction> {
                     criteriaBuilder.equal(root.get("type"), filter.getType())
             );
         }
+
         return predicate;
     }
 }

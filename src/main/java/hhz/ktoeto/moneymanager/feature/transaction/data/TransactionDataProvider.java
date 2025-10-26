@@ -2,6 +2,7 @@ package hhz.ktoeto.moneymanager.feature.transaction.data;
 
 import com.vaadin.flow.data.provider.AbstractBackEndDataProvider;
 import com.vaadin.flow.data.provider.Query;
+import com.vaadin.flow.data.provider.SortDirection;
 import hhz.ktoeto.moneymanager.core.event.TransactionCreatedEvent;
 import hhz.ktoeto.moneymanager.core.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.core.event.TransactionUpdatedEvent;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.NonNull;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class TransactionDataProvider extends AbstractBackEndDataProvider<Transaction, TransactionFilter> {
@@ -47,10 +49,22 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
 
         Sort sort;
         boolean isLimited = maxSize < UNLIMITED;
+
         if (isLimited) {
-            sort = Sort.by(Sort.Order.desc("createdAt"));
+            sort = Sort.by(Sort.Direction.DESC, "createdAt");
         } else {
-            sort = Sort.by(Sort.Order.desc("date"));
+            sort = query.getSortOrders().stream()
+                    .map(order -> Sort.by(order.getDirection() == SortDirection.DESCENDING
+                                    ? Sort.Direction.DESC
+                                    : Sort.Direction.ASC,
+                            order.getSorted())
+                    )
+                    .reduce(Sort.unsorted(), Sort::and);
+
+            if (Objects.equals(Sort.unsorted(), sort)) {
+                sort = Sort.by(Sort.Direction.DESC, "date")
+                        .and(Sort.by(Sort.Direction.DESC, "createdAt"));
+            }
         }
 
         int limit = query.getLimit();

@@ -1,11 +1,10 @@
-package hhz.ktoeto.moneymanager.feature.transaction.view;
+package hhz.ktoeto.moneymanager.feature.transaction;
 
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormViewPresenter;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
+import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.data.TransactionDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.presenter.TransactionsGridPresenter;
+import hhz.ktoeto.moneymanager.feature.transaction.view.TransactionsGrid;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,15 +14,17 @@ public class TransactionsGridConfig {
     @Bean
     @UIScope
     TransactionsGridViewPresenter recentTransactionsPresenter(TransactionDataProvider recentTransactionsProvider,
+                                                              CategoryDataProvider categoryDataProvider,
                                                               TransactionFormViewPresenter formViewPresenter) {
-        return new TransactionsGridPresenter(recentTransactionsProvider, formViewPresenter);
+        return new TransactionsGridPresenter(recentTransactionsProvider, categoryDataProvider, formViewPresenter);
     }
 
     @Bean
     @UIScope
     TransactionsGridViewPresenter allTransactionsPresenter(TransactionDataProvider allTransactionsProvider,
+                                                           CategoryDataProvider categoryDataProvider,
                                                            TransactionFormViewPresenter formViewPresenter) {
-        return new TransactionsGridPresenter(allTransactionsProvider, formViewPresenter);
+        return new TransactionsGridPresenter(allTransactionsProvider, categoryDataProvider, formViewPresenter);
     }
 
     @Bean

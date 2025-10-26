@@ -1,5 +1,8 @@
 package hhz.ktoeto.moneymanager.feature.transaction.presenter;
 
+import com.vaadin.flow.data.provider.ListDataProvider;
+import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
@@ -11,7 +14,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TransactionsGridPresenter implements TransactionsGridViewPresenter {
 
-    private final TransactionDataProvider dataProvider;
+    private final TransactionDataProvider transactionsDataProvider;
+    private final CategoryDataProvider categoryDataProvider;
     private final TransactionFormViewPresenter formPresenter;
 
     private TransactionsGridView view;
@@ -23,12 +27,12 @@ public class TransactionsGridPresenter implements TransactionsGridViewPresenter 
 
     @Override
     public TransactionFilter getFilter() {
-        return dataProvider.getCurrentFilter();
+        return transactionsDataProvider.getCurrentFilter();
     }
 
     @Override
     public void setFilter(TransactionFilter filter) {
-        dataProvider.setCurrentFilter(filter);
+        transactionsDataProvider.setCurrentFilter(filter);
     }
 
     @Override
@@ -37,7 +41,12 @@ public class TransactionsGridPresenter implements TransactionsGridViewPresenter 
     }
 
     @Override
-    public TransactionDataProvider getDataProvider() {
-        return this.dataProvider;
+    public ListDataProvider<Category> getCategoriesProvider() {
+        return this.categoryDataProvider;
+    }
+
+    @Override
+    public TransactionDataProvider getTransactionsProvider() {
+        return this.transactionsDataProvider;
     }
 }
