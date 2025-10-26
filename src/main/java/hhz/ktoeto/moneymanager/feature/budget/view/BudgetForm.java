@@ -28,7 +28,7 @@ import hhz.ktoeto.moneymanager.feature.budget.validator.BudgetCategoriesValidato
 import hhz.ktoeto.moneymanager.feature.budget.validator.BudgetDateRangeValidator;
 import hhz.ktoeto.moneymanager.feature.budget.validator.BudgetNameValidator;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
-import hhz.ktoeto.moneymanager.feature.category.ui.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 

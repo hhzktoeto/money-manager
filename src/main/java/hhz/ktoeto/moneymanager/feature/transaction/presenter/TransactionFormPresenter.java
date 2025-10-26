@@ -3,7 +3,8 @@ package hhz.ktoeto.moneymanager.feature.transaction.presenter;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
-import hhz.ktoeto.moneymanager.feature.category.ui.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.feature.category.CategoryFormViewPresenter;
+import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormView;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
@@ -22,8 +23,9 @@ public class TransactionFormPresenter implements TransactionFormViewPresenter {
     private final UserContextHolder userContextHolder;
     private final TransactionService transactionService;
     private final CategoryDataProvider categoryDataProvider;
+    private final CategoryFormViewPresenter categoryFormPresenter;
 
-    private final CustomDialog transactionFormDialog = new CustomDialog();
+    private final CustomDialog dialog = new CustomDialog();
 
     private TransactionFormView view;
 
@@ -36,9 +38,9 @@ public class TransactionFormPresenter implements TransactionFormViewPresenter {
     public void openCreateForm() {
         TransactionForm form = new TransactionForm(categoryDataProvider, this, FormMode.CREATE);
 
-        this.transactionFormDialog.setTitle("Новая транзакция");
-        this.transactionFormDialog.addBody(form);
-        this.transactionFormDialog.open();
+        this.dialog.setTitle("Новая транзакция");
+        this.dialog.addBody(form);
+        this.dialog.open();
     }
 
     @Override
@@ -46,9 +48,9 @@ public class TransactionFormPresenter implements TransactionFormViewPresenter {
         TransactionForm form = new TransactionForm(categoryDataProvider, this, FormMode.EDIT);
         form.setEditedEntity(transaction);
 
-        this.transactionFormDialog.setTitle("Редактировать транзакцию");
-        this.transactionFormDialog.addBody(form);
-        this.transactionFormDialog.open();
+        this.dialog.setTitle("Редактировать транзакцию");
+        this.dialog.addBody(form);
+        this.dialog.open();
     }
 
     @Override
@@ -62,7 +64,7 @@ public class TransactionFormPresenter implements TransactionFormViewPresenter {
 
     @Override
     public void onCancel() {
-        this.transactionFormDialog.close();
+        this.dialog.close();
     }
 
     @Override
@@ -73,7 +75,7 @@ public class TransactionFormPresenter implements TransactionFormViewPresenter {
             Transaction transaction = view.getEditedEntity();
             transactionService.delete(transaction.getId(), userContextHolder.getCurrentUserId());
             confirmDialog.close();
-            this.transactionFormDialog.close();
+            this.dialog.close();
         });
 
         confirmDialog.open();
@@ -81,7 +83,7 @@ public class TransactionFormPresenter implements TransactionFormViewPresenter {
 
     @Override
     public void onCategoryAdd() {
-        throw new RuntimeException("Напиши реализацию чухан");
+        categoryFormPresenter.openCreateForm();
     }
 
     private void submitCreate() {
@@ -114,5 +116,6 @@ public class TransactionFormPresenter implements TransactionFormViewPresenter {
         }
 
         transactionService.update(transaction, userContextHolder.getCurrentUserId());
+        this.dialog.close();
     }
 }

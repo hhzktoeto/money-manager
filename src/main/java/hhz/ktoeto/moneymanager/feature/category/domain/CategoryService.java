@@ -1,10 +1,14 @@
 package hhz.ktoeto.moneymanager.feature.category.domain;
 
+import hhz.ktoeto.moneymanager.core.event.CategoryCreatedEvent;
+import hhz.ktoeto.moneymanager.core.event.CategoryDeletedEvent;
+import hhz.ktoeto.moneymanager.core.event.CategoryUpdatedEvent;
 import hhz.ktoeto.moneymanager.core.exception.EntityNotFoundException;
 import hhz.ktoeto.moneymanager.core.exception.NonOwnerRequestException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +19,7 @@ import java.util.List;
 public class CategoryService {
 
     private final CategoryRepository repository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public List<Category> getAll(long userId) {
         log.debug("Fetching all categories for user with id {}", userId);
@@ -28,7 +33,11 @@ public class CategoryService {
     @Transactional
     public Category create(Category category) {
         log.debug("Creating category for user with id {}. Category: {}", category.getUserId(), category);
-        return repository.save(category);
+
+        Category saved = repository.save(category);
+        eventPublisher.publishEvent(new CategoryCreatedEvent(this, saved));
+
+        return saved;
     }
 
     @Transactional
@@ -39,7 +48,10 @@ public class CategoryService {
             throw new NonOwnerRequestException("User with id %d requested category updating, which owner is user with id %d".formatted(updated.getUserId(), userId));
         }
 
-        return repository.save(updated);
+        Category saved = repository.save(updated);
+        eventPublisher.publishEvent(new CategoryUpdatedEvent(this, saved));
+
+        return saved;
     }
 
     @Transactional
@@ -50,6 +62,7 @@ public class CategoryService {
             throw new NonOwnerRequestException("User with id %d requested category deletion, which owner is user with id %d".formatted(userId, category.getUserId()));
         }
         repository.delete(category);
+        eventPublisher.publishEvent(new CategoryDeletedEvent(this, category));
     }
 
     public boolean exist(long userId, CategoryFilter filter) {

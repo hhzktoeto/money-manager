@@ -8,7 +8,8 @@ import hhz.ktoeto.moneymanager.feature.budget.BudgetFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.feature.budget.view.BudgetForm;
-import hhz.ktoeto.moneymanager.feature.category.ui.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.feature.category.CategoryFormViewPresenter;
+import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.constant.FormMode;
@@ -22,6 +23,7 @@ public class BudgetFormPresenter implements BudgetFormViewPresenter {
     private final BudgetService budgetService;
     private final UserContextHolder userContextHolder;
     private final CategoryDataProvider categoryDataProvider;
+    private final CategoryFormViewPresenter categoryFormPresenter;
 
     private final CustomDialog budgetFormDialog = new CustomDialog();
 
@@ -83,7 +85,7 @@ public class BudgetFormPresenter implements BudgetFormViewPresenter {
 
     @Override
     public void onCategoryAdd() {
-        throw new RuntimeException("Напиши реализацию чухан");
+        categoryFormPresenter.openCreateForm();
     }
 
     private void submitCreate() {

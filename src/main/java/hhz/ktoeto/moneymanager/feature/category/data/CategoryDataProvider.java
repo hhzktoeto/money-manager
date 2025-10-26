@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.category.ui.data;
+package hhz.ktoeto.moneymanager.feature.category.data;
 
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
