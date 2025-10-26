@@ -46,6 +46,7 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
 
         this.dateRangePicker = new RussianDateRangePicker("Период");
         this.grid = new Grid<>();
+        this.grid.setDataProvider(this.presenter.getDataProvider());
     }
 
     @Override

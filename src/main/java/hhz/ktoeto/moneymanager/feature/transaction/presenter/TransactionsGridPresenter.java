@@ -1,27 +1,20 @@
 package hhz.ktoeto.moneymanager.feature.transaction.presenter;
 
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.data.provider.DataChangeEvent;
-import com.vaadin.flow.data.provider.DataProviderListener;
-import com.vaadin.flow.data.provider.Query;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.data.TransactionDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
 @RequiredArgsConstructor
-public class TransactionsGridPresenter implements TransactionsGridViewPresenter, DataProviderListener<Transaction> {
+public class TransactionsGridPresenter implements TransactionsGridViewPresenter {
 
     private final TransactionDataProvider dataProvider;
-    private final transient TransactionFormViewPresenter formPresenter;
+    private final TransactionFormViewPresenter formPresenter;
 
-    private transient TransactionsGridView view;
+    private TransactionsGridView view;
 
     @Override
     public void setView(TransactionsGridView view) {
@@ -44,21 +37,7 @@ public class TransactionsGridPresenter implements TransactionsGridViewPresenter,
     }
 
     @Override
-    public void onDataChange(DataChangeEvent<Transaction> dataChangeEvent) {
-        this.refresh();
-    }
-
-    @PostConstruct
-    private void init() {
-        this.dataProvider.addDataProviderListener(this);
-        this.refresh();
-    }
-
-    private void refresh() {
-        UI.getCurrent().access(() -> {
-            Query<Transaction, TransactionFilter> query = new Query<>(this.dataProvider.getCurrentFilter());
-            List<Transaction> transactions = this.dataProvider.fetch(query).toList();
-            this.view.updateItems(transactions);
-        });
+    public TransactionDataProvider getDataProvider() {
+        return this.dataProvider;
     }
 }

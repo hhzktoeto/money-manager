@@ -2,14 +2,13 @@ package hhz.ktoeto.moneymanager.feature.transaction.data;
 
 import com.vaadin.flow.data.provider.AbstractBackEndDataProvider;
 import com.vaadin.flow.data.provider.Query;
-import com.vaadin.flow.data.provider.SortDirection;
+import hhz.ktoeto.moneymanager.core.event.TransactionCreatedEvent;
+import hhz.ktoeto.moneymanager.core.event.TransactionDeletedEvent;
+import hhz.ktoeto.moneymanager.core.event.TransactionUpdatedEvent;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
-import hhz.ktoeto.moneymanager.core.event.TransactionCreatedEvent;
-import hhz.ktoeto.moneymanager.core.event.TransactionDeletedEvent;
-import hhz.ktoeto.moneymanager.core.event.TransactionUpdatedEvent;
 import lombok.Getter;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +26,7 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
     @Getter
     protected transient TransactionFilter currentFilter;
 
-    private int maxSize;
+    private final int maxSize;
 
     public TransactionDataProvider(TransactionService transactionService, UserContextHolder userContextHolder, int maxSize) {
         this.userContextHolder = userContextHolder;
@@ -48,24 +47,17 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
 
         Sort sort;
         boolean isLimited = maxSize < UNLIMITED;
-        if (isLimited || query.getSortOrders().isEmpty()) {
-            sort = Sort.by(Sort.Order.desc("date"))
-                    .and(Sort.by(Sort.Order.desc("createdAt")));
+        if (isLimited) {
+            sort = Sort.by(Sort.Order.desc("createdAt"));
         } else {
-            sort = query.getSortOrders().stream()
-                    .map(order -> Sort.by(order.getDirection() == SortDirection.DESCENDING
-                                    ? Sort.Direction.DESC
-                                    : Sort.Direction.ASC,
-                            order.getSorted())
-                    )
-                    .reduce(Sort.unsorted(), Sort::and);
+            sort = Sort.by(Sort.Order.desc("date"));
         }
 
         int limit = query.getLimit();
         int page = query.getOffset() / query.getLimit();
         if (isLimited) {
             page = 0;
-            limit = Math.min(limit, maxSize);
+            limit = maxSize;
         }
         PageRequest pageRequest = PageRequest.of(page, limit, sort);
 
