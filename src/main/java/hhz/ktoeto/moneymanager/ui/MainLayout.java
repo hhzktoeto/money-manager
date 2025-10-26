@@ -13,10 +13,9 @@ import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.ui.component.NavigationMenu;
-import hhz.ktoeto.moneymanager.ui.event.OpenTransactionCreateDialogEvent;
 import hhz.ktoeto.moneymanager.core.constant.StyleConstants;
-import org.springframework.context.ApplicationEventPublisher;
+import hhz.ktoeto.moneymanager.ui.component.NavigationMenu;
+import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
 
 @UIScope
 @SpringComponent
@@ -31,9 +30,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
     private final Button addTransactionButtonMobile;
     private final Image appLogo;
 
-    public MainLayout(ApplicationEventPublisher eventPublisher) {
+    public MainLayout(FormViewPresenter<Transaction, FormView<Transaction>> transactionFormPresenter) {
         ComponentEventListener<ClickEvent<Button>> openTransactionCreatingModal = e ->
-                eventPublisher.publishEvent(new OpenTransactionCreateDialogEvent(this));
+                transactionFormPresenter.openCreateForm();
         this.setPadding(false);
         this.setSpacing(false);
         this.setSizeFull();

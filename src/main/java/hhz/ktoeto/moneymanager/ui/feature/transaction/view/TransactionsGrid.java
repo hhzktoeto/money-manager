@@ -1,5 +1,7 @@
-package hhz.ktoeto.moneymanager.ui.feature.transaction.ui;
+package hhz.ktoeto.moneymanager.ui.feature.transaction.view;
 
+import com.vaadin.componentfactory.DateRange;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
@@ -11,56 +13,88 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.NumberRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
+import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
 import hhz.ktoeto.moneymanager.ui.feature.category.domain.Category;
+import hhz.ktoeto.moneymanager.ui.feature.transaction.TransactionsGridView;
+import hhz.ktoeto.moneymanager.ui.feature.transaction.TransactionsGridViewPresenter;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.feature.transaction.domain.TransactionFilter;
-import hhz.ktoeto.moneymanager.ui.event.OpenTransactionEditDialogEvent;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.ui.data.TransactionDataProvider;
-import lombok.Builder;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.List;
 import java.util.Locale;
 
-@Builder
-public class TransactionsGrid extends Composite<Grid<Transaction>> {
+public class TransactionsGrid extends Composite<VerticalLayout> implements TransactionsGridView {
 
-    private final transient TransactionDataProvider dataProvider;
-    private final transient ApplicationEventPublisher eventPublisher;
-
+    private final transient TransactionsGridViewPresenter presenter;
     private final Mode mode;
+
+    private final RussianDateRangePicker dateRangePicker;
+    private final Grid<Transaction> grid;
 
     public enum Mode {
         RECENT,
         ALL
     }
 
+    public TransactionsGrid(TransactionsGridViewPresenter presenter, Mode mode) {
+        this.mode = mode;
+        this.presenter = presenter;
+        this.presenter.setView(this);
+
+        this.dateRangePicker = new RussianDateRangePicker("Период");
+        this.grid = new Grid<>();
+    }
+
     @Override
-    protected Grid<Transaction> initContent() {
-        Grid<Transaction> root = new Grid<>();
-        root.addClassNames(LumoUtility.Background.TRANSPARENT);
-        root.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
-        if (mode == Mode.RECENT) {
-            root.setAllRowsVisible(true);
-        } else {
-            root.setPageSize(25);
+    protected VerticalLayout initContent() {
+        VerticalLayout root = new VerticalLayout();
+        root.setSizeFull();
+
+        if (this.mode == Mode.ALL) {
+            HorizontalLayout header = new HorizontalLayout();
+            this.configureHeader(header);
+            root.add(header);
         }
-        root.setSelectionMode(Grid.SelectionMode.NONE);
+
+        this.configureGrid(this.grid);
+
+        root.add(this.grid);
+
+        return root;
+    }
+
+    @Override
+    public void updateItems(List<Transaction> transactions) {
+        this.grid.setItems(transactions);
+    }
+
+    @Override
+    public Component asComponent() {
+        return this;
+    }
+
+    private void configureGrid(Grid<Transaction> grid) {
+        grid.addClassNames(LumoUtility.Background.TRANSPARENT);
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
+        if (mode == Mode.RECENT) {
+            grid.setAllRowsVisible(true);
+        } else {
+            grid.setPageSize(25);
+        }
+        grid.setSelectionMode(Grid.SelectionMode.NONE);
 
         EmptyDataImage noTransactionsImage = new EmptyDataImage();
         noTransactionsImage.setText(mode == Mode.RECENT
                 ? "Нет недавних транзакций"
                 : "Нет транзакций за выбранный период");
-        root.setEmptyStateComponent(noTransactionsImage);
+        grid.setEmptyStateComponent(noTransactionsImage);
 
-        root.setDataProvider(dataProvider);
-        root.addItemClickListener(event ->
-                eventPublisher.publishEvent(new OpenTransactionEditDialogEvent(this, event.getItem()))
-        );
-        root.addColumn(new TransactionCategoryDateRenderer());
-        root.addColumn(new TransactionAmountRenderer())
+        grid.addItemClickListener(event -> presenter.onEditRequested(event.getItem()));
+        grid.addColumn(new TransactionCategoryDateRenderer());
+        grid.addColumn(new NumberRenderer<>(Transaction::getAmount, NumberFormat.getCurrencyInstance(Locale.getDefault())))
                 .setKey("amount")
                 .setTextAlign(ColumnTextAlign.END)
                 .setPartNameGenerator(transaction -> {
@@ -71,22 +105,26 @@ public class TransactionsGrid extends Composite<Grid<Transaction>> {
                     }
                     return stringBuilder.toString();
                 });
-        return root;
     }
 
-    public TransactionFilter getCurrentFilter() {
-        return dataProvider.getCurrentFilter();
-    }
+    private void configureHeader(HorizontalLayout header) {
+        header.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.AlignContent.END,
+                LumoUtility.JustifyContent.END
+        );
 
-    public void setCurrentFilter(TransactionFilter filter) {
-        dataProvider.setCurrentFilter(filter);
-    }
-
-    private static final class TransactionAmountRenderer extends NumberRenderer<Transaction> {
-
-        private TransactionAmountRenderer() {
-            super(Transaction::getAmount, NumberFormat.getCurrencyInstance(Locale.getDefault()));
-        }
+        TransactionFilter transactionFilter = this.presenter.getCurrentFilter();
+        this.dateRangePicker.setValue(new DateRange(transactionFilter.getFromDate(), transactionFilter.getToDate()));
+        this.dateRangePicker.addValueChangeListener(event -> {
+            TransactionFilter filter = this.presenter.getCurrentFilter();
+            DateRange selectedRange = this.dateRangePicker.getValue();
+            filter.setFromDate(selectedRange.getStartDate());
+            filter.setToDate(selectedRange.getEndDate());
+            this.presenter.setCurrentFilter(filter);
+            this.dateRangePicker.suppressKeyboard();
+        });
+        header.add(this.dateRangePicker);
     }
 
     private static final class TransactionCategoryDateRenderer extends ComponentRenderer<HorizontalLayout, Transaction> {

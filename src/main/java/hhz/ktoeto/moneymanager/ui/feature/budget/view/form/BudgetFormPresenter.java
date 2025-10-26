@@ -34,7 +34,7 @@ public class BudgetFormPresenter implements FormViewPresenter<Budget, FormView<B
     public void openCreateForm() {
         BudgetForm form = new BudgetForm(categoryDataProvider, this, BudgetForm.Mode.CREATE);
 
-        this.budgetFormDialog.setTitle("Создать бюджет");
+        this.budgetFormDialog.setTitle("Новый бюджет");
         this.budgetFormDialog.addBody(form);
         this.budgetFormDialog.open();
     }
@@ -60,13 +60,12 @@ public class BudgetFormPresenter implements FormViewPresenter<Budget, FormView<B
 
     @Override
     public void onCancel() {
-        view.reset();
+        view.reset(new Budget());
         this.budgetFormDialog.close();
     }
 
     @Override
     public void onDelete() {
-
         DeleteConfirmDialog confirmDialog = new DeleteConfirmDialog();
         confirmDialog.setHeader("Удалить бюджет?");
         confirmDialog.addConfirmListener(event -> {
@@ -91,7 +90,7 @@ public class BudgetFormPresenter implements FormViewPresenter<Budget, FormView<B
         }
 
         budgetService.create(budget);
-        view.reset();
+        view.reset(new Budget());
     }
 
     private void submitEdit() {

@@ -2,9 +2,13 @@ package hhz.ktoeto.moneymanager.ui.feature.transaction.domain;
 
 import hhz.ktoeto.moneymanager.core.exception.EntityNotFoundException;
 import hhz.ktoeto.moneymanager.core.exception.NonOwnerRequestException;
+import hhz.ktoeto.moneymanager.ui.event.TransactionCreatedEvent;
+import hhz.ktoeto.moneymanager.ui.event.TransactionDeletedEvent;
+import hhz.ktoeto.moneymanager.ui.event.TransactionUpdatedEvent;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,7 @@ import java.util.List;
 public class TransactionService {
 
     private final TransactionsRepository repository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public List<Transaction> getAll(long userId, TransactionFilter filter) {
         TransactionSpecification specification = TransactionSpecification.builder()
@@ -63,7 +68,10 @@ public class TransactionService {
     @Transactional
     public Transaction create(Transaction transaction) {
         log.debug("Creating transaction for user with id {}. Transaction: {}", transaction.getUserId(), transaction);
-        return repository.save(transaction);
+        Transaction saved = repository.save(transaction);
+        eventPublisher.publishEvent(new TransactionCreatedEvent(this, saved));
+
+        return saved;
     }
 
     @Transactional
@@ -74,7 +82,10 @@ public class TransactionService {
             throw new NonOwnerRequestException("User with id %d requested transaction update, which owner is user with id %d".formatted(userId, transaction.getUserId()));
         }
 
-        return repository.save(updated);
+        Transaction saved = repository.save(updated);
+        eventPublisher.publishEvent(new TransactionUpdatedEvent(this, saved));
+
+        return saved;
     }
 
     @Transactional
@@ -85,6 +96,7 @@ public class TransactionService {
             throw new NonOwnerRequestException("User with id %d requested transaction deletion, which owner is user with id %d".formatted(userId, transaction.getUserId()));
         }
         repository.delete(transaction);
+        eventPublisher.publishEvent(new TransactionDeletedEvent(this, transaction));
     }
 
     public int count(long userId, TransactionFilter filter) {

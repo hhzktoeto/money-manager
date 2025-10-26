@@ -97,7 +97,7 @@ public class BudgetService {
         }
 
         repository.delete(budget);
-        eventPublisher.publishEvent(new BudgetDeletedEvent(this));
+        eventPublisher.publishEvent(new BudgetDeletedEvent(this, budget));
     }
 
     public int count(long userId, BudgetFilter filter) {

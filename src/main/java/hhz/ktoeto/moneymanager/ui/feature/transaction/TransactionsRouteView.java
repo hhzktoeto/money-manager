@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui;
+package hhz.ktoeto.moneymanager.ui.feature.transaction;
 
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -7,18 +7,16 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.core.constant.Routes;
-import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.TransactionsGridView;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.view.TransactionsSummary;
+import hhz.ktoeto.moneymanager.ui.MainLayout;
 import jakarta.annotation.security.PermitAll;
 
 @UIScope
 @PermitAll
 @SpringComponent
-@Route(value = Routes.Path.HOME, layout = MainLayout.class)
-public class HomeView extends VerticalLayout {
+@Route(value = Routes.Path.TRANSACTIONS, layout = MainLayout.class)
+public class TransactionsRouteView extends VerticalLayout {
 
-    public HomeView(TransactionsGridView recentTransactionsGrid, TransactionsSummary transactionsSummary) {
+    public TransactionsRouteView(TransactionsGridView allTransactionsGrid) {
         setSizeFull();
         addClassNames(
                 LumoUtility.AlignItems.CENTER,
@@ -34,16 +32,7 @@ public class HomeView extends VerticalLayout {
                 LumoUtility.Height.FULL,
                 LumoUtility.MaxWidth.SCREEN_LARGE
         );
-
-        BasicContainer transactionsGridContainer = new BasicContainer();
-        transactionsGridContainer.setHeader("Недавние транзакции");
-        transactionsGridContainer.setContent(recentTransactionsGrid.asComponent());
-        transactionsGridContainer.getHeader().addClassName(LumoUtility.Margin.Bottom.MEDIUM);
-
-        content.add(
-                transactionsSummary,
-                transactionsGridContainer
-        );
+        content.add(allTransactionsGrid.asComponent());
 
         add(content);
     }

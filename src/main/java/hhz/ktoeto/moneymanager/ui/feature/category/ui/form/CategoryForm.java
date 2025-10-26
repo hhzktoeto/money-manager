@@ -29,10 +29,12 @@ public class CategoryForm extends Composite<FlexLayout> {
     public CategoryForm(Runnable submitAction, Runnable cancelAction) {
         this.submitAction = submitAction;
         this.cancelAction = cancelAction;
-        this.binder = new Binder<>(Category.class);
+
         this.nameField = new TextField("Имя");
         this.submitButton = new Button("Сохранить");
         this.cancelButton = new Button("Отмена");
+
+        this.binder = new Binder<>(Category.class);
     }
 
     @Override

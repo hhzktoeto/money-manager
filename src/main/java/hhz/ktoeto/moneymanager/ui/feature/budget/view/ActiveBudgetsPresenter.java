@@ -21,7 +21,7 @@ import java.util.List;
 
 @UIScope
 @SpringComponent
-public class ActiveBudgetsPresenter implements DataProviderListener<Budget>, ActiveBudgetsViewPresenter {
+public class ActiveBudgetsPresenter implements ActiveBudgetsViewPresenter, DataProviderListener<Budget> {
 
     private final BudgetsDataProvider dataProvider;
     private final transient FormViewPresenter<Budget, FormView<Budget>> formPresenter;

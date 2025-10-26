@@ -8,7 +8,7 @@ public interface FormView<T> {
 
     T getEditedEntity();
 
-    void reset();
+    void reset(T resetEntity);
 
     boolean writeToIfValid(T entity);
 }

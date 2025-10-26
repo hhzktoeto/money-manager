@@ -130,8 +130,8 @@ public class BudgetForm extends Composite<FlexLayout> implements FormView<Budget
     }
 
     @Override
-    public void reset() {
-        binder.setBean(new Budget());
+    public void reset(Budget resetBudget) {
+        binder.setBean(resetBudget);
     }
 
     @Override

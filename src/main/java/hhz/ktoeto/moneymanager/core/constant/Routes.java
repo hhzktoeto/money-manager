@@ -6,7 +6,7 @@ import hhz.ktoeto.moneymanager.ui.HomeView;
 import hhz.ktoeto.moneymanager.ui.feature.budget.BudgetRouteView;
 import hhz.ktoeto.moneymanager.ui.feature.category.CategoryView;
 import hhz.ktoeto.moneymanager.ui.feature.statistics.StatisticsView;
-import hhz.ktoeto.moneymanager.ui.feature.transaction.TransactionsView;
+import hhz.ktoeto.moneymanager.ui.feature.transaction.TransactionsRouteView;
 import hhz.ktoeto.moneymanager.ui.feature.user.LoginView;
 import lombok.Getter;
 
@@ -15,7 +15,7 @@ public enum Routes {
 
     HOME(Path.HOME, Name.HOME, HomeView.class, VaadinIcon.HOME),
     BUDGET(Path.BUDGET, Name.BUDGET, BudgetRouteView.class, VaadinIcon.CALC_BOOK),
-    TRANSACTIONS(Path.TRANSACTIONS, Name.TRANSACTIONS, TransactionsView.class, VaadinIcon.CASH),
+    TRANSACTIONS(Path.TRANSACTIONS, Name.TRANSACTIONS, TransactionsRouteView.class, VaadinIcon.CASH),
     CATEGORIES(Path.CATEGORIES, Name.CATEGORIES, CategoryView.class, VaadinIcon.RECORDS),
     STATS(Path.STATISTICS, Name.STATISTICS, StatisticsView.class, VaadinIcon.PIE_BAR_CHART),
     LOGIN(Path.LOGIN, null, LoginView.class, null);
