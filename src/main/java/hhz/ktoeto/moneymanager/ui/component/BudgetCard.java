@@ -40,7 +40,7 @@ public class BudgetCard extends Composite<BasicContainer> {
     }
 
     public void addClickListener(ComponentEventListener<ClickEvent<FlexLayout>> listener) {
-        this.getContent().addClickListener(listener);
+        this.getContent().getContent().addClickListener(listener);
     }
 
     private void configureHeader(FlexLayout header) {

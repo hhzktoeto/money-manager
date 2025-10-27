@@ -46,12 +46,12 @@ public class ActiveBudgetsPresenter implements ActiveBudgetsViewPresenter, DataP
 
     @Override
     public void onCreateRequested() {
-        formPresenter.openCreateForm();
+        this.formPresenter.openCreateForm();
     }
 
     @Override
     public void onEditRequested(Budget budget) {
-        formPresenter.openEditForm(budget);
+        this.formPresenter.openEditForm(budget);
     }
 
     @Override
