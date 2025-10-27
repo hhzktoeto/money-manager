@@ -1,75 +1,74 @@
 package hhz.ktoeto.moneymanager.feature.transaction.view;
 
-import com.vaadin.componentfactory.DateRange;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.combobox.MultiSelectComboBox;
-import com.vaadin.flow.component.grid.ColumnTextAlign;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridSortOrder;
-import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.data.provider.SortDirection;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.NumberRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionsSummaries;
+import hhz.ktoeto.moneymanager.feature.transaction.renderer.TransactionCategoryDateRenderer;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
-import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
+import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 
 import java.text.NumberFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.Collections;
 import java.util.Locale;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class TransactionsGrid extends Composite<VerticalLayout> implements TransactionsGridView {
 
     private final transient TransactionsGridViewPresenter presenter;
     private final Mode mode;
 
-    private final RussianDateRangePicker dateRangePicker;
-    private final Grid<Transaction> grid;
-
-    public enum Mode {
-        RECENT,
-        ALL
-    }
+    private final Button expensesFilterButton;
+    private final Button incomesFilterButton;
+    private final Button totalFilterButton;
 
     public TransactionsGrid(TransactionsGridViewPresenter presenter, Mode mode) {
         this.mode = mode;
         this.presenter = presenter;
         this.presenter.setView(this);
 
-        this.dateRangePicker = new RussianDateRangePicker("Период");
-        this.grid = new Grid<>();
-        this.grid.setDataProvider(this.presenter.getTransactionsProvider());
+        this.expensesFilterButton = new Button();
+        this.incomesFilterButton = new Button();
+        this.totalFilterButton = new Button();
     }
 
     @Override
     protected VerticalLayout initContent() {
         VerticalLayout root = new VerticalLayout();
+        root.setPadding(false);
+        root.setSpacing(false);
         root.setSizeFull();
 
-        Div header = new Div();
-        this.configureHeader(header);
-        root.add(header);
+        Grid<Transaction> grid = new Grid<>();
 
-        this.configureGrid(this.grid);
+        this.configureGrid(grid);
 
-        root.add(this.grid);
+        if (mode == Mode.ALL) {
+            this.configureGridHeader(grid);
+        }
+
+        root.add(grid);
+
+        root.addAttachListener(event -> this.presenter.initialize());
 
         return root;
+    }
+
+    @Override
+    public void updateSummaries(TransactionsSummaries summaries) {
+        expensesFilterButton.setText(this.presenter.formatAmount(summaries.expenses()));
+        incomesFilterButton.setText(this.presenter.formatAmount(summaries.incomes()));
+        totalFilterButton.setText(this.presenter.formatAmount(summaries.total()));
     }
 
     @Override
@@ -78,8 +77,13 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
     }
 
     private void configureGrid(Grid<Transaction> grid) {
+        grid.setDataProvider(this.presenter.getTransactionsProvider());
         grid.addClassNames(LumoUtility.Background.TRANSPARENT);
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
+        grid.addThemeVariants(
+                GridVariant.LUMO_COMPACT,
+                GridVariant.LUMO_NO_BORDER,
+                GridVariant.LUMO_NO_ROW_BORDERS
+        );
         if (mode == Mode.RECENT) {
             grid.setAllRowsVisible(true);
         } else {
@@ -94,15 +98,13 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
                 : "Нет транзакций за выбранный период");
         grid.setEmptyStateComponent(noTransactionsImage);
 
-        Grid.Column<Transaction> categoryDateColumn = grid.addColumn(new TransactionCategoryDateRenderer())
+        grid.addColumn(new TransactionCategoryDateRenderer())
                 .setKey("date")
-                .setSortable(mode == Mode.ALL)
-                .setHeader(mode == Mode.ALL ? "По дате" : null);
+                .setSortable(mode == Mode.ALL);
         grid.addColumn(new NumberRenderer<>(Transaction::getAmount, NumberFormat.getCurrencyInstance(Locale.getDefault())))
                 .setKey("amount")
                 .setTextAlign(ColumnTextAlign.END)
                 .setSortable(mode == Mode.ALL)
-                .setHeader(mode == Mode.ALL ? "По сумме" : null)
                 .setPartNameGenerator(transaction -> {
                     StringBuilder stringBuilder = new StringBuilder("amount-column ");
                     switch (transaction.getType()) {
@@ -111,99 +113,79 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
                     }
                     return stringBuilder.toString();
                 });
-
-        if (mode == Mode.ALL) {
-            grid.sort(Collections.singletonList(
-                    new GridSortOrder<>(categoryDateColumn, SortDirection.DESCENDING))
-            );
-        }
     }
 
-    //TODO: вот это надо рефакторить
-    private void configureHeader(Div header) {
-        MultiSelectComboBox<Category> categoryMultiSelect = new MultiSelectComboBox<>("Категории");
-        categoryMultiSelect.setItemLabelGenerator(Category::getName);
-        categoryMultiSelect.setClearButtonVisible(true);
-        categoryMultiSelect.addValueChangeListener(event -> {
-            TransactionFilter filter = presenter.getFilter();
-            Set<Long> selectedCategoriesIds = event.getValue().stream()
-                    .map(Category::getId)
-                    .collect(Collectors.toSet());
-            filter.setCategoriesIds(selectedCategoriesIds);
-            presenter.setFilter(filter);
-        });
-        categoryMultiSelect.setItems(presenter.getCategoriesProvider());
+    private void configureGridHeader(Grid<Transaction> grid) {
+        Grid.Column<Transaction> categoryDateColumn = grid.getColumnByKey("date")
+                .setHeader("По дате");
+        Grid.Column<Transaction> amountColumn = grid.getColumnByKey("amount")
+                .setHeader("По сумме");
 
-        RadioButtonGroup<String> typeGroup = new RadioButtonGroup<>("Тип");
-        typeGroup.setItems("Все", "Доход", "Расход");
-        typeGroup.addValueChangeListener(event -> {
-            TransactionFilter filter = presenter.getFilter();
-            Transaction.Type type = switch (event.getValue()) {
-                case "Доход" -> Transaction.Type.INCOME;
-                case "Расход" -> Transaction.Type.EXPENSE;
-                default -> null;
-            };
-            filter.setType(type);
-            presenter.setFilter(filter);
-        });
-        typeGroup.setValue("Все");
-
-        TransactionFilter transactionFilter = this.presenter.getFilter();
-        this.dateRangePicker.setValue(new DateRange(transactionFilter.getFromDate(), transactionFilter.getToDate()));
-        this.dateRangePicker.addValueChangeListener(event -> {
-            TransactionFilter filter = this.presenter.getFilter();
-            DateRange selectedRange = this.dateRangePicker.getValue();
-            filter.setFromDate(selectedRange.getStartDate());
-            filter.setToDate(selectedRange.getEndDate());
-            this.presenter.setFilter(filter);
-            this.dateRangePicker.suppressKeyboard();
-        });
-
-        header.setVisible(mode == Mode.ALL);
-        header.addClassNames(
+        this.expensesFilterButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
+        this.expensesFilterButton.getStyle().set(StyleConstants.BORDER_RADIUS, StyleConstants.BorderRadius.LEFT_075REM);
+        this.expensesFilterButton.addClassNames(
                 LumoUtility.Width.FULL,
-                LumoUtility.Gap.SMALL,
-                LumoUtility.Display.GRID,
-                LumoUtility.Grid.FLOW_ROW,
-                LumoUtility.Grid.Column.COLUMNS_1,
-                LumoUtility.Grid.Breakpoint.Small.COLUMNS_2,
-                LumoUtility.Grid.Breakpoint.Medium.COLUMNS_3,
-                LumoUtility.AlignItems.STRETCH,
-                LumoUtility.AlignContent.START
+                LumoUtility.FontSize.XSMALL,
+                LumoUtility.FontSize.Breakpoint.Small.MEDIUM,
+                LumoUtility.TextColor.ERROR
         );
-        header.add(typeGroup, categoryMultiSelect, this.dateRangePicker);
+        this.expensesFilterButton.addClickListener(e -> {
+            TransactionFilter filter = this.presenter.getFilter();
+            Transaction.Type effectiveType = filter.getType() == Transaction.Type.EXPENSE
+                    ? null
+                    : Transaction.Type.EXPENSE;
+            filter.setType(effectiveType);
+            this.presenter.setFilter(filter);
+        });
+
+        this.incomesFilterButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
+        this.incomesFilterButton.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.BorderRadius.NONE,
+                LumoUtility.FontSize.XSMALL,
+                LumoUtility.FontSize.Breakpoint.Small.MEDIUM,
+                LumoUtility.TextColor.SUCCESS
+        );
+        this.incomesFilterButton.addClickListener(e -> {
+            TransactionFilter filter = this.presenter.getFilter();
+            Transaction.Type effectiveType = filter.getType() == Transaction.Type.INCOME
+                    ? null
+                    : Transaction.Type.INCOME;
+            filter.setType(effectiveType);
+            this.presenter.setFilter(filter);
+        });
+
+        this.totalFilterButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
+        this.totalFilterButton.getStyle().set(StyleConstants.BORDER_RADIUS, StyleConstants.BorderRadius.RIGHT_075REM);
+        this.totalFilterButton.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.BorderRadius.NONE,
+                LumoUtility.FontSize.XSMALL,
+                LumoUtility.FontSize.Breakpoint.Small.MEDIUM,
+                LumoUtility.TextColor.BODY
+        );
+        this.totalFilterButton.addClickListener(e -> {
+            TransactionFilter filter = this.presenter.getFilter();
+            filter.setType(null);
+            this.presenter.setFilter(filter);
+        });
+
+        Div summariesDiv = new Div(this.expensesFilterButton, this.incomesFilterButton, this.totalFilterButton);
+        summariesDiv.addClassNames(
+                LumoUtility.Display.GRID,
+                LumoUtility.Grid.Column.COLUMNS_3,
+                LumoUtility.Width.FULL,
+                LumoUtility.Padding.NONE,
+                LumoUtility.Margin.NONE
+        );
+
+        HeaderRow summariesRow = grid.prependHeaderRow();
+        summariesRow.join(categoryDateColumn, amountColumn).setComponent(summariesDiv);
+
+        grid.sort(Collections.singletonList(
+                new GridSortOrder<>(categoryDateColumn, SortDirection.DESCENDING))
+        );
     }
 
-    private static final class TransactionCategoryDateRenderer extends ComponentRenderer<HorizontalLayout, Transaction> {
-
-        //TODO: Добавить иконки для категория, когда они появятся
-        private TransactionCategoryDateRenderer() {
-            super(transaction -> {
-                HorizontalLayout layout = new HorizontalLayout();
-                Category transactionCategory = transaction.getCategory();
-                DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                        .appendPattern("dd MMMM yyyy")
-                        .toFormatter()
-                        .withLocale(Locale.of("ru"));
-
-                Span categoryName = new Span(transactionCategory.getName());
-                categoryName.addClassNames(
-                        LumoUtility.FontWeight.BOLD,
-                        LumoUtility.FontSize.MEDIUM
-                );
-                Span transactionDate = new Span(formatter.format(transaction.getDate()));
-                transactionDate.addClassNames(
-                        LumoUtility.TextColor.SECONDARY,
-                        LumoUtility.FontWeight.LIGHT,
-                        LumoUtility.FontSize.SMALL
-                );
-
-                VerticalLayout nameDateLayout = new VerticalLayout(categoryName, transactionDate);
-                nameDateLayout.addClassName(LumoUtility.Gap.XSMALL);
-
-                layout.add(nameDateLayout);
-                return layout;
-            });
-        }
-    }
+    public enum Mode {RECENT, ALL}
 }

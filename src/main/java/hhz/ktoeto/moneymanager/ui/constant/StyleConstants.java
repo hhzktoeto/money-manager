@@ -9,6 +9,7 @@ public final class StyleConstants {
     public static final String COLOR = "color";
     public static final String TRANSITION = "transition";
     public static final String TRANSFORM = "transform";
+    public static final String BORDER_RADIUS = "border-radius";
 
     public static final class Color {
 
@@ -50,5 +51,13 @@ public final class StyleConstants {
 
         public static final String ERROR = "badge error";
         public static final String SUCCESS = "badge success";
+    }
+
+    public static final class BorderRadius {
+
+        private BorderRadius() {}
+
+        public static final String LEFT_075REM = "0.75rem 0 0 0.75rem";
+        public static final String RIGHT_075REM = "0 0.75rem 0.75rem 0";
     }
 }

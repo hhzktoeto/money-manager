@@ -16,7 +16,7 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = Routes.Path.TRANSACTIONS, layout = MainLayout.class)
 public class TransactionsRouteView extends VerticalLayout {
 
-    public TransactionsRouteView(TransactionsGridView allTransactionsGrid) {
+    public TransactionsRouteView(TransactionsGridSettingsView gridSettings, TransactionsGridView allTransactionsGrid) {
         setSizeFull();
         addClassNames(
                 LumoUtility.AlignItems.CENTER,
@@ -27,12 +27,14 @@ public class TransactionsRouteView extends VerticalLayout {
         FlexLayout content = new FlexLayout();
         content.setFlexDirection(FlexLayout.FlexDirection.COLUMN);
         content.addClassNames(
-                LumoUtility.Gap.XLARGE,
                 LumoUtility.Width.FULL,
                 LumoUtility.Height.FULL,
                 LumoUtility.MaxWidth.SCREEN_LARGE
         );
-        content.add(allTransactionsGrid.asComponent());
+        content.add(
+                gridSettings.asComponent(),
+                allTransactionsGrid.asComponent()
+        );
 
         add(content);
     }

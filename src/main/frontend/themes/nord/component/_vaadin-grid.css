@@ -5,6 +5,16 @@ vaadin-grid::part(cell) {
 
 vaadin-grid::part(header-cell) {
     background: var(--lumo-base-color);
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+vaadin-grid::part(last-header-row-cell) {
+    background: var(--lumo-base-color);
+    border-bottom: solid 1px;
+    padding-top: 0.25rem;
+    padding-bottom: 0.5rem;
+    border-color: var(--lumo-primary-color);
 }
 
 vaadin-grid::part(row):hover {
@@ -14,6 +24,7 @@ vaadin-grid::part(row):hover {
 
 vaadin-grid::part(amount-column) {
     font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
 }
 
 vaadin-grid::part(expense) {
@@ -22,4 +33,10 @@ vaadin-grid::part(expense) {
 
 vaadin-grid::part(income) {
     color: var(--lumo-success-color);
+}
+
+@media screen and (max-width: 600px) {
+    vaadin-grid::part(amount-column) {
+        font-size: 0.9rem;
+    }
 }

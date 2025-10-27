@@ -59,7 +59,8 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
                                     : Sort.Direction.ASC,
                             order.getSorted())
                     )
-                    .reduce(Sort.unsorted(), Sort::and);
+                    .reduce(Sort.unsorted(), Sort::and)
+                    .and(Sort.by(Sort.Direction.DESC, "createdAt"));
 
             if (Objects.equals(Sort.unsorted(), sort)) {
                 sort = Sort.by(Sort.Direction.DESC, "date")

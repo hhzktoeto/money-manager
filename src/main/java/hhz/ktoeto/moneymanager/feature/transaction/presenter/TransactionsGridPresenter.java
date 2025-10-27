@@ -1,24 +1,48 @@
 package hhz.ktoeto.moneymanager.feature.transaction.presenter;
 
-import com.vaadin.flow.data.provider.ListDataProvider;
-import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
-import hhz.ktoeto.moneymanager.feature.category.domain.Category;
+import com.vaadin.flow.data.provider.DataChangeEvent;
+import com.vaadin.flow.data.provider.DataProviderListener;
+import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
+import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.data.TransactionDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
-import lombok.RequiredArgsConstructor;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionsSummaries;
 
-@RequiredArgsConstructor
-public class TransactionsGridPresenter implements TransactionsGridViewPresenter {
+import java.math.BigDecimal;
 
-    private final TransactionDataProvider transactionsDataProvider;
-    private final CategoryDataProvider categoryDataProvider;
+public class TransactionsGridPresenter implements TransactionsGridViewPresenter, DataProviderListener<Transaction> {
+
+    private final UserContextHolder userContextHolder;
+    private final FormattingService formattingService;
+    private final TransactionService transactionService;
+    private final TransactionDataProvider dataProvider;
     private final TransactionFormViewPresenter formPresenter;
 
     private TransactionsGridView view;
+
+    public TransactionsGridPresenter(UserContextHolder userContextHolder,
+                                     FormattingService formattingService,
+                                     TransactionService transactionService,
+                                     TransactionDataProvider dataProvider,
+                                     TransactionFormViewPresenter formPresenter) {
+        this.userContextHolder = userContextHolder;
+        this.formattingService = formattingService;
+        this.transactionService = transactionService;
+        this.dataProvider = dataProvider;
+        this.formPresenter = formPresenter;
+
+        this.dataProvider.addDataProviderListener(this);
+    }
+
+    @Override
+    public void onDataChange(DataChangeEvent<Transaction> dataChangeEvent) {
+        this.refresh();
+    }
 
     @Override
     public void setView(TransactionsGridView view) {
@@ -27,12 +51,12 @@ public class TransactionsGridPresenter implements TransactionsGridViewPresenter 
 
     @Override
     public TransactionFilter getFilter() {
-        return transactionsDataProvider.getCurrentFilter();
+        return this.dataProvider.getCurrentFilter();
     }
 
     @Override
     public void setFilter(TransactionFilter filter) {
-        transactionsDataProvider.setCurrentFilter(filter);
+        this.dataProvider.setCurrentFilter(filter);
     }
 
     @Override
@@ -41,12 +65,22 @@ public class TransactionsGridPresenter implements TransactionsGridViewPresenter 
     }
 
     @Override
-    public ListDataProvider<Category> getCategoriesProvider() {
-        return this.categoryDataProvider;
+    public TransactionDataProvider getTransactionsProvider() {
+        return this.dataProvider;
     }
 
     @Override
-    public TransactionDataProvider getTransactionsProvider() {
-        return this.transactionsDataProvider;
+    public String formatAmount(BigDecimal amount) {
+        return this.formattingService.formatAmount(amount);
+    }
+
+    @Override
+    public void initialize() {
+        this.refresh();
+    }
+
+    private void refresh() {
+        TransactionsSummaries summaries = this.transactionService.getSummaries(this.userContextHolder.getCurrentUserId(), this.getFilter());
+        this.view.updateSummaries(summaries);
     }
 }

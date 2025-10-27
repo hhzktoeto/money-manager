@@ -45,7 +45,7 @@ public class ActiveBudgets extends Composite<Div> implements ActiveBudgetsView {
                 LumoUtility.AlignItems.STRETCH
         );
 
-        addNewBudgetButton.addClassNames(
+        this.addNewBudgetButton.addClassNames(
                 StyleConstants.CLICKABLE,
                 LumoUtility.BorderRadius.LARGE,
                 LumoUtility.Gap.SMALL,
@@ -58,10 +58,10 @@ public class ActiveBudgets extends Composite<Div> implements ActiveBudgetsView {
                 LumoUtility.FontSize.MEDIUM,
                 LumoUtility.FontWeight.BOLD
         );
-        addNewBudgetButton.setMinHeight(3, Unit.REM);
-        addNewBudgetButton.addClickListener(e -> presenter.onCreateRequested());
+        this.addNewBudgetButton.setMinHeight(3, Unit.REM);
+        this.addNewBudgetButton.addClickListener(e -> this.presenter.onCreateRequested());
 
-        root.addAttachListener(event -> presenter.init());
+        root.addAttachListener(event -> this.presenter.initialize());
 
         return root;
     }
@@ -71,10 +71,10 @@ public class ActiveBudgets extends Composite<Div> implements ActiveBudgetsView {
         Div root = this.getContent();
         root.removeAll();
         cards.forEach(card -> {
-            card.addClickListener(event -> presenter.onEditRequested(card.getBudget()));
+            card.addClickListener(event -> this.presenter.onEditRequested(card.getBudget()));
             root.add(card);
         });
-        root.add(addNewBudgetButton);
+        root.add(this.addNewBudgetButton);
     }
 
     @Override
