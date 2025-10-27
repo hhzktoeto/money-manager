@@ -1,8 +1,7 @@
 package hhz.ktoeto.moneymanager.ui;
 
+@FunctionalInterface
 public interface CanEdit<T> {
 
-    void setEditedEntity(T editedEntity);
-
-    T getEditedEntity();
+    void onEditRequested(T entity);
 }

@@ -1,6 +1,6 @@
 package hhz.ktoeto.moneymanager.ui;
 
-public interface FormView<T> extends View, CanEdit<T>, Resettable<T> {
+public interface FormView<T> extends View, HasEditableEntity<T>, Resettable<T> {
 
     boolean isCreateMode();
 
