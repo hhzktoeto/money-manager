@@ -4,6 +4,7 @@ import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -99,6 +100,7 @@ public class Budget {
     @Column(name = "user_id", nullable = false)
     private long userId;
 
+    @ToString.Exclude
     @ManyToMany
     @JoinTable(
             name = "budget_categories",
