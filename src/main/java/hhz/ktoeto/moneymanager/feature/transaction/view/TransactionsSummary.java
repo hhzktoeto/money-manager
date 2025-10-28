@@ -37,7 +37,7 @@ public class TransactionsSummary extends Composite<FlexLayout> {
         FlexLayout root = new FlexLayout();
         root.addClassNames(
                 LumoUtility.Width.FULL,
-                LumoUtility.Gap.XLARGE,
+                LumoUtility.Gap.MEDIUM,
                 LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.FlexDirection.Breakpoint.Small.ROW
         );

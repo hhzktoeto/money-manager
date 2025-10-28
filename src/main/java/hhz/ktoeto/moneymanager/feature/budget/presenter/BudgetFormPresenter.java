@@ -60,6 +60,7 @@ public class BudgetFormPresenter implements BudgetFormViewPresenter {
         } else {
             this.submitEdit();
         }
+        this.budgetFormDialog.close();
     }
 
     @Override

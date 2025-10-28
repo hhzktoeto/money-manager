@@ -61,28 +61,7 @@ public class BudgetCard extends Composite<BasicContainer> {
                 LumoUtility.AlignItems.CENTER
         );
 
-        Span current = new Span(formattingService.formatAmount(budget.getCurrentAmount()));
-        current.addClassNames(
-                LumoUtility.FontSize.LARGE,
-                LumoUtility.FontWeight.BOLD
-        );
-
-        Span goal = new Span("из " + formattingService.formatAmount(budget.getGoalAmount()));
-        goal.addClassNames(
-                LumoUtility.FontSize.SMALL,
-                LumoUtility.FontWeight.LIGHT,
-                LumoUtility.TextColor.SECONDARY
-        );
-
-        HorizontalLayout amountsLayout = new HorizontalLayout(current, goal);
-        amountsLayout.setSpacing(false);
-        amountsLayout.setPadding(false);
-        amountsLayout.addClassNames(
-                LumoUtility.Gap.SMALL,
-                LumoUtility.AlignItems.BASELINE
-        );
-
-        header.add(titleTypeLayout, amountsLayout);
+        header.add(titleTypeLayout);
         header.addClassNames(
                 LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.Gap.SMALL
@@ -95,6 +74,29 @@ public class BudgetCard extends Composite<BasicContainer> {
         BigDecimal maxAmount = budget.getGoalAmount();
         BigDecimal safeAmount = currentAmount.min(maxAmount);
         BigDecimal leftOver = currentAmount.subtract(safeAmount);
+
+        Span current = new Span(formattingService.formatAmount(currentAmount));
+        current.addClassNames(
+                LumoUtility.FontSize.LARGE,
+                LumoUtility.FontWeight.BOLD
+        );
+
+        Span goal = new Span("из " + formattingService.formatAmount(maxAmount));
+        goal.addClassNames(
+                LumoUtility.FontSize.SMALL,
+                LumoUtility.FontWeight.LIGHT,
+                LumoUtility.TextColor.SECONDARY
+        );
+
+        HorizontalLayout amountsLayout = new HorizontalLayout(current, goal);
+        amountsLayout.setSpacing(false);
+        amountsLayout.setPadding(false);
+        amountsLayout.addClassNames(
+                LumoUtility.Gap.SMALL,
+                LumoUtility.Padding.Left.SMALL,
+                LumoUtility.Padding.Top.SMALL,
+                LumoUtility.AlignItems.BASELINE
+        );
 
         Div progressBarWrapper = new Div();
         progressBarWrapper.addClassNames(
@@ -160,6 +162,6 @@ public class BudgetCard extends Composite<BasicContainer> {
 
         content.addClassName(StyleConstants.CLICKABLE);
         content.setFlexDirection(FlexLayout.FlexDirection.COLUMN);
-        content.add(progressBarWrapper);
+        content.add(amountsLayout, progressBarWrapper);
     }
 }
