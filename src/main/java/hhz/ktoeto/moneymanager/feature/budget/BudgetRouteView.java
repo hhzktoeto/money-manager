@@ -1,6 +1,5 @@
 package hhz.ktoeto.moneymanager.feature.budget;
 
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -17,24 +16,15 @@ import jakarta.annotation.security.PermitAll;
 public class BudgetRouteView extends VerticalLayout {
 
     public BudgetRouteView(ActiveBudgetsView activeBudgetsView) {
-        setSizeFull();
-        addClassNames(
-                LumoUtility.AlignItems.CENTER,
-                LumoUtility.JustifyContent.START,
-                LumoUtility.Height.FULL
-        );
-
-        FlexLayout content = new FlexLayout();
-        content.setFlexDirection(FlexLayout.FlexDirection.COLUMN);
-        content.addClassNames(
-                LumoUtility.Gap.XLARGE,
+        this.setPadding(false);
+        this.setSpacing(false);
+        this.addClassNames(
                 LumoUtility.Width.FULL,
                 LumoUtility.Height.FULL,
-                LumoUtility.MaxWidth.SCREEN_LARGE
+                LumoUtility.AlignItems.CENTER,
+                LumoUtility.JustifyContent.START,
+                LumoUtility.Gap.MEDIUM
         );
-
-        content.add(activeBudgetsView.asComponent());
-
-        add(content);
+        this.add(activeBudgetsView.asComponent());
     }
 }

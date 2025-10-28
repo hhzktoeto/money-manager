@@ -22,6 +22,8 @@ import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 @SpringComponent
 public class MainLayout extends VerticalLayout implements RouterLayout {
 
+    private final TransactionFormViewPresenter transactionFormPresenter;
+
     private final NavigationMenu desktopNavigation;
     private final NavigationMenu mobileNavigation;
     private final HorizontalLayout header;
@@ -32,72 +34,29 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
     private final Image appLogo;
 
     public MainLayout(TransactionFormViewPresenter transactionFormPresenter) {
-        ComponentEventListener<ClickEvent<Button>> openTransactionCreatingModal = e ->
-                transactionFormPresenter.openCreateForm();
+        this.transactionFormPresenter = transactionFormPresenter;
+
+        this.appLogo = new Image("/logo.png", "Money Manager");
+        this.desktopNavigation = new NavigationMenu(NavigationMenu.Mode.DESKTOP);
+        this.addTransactionButtonDesktop = new Button("Добавить транзакцию");
+        this.header = new HorizontalLayout(this.appLogo, this.desktopNavigation, this.addTransactionButtonDesktop);
+
+        this.content = new VerticalLayout();
+
+        this.mobileNavigation = new NavigationMenu(NavigationMenu.Mode.MOBILE);
+        this.addTransactionButtonMobile = new Button(VaadinIcon.PLUS.create());
+
+        this.configureHeader();
+        this.configureAppLogo();
+        this.configureAddTransactionButtonDesktop();
+        this.configureContent();
+        this.configureAddTransactionButtonMobile();
+
         this.setPadding(false);
         this.setSpacing(false);
         this.setSizeFull();
         this.setAlignItems(FlexComponent.Alignment.STRETCH);
-
-        header = new HorizontalLayout();
-        header.addClassNames(
-                LumoUtility.Width.FULL,
-                LumoUtility.MaxWidth.SCREEN_XLARGE,
-                LumoUtility.AlignSelf.CENTER,
-                LumoUtility.Border.BOTTOM,
-                LumoUtility.BorderRadius.LARGE,
-                LumoUtility.BorderColor.PRIMARY,
-                LumoUtility.Background.TRANSPARENT,
-                LumoUtility.Padding.Horizontal.XLARGE,
-                LumoUtility.Padding.Vertical.MEDIUM
-        );
-
-        appLogo = new Image("/logo.png", "Money Manager");
-        appLogo.addClickListener(event -> UI.getCurrent().navigate(HomeView.class));
-        appLogo.setWidth(11, Unit.REM);
-        appLogo.setClassName(StyleConstants.CLICKABLE);
-        header.add(appLogo);
-
-        desktopNavigation = new NavigationMenu(NavigationMenu.Mode.DESKTOP);
-        header.add(desktopNavigation);
-
-        addTransactionButtonDesktop = new Button("Добавить транзакцию");
-        addTransactionButtonDesktop.addClickListener(openTransactionCreatingModal);
-        addTransactionButtonDesktop.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        addTransactionButtonDesktop.addClassName(LumoUtility.AlignSelf.CENTER);
-        header.add(addTransactionButtonDesktop);
-
-        content = new VerticalLayout();
-        content.setSizeFull();
-        content.addClassNames(
-                LumoUtility.AlignContent.STRETCH,
-                LumoUtility.Overflow.AUTO,
-                LumoUtility.Padding.Horizontal.NONE
-        );
-
-        mobileNavigation = new NavigationMenu(NavigationMenu.Mode.MOBILE);
-
-        addTransactionButtonMobile = new Button(VaadinIcon.PLUS.create());
-        addTransactionButtonMobile.addClickListener(openTransactionCreatingModal);
-        addTransactionButtonMobile.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        addTransactionButtonMobile.getStyle().set("bottom", "11vh");
-        addTransactionButtonMobile.addClassNames(
-                LumoUtility.Position.FIXED,
-                LumoUtility.Position.End.MEDIUM,
-                LumoUtility.Width.XLARGE,
-                LumoUtility.Height.XLARGE,
-                LumoUtility.BoxShadow.MEDIUM,
-                LumoUtility.ZIndex.XLARGE,
-                LumoUtility.AlignItems.CENTER,
-                LumoUtility.JustifyContent.CENTER,
-                LumoUtility.Transition.TRANSFORM
-        );
-        addTransactionButtonMobile.setVisible(false);
-
-        this.add(header, content);
-        this.add(addTransactionButtonMobile);
-        this.add(mobileNavigation);
-
+        this.add(header, content, addTransactionButtonMobile, mobileNavigation);
         this.addAttachListener(attachEvent -> {
             Page page = attachEvent.getUI().getPage();
             page.addBrowserWindowResizeListener(resizeEvent -> updateResponsive(resizeEvent.getWidth()));
@@ -137,5 +96,65 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
 
             content.getStyle().remove("margin-bottom");
         }
+    }
+
+    private void configureHeader() {
+        this.header.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.MaxWidth.SCREEN_XLARGE,
+                LumoUtility.AlignSelf.CENTER,
+                LumoUtility.AlignItems.CENTER,
+                LumoUtility.Border.BOTTOM,
+                LumoUtility.BorderRadius.LARGE,
+                LumoUtility.BorderColor.PRIMARY,
+                LumoUtility.Background.TRANSPARENT,
+                LumoUtility.Padding.Horizontal.XLARGE,
+                LumoUtility.Padding.Vertical.MEDIUM
+        );
+    }
+
+    private void configureAppLogo() {
+        this.appLogo.addClickListener(event -> UI.getCurrent().navigate(HomeView.class));
+        this.appLogo.setWidth(11, Unit.REM);
+        this.appLogo.setHeightFull();
+        this.appLogo.setMaxHeight(3.25f, Unit.REM);
+        this.appLogo.setClassName(StyleConstants.CLICKABLE);
+    }
+
+    private void configureAddTransactionButtonDesktop() {
+        this.addTransactionButtonDesktop.addClickListener(e -> this.transactionFormPresenter.openCreateForm());
+        this.addTransactionButtonDesktop.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        this.addTransactionButtonDesktop.addClassName(LumoUtility.AlignSelf.CENTER);
+    }
+
+    private void configureContent() {
+        this.content.addClassNames(
+                LumoUtility.Padding.Horizontal.MEDIUM,
+                LumoUtility.Padding.Vertical.MEDIUM,
+                LumoUtility.Width.FULL,
+                LumoUtility.MaxWidth.SCREEN_LARGE,
+                LumoUtility.AlignSelf.CENTER,
+                LumoUtility.Height.FULL,
+                LumoUtility.AlignContent.STRETCH,
+                LumoUtility.Overflow.AUTO
+        );
+    }
+
+    private void configureAddTransactionButtonMobile() {
+        this.addTransactionButtonMobile.addClickListener(e -> this.transactionFormPresenter.openCreateForm());
+        this.addTransactionButtonMobile.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        this.addTransactionButtonMobile.getStyle().set("bottom", "11vh");
+        this.addTransactionButtonMobile.addClassNames(
+                LumoUtility.Position.FIXED,
+                LumoUtility.Position.End.MEDIUM,
+                LumoUtility.Width.XLARGE,
+                LumoUtility.Height.XLARGE,
+                LumoUtility.BoxShadow.MEDIUM,
+                LumoUtility.ZIndex.XLARGE,
+                LumoUtility.AlignItems.CENTER,
+                LumoUtility.JustifyContent.CENTER,
+                LumoUtility.Transition.TRANSFORM
+        );
+        this.addTransactionButtonMobile.setVisible(false);
     }
 }

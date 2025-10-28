@@ -5,6 +5,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.constant.Routes;
 import hhz.ktoeto.moneymanager.feature.user.ui.LoginCard;
 
@@ -12,13 +13,17 @@ import hhz.ktoeto.moneymanager.feature.user.ui.LoginCard;
 @SpringComponent
 @AnonymousAllowed
 @Route(Routes.Path.LOGIN)
-public class LoginView extends VerticalLayout {
+public class LoginRouteView extends VerticalLayout {
 
-    public LoginView(LoginCard loginContainer) {
-        setSizeFull();
-        setAlignItems(Alignment.CENTER);
-        setJustifyContentMode(JustifyContentMode.CENTER);
-
-        add(loginContainer);
+    public LoginRouteView(LoginCard loginContainer) {
+        this.setPadding(false);
+        this.setSpacing(false);
+        this.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.Height.FULL,
+                LumoUtility.AlignItems.CENTER,
+                LumoUtility.JustifyContent.CENTER
+        );
+        this.add(loginContainer);
     }
 }
