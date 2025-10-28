@@ -60,7 +60,6 @@ public class BudgetFormPresenter implements BudgetFormViewPresenter {
         } else {
             this.submitEdit();
         }
-        this.budgetFormDialog.close();
     }
 
     @Override
@@ -102,6 +101,7 @@ public class BudgetFormPresenter implements BudgetFormViewPresenter {
 
         budgetService.create(budget);
         view.reset(new Budget());
+        this.budgetFormDialog.close();
     }
 
     private void submitEdit() {
@@ -113,5 +113,6 @@ public class BudgetFormPresenter implements BudgetFormViewPresenter {
         }
 
         budgetService.update(budget, userContextHolder.getCurrentUserId());
+        this.budgetFormDialog.close();
     }
 }

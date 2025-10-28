@@ -3,6 +3,8 @@ package hhz.ktoeto.moneymanager.ui.component;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
@@ -16,6 +18,7 @@ import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.math.BigDecimal;
 
@@ -25,6 +28,14 @@ public class BudgetCard extends Composite<BasicContainer> {
     @Getter
     private final transient Budget budget;
     private final transient FormattingService formattingService;
+
+    private final Button favouriteButton;
+
+    public BudgetCard(Budget budget, FormattingService formattingService) {
+        this.budget = budget;
+        this.formattingService = formattingService;
+        this.favouriteButton = new Button(MaterialIcons.STAR_BORDER.create());
+    }
 
     @Override
     protected BasicContainer initContent() {
@@ -39,8 +50,12 @@ public class BudgetCard extends Composite<BasicContainer> {
         return root;
     }
 
-    public void addClickListener(ComponentEventListener<ClickEvent<FlexLayout>> listener) {
+    public void addContentClickListener(ComponentEventListener<ClickEvent<FlexLayout>> listener) {
         this.getContent().getContent().addClickListener(listener);
+    }
+
+    public void addFavouriteButtonClickListener(ComponentEventListener<ClickEvent<Button>> listener) {
+        this.favouriteButton.addClickListener(listener);
     }
 
     private void configureHeader(FlexLayout header) {
@@ -61,9 +76,16 @@ public class BudgetCard extends Composite<BasicContainer> {
                 LumoUtility.AlignItems.CENTER
         );
 
-        header.add(titleTypeLayout);
+        this.favouriteButton.addThemeVariants(ButtonVariant.LUMO_LARGE, ButtonVariant.LUMO_TERTIARY_INLINE);
+        if (budget.isFavourite()) {
+            this.favouriteButton.setIcon(MaterialIcons.STAR.create());
+            this.favouriteButton.addThemeVariants(ButtonVariant.LUMO_WARNING);
+        }
+
+        header.add(titleTypeLayout, this.favouriteButton);
         header.addClassNames(
-                LumoUtility.FlexDirection.COLUMN,
+                LumoUtility.FlexDirection.ROW,
+                LumoUtility.JustifyContent.BETWEEN,
                 LumoUtility.Gap.SMALL
         );
     }

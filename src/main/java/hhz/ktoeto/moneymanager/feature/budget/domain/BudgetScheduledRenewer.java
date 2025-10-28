@@ -32,6 +32,9 @@ public class BudgetScheduledRenewer {
         log.info("Found {} budgets to renew", expiredRenewableBudgets.size());
         for (Budget budget : expiredRenewableBudgets) {
             Budget newBudget = this.renewBudget(budget);
+            if (budget.isFavourite()) {
+                budget.setFavourite(false);
+            }
 
             repository.save(newBudget);
         }
@@ -42,13 +45,15 @@ public class BudgetScheduledRenewer {
         Budget newBudget = new Budget();
         newBudget.setName(budget.getName());
         newBudget.setRenewable(budget.isRenewable());
+        newBudget.setFavourite(budget.isFavourite());
         newBudget.setType(budget.getType());
         newBudget.setScope(budget.getScope());
         newBudget.setActivePeriod(budget.getActivePeriod());
         newBudget.setGoalAmount(budget.getGoalAmount());
         newBudget.calculateActiveDates();
         newBudget.setUserId(budget.getUserId());
-        newBudget.setCategories(budget.getCategories());
+
+        newBudget.getCategories().addAll(budget.getCategories());
 
         return newBudget;
     }

@@ -10,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 import hhz.ktoeto.moneymanager.feature.budget.ActiveBudgetsView;
 import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
@@ -71,7 +72,9 @@ public class ActiveBudgets extends Composite<Div> implements ActiveBudgetsView {
         Div root = this.getContent();
         root.removeAll();
         cards.forEach(card -> {
-            card.addClickListener(event -> this.presenter.onEditRequested(card.getBudget()));
+            Budget budget = card.getBudget();
+            card.addContentClickListener(event -> this.presenter.onEditRequested(budget));
+            card.addFavouriteButtonClickListener(event -> this.presenter.onAddToFavourite(budget));
             root.add(card);
         });
         root.add(this.addNewBudgetButton);

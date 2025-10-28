@@ -15,6 +15,7 @@ import hhz.ktoeto.moneymanager.core.event.TransactionCreatedEvent;
 import hhz.ktoeto.moneymanager.core.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.core.event.TransactionUpdatedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Sort;
 
 import java.util.stream.Stream;
 
@@ -34,8 +35,11 @@ public class BudgetsDataProvider extends AbstractBackEndDataProvider<Budget, Bud
     protected Stream<Budget> fetchFromBackEnd(Query<Budget, BudgetFilter> query) {
         long userId = userContextHolder.getCurrentUserId();
         BudgetFilter filter = query.getFilter().orElse(null);
+        Sort sort = Sort.by(Sort.Direction.DESC, "isFavourite")
+                .and(Sort.by(Sort.Direction.ASC, "endDate"));
 
-        return budgetService.getAll(userId, filter).stream();
+
+        return budgetService.getAll(userId, filter, sort).stream();
     }
 
     @Override

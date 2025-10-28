@@ -13,6 +13,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,35 +31,8 @@ public class BudgetService {
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
-    public List<Budget> getAll(long userId, BudgetFilter filter) {
-        log.debug("Fetching active budgets for user with id {}", userId);
-        BudgetSpecification specification = BudgetSpecification.builder()
-                .userId(userId)
-                .filter(filter)
-                .build();
-
-        List<Budget> budgets = repository.findAll(specification);
-        budgets.forEach(budget -> {
-            TransactionFilter transactionFilter = new TransactionFilter();
-            transactionFilter.setFromDate(budget.getStartDate());
-            transactionFilter.setToDate(budget.getEndDate());
-            transactionFilter.setCategoriesIds(
-                    budget.getCategories().stream()
-                            .map(Category::getId)
-                            .collect(Collectors.toSet())
-            );
-            transactionFilter.setType(
-                    Budget.Type.EXPENSE == budget.getType()
-                            ? Transaction.Type.EXPENSE
-                            : Transaction.Type.INCOME
-            );
-            List<Transaction> transactions = transactionService.getAll(userId, transactionFilter);
-            BigDecimal currentAmount = transactionService.calculateTotal(transactions);
-
-            budget.setCurrentAmount(currentAmount);
-        });
-
-        return repository.findAll(specification);
+    public List<Budget> getAll(long userId, BudgetFilter filter, Sort sort) {
+        return doGetAll(userId, filter, sort);
     }
 
     @Transactional
@@ -112,5 +87,42 @@ public class BudgetService {
     private Budget getBudgetFromRepository(long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Could not find Budget with id %d".formatted(id)));
+    }
+
+    private List<Budget> doGetAll(long userId, BudgetFilter filter, @Nullable Sort sort) {
+        log.debug("Fetching active budgets for user with id {}", userId);
+        BudgetSpecification specification = BudgetSpecification.builder()
+                .userId(userId)
+                .filter(filter)
+                .build();
+
+        List<Budget> budgets;
+        if (sort == null) {
+            budgets = repository.findAll(specification);
+        } else {
+            budgets = repository.findAll(specification, sort);
+        }
+        budgets.forEach(budget -> {
+            TransactionFilter transactionFilter = new TransactionFilter();
+            transactionFilter.setFromDate(budget.getStartDate());
+            transactionFilter.setToDate(budget.getEndDate());
+            transactionFilter.setCategoriesIds(
+                    budget.getCategories().stream()
+                            .map(Category::getId)
+                            .collect(Collectors.toSet())
+            );
+            transactionFilter.setType(
+                    Budget.Type.EXPENSE == budget.getType()
+                            ? Transaction.Type.EXPENSE
+                            : Transaction.Type.INCOME
+            );
+            List<Transaction> transactions = transactionService.getAll(userId, transactionFilter);
+            BigDecimal currentAmount = transactionService.calculateTotal(transactions);
+
+            budget.setCurrentAmount(currentAmount);
+        });
+
+        return budgets;
+
     }
 }

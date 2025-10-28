@@ -99,7 +99,7 @@ public class Budget {
     @Column(name = "user_id", nullable = false)
     private long userId;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "budget_categories",
             joinColumns = @JoinColumn(name = "budget_id"),

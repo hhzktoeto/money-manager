@@ -7,4 +7,6 @@ import hhz.ktoeto.moneymanager.ui.InitializedManually;
 import hhz.ktoeto.moneymanager.ui.ViewPresenter;
 
 public interface ActiveBudgetsViewPresenter extends ViewPresenter<ActiveBudgetsView>, InitializedManually, CanCreate, CanEdit<Budget> {
+
+    void onAddToFavourite(Budget budget);
 }
