@@ -42,12 +42,11 @@ public class TransactionsGridSettings extends Composite<Details> implements Tran
     @Override
     protected Details initContent() {
         Details root = new Details("Настройки");
+        root.setWidthFull();
 
-        Div contentWrapper = new Div();
-
-        this.configureContentWrapper(contentWrapper);
-
-        root.add(contentWrapper);
+        Div content = new Div();
+        this.configureContent(content);
+        root.add(content);
 
         return root;
     }
@@ -57,7 +56,7 @@ public class TransactionsGridSettings extends Composite<Details> implements Tran
         return this;
     }
 
-    private void configureContentWrapper(Div wrapper) {
+    private void configureContent(Div content) {
         this.categoryMultiSelect.setItemLabelGenerator(Category::getName);
         this.categoryMultiSelect.setClearButtonVisible(true);
         this.categoryMultiSelect.addValueChangeListener(event -> {
@@ -81,7 +80,7 @@ public class TransactionsGridSettings extends Composite<Details> implements Tran
             this.dateRangePicker.suppressKeyboard();
         });
 
-        wrapper.addClassNames(
+        content.addClassNames(
                 LumoUtility.Width.FULL,
                 LumoUtility.Gap.Column.SMALL,
                 LumoUtility.Display.GRID,
@@ -89,6 +88,6 @@ public class TransactionsGridSettings extends Composite<Details> implements Tran
                 LumoUtility.Grid.Column.COLUMNS_1,
                 LumoUtility.Grid.Breakpoint.Small.COLUMNS_2
         );
-        wrapper.add(this.categoryMultiSelect, this.dateRangePicker);
+        content.add(this.categoryMultiSelect, this.dateRangePicker);
     }
 }

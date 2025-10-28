@@ -1,6 +1,5 @@
 package hhz.ktoeto.moneymanager.feature.transaction;
 
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -17,25 +16,17 @@ import jakarta.annotation.security.PermitAll;
 public class TransactionsRouteView extends VerticalLayout {
 
     public TransactionsRouteView(TransactionsGridSettingsView gridSettings, TransactionsGridView allTransactionsGrid) {
-        setSizeFull();
-        addClassNames(
-                LumoUtility.AlignItems.CENTER,
-                LumoUtility.JustifyContent.START,
-                LumoUtility.Height.FULL
-        );
-
-        FlexLayout content = new FlexLayout();
-        content.setFlexDirection(FlexLayout.FlexDirection.COLUMN);
-        content.addClassNames(
+        this.setPadding(false);
+        this.setSpacing(false);
+        this.addClassNames(
                 LumoUtility.Width.FULL,
                 LumoUtility.Height.FULL,
-                LumoUtility.MaxWidth.SCREEN_LARGE
+                LumoUtility.AlignItems.START,
+                LumoUtility.JustifyContent.START
         );
-        content.add(
+        this.add(
                 gridSettings.asComponent(),
                 allTransactionsGrid.asComponent()
         );
-
-        add(content);
     }
 }

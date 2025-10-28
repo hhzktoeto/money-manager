@@ -4,7 +4,7 @@ import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyC
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import hhz.ktoeto.moneymanager.ui.constant.Routes;
 import hhz.ktoeto.moneymanager.feature.user.domain.UserService;
-import hhz.ktoeto.moneymanager.feature.user.LoginView;
+import hhz.ktoeto.moneymanager.feature.user.LoginRouteView;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -69,7 +69,7 @@ public class SecurityConfig {
         requestCache.setMatchingRequestParameterName(null);
 
         return http
-                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(LoginView.class, Routes.LOGIN.getPath()))
+                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(LoginRouteView.class, Routes.LOGIN.getPath()))
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/logo.png").permitAll())
                 .requestCache(configurer -> configurer.requestCache(requestCache))
                 .formLogin(configurer -> configurer
