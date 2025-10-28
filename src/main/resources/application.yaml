@@ -36,3 +36,12 @@ logging:
     http: warn
   pattern:
     console: '%d{dd.MM.YYYY HH:mm:ss.SSS} %highlight(%-5level) --- [%25thread] --- %-75logger{75} : %cyan(%msg%n)'
+    file: '%d{dd.MM.YYYY HH:mm:ss.SSS} %-5level --- [%25thread] %-25logger{25} : %msg%n'
+  file:
+    name: logs/log.log
+  logback:
+    rollingpolicy:
+      max-file-size: 25MB
+      max-history: 10
+      total-size-cap: 2GB
+      file-name-pattern: money-manager-log.%d{yyyy-MM-dd}.%i.gz

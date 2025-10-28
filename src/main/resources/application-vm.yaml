@@ -1,39 +1,13 @@
 spring:
-  application:
-    name: money-manager
-  jpa:
-    open-in-view: false
   datasource:
     url: jdbc:postgresql://10.78.16.20:${POSTGRES_PORT}/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yaml
-  security:
-    remember-me:
-      key: ${REMEMBER_ME_KEY}
-      cookie-name: ${REMEMBER_ME_COOKIE_NAME}
-      max-age: ${REMEMBER_ME_MAX_AGE}
-
-vaadin:
-  launch-browser: true
-  allowed-packages: com.vaadin,org.vaadin,com.flowingcode,hhz.ktoeto
-
-server:
-  port: ${MONEY_MANAGER_PORT}
-  tomcat:
-    max-http-form-post-size: 5MB
 
 logging:
-  group:
-    myapp: hhz
-    spring: org.springframework, org.springframework.web, org.springframework.boot
-    database: liquibase, org.hibernate, com.zaxxer
-    http: org.apache.coyote, org.apache.catalina
   level:
-    myapp: debug
-    spring: warn
-    database: warn
-    http: warn
-  pattern:
-    console: '%d{dd.MM.YYYY HH:mm:ss.SSS} %highlight(%-5level) --- [%25thread] --- %-75logger{75} : %cyan(%msg%n)'
+    spring: info
+    database: info
+    http: info
+  file:
+    name: ""
