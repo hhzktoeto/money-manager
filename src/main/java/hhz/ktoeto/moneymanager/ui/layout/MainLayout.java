@@ -86,6 +86,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
 
             this.header.setJustifyContentMode(JustifyContentMode.CENTER);
             this.header.addClassName(LumoUtility.TextAlignment.CENTER);
+
+            this.content.getStyle().set("margin-bottom", "10vh");
         } else {
             this.desktopNavigation.setVisible(true);
             this.addTransactionButtonDesktop.setVisible(true);
@@ -95,6 +97,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
 
             this.header.setJustifyContentMode(JustifyContentMode.BETWEEN);
             this.header.removeClassName(LumoUtility.TextAlignment.CENTER);
+
+            this.content.getStyle().remove("margin-bottom");
         }
     }
 
