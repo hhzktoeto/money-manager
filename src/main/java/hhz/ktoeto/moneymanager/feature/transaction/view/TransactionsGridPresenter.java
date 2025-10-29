@@ -2,9 +2,11 @@ package hhz.ktoeto.moneymanager.feature.transaction.view;
 
 import com.vaadin.flow.data.provider.DataChangeEvent;
 import com.vaadin.flow.data.provider.DataProviderListener;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormViewPresenter;
+import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.data.TransactionDataProvider;
@@ -12,6 +14,8 @@ import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionsSummaries;
+import hhz.ktoeto.moneymanager.ui.event.TransactionEditRequested;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 
@@ -21,7 +25,8 @@ public class TransactionsGridPresenter implements TransactionsGridViewPresenter,
     private final FormattingService formattingService;
     private final TransactionService transactionService;
     private final TransactionDataProvider dataProvider;
-    private final TransactionFormViewPresenter formPresenter;
+    private final CategoryDataProvider categoryDataProvider;
+    private final ApplicationEventPublisher eventPublisher;
 
     private TransactionsGridView view;
 
@@ -29,12 +34,14 @@ public class TransactionsGridPresenter implements TransactionsGridViewPresenter,
                                      FormattingService formattingService,
                                      TransactionService transactionService,
                                      TransactionDataProvider dataProvider,
-                                     TransactionFormViewPresenter formPresenter) {
+                                     CategoryDataProvider categoryDataProvider,
+                                     ApplicationEventPublisher eventPublisher) {
         this.userContextHolder = userContextHolder;
         this.formattingService = formattingService;
         this.transactionService = transactionService;
         this.dataProvider = dataProvider;
-        this.formPresenter = formPresenter;
+        this.categoryDataProvider = categoryDataProvider;
+        this.eventPublisher = eventPublisher;
 
         this.dataProvider.addDataProviderListener(this);
     }
@@ -62,12 +69,17 @@ public class TransactionsGridPresenter implements TransactionsGridViewPresenter,
 
     @Override
     public void onEditRequested(Transaction transaction) {
-        formPresenter.openEditForm(transaction);
+        eventPublisher.publishEvent(new TransactionEditRequested(this, transaction));
     }
 
     @Override
     public TransactionDataProvider getTransactionsProvider() {
         return this.dataProvider;
+    }
+
+    @Override
+    public ListDataProvider<Category> getCategoriesProvider() {
+        return this.categoryDataProvider;
     }
 
     @Override

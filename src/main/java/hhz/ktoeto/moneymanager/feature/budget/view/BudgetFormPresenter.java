@@ -7,12 +7,16 @@ import hhz.ktoeto.moneymanager.feature.budget.BudgetFormView;
 import hhz.ktoeto.moneymanager.feature.budget.BudgetFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
-import hhz.ktoeto.moneymanager.feature.category.CategoryFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.constant.FormMode;
+import hhz.ktoeto.moneymanager.ui.event.BudgetCreateRequested;
+import hhz.ktoeto.moneymanager.ui.event.BudgetEditRequested;
+import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 
 @UIScope
 @SpringComponent
@@ -21,8 +25,8 @@ public class BudgetFormPresenter implements BudgetFormViewPresenter {
 
     private final BudgetService budgetService;
     private final UserContextHolder userContextHolder;
+    private final ApplicationEventPublisher eventPublisher;
     private final CategoryDataProvider categoryDataProvider;
-    private final CategoryFormViewPresenter categoryFormPresenter;
 
     private final CustomDialog budgetFormDialog = new CustomDialog();
 
@@ -81,10 +85,19 @@ public class BudgetFormPresenter implements BudgetFormViewPresenter {
         confirmDialog.open();
     }
 
-
     @Override
     public void onCategoryAdd() {
-        categoryFormPresenter.openCreateForm();
+        this.eventPublisher.publishEvent(new CategoryCreateRequested(this));
+    }
+
+    @EventListener(BudgetCreateRequested.class)
+    private void onBudgetCreateRequested() {
+        this.openCreateForm();
+    }
+
+    @EventListener(BudgetEditRequested.class)
+    private void onBudgetEditRequested(BudgetEditRequested event) {
+        this.openEditForm(event.getBudget());
     }
 
     private void submitCreate() {

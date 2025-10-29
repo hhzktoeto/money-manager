@@ -10,13 +10,15 @@ import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.feature.budget.ActiveBudgetsView;
 import hhz.ktoeto.moneymanager.feature.budget.ActiveBudgetsViewPresenter;
-import hhz.ktoeto.moneymanager.feature.budget.BudgetFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.budget.data.BudgetsDataProvider;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetFilter;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
+import hhz.ktoeto.moneymanager.ui.event.BudgetCreateRequested;
+import hhz.ktoeto.moneymanager.ui.event.BudgetEditRequested;
 import lombok.Setter;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
@@ -28,21 +30,21 @@ public class ActiveBudgetsPresenter implements ActiveBudgetsViewPresenter, DataP
     private final transient BudgetService budgetService;
     private final transient FormattingService formattingService;
     private final transient UserContextHolder userContextHolder;
-    private final transient BudgetFormViewPresenter formPresenter;
+    private final transient ApplicationEventPublisher eventPublisher;
 
     @Setter
     private transient ActiveBudgetsView view;
 
     public ActiveBudgetsPresenter(BudgetsDataProvider dataProvider,
                                   BudgetService budgetService,
-                                  BudgetFormViewPresenter formPresenter,
+                                  ApplicationEventPublisher eventPublisher,
                                   FormattingService formattingService,
                                   UserContextHolder userContextHolder) {
         this.dataProvider = dataProvider;
         this.budgetService = budgetService;
         this.formattingService = formattingService;
         this.userContextHolder = userContextHolder;
-        this.formPresenter = formPresenter;
+        this.eventPublisher = eventPublisher;
 
         this.dataProvider.addDataProviderListener(this);
     }
@@ -54,12 +56,12 @@ public class ActiveBudgetsPresenter implements ActiveBudgetsViewPresenter, DataP
 
     @Override
     public void onCreateRequested() {
-        this.formPresenter.openCreateForm();
+        this.eventPublisher.publishEvent(new BudgetCreateRequested(this));
     }
 
     @Override
     public void onEditRequested(Budget budget) {
-        this.formPresenter.openEditForm(budget);
+        this.eventPublisher.publishEvent(new BudgetEditRequested(this, budget));
     }
 
     @Override

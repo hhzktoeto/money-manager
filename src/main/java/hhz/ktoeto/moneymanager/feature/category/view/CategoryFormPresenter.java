@@ -10,7 +10,9 @@ import hhz.ktoeto.moneymanager.feature.category.domain.CategoryService;
 import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.constant.FormMode;
+import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 
 @SpringComponent
 @RequiredArgsConstructor
@@ -76,7 +78,12 @@ public class CategoryFormPresenter implements CategoryFormViewPresenter {
         confirmDialog.open();
     }
 
-    public void submitCreate() {
+    @EventListener(CategoryCreateRequested.class)
+    private void onCategoryCreateRequested() {
+        this.openCreateForm();
+    }
+
+    private void submitCreate() {
         long userId = userContextHolder.getCurrentUserId();
 
         Category category = new Category();

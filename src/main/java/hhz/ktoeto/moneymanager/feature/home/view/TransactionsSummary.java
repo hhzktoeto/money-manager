@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.transaction.view;
+package hhz.ktoeto.moneymanager.feature.home.view;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.html.H3;

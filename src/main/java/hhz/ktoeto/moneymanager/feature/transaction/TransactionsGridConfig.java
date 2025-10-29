@@ -3,10 +3,12 @@ package hhz.ktoeto.moneymanager.feature.transaction;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
+import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.data.TransactionDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
-import hhz.ktoeto.moneymanager.feature.transaction.view.TransactionsGridPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.view.TransactionsGrid;
+import hhz.ktoeto.moneymanager.feature.transaction.view.TransactionsGridPresenter;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,8 +21,9 @@ public class TransactionsGridConfig {
                                                               FormattingService formattingService,
                                                               TransactionService transactionService,
                                                               TransactionDataProvider recentTransactionsProvider,
-                                                              TransactionFormViewPresenter formViewPresenter) {
-        return new TransactionsGridPresenter(userContextHolder, formattingService, transactionService, recentTransactionsProvider, formViewPresenter);
+                                                              CategoryDataProvider categoryDataProvider,
+                                                              ApplicationEventPublisher eventPublisher) {
+        return new TransactionsGridPresenter(userContextHolder, formattingService, transactionService, recentTransactionsProvider, categoryDataProvider, eventPublisher);
     }
 
     @Bean
@@ -29,8 +32,9 @@ public class TransactionsGridConfig {
                                                            FormattingService formattingService,
                                                            TransactionService transactionService,
                                                            TransactionDataProvider allTransactionsProvider,
-                                                           TransactionFormViewPresenter formViewPresenter) {
-        return new TransactionsGridPresenter(userContextHolder, formattingService, transactionService, allTransactionsProvider, formViewPresenter);
+                                                           CategoryDataProvider categoryDataProvider,
+                                                           ApplicationEventPublisher eventPublisher) {
+        return new TransactionsGridPresenter(userContextHolder, formattingService, transactionService, allTransactionsProvider, categoryDataProvider, eventPublisher);
     }
 
     @Bean

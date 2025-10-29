@@ -3,7 +3,6 @@ package hhz.ktoeto.moneymanager.feature.transaction.view;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
-import hhz.ktoeto.moneymanager.feature.category.CategoryFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormView;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormViewPresenter;
@@ -12,7 +11,12 @@ import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.constant.FormMode;
+import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
+import hhz.ktoeto.moneymanager.ui.event.TransactionCreateRequested;
+import hhz.ktoeto.moneymanager.ui.event.TransactionEditRequested;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 
 @UIScope
 @SpringComponent
@@ -21,8 +25,8 @@ public class TransactionFormPresenter implements TransactionFormViewPresenter {
 
     private final UserContextHolder userContextHolder;
     private final TransactionService transactionService;
+    private final ApplicationEventPublisher eventPublisher;
     private final CategoryDataProvider categoryDataProvider;
-    private final CategoryFormViewPresenter categoryFormPresenter;
 
     private final CustomDialog dialog = new CustomDialog();
 
@@ -82,7 +86,17 @@ public class TransactionFormPresenter implements TransactionFormViewPresenter {
 
     @Override
     public void onCategoryAdd() {
-        categoryFormPresenter.openCreateForm();
+        this.eventPublisher.publishEvent(new CategoryCreateRequested(this));
+    }
+
+    @EventListener(TransactionCreateRequested.class)
+    private void onTransactionCreateRequested() {
+        this.openCreateForm();
+    }
+
+    @EventListener(TransactionEditRequested.class)
+    private void onTransactionEditRequested(TransactionEditRequested event) {
+        this.openEditForm(event.getTransaction());
     }
 
     private void submitCreate() {

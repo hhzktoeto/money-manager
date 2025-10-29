@@ -1,15 +1,19 @@
 package hhz.ktoeto.moneymanager.feature.transaction.view;
 
+import com.vaadin.componentfactory.DateRange;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
+import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.data.renderer.NumberRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
@@ -17,11 +21,14 @@ import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionsSummaries;
 import hhz.ktoeto.moneymanager.feature.transaction.view.renderer.TransactionCategoryDateRenderer;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
+import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TransactionsGrid extends Composite<VerticalLayout> implements TransactionsGridView {
 
@@ -50,14 +57,20 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
         root.setSpacing(false);
         root.setSizeFull();
 
+        Details gridSettings = null;
         Grid<Transaction> grid = new Grid<>();
 
         this.configureGrid(grid);
 
         if (mode == Mode.ALL) {
+            gridSettings = new Details("Настройки");
+            this.configureGridSettings(gridSettings);
             this.configureGridHeader(grid);
         }
 
+        if (gridSettings != null) {
+            root.add(gridSettings);
+        }
         root.add(grid);
 
         return root;
@@ -89,7 +102,7 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
             grid.setPageSize(25);
         }
         grid.setSelectionMode(Grid.SelectionMode.NONE);
-        grid.addItemClickListener(event -> presenter.onEditRequested(event.getItem()));
+        grid.addItemClickListener(event -> this.presenter.onEditRequested(event.getItem()));
 
         EmptyDataImage noTransactionsImage = new EmptyDataImage();
         noTransactionsImage.setText(mode == Mode.RECENT
@@ -112,6 +125,46 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
                     }
                     return stringBuilder.toString();
                 });
+    }
+
+    private void configureGridSettings(Details gridSettings) {
+        MultiSelectComboBox<Category> categoryMultiSelect = new MultiSelectComboBox<>("Категории");
+        categoryMultiSelect.setItemLabelGenerator(Category::getName);
+        categoryMultiSelect.setClearButtonVisible(true);
+        categoryMultiSelect.addValueChangeListener(event -> {
+            TransactionFilter filter = this.presenter.getFilter();
+            Set<Long> selectedCategoriesIds = event.getValue().stream()
+                    .map(Category::getId)
+                    .collect(Collectors.toSet());
+            filter.setCategoriesIds(selectedCategoriesIds);
+            this.presenter.setFilter(filter);
+        });
+        categoryMultiSelect.setItems(this.presenter.getCategoriesProvider());
+
+        RussianDateRangePicker dateRangePicker = new RussianDateRangePicker("Период");
+        TransactionFilter transactionFilter = this.presenter.getFilter();
+        dateRangePicker.setValue(new DateRange(transactionFilter.getFromDate(), transactionFilter.getToDate()));
+        dateRangePicker.addValueChangeListener(event -> {
+            TransactionFilter filter = this.presenter.getFilter();
+            DateRange selectedRange = dateRangePicker.getValue();
+            filter.setFromDate(selectedRange.getStartDate());
+            filter.setToDate(selectedRange.getEndDate());
+            this.presenter.setFilter(filter);
+            dateRangePicker.suppressKeyboard();
+        });
+
+        Div content = new Div(categoryMultiSelect, dateRangePicker);
+        content.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.Gap.Column.SMALL,
+                LumoUtility.Display.GRID,
+                LumoUtility.Grid.FLOW_ROW,
+                LumoUtility.Grid.Column.COLUMNS_1,
+                LumoUtility.Grid.Breakpoint.Small.COLUMNS_2
+        );
+
+        gridSettings.setWidthFull();
+        gridSettings.add(content);
     }
 
     private void configureGridHeader(Grid<Transaction> grid) {

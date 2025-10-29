@@ -15,15 +15,16 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.home.HomeRouteView;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormViewPresenter;
 import hhz.ktoeto.moneymanager.ui.component.NavigationMenu;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
+import hhz.ktoeto.moneymanager.ui.event.TransactionCreateRequested;
+import org.springframework.context.ApplicationEventPublisher;
 
 @UIScope
 @SpringComponent
 public class MainLayout extends VerticalLayout implements RouterLayout {
 
-    private final TransactionFormViewPresenter transactionFormPresenter;
+    private final ApplicationEventPublisher eventPublisher;
 
     private final NavigationMenu desktopNavigation;
     private final NavigationMenu mobileNavigation;
@@ -34,8 +35,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
     private final Button addTransactionButtonMobile;
     private final Image appLogo;
 
-    public MainLayout(TransactionFormViewPresenter transactionFormPresenter) {
-        this.transactionFormPresenter = transactionFormPresenter;
+    public MainLayout(ApplicationEventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
 
         this.appLogo = new Image("/logo.png", "Money Manager");
         this.desktopNavigation = new NavigationMenu(NavigationMenu.Mode.DESKTOP);
@@ -63,8 +64,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         this.add(header, content, addTransactionButtonMobile, mobileNavigation);
         this.addAttachListener(attachEvent -> {
             Page page = attachEvent.getUI().getPage();
-            page.addBrowserWindowResizeListener(resizeEvent -> updateResponsive(resizeEvent.getWidth()));
-            page.retrieveExtendedClientDetails(details -> updateResponsive(details.getWindowInnerWidth()));
+            page.addBrowserWindowResizeListener(resizeEvent -> this.updateResponsive(resizeEvent.getWidth()));
+            page.retrieveExtendedClientDetails(details -> this.updateResponsive(details.getWindowInnerWidth()));
         });
     }
 
@@ -126,7 +127,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
     }
 
     private void configureAddTransactionButtonDesktop() {
-        this.addTransactionButtonDesktop.addClickListener(e -> this.transactionFormPresenter.openCreateForm());
+        this.addTransactionButtonDesktop.addClickListener(e -> this.eventPublisher.publishEvent(new TransactionCreateRequested(this)));
         this.addTransactionButtonDesktop.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         this.addTransactionButtonDesktop.addClassName(LumoUtility.AlignSelf.CENTER);
     }
@@ -145,7 +146,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
     }
 
     private void configureAddTransactionButtonMobile() {
-        this.addTransactionButtonMobile.addClickListener(e -> this.transactionFormPresenter.openCreateForm());
+        this.addTransactionButtonMobile.addClickListener(e -> this.eventPublisher.publishEvent(new TransactionCreateRequested(this)));
         this.addTransactionButtonMobile.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         this.addTransactionButtonMobile.getStyle().set("bottom", "11vh");
         this.addTransactionButtonMobile.addClassNames(
