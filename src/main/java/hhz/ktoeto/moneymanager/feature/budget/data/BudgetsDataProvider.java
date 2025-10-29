@@ -36,7 +36,7 @@ public class BudgetsDataProvider extends AbstractBackEndDataProvider<Budget, Bud
         long userId = userContextHolder.getCurrentUserId();
         BudgetFilter filter = query.getFilter().orElse(null);
         Sort sort = Sort.by(Sort.Direction.DESC, "isFavourite")
-                .and(Sort.by(Sort.Direction.ASC, "endDate"));
+                .and(Sort.by(Sort.Direction.ASC, "goalAmount"));
 
 
         return budgetService.getAll(userId, filter, sort).stream();
