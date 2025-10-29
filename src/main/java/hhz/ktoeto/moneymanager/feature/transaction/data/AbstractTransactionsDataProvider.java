@@ -19,22 +19,28 @@ import org.springframework.lang.NonNull;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public class TransactionDataProvider extends AbstractBackEndDataProvider<Transaction, TransactionFilter> {
+public abstract class AbstractTransactionsDataProvider extends AbstractBackEndDataProvider<Transaction, TransactionFilter> {
 
-    private static final int UNLIMITED = Integer.MAX_VALUE;
+    protected final transient UserContextHolder userContextHolder;
+    protected final transient TransactionService transactionService;
 
-    private final transient UserContextHolder userContextHolder;
-    private final transient TransactionService transactionService;
     @Getter
     protected transient TransactionFilter currentFilter;
 
-    private final int maxSize;
+    protected Integer customLimit;
+    protected Sort customSort;
 
-    public TransactionDataProvider(TransactionService transactionService, UserContextHolder userContextHolder, int maxSize) {
+    public AbstractTransactionsDataProvider(UserContextHolder userContextHolder, TransactionService transactionService) {
         this.userContextHolder = userContextHolder;
         this.transactionService = transactionService;
         this.currentFilter = TransactionFilter.currentMonthFilter();
-        this.maxSize = maxSize;
+    }
+
+    public AbstractTransactionsDataProvider(UserContextHolder userContextHolder, TransactionService transactionService,
+                                            Integer limit, Sort sort) {
+        this(userContextHolder, transactionService);
+        this.customLimit = limit;
+        this.customSort = sort;
     }
 
     public void setCurrentFilter(@NonNull TransactionFilter filter) {
@@ -48,10 +54,9 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
         TransactionFilter filter = query.getFilter().orElse(currentFilter);
 
         Sort sort;
-        boolean isLimited = maxSize < UNLIMITED;
 
-        if (isLimited) {
-            sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        if (customSort != null) {
+            sort = customSort;
         } else {
             sort = query.getSortOrders().stream()
                     .map(order -> Sort.by(order.getDirection() == SortDirection.DESCENDING
@@ -70,13 +75,15 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
 
         int limit = query.getLimit();
         int page = query.getOffset() / query.getLimit();
-        if (isLimited) {
+
+        if (customLimit != null) {
+            limit = customLimit;
             page = 0;
-            limit = maxSize;
         }
+
         PageRequest pageRequest = PageRequest.of(page, limit, sort);
 
-        return transactionService.getPage(userId, filter, pageRequest).getContent().stream();
+        return transactionService.getPage(userId, filter, pageRequest).stream();
     }
 
     @Override
@@ -85,7 +92,7 @@ public class TransactionDataProvider extends AbstractBackEndDataProvider<Transac
         TransactionFilter filter = query.getFilter().orElse(currentFilter);
         int count = transactionService.count(userId, filter);
 
-        return Math.min(maxSize, count);
+        return Objects.requireNonNullElse(customLimit, count);
     }
 
     @EventListener({
