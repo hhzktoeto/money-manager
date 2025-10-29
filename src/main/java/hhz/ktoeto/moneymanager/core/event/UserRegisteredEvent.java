@@ -1,6 +1,6 @@
 package hhz.ktoeto.moneymanager.core.event;
 
-import hhz.ktoeto.moneymanager.feature.user.domain.User;
+import hhz.ktoeto.moneymanager.feature.login.domain.User;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 

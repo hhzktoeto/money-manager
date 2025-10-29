@@ -22,8 +22,8 @@ import hhz.ktoeto.moneymanager.ui.component.RussianDatePicker;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
-import hhz.ktoeto.moneymanager.feature.transaction.validator.TransactionAmountValidator;
-import hhz.ktoeto.moneymanager.feature.transaction.validator.TransactionDescriptionValidator;
+import hhz.ktoeto.moneymanager.feature.transaction.view.validator.TransactionAmountValidator;
+import hhz.ktoeto.moneymanager.feature.transaction.view.validator.TransactionDescriptionValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 

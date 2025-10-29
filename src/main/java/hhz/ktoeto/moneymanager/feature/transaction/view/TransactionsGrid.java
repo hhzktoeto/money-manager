@@ -15,7 +15,7 @@ import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionsSummaries;
-import hhz.ktoeto.moneymanager.feature.transaction.renderer.TransactionCategoryDateRenderer;
+import hhz.ktoeto.moneymanager.feature.transaction.view.renderer.TransactionCategoryDateRenderer;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 

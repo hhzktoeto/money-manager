@@ -13,7 +13,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.category.CategoryFormView;
 import hhz.ktoeto.moneymanager.feature.category.CategoryFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
-import hhz.ktoeto.moneymanager.feature.category.validator.CategoryNameValidator;
+import hhz.ktoeto.moneymanager.feature.category.view.validator.CategoryNameValidator;
 import hhz.ktoeto.moneymanager.ui.constant.FormMode;
 import lombok.extern.slf4j.Slf4j;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;

@@ -14,7 +14,7 @@ import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.feature.HomeView;
+import hhz.ktoeto.moneymanager.feature.home.HomeRouteView;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormViewPresenter;
 import hhz.ktoeto.moneymanager.ui.component.NavigationMenu;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
@@ -118,7 +118,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
     }
 
     private void configureAppLogo() {
-        this.appLogo.addClickListener(event -> UI.getCurrent().navigate(HomeView.class));
+        this.appLogo.addClickListener(event -> UI.getCurrent().navigate(HomeRouteView.class));
         this.appLogo.setWidth(11, Unit.REM);
         this.appLogo.setHeightFull();
         this.appLogo.setMaxHeight(3.25f, Unit.REM);

@@ -5,7 +5,7 @@ import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.feature.transaction.data.TransactionDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
-import hhz.ktoeto.moneymanager.feature.transaction.presenter.TransactionsGridPresenter;
+import hhz.ktoeto.moneymanager.feature.transaction.view.TransactionsGridPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.view.TransactionsGrid;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
