@@ -30,7 +30,7 @@ public class TransactionFormPresenter implements TransactionFormViewPresenter {
     private TransactionFormView view;
 
     @Override
-    public void setView(TransactionFormView view) {
+    public void initialize(TransactionFormView view) {
         this.view = view;
     }
 

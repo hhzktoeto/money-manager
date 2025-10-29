@@ -52,7 +52,6 @@ public class TransactionForm extends Composite<FlexLayout> implements Transactio
         this.categoryProvider = categoryProvider;
         this.mode = mode;
         this.presenter = presenter;
-        presenter.setView(this);
 
         this.typeToggle = new IncomeExpenseToggle<>(Transaction.Type.EXPENSE, Transaction.Type.INCOME);
         this.categorySelect = new ComboBox<>("Категория");
@@ -65,6 +64,8 @@ public class TransactionForm extends Composite<FlexLayout> implements Transactio
         this.deleteButton = new Button(MaterialIcons.DELETE.create());
 
         this.binder = new Binder<>(Transaction.class);
+
+        this.presenter.initialize(this);
     }
 
     @Override

@@ -34,9 +34,11 @@ public class TransactionsGridSettings extends Composite<Details> implements Tran
                                     TransactionsGridSettingsViewPresenter settingsPresenter) {
         this.gridPresenter = gridPresenter;
         this.settingsPresenter = settingsPresenter;
-        this.settingsPresenter.setView(this);
+
         this.categoryMultiSelect = new MultiSelectComboBox<>("Категории");
         this.dateRangePicker = new RussianDateRangePicker("Период");
+
+        this.settingsPresenter.initialize(this);
     }
 
     @Override

@@ -25,7 +25,7 @@ public class CategoryFormPresenter implements CategoryFormViewPresenter {
     private CategoryFormView view;
 
     @Override
-    public void setView(CategoryFormView view) {
+    public void initialize(CategoryFormView view) {
         this.view = view;
     }
 

@@ -34,7 +34,6 @@ public class CategoryForm extends Composite<FlexLayout> implements CategoryFormV
     public CategoryForm(CategoryFormViewPresenter presenter, FormMode mode) {
         this.mode = mode;
         this.presenter = presenter;
-        presenter.setView(this);
 
         this.nameField = new TextField("Имя");
         this.submitButton = new Button("Сохранить");
@@ -42,6 +41,8 @@ public class CategoryForm extends Composite<FlexLayout> implements CategoryFormV
         this.deleteButton = new Button(MaterialIcons.DELETE.create());
 
         this.binder = new Binder<>(Category.class);
+
+        this.presenter.initialize(this);
     }
 
     @Override

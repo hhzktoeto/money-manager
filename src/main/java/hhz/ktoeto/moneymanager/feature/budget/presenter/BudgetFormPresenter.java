@@ -30,7 +30,7 @@ public class BudgetFormPresenter implements BudgetFormViewPresenter {
     private BudgetFormView view;
 
     @Override
-    public void setView(BudgetFormView view) {
+    public void initialize(BudgetFormView view) {
         this.view = view;
     }
 

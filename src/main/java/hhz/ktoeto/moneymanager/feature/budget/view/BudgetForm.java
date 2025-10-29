@@ -61,7 +61,6 @@ public class BudgetForm extends Composite<FlexLayout> implements BudgetFormView 
         this.categoryProvider = categoryProvider;
         this.mode = mode;
         this.presenter = presenter;
-        this.presenter.setView(this);
 
         this.typeToggle = new IncomeExpenseToggle<>(Budget.Type.EXPENSE, Budget.Type.INCOME);
         this.nameField = new TextField("Название");
@@ -77,6 +76,8 @@ public class BudgetForm extends Composite<FlexLayout> implements BudgetFormView 
         this.deleteButton = new Button(MaterialIcons.DELETE.create());
 
         this.binder = new Binder<>(Budget.class);
+
+        this.presenter.initialize(this);
     }
 
     @Override

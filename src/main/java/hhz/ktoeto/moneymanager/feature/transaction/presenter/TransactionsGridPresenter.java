@@ -45,8 +45,9 @@ public class TransactionsGridPresenter implements TransactionsGridViewPresenter,
     }
 
     @Override
-    public void setView(TransactionsGridView view) {
+    public void initialize(TransactionsGridView view) {
         this.view = view;
+        this.refresh();
     }
 
     @Override
@@ -72,11 +73,6 @@ public class TransactionsGridPresenter implements TransactionsGridViewPresenter,
     @Override
     public String formatAmount(BigDecimal amount) {
         return this.formattingService.formatAmount(amount);
-    }
-
-    @Override
-    public void initialize() {
-        this.refresh();
     }
 
     private void refresh() {

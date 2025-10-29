@@ -24,11 +24,14 @@ public class ActiveBudgets extends Composite<Div> implements ActiveBudgetsView {
 
     private final transient ActiveBudgetsViewPresenter presenter;
 
-    private final FlexLayout addNewBudgetButton = new FlexLayout(VaadinIcon.PLUS.create(), new Span("Новый бюджет"));
+    private final FlexLayout addNewBudgetButton;
 
     public ActiveBudgets(ActiveBudgetsViewPresenter presenter) {
         this.presenter = presenter;
-        this.presenter.setView(this);
+
+        this.addNewBudgetButton = new FlexLayout(VaadinIcon.PLUS.create(), new Span("Новый бюджет"));
+
+        this.presenter.initialize(this);
     }
 
     @Override
@@ -61,8 +64,6 @@ public class ActiveBudgets extends Composite<Div> implements ActiveBudgetsView {
         );
         this.addNewBudgetButton.setMinHeight(3, Unit.REM);
         this.addNewBudgetButton.addClickListener(e -> this.presenter.onCreateRequested());
-
-        root.addAttachListener(event -> this.presenter.initialize());
 
         return root;
     }

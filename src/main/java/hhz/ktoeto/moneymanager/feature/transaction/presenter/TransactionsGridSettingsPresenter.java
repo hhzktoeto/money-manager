@@ -7,6 +7,7 @@ import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridSettingsView;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridSettingsViewPresenter;
+import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
 import lombok.RequiredArgsConstructor;
 
 @UIScope
@@ -15,11 +16,12 @@ import lombok.RequiredArgsConstructor;
 public class TransactionsGridSettingsPresenter implements TransactionsGridSettingsViewPresenter {
 
     private final CategoryDataProvider categoryDataProvider;
+    private final TransactionsGridViewPresenter allTransactionsPresenter;
 
     private TransactionsGridSettingsView view;
 
     @Override
-    public void setView(TransactionsGridSettingsView view) {
+    public void initialize(TransactionsGridSettingsView view) {
         this.view = view;
     }
 

@@ -5,5 +5,5 @@ import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.ui.*;
 
 public interface TransactionsGridViewPresenter extends ViewPresenter<TransactionsGridView>, HasFilter<TransactionFilter>,
-        HasTransactionsProvider, CanFormatAmount, InitializedManually, CanEdit<Transaction> {
+        HasTransactionsProvider, CanFormatAmount, CanEdit<Transaction> {
 }

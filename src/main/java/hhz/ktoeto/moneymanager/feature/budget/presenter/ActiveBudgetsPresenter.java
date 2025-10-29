@@ -63,7 +63,8 @@ public class ActiveBudgetsPresenter implements ActiveBudgetsViewPresenter, DataP
     }
 
     @Override
-    public void initialize() {
+    public void initialize(ActiveBudgetsView view) {
+        this.view = view;
         this.refresh();
     }
 

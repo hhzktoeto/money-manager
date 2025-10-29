@@ -35,11 +35,12 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
     public TransactionsGrid(TransactionsGridViewPresenter presenter, Mode mode) {
         this.mode = mode;
         this.presenter = presenter;
-        this.presenter.setView(this);
 
         this.expensesFilterButton = new Button();
         this.incomesFilterButton = new Button();
         this.totalFilterButton = new Button();
+
+        this.presenter.initialize(this);
     }
 
     @Override
@@ -58,8 +59,6 @@ public class TransactionsGrid extends Composite<VerticalLayout> implements Trans
         }
 
         root.add(grid);
-
-        root.addAttachListener(event -> this.presenter.initialize());
 
         return root;
     }
