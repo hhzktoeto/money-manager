@@ -3,16 +3,16 @@ package hhz.ktoeto.moneymanager.feature.category.view;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
-import hhz.ktoeto.moneymanager.feature.category.CategoryFormView;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryFilter;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryService;
+import hhz.ktoeto.moneymanager.ui.AbstractFormView;
 import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
 import org.springframework.context.event.EventListener;
 
 @UIScope
 @SpringComponent
-public class CreateCategoryFormPresenter extends AbstractCategoryFormViewPresenter {
+public class CreateCategoryFormPresenter extends CategoryFormPresenter {
 
     protected CreateCategoryFormPresenter(CategoryService categoryService, UserContextHolder userContextHolder) {
         super(categoryService, userContextHolder);
@@ -24,8 +24,8 @@ public class CreateCategoryFormPresenter extends AbstractCategoryFormViewPresent
     }
 
     @Override
-    protected CategoryFormView getForm() {
-        return new CreateCategoryForm(this);
+    protected AbstractFormView<Category> getForm() {
+        return new CreateCategoryFormView(this);
     }
 
     @Override
