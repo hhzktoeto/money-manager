@@ -32,6 +32,16 @@ public class BudgetService {
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
+    public List<Budget> getFavouriteBudgets(long userId) {
+        log.debug("Fetching favourite budgets for user with id {}", userId);
+        BudgetFilter filter = BudgetFilter.favouriteBudgetsFilter();
+
+        Sort sort = Sort.by(Sort.Direction.ASC, "goalAmount");
+
+        return this.getAllFromRepository(userId, filter, sort);
+    }
+
+    @Transactional
     public List<Budget> getActiveBudgets(long userId) {
         log.debug("Fetching active budgets for user with id {}", userId);
         BudgetFilter filter = BudgetFilter.activeBudgetsFilter();

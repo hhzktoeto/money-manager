@@ -18,17 +18,22 @@ public class EmptyDataImage extends Composite<VerticalLayout> {
         root.addClassNames(
                 LumoUtility.Width.FULL,
                 LumoUtility.AlignItems.CENTER,
-                LumoUtility.JustifyContent.CENTER);
+                LumoUtility.JustifyContent.CENTER
+        );
 
-        image.setWidth(50, Unit.PERCENTAGE);
-        text.addClassName(LumoUtility.TextColor.DISABLED);
+        this.image.setWidth(40, Unit.PERCENTAGE);
+        this.text.addClassName(LumoUtility.TextColor.DISABLED);
 
-        root.add(image, text);
+        root.add(this.image, this.text);
 
         return root;
     }
 
     public void setText(String text) {
         this.text.setText(text);
+    }
+
+    public void setImageMaxWidth(float width, Unit unit) {
+        this.image.setMaxWidth(width, unit);
     }
 }

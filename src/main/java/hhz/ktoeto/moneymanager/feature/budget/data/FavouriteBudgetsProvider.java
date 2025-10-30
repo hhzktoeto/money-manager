@@ -10,14 +10,14 @@ import java.util.stream.Stream;
 
 @SpringComponent
 @VaadinSessionScope
-public class ActiveBudgetsDataProvider extends BudgetsDataProvider {
+public class FavouriteBudgetsProvider extends BudgetsDataProvider {
 
-    protected ActiveBudgetsDataProvider(BudgetService budgetService, UserContextHolder userContextHolder) {
+    protected FavouriteBudgetsProvider(BudgetService budgetService, UserContextHolder userContextHolder) {
         super(budgetService, userContextHolder);
     }
 
     @Override
-    public Stream<Budget> fetchBudgets(long userId) {
-        return this.budgetService.getActiveBudgets(userId).stream();
+    protected Stream<Budget> fetchBudgets(long userId) {
+        return this.budgetService.getFavouriteBudgets(userId).stream();
     }
 }

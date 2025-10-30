@@ -4,7 +4,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
-import hhz.ktoeto.moneymanager.feature.budget.data.ActiveBudgetsDataProvider;
+import hhz.ktoeto.moneymanager.feature.budget.data.ActiveBudgetsProvider;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.ui.event.BudgetCreateRequested;
@@ -16,7 +16,7 @@ import org.springframework.context.ApplicationEventPublisher;
 @SpringComponent
 public class ActiveBudgetsCardPresenter extends BudgetsCardsPresenter implements CanCreate, CanAddToFavourite<Budget> {
 
-    public ActiveBudgetsCardPresenter(ActiveBudgetsDataProvider dataProvider, BudgetService budgetService,
+    public ActiveBudgetsCardPresenter(ActiveBudgetsProvider dataProvider, BudgetService budgetService,
                                       FormattingService formattingService, UserContextHolder userContextHolder,
                                       ApplicationEventPublisher eventPublisher) {
         super(dataProvider, budgetService, formattingService, userContextHolder, eventPublisher);

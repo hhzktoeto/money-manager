@@ -7,6 +7,7 @@ public class BudgetFilter {
 
     private Boolean isActive;
     private Boolean isRenewable;
+    private Boolean isFavourite;
 
     public static BudgetFilter expiredRenewableBudgetsFilter() {
         BudgetFilter filter = new BudgetFilter();
@@ -26,6 +27,13 @@ public class BudgetFilter {
     public static BudgetFilter expiredBudgetsFilter() {
         BudgetFilter filter = new BudgetFilter();
         filter.setIsActive(false);
+
+        return filter;
+    }
+
+    public static BudgetFilter favouriteBudgetsFilter() {
+        BudgetFilter filter = new BudgetFilter();
+        filter.setIsFavourite(true);
 
         return filter;
     }

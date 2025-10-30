@@ -10,9 +10,9 @@ import java.util.stream.Stream;
 
 @SpringComponent
 @VaadinSessionScope
-public class ExpiredBudgetsDataProvider extends BudgetsDataProvider {
+public class ExpiredBudgetsProvider extends BudgetsDataProvider {
 
-    protected ExpiredBudgetsDataProvider(BudgetService budgetService, UserContextHolder userContextHolder) {
+    protected ExpiredBudgetsProvider(BudgetService budgetService, UserContextHolder userContextHolder) {
         super(budgetService, userContextHolder);
     }
 

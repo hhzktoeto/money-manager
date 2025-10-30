@@ -6,7 +6,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.feature.home.view.TransactionsSummary;
+import hhz.ktoeto.moneymanager.feature.budget.view.FavouriteBudgetsCardsPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.view.RecentTransactionsGridPresenter;
 import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
 import hhz.ktoeto.moneymanager.ui.constant.Routes;
@@ -19,7 +19,7 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = Routes.Path.HOME, layout = MainLayout.class)
 public class HomeRouteView extends VerticalLayout {
 
-    public HomeRouteView(RecentTransactionsGridPresenter recentTransactionsGrid, TransactionsSummary transactionsSummary) {
+    public HomeRouteView(FavouriteBudgetsCardsPresenter favouriteBudgetsPresenter, RecentTransactionsGridPresenter recentTransactionsGrid) {
         BasicContainer transactionsGridContainer = new BasicContainer();
         Details transactionsGridDetails = new Details("Недавние транзакции");
         transactionsGridDetails.add(recentTransactionsGrid.getView().asComponent());
@@ -45,7 +45,7 @@ public class HomeRouteView extends VerticalLayout {
                 LumoUtility.Gap.MEDIUM
         );
         this.add(
-                transactionsSummary,
+                favouriteBudgetsPresenter.getView().asComponent(),
                 transactionsGridContainer
         );
     }

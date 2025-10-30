@@ -14,7 +14,7 @@ public class BudgetSpecification implements Specification<Budget> {
     @Nullable
     private final Long userId;
     @Nullable
-    private final BudgetFilter filter;
+    private final transient BudgetFilter filter;
 
     @Override
     public Predicate toPredicate(@NotNull Root<Budget> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -29,7 +29,7 @@ public class BudgetSpecification implements Specification<Budget> {
         }
 
         if (filter.getIsActive() != null) {
-            if (filter.getIsActive()) {
+            if (Boolean.TRUE.equals(filter.getIsActive())) {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.greaterThanOrEqualTo(root.get("endDate"), LocalDate.now()));
             } else {
@@ -40,7 +40,12 @@ public class BudgetSpecification implements Specification<Budget> {
         }
         if (filter.getIsRenewable() != null) {
             predicate = criteriaBuilder.and(predicate,
-                    criteriaBuilder.equal(root.get("isRenewable"), filter.getIsRenewable().booleanValue())
+                    criteriaBuilder.equal(root.get("isRenewable"), filter.getIsRenewable())
+            );
+        }
+        if (filter.getIsFavourite() != null) {
+            predicate = criteriaBuilder.and(predicate,
+                    criteriaBuilder.equal(root.get("isFavourite"), filter.getIsFavourite())
             );
         }
 
