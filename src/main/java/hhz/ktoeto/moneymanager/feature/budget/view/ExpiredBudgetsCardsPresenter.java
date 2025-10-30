@@ -19,11 +19,7 @@ public class ExpiredBudgetsCardsPresenter extends BudgetsCardsPresenter {
     }
 
     @Override
-    public void initialize() {
+    protected void setView() {
         this.view = new ExpiredBudgetsCardsView(this);
-
-        this.dataProvider.addDataProviderListener(this);
-
-        this.onDataChange(null);
     }
 }

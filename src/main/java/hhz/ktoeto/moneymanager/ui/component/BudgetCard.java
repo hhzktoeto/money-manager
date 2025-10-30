@@ -67,6 +67,10 @@ public class BudgetCard extends Composite<BasicContainer> {
         this.getContent().setMinWidth(width, unit);
     }
 
+    public void setMaxWidth(float width, Unit unit) {
+        this.getContent().setMaxWidth(width, unit);
+    }
+
     private void configureHeader(FlexLayout header) {
         H3 title = new H3(budget.getName());
 

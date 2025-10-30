@@ -40,9 +40,16 @@ public abstract class BudgetsCardsPresenter implements ViewPresenter, DataProvid
         this.eventPublisher = eventPublisher;
     }
 
+    protected abstract void setView();
+
     @Override
     @PostConstruct
-    public abstract void initialize();
+    public void initialize() {
+        this.setView();
+        this.dataProvider.addDataProviderListener(this);
+        // Call on init to make cards visible without updating
+        this.onDataChange(null);
+    }
 
     @Override
     public void onDataChange(@Nullable DataChangeEvent<Budget> ignored) {

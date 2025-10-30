@@ -23,12 +23,8 @@ public class ActiveBudgetsCardPresenter extends BudgetsCardsPresenter implements
     }
 
     @Override
-    public void initialize() {
+    protected void setView() {
         this.view = new ActiveBudgetsCardsView(this);
-
-        this.dataProvider.addDataProviderListener(this);
-
-        this.onDataChange(null);
     }
 
     @Override

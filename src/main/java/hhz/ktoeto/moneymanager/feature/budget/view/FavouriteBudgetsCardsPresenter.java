@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationEventPublisher;
 @SpringComponent
 
 public class FavouriteBudgetsCardsPresenter extends BudgetsCardsPresenter {
+
     protected FavouriteBudgetsCardsPresenter(FavouriteBudgetsProvider dataProvider, BudgetService budgetService,
                                              FormattingService formattingService, UserContextHolder userContextHolder,
                                              ApplicationEventPublisher eventPublisher) {
@@ -19,11 +20,7 @@ public class FavouriteBudgetsCardsPresenter extends BudgetsCardsPresenter {
     }
 
     @Override
-    public void initialize() {
+    protected void setView() {
         this.view = new FavouriteBudgetsCardsView(this);
-
-        this.dataProvider.addDataProviderListener(this);
-
-        this.onDataChange(null);
     }
 }

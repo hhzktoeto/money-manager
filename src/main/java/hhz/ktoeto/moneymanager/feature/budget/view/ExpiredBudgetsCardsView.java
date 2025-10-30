@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ExpiredBudgetsCardsView extends BudgetsCardsView {
 
-    public ExpiredBudgetsCardsView(BudgetsCardsPresenter presenter) {
+    public ExpiredBudgetsCardsView(ExpiredBudgetsCardsPresenter presenter) {
         super(presenter);
     }
 
