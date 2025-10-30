@@ -32,8 +32,24 @@ public class BudgetService {
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
-    public List<Budget> getAll(long userId, BudgetFilter filter, Sort sort) {
-        return doGetAll(userId, filter, sort);
+    public List<Budget> getActiveBudgets(long userId) {
+        log.debug("Fetching active budgets for user with id {}", userId);
+        BudgetFilter filter = BudgetFilter.activeBudgetsFilter();
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "isFavourite")
+                .and(Sort.by(Sort.Direction.ASC, "goalAmount"));
+
+        return this.getAllFromRepository(userId, filter, sort);
+    }
+
+    @Transactional
+    public List<Budget> getExpiredBudgets(long userId) {
+        log.debug("Fetching expired budgets for user with id {}", userId);
+        BudgetFilter filter = BudgetFilter.expiredBudgetsFilter();
+
+        Sort sort = Sort.by(Sort.Direction.ASC, "endDate");
+
+        return this.getAllFromRepository(userId, filter, sort);
     }
 
     @Transactional
@@ -70,7 +86,7 @@ public class BudgetService {
 
     @Transactional
     public void delete(long id, long userId) {
-        Budget budget = getBudgetFromRepository(id);
+        Budget budget = this.getBudgetFromRepository(id);
         if (budget.getUserId() != userId) {
             throw new NonOwnerRequestException("User with id %d requested budget deletion, which owner is user with id %d".formatted(userId, budget.getUserId()));
         }
@@ -79,22 +95,12 @@ public class BudgetService {
         eventPublisher.publishEvent(new BudgetDeletedEvent(this, budget));
     }
 
-    public int count(long userId, BudgetFilter filter) {
-        BudgetSpecification specification = BudgetSpecification.builder()
-                .userId(userId)
-                .filter(filter)
-                .build();
-        long count = repository.count(specification);
-        return (int) Math.min(Integer.MAX_VALUE, count);
-    }
-
     private Budget getBudgetFromRepository(long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Could not find Budget with id %d".formatted(id)));
     }
 
-    private List<Budget> doGetAll(long userId, BudgetFilter filter, @Nullable Sort sort) {
-        log.debug("Fetching active budgets for user with id {}", userId);
+    private List<Budget> getAllFromRepository(long userId, BudgetFilter filter, @Nullable Sort sort) {
         BudgetSpecification specification = BudgetSpecification.builder()
                 .userId(userId)
                 .filter(filter)

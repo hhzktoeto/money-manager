@@ -1,5 +1,7 @@
 package hhz.ktoeto.moneymanager.feature.budget.view;
 
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.data.provider.DataChangeEvent;
 import com.vaadin.flow.data.provider.DataProviderListener;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
@@ -7,11 +9,15 @@ import hhz.ktoeto.moneymanager.feature.budget.data.BudgetsDataProvider;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.ui.ViewPresenter;
+import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
 import hhz.ktoeto.moneymanager.ui.event.BudgetEditRequested;
 import hhz.ktoeto.moneymanager.ui.mixin.CanEdit;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.lang.Nullable;
+
+import java.util.List;
 
 public abstract class BudgetsCardsPresenter implements ViewPresenter, DataProviderListener<Budget>, CanEdit<Budget> {
 
@@ -37,6 +43,17 @@ public abstract class BudgetsCardsPresenter implements ViewPresenter, DataProvid
     @Override
     @PostConstruct
     public abstract void initialize();
+
+    @Override
+    public void onDataChange(@Nullable DataChangeEvent<Budget> ignored) {
+        UI.getCurrent().access(() -> {
+            List<BudgetCard> cards = this.dataProvider.fetch()
+                    .map(budget -> new BudgetCard(budget, this.formattingService))
+                    .toList();
+
+            this.view.update(cards);
+        });
+    }
 
     @Override
     public void onEditRequested(Budget entity) {
