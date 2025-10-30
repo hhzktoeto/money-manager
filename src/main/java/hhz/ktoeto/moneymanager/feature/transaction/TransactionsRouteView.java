@@ -25,6 +25,7 @@ public class TransactionsRouteView extends VerticalLayout {
                 LumoUtility.AlignItems.START,
                 LumoUtility.JustifyContent.START
         );
+
         this.add(allTransactionsGrid.getView().asComponent());
     }
 }

@@ -23,12 +23,12 @@ import java.math.BigDecimal;
 public abstract class TransactionsGridPresenter implements ViewPresenter, HasTransactionsProvider, HasCategoriesProvider,
         CanFormatAmount, CanEdit<Transaction> {
 
-    protected final UserContextHolder userContextHolder;
-    protected final FormattingService formattingService;
-    protected final TransactionService transactionService;
+    protected final transient UserContextHolder userContextHolder;
+    protected final transient FormattingService formattingService;
+    protected final transient TransactionService transactionService;
+    protected final transient ApplicationEventPublisher eventPublisher;
     protected final AbstractTransactionsDataProvider dataProvider;
     protected final CategoryDataProvider categoryDataProvider;
-    protected final ApplicationEventPublisher eventPublisher;
 
     @Getter
     protected TransactionsGridView view;
