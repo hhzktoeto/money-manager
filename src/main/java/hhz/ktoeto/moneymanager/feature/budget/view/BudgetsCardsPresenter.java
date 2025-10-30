@@ -36,7 +36,7 @@ public abstract class BudgetsCardsPresenter implements ViewPresenter, DataProvid
 
     @Override
     @PostConstruct
-    public abstract void initializeView();
+    public abstract void initialize();
 
     @Override
     public void onEditRequested(Budget entity) {

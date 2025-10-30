@@ -11,26 +11,24 @@ import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetFilter;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
-import hhz.ktoeto.moneymanager.ui.event.BudgetCreateRequested;
-import hhz.ktoeto.moneymanager.ui.mixin.CanAddToFavourite;
-import hhz.ktoeto.moneymanager.ui.mixin.CanCreate;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
 @UIScope
 @SpringComponent
-public class ActiveBudgetsCardPresenter extends BudgetsCardsPresenter implements CanCreate, CanAddToFavourite<Budget> {
+public class ExpiredBudgetsCardsPresenter extends BudgetsCardsPresenter {
 
-    public ActiveBudgetsCardPresenter(BudgetsDataProvider dataProvider, BudgetService budgetService,
-                                      FormattingService formattingService, UserContextHolder userContextHolder,
-                                      ApplicationEventPublisher eventPublisher) {
+    public ExpiredBudgetsCardsPresenter(BudgetsDataProvider dataProvider, BudgetService budgetService,
+                                        FormattingService formattingService, UserContextHolder userContextHolder,
+                                        ApplicationEventPublisher eventPublisher) {
         super(dataProvider, budgetService, formattingService, userContextHolder, eventPublisher);
     }
 
     @Override
     public void initialize() {
-        this.view = new ActiveBudgetsCardsView(this);
+        this.view = new ExpiredBudgetsCardsView(this);
 
         this.dataProvider.addDataProviderListener(this);
 
@@ -42,21 +40,12 @@ public class ActiveBudgetsCardPresenter extends BudgetsCardsPresenter implements
         this.refresh();
     }
 
-    @Override
-    public void onCreateRequested() {
-        this.eventPublisher.publishEvent(new BudgetCreateRequested(this));
-    }
-
-    @Override
-    public void onAddToFavourites(Budget budget) {
-        budget.setFavourite(!budget.isFavourite());
-
-        this.budgetService.update(budget, this.userContextHolder.getCurrentUserId());
-    }
-
     private void refresh() {
         UI.getCurrent().access(() -> {
-            List<BudgetCard> cards = this.dataProvider.fetch(BudgetFilter.activeBudgetsFilter())
+            List<BudgetCard> cards = this.dataProvider.fetchWithSort(
+                            BudgetFilter.expiredBudgetsFilter(),
+                            Sort.by(Sort.Direction.ASC, "endDate")
+                    )
                     .map(budget -> new BudgetCard(budget, this.formattingService))
                     .toList();
 
@@ -64,4 +53,3 @@ public class ActiveBudgetsCardPresenter extends BudgetsCardsPresenter implements
         });
     }
 }
-

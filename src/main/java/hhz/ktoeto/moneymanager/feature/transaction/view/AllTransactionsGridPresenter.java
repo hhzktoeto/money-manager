@@ -29,7 +29,7 @@ public class AllTransactionsGridPresenter extends TransactionsGridPresenter impl
     }
 
     @Override
-    public void initializeView() {
+    public void initialize() {
         AllTransactionsGridView allTransactionsView = new AllTransactionsGridView(this);
         this.view = allTransactionsView;
         this.hasUpdatableDataDelegate = allTransactionsView;

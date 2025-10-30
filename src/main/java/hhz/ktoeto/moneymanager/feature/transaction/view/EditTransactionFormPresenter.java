@@ -23,7 +23,7 @@ public class EditTransactionFormPresenter extends TransactionFormPresenter {
     }
 
     @Override
-    public void initializeView() {
+    public void initialize() {
         this.view = new EditTransactionFormView(this, this.categoryDataProvider);
     }
 

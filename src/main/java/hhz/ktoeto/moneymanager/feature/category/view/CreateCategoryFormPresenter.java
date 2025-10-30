@@ -20,7 +20,7 @@ public class CreateCategoryFormPresenter extends CategoryFormPresenter {
     }
 
     @Override
-    public void initializeView() {
+    public void initialize() {
         this.view = new CreateCategoryFormView(this);
     }
 

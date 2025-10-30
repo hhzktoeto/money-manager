@@ -22,4 +22,11 @@ public class BudgetFilter {
 
         return filter;
     }
+
+    public static BudgetFilter expiredBudgetsFilter() {
+        BudgetFilter filter = new BudgetFilter();
+        filter.setIsActive(false);
+
+        return filter;
+    }
 }

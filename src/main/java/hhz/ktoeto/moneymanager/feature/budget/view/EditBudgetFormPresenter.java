@@ -21,7 +21,7 @@ public class EditBudgetFormPresenter extends BudgetFormPresenter {
     }
 
     @Override
-    public void initializeView() {
+    public void initialize() {
         this.view = new EditBudgetFormView(this, this.categoryDataProvider);
     }
 

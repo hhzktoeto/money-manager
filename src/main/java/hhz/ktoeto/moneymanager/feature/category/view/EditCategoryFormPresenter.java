@@ -17,7 +17,7 @@ public class EditCategoryFormPresenter extends CategoryFormPresenter {
     }
 
     @Override
-    public void initializeView() {
+    public void initialize() {
         this.view = new EditCategoryFormView(this);
     }
 

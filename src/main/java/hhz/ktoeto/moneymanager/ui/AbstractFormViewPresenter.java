@@ -16,7 +16,7 @@ public abstract class AbstractFormViewPresenter<T> implements FormViewPresenter<
 
     @Override
     @PostConstruct
-    public abstract void initializeView();
+    public abstract void initialize();
 
     @Override
     public void openForm(T entity) {

@@ -49,7 +49,7 @@ public abstract class TransactionsGridPresenter implements ViewPresenter, HasTra
 
     @Override
     @PostConstruct
-    public abstract void initializeView();
+    public abstract void initialize();
 
     @Override
     public void onEditRequested(Transaction transaction) {

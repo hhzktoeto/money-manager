@@ -21,7 +21,7 @@ public class RecentTransactionsGridPresenter extends TransactionsGridPresenter {
     }
 
     @Override
-    public void initializeView() {
+    public void initialize() {
         this.view = new RecentTransactionsGrid(this);
     }
 }

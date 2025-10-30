@@ -20,7 +20,7 @@ public class CreateBudgetFormPresenter extends BudgetFormPresenter {
     }
 
     @Override
-    public void initializeView() {
+    public void initialize() {
         this.view = new CreateBudgetFormView(this, this.categoryDataProvider);
     }
 
