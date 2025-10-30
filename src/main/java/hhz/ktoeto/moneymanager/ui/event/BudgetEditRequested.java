@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 public class BudgetEditRequested extends ApplicationEvent {
 
-    private final Budget budget;
+    private final transient Budget budget;
 
     public BudgetEditRequested(Object source, Budget budget) {
         super(source);

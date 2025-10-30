@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 public class TransactionEditRequested extends ApplicationEvent {
 
-    private final Transaction transaction;
+    private final transient Transaction transaction;
 
     public TransactionEditRequested(Object source, Transaction transaction) {
         super(source);
