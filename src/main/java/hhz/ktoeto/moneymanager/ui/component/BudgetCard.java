@@ -58,6 +58,10 @@ public class BudgetCard extends Composite<BasicContainer> {
         this.favouriteButton.addClickListener(listener);
     }
 
+    public void hideAddToFavouriteButton() {
+        this.favouriteButton.setVisible(false);
+    }
+
     private void configureHeader(FlexLayout header) {
         H3 title = new H3(budget.getName());
 

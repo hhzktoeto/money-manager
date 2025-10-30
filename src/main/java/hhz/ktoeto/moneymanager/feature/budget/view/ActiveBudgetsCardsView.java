@@ -1,51 +1,37 @@
 package hhz.ktoeto.moneymanager.feature.budget.view;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
-import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
-import hhz.ktoeto.moneymanager.feature.budget.ActiveBudgetsView;
 import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
-import hhz.ktoeto.moneymanager.feature.budget.ActiveBudgetsViewPresenter;
+import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
+import hhz.ktoeto.moneymanager.ui.mixin.CanAddToFavourite;
+import hhz.ktoeto.moneymanager.ui.mixin.CanCreate;
 
 import java.util.List;
 
-@UIScope
-@SpringComponent
-public class ActiveBudgets extends Composite<Div> implements ActiveBudgetsView {
+public class ActiveBudgetsCardsView extends BudgetsCardsView {
 
-    private final transient ActiveBudgetsViewPresenter presenter;
+    private final CanCreate canCreateDelegate;
+    private final CanAddToFavourite<Budget> canAddToFavouriteDelegate;
 
     private final FlexLayout addNewBudgetButton;
 
-    public ActiveBudgets(ActiveBudgetsViewPresenter presenter) {
-        this.presenter = presenter;
+    public ActiveBudgetsCardsView(ActiveBudgetsCardPresenter presenter) {
+        super(presenter);
+        this.canCreateDelegate = presenter;
+        this.canAddToFavouriteDelegate = presenter;
 
         this.addNewBudgetButton = new FlexLayout(VaadinIcon.PLUS.create(), new Span("Новый бюджет"));
     }
 
     @Override
     protected Div initContent() {
-        Div root = new Div();
-        root.addClassNames(
-                LumoUtility.Width.FULL,
-                LumoUtility.Gap.MEDIUM,
-                LumoUtility.Display.GRID,
-                LumoUtility.Grid.FLOW_ROW,
-                LumoUtility.Grid.Column.COLUMNS_1,
-                LumoUtility.Grid.Breakpoint.Small.COLUMNS_2,
-                LumoUtility.Grid.Breakpoint.Large.COLUMNS_3,
-                LumoUtility.AlignContent.START,
-                LumoUtility.AlignItems.STRETCH
-        );
+        Div root = super.initContent();
 
         this.addNewBudgetButton.addClassNames(
                 StyleConstants.CLICKABLE,
@@ -61,26 +47,22 @@ public class ActiveBudgets extends Composite<Div> implements ActiveBudgetsView {
                 LumoUtility.FontWeight.BOLD
         );
         this.addNewBudgetButton.setMinHeight(3, Unit.REM);
-        this.addNewBudgetButton.addClickListener(e -> this.presenter.onCreateRequested());
+        this.addNewBudgetButton.addClickListener(e -> this.canCreateDelegate.onCreateRequested());
 
         return root;
     }
 
     @Override
-    public void updateCards(List<BudgetCard> cards) {
+    public void update(List<BudgetCard> data) {
         Div root = this.getContent();
         root.removeAll();
-        cards.forEach(card -> {
+
+        data.forEach(card -> {
             Budget budget = card.getBudget();
             card.addContentClickListener(event -> this.presenter.onEditRequested(budget));
-            card.addFavouriteButtonClickListener(event -> this.presenter.onAddToFavourite(budget));
+            card.addFavouriteButtonClickListener(event -> this.canAddToFavouriteDelegate.onAddToFavourites(budget));
             root.add(card);
         });
         root.add(this.addNewBudgetButton);
-    }
-
-    @Override
-    public Component asComponent() {
-        return this;
     }
 }

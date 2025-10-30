@@ -20,8 +20,6 @@ public abstract class BudgetFormPresenter extends AbstractFormViewPresenter<Budg
 
     protected final CustomDialog dialog = new CustomDialog();
 
-    protected BudgetFormView view;
-
     protected BudgetFormPresenter(BudgetService budgetService, UserContextHolder userContextHolder,
                                   ApplicationEventPublisher eventPublisher, CategoryDataProvider categoryDataProvider) {
         this.budgetService = budgetService;

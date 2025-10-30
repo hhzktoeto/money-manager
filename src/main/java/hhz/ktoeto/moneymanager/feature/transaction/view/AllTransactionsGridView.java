@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class AllTransactionsGrid extends TransactionsGridView implements HasUpdatableData<TransactionsSummaries> {
+public class AllTransactionsGridView extends TransactionsGridView implements HasUpdatableData<TransactionsSummaries> {
 
     private final HasFilter<TransactionFilter> hasFilterDelegate;
 
@@ -34,7 +34,7 @@ public class AllTransactionsGrid extends TransactionsGridView implements HasUpda
     private final Button incomesFilterButton;
     private final Button totalFilterButton;
 
-    public AllTransactionsGrid(AllTransactionsGridPresenter presenter) {
+    public AllTransactionsGridView(AllTransactionsGridPresenter presenter) {
         super(presenter);
         this.hasFilterDelegate = presenter;
 

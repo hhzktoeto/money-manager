@@ -53,7 +53,7 @@ public abstract class TransactionsGridPresenter implements ViewPresenter, HasTra
 
     @Override
     public void onEditRequested(Transaction transaction) {
-        eventPublisher.publishEvent(new TransactionEditRequested(this, transaction));
+        this.eventPublisher.publishEvent(new TransactionEditRequested(this, transaction));
     }
 
     @Override

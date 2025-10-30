@@ -14,7 +14,6 @@ import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionsSummaries;
 import hhz.ktoeto.moneymanager.ui.mixin.HasFilter;
 import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
-import jakarta.annotation.PostConstruct;
 import org.springframework.context.ApplicationEventPublisher;
 
 @UIScope
@@ -31,7 +30,7 @@ public class AllTransactionsGridPresenter extends TransactionsGridPresenter impl
 
     @Override
     public void initializeView() {
-        AllTransactionsGrid allTransactionsView = new AllTransactionsGrid(this);
+        AllTransactionsGridView allTransactionsView = new AllTransactionsGridView(this);
         this.view = allTransactionsView;
         this.hasUpdatableDataDelegate = allTransactionsView;
 
