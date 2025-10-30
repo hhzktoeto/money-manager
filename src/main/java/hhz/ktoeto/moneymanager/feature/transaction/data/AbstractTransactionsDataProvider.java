@@ -36,7 +36,7 @@ public abstract class AbstractTransactionsDataProvider extends AbstractBackEndDa
         this.currentFilter = TransactionFilter.currentMonthFilter();
     }
 
-    public AbstractTransactionsDataProvider(UserContextHolder userContextHolder, TransactionService transactionService,
+    protected AbstractTransactionsDataProvider(UserContextHolder userContextHolder, TransactionService transactionService,
                                             Integer limit, Sort sort) {
         this(userContextHolder, transactionService);
         this.customLimit = limit;
@@ -89,10 +89,17 @@ public abstract class AbstractTransactionsDataProvider extends AbstractBackEndDa
     @Override
     protected int sizeInBackEnd(Query<Transaction, TransactionFilter> query) {
         long userId = userContextHolder.getCurrentUserId();
-        TransactionFilter filter = query.getFilter().orElse(currentFilter);
-        int count = transactionService.count(userId, filter);
 
-        return Objects.requireNonNullElse(customLimit, count);
+        int count;
+        if (customSort != null) {
+            int actualCount = transactionService.count(userId);
+            count = Math.min(actualCount, customLimit);
+        } else {
+            TransactionFilter filter = query.getFilter().orElse(currentFilter);
+            count = transactionService.count(userId, filter);
+        }
+
+        return count;
     }
 
     @EventListener({

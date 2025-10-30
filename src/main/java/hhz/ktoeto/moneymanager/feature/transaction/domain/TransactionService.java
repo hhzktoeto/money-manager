@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -99,13 +100,12 @@ public class TransactionService {
         eventPublisher.publishEvent(new TransactionDeletedEvent(this, transaction));
     }
 
+    public int count(long userId) {
+        return doCount(userId, null);
+    }
+
     public int count(long userId, TransactionFilter filter) {
-        TransactionSpecification specification = TransactionSpecification.builder()
-                .userId(userId)
-                .filter(filter)
-                .build();
-        long count = repository.count(specification);
-        return (int) Math.min(Integer.MAX_VALUE, count);
+        return doCount(userId, filter);
     }
 
     public BigDecimal calculateTotal(Collection<Transaction> transactions) {
@@ -118,5 +118,15 @@ public class TransactionService {
     private Transaction getTransactionFromRepository(long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Could not find Transaction with id %d".formatted(id)));
+    }
+
+    private int doCount(long userId, @Nullable TransactionFilter filter) {
+        TransactionSpecification specification = TransactionSpecification.builder()
+                .userId(userId)
+                .filter(filter)
+                .build();
+
+        long count = repository.count(specification);
+        return (int) Math.min(Integer.MAX_VALUE, count);
     }
 }
