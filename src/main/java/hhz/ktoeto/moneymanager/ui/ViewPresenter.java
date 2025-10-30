@@ -1,7 +1,9 @@
 package hhz.ktoeto.moneymanager.ui;
 
+import java.io.Serializable;
+
 @FunctionalInterface
-public interface ViewPresenter {
+public interface ViewPresenter extends Serializable {
 
     void initialize();
 }

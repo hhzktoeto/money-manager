@@ -30,7 +30,7 @@ public abstract class BudgetsCardsPresenter implements ViewPresenter, DataProvid
     @Getter
     protected transient BudgetsCardsView view;
 
-    public BudgetsCardsPresenter(BudgetsDataProvider dataProvider, BudgetService budgetService,
+    protected BudgetsCardsPresenter(BudgetsDataProvider dataProvider, BudgetService budgetService,
                                  FormattingService formattingService, UserContextHolder userContextHolder,
                                  ApplicationEventPublisher eventPublisher) {
         this.dataProvider = dataProvider;

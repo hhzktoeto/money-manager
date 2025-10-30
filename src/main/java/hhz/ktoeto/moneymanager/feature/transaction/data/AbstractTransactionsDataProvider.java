@@ -30,7 +30,7 @@ public abstract class AbstractTransactionsDataProvider extends AbstractBackEndDa
     protected Integer customLimit;
     protected Sort customSort;
 
-    public AbstractTransactionsDataProvider(UserContextHolder userContextHolder, TransactionService transactionService) {
+    protected AbstractTransactionsDataProvider(UserContextHolder userContextHolder, TransactionService transactionService) {
         this.userContextHolder = userContextHolder;
         this.transactionService = transactionService;
         this.currentFilter = TransactionFilter.currentMonthFilter();

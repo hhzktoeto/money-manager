@@ -14,7 +14,7 @@ public abstract class BudgetsCardsView extends Composite<Div> implements View, H
 
     protected final transient BudgetsCardsPresenter presenter;
 
-    public BudgetsCardsView(BudgetsCardsPresenter presenter) {
+    protected BudgetsCardsView(BudgetsCardsPresenter presenter) {
         this.presenter = presenter;
     }
 

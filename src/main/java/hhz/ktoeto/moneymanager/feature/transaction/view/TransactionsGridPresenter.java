@@ -33,7 +33,7 @@ public abstract class TransactionsGridPresenter implements ViewPresenter, HasTra
     @Getter
     protected TransactionsGridView view;
 
-    public TransactionsGridPresenter(UserContextHolder userContextHolder,
+    protected TransactionsGridPresenter(UserContextHolder userContextHolder,
                                      FormattingService formattingService,
                                      TransactionService transactionService,
                                      AbstractTransactionsDataProvider dataProvider,

@@ -22,7 +22,7 @@ public abstract class TransactionsGridView extends Composite<VerticalLayout> imp
 
     protected final Grid<Transaction> grid;
 
-    public TransactionsGridView(TransactionsGridPresenter presenter) {
+    protected TransactionsGridView(TransactionsGridPresenter presenter) {
         this.presenter = presenter;
 
         this.grid = new Grid<>();

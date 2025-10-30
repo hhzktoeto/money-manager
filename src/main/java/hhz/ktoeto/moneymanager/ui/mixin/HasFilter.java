@@ -1,6 +1,8 @@
 package hhz.ktoeto.moneymanager.ui.mixin;
 
-public interface HasFilter<T> {
+import java.io.Serializable;
+
+public interface HasFilter<T> extends Serializable {
 
     T getFilter();
 
