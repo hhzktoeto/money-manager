@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.category.view;
+package hhz.ktoeto.moneymanager.feature.category.formview;
 
 public class CreateCategoryFormView extends CategoryFormView {
 

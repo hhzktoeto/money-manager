@@ -1,10 +1,10 @@
-package hhz.ktoeto.moneymanager.feature.category.view;
+package hhz.ktoeto.moneymanager.feature.category.formview;
 
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
-import hhz.ktoeto.moneymanager.feature.category.view.validator.CategoryNameValidator;
+import hhz.ktoeto.moneymanager.feature.category.formview.validator.CategoryNameValidator;
 import hhz.ktoeto.moneymanager.ui.AbstractFormView;
 import hhz.ktoeto.moneymanager.ui.mixin.HasCustomErrors;
 

@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.transaction.view;
+package hhz.ktoeto.moneymanager.feature.transaction.formview;
 
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 

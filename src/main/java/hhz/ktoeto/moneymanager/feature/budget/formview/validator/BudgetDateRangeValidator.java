@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.budget.view.validator;
+package hhz.ktoeto.moneymanager.feature.budget.formview.validator;
 
 import com.vaadin.componentfactory.DateRange;
 import com.vaadin.flow.component.checkbox.Checkbox;

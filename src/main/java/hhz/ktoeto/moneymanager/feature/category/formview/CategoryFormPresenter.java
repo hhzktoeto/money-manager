@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.category.view;
+package hhz.ktoeto.moneymanager.feature.category.formview;
 
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;

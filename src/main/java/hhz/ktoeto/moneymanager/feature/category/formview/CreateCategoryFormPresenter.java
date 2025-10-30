@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.category.view;
+package hhz.ktoeto.moneymanager.feature.category.formview;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -6,9 +6,7 @@ import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryFilter;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryService;
-import hhz.ktoeto.moneymanager.feature.transaction.view.EditTransactionFormView;
 import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
-import jakarta.annotation.PostConstruct;
 import org.springframework.context.event.EventListener;
 
 @UIScope

@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.feature.transaction.view;
+package hhz.ktoeto.moneymanager.feature.transaction.formview;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -12,8 +12,8 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
-import hhz.ktoeto.moneymanager.feature.transaction.view.validator.TransactionAmountValidator;
-import hhz.ktoeto.moneymanager.feature.transaction.view.validator.TransactionDescriptionValidator;
+import hhz.ktoeto.moneymanager.feature.transaction.formview.validator.TransactionAmountValidator;
+import hhz.ktoeto.moneymanager.feature.transaction.formview.validator.TransactionDescriptionValidator;
 import hhz.ktoeto.moneymanager.ui.AbstractFormView;
 import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
 import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
