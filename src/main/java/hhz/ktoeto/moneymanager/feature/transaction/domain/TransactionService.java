@@ -1,10 +1,10 @@
 package hhz.ktoeto.moneymanager.feature.transaction.domain;
 
-import hhz.ktoeto.moneymanager.core.exception.EntityNotFoundException;
-import hhz.ktoeto.moneymanager.core.exception.NonOwnerRequestException;
 import hhz.ktoeto.moneymanager.core.event.TransactionCreatedEvent;
 import hhz.ktoeto.moneymanager.core.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.core.event.TransactionUpdatedEvent;
+import hhz.ktoeto.moneymanager.core.exception.EntityNotFoundException;
+import hhz.ktoeto.moneymanager.core.exception.NonOwnerRequestException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,14 +35,18 @@ public class TransactionService {
         return repository.findAll(specification);
     }
 
-    public Page<Transaction> getPage(long userId, TransactionFilter filter, Pageable pageable) {
-        log.debug("Fetching transactions for user with id {}, page {}, size {}", userId, pageable.getPageNumber(), pageable.getPageSize());
-        TransactionSpecification specification = TransactionSpecification.builder()
-                .userId(userId)
-                .filter(filter)
-                .build();
+    public Page<Transaction> getPage(long userId, Pageable pageable) {
+        log.debug("Fetching transactions for user with id {}, page {}, size {}",
+                userId, pageable.getPageNumber(), pageable.getPageSize());
 
-        return repository.findAll(specification, pageable);
+        return doGetPage(userId, pageable, null);
+    }
+
+    public Page<Transaction> getPage(long userId, TransactionFilter filter, Pageable pageable) {
+        log.debug("Fetching transactions for user with id {}, page {}, size {}, filter {}",
+                userId, pageable.getPageNumber(), pageable.getPageSize(), filter);
+
+        return doGetPage(userId, pageable, filter);
     }
 
     public TransactionsSummaries getSummaries(long userId, TransactionFilter filter) {
@@ -128,5 +132,14 @@ public class TransactionService {
 
         long count = repository.count(specification);
         return (int) Math.min(Integer.MAX_VALUE, count);
+    }
+
+    private Page<Transaction> doGetPage(long userId, Pageable pageable, @Nullable TransactionFilter filter) {
+        TransactionSpecification specification = TransactionSpecification.builder()
+                .userId(userId)
+                .filter(filter)
+                .build();
+
+        return repository.findAll(specification, pageable);
     }
 }
