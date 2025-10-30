@@ -13,26 +13,30 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionsSummaries;
 import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
+import hhz.ktoeto.moneymanager.ui.mixin.HasFilter;
+import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
 
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class AllTransactionsGrid extends TransactionsGridView {
+public class AllTransactionsGrid extends TransactionsGridView implements HasUpdatableData<TransactionsSummaries> {
+
+    private final HasFilter<TransactionFilter> hasFilterDelegate;
 
     private final Details gridSettings;
     private final Button expensesFilterButton;
     private final Button incomesFilterButton;
     private final Button totalFilterButton;
 
-    public AllTransactionsGrid(TransactionsGridViewPresenter presenter) {
+    public AllTransactionsGrid(AllTransactionsGridPresenter presenter) {
         super(presenter);
+        this.hasFilterDelegate = presenter;
 
         this.gridSettings = new Details("Настройки");
         this.expensesFilterButton = new Button();
@@ -68,7 +72,7 @@ public class AllTransactionsGrid extends TransactionsGridView {
     }
 
     @Override
-    public void updateSummaries(TransactionsSummaries summaries) {
+    public void update(TransactionsSummaries summaries) {
         expensesFilterButton.setText(this.presenter.formatAmount(summaries.expenses()));
         incomesFilterButton.setText(this.presenter.formatAmount(summaries.incomes()));
         totalFilterButton.setText(this.presenter.formatAmount(summaries.total()));
@@ -89,12 +93,12 @@ public class AllTransactionsGrid extends TransactionsGridView {
                 LumoUtility.TextColor.ERROR
         );
         this.expensesFilterButton.addClickListener(e -> {
-            TransactionFilter filter = this.presenter.getFilter();
+            TransactionFilter filter = this.hasFilterDelegate.getFilter();
             Transaction.Type effectiveType = filter.getType() == Transaction.Type.EXPENSE
                     ? null
                     : Transaction.Type.EXPENSE;
             filter.setType(effectiveType);
-            this.presenter.setFilter(filter);
+            this.hasFilterDelegate.setFilter(filter);
         });
 
         this.incomesFilterButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
@@ -106,12 +110,12 @@ public class AllTransactionsGrid extends TransactionsGridView {
                 LumoUtility.TextColor.SUCCESS
         );
         this.incomesFilterButton.addClickListener(e -> {
-            TransactionFilter filter = this.presenter.getFilter();
+            TransactionFilter filter = this.hasFilterDelegate.getFilter();
             Transaction.Type effectiveType = filter.getType() == Transaction.Type.INCOME
                     ? null
                     : Transaction.Type.INCOME;
             filter.setType(effectiveType);
-            this.presenter.setFilter(filter);
+            this.hasFilterDelegate.setFilter(filter);
         });
 
         this.totalFilterButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
@@ -124,9 +128,9 @@ public class AllTransactionsGrid extends TransactionsGridView {
                 LumoUtility.TextColor.BODY
         );
         this.totalFilterButton.addClickListener(e -> {
-            TransactionFilter filter = this.presenter.getFilter();
+            TransactionFilter filter = this.hasFilterDelegate.getFilter();
             filter.setType(null);
-            this.presenter.setFilter(filter);
+            this.hasFilterDelegate.setFilter(filter);
         });
 
         Div summariesDiv = new Div(this.expensesFilterButton, this.incomesFilterButton, this.totalFilterButton);
@@ -151,24 +155,24 @@ public class AllTransactionsGrid extends TransactionsGridView {
         categoryMultiSelect.setItemLabelGenerator(Category::getName);
         categoryMultiSelect.setClearButtonVisible(true);
         categoryMultiSelect.addValueChangeListener(event -> {
-            TransactionFilter filter = this.presenter.getFilter();
+            TransactionFilter filter = this.hasFilterDelegate.getFilter();
             Set<Long> selectedCategoriesIds = event.getValue().stream()
                     .map(Category::getId)
                     .collect(Collectors.toSet());
             filter.setCategoriesIds(selectedCategoriesIds);
-            this.presenter.setFilter(filter);
+            this.hasFilterDelegate.setFilter(filter);
         });
         categoryMultiSelect.setItems(this.presenter.getCategoriesProvider());
 
         RussianDateRangePicker dateRangePicker = new RussianDateRangePicker("Период");
-        TransactionFilter transactionFilter = this.presenter.getFilter();
+        TransactionFilter transactionFilter = this.hasFilterDelegate.getFilter();
         dateRangePicker.setValue(new DateRange(transactionFilter.getFromDate(), transactionFilter.getToDate()));
         dateRangePicker.addValueChangeListener(event -> {
-            TransactionFilter filter = this.presenter.getFilter();
+            TransactionFilter filter = this.hasFilterDelegate.getFilter();
             DateRange selectedRange = dateRangePicker.getValue();
             filter.setFromDate(selectedRange.getStartDate());
             filter.setToDate(selectedRange.getEndDate());
-            this.presenter.setFilter(filter);
+            this.hasFilterDelegate.setFilter(filter);
             dateRangePicker.suppressKeyboard();
         });
 

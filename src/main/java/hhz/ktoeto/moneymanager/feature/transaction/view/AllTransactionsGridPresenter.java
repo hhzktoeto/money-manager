@@ -7,18 +7,21 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;
 import hhz.ktoeto.moneymanager.feature.transaction.data.AllTransactionsProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionsSummaries;
+import hhz.ktoeto.moneymanager.ui.mixin.HasFilter;
+import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.ApplicationEventPublisher;
 
 @UIScope
-@SpringComponent("allTransactionsPresenter")
-public class AllTransactionsGridPresenter extends TransactionsGridPresenter implements DataProviderListener<Transaction> {
+@SpringComponent
+public class AllTransactionsGridPresenter extends TransactionsGridPresenter implements DataProviderListener<Transaction>, HasFilter<TransactionFilter> {
+
+    private HasUpdatableData<TransactionsSummaries> hasUpdatableDataDelegate;
 
     public AllTransactionsGridPresenter(UserContextHolder userContextHolder, FormattingService formattingService,
                                         TransactionService transactionService, AllTransactionsProvider dataProvider,
@@ -27,9 +30,10 @@ public class AllTransactionsGridPresenter extends TransactionsGridPresenter impl
     }
 
     @Override
-    @PostConstruct
     public void initializeView() {
-        this.view = new AllTransactionsGrid(this);
+        AllTransactionsGrid allTransactionsView = new AllTransactionsGrid(this);
+        this.view = allTransactionsView;
+        this.hasUpdatableDataDelegate = allTransactionsView;
 
         this.dataProvider.addDataProviderListener(this);
         this.refresh();
@@ -52,6 +56,6 @@ public class AllTransactionsGridPresenter extends TransactionsGridPresenter impl
 
     private void refresh() {
         TransactionsSummaries summaries = this.transactionService.getSummaries(this.userContextHolder.getCurrentUserId(), this.getFilter());
-        this.view.updateSummaries(summaries);
+        this.hasUpdatableDataDelegate.update(summaries);
     }
 }

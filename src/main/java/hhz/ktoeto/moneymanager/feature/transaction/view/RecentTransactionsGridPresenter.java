@@ -6,13 +6,11 @@ import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.data.RecentTransactionsProvider;
-import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
-import jakarta.annotation.PostConstruct;
 import org.springframework.context.ApplicationEventPublisher;
 
 @UIScope
-@SpringComponent("recentTransactionsPresenter")
+@SpringComponent
 public class RecentTransactionsGridPresenter extends TransactionsGridPresenter {
 
 
@@ -23,18 +21,7 @@ public class RecentTransactionsGridPresenter extends TransactionsGridPresenter {
     }
 
     @Override
-    @PostConstruct
     public void initializeView() {
         this.view = new RecentTransactionsGrid(this);
-    }
-
-    @Override
-    public TransactionFilter getFilter() {
-        throw new UnsupportedOperationException("getFilter() should not be called on RecentTransactionsGridPresenter");
-    }
-
-    @Override
-    public void setFilter(TransactionFilter filter) {
-        throw new UnsupportedOperationException("setFilter() should not be called on RecentTransactionsGridPresenter");
     }
 }

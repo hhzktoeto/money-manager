@@ -5,18 +5,23 @@ import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.data.AbstractTransactionsDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
+import hhz.ktoeto.moneymanager.ui.ViewPresenter;
 import hhz.ktoeto.moneymanager.ui.event.TransactionEditRequested;
+import hhz.ktoeto.moneymanager.ui.mixin.CanEdit;
+import hhz.ktoeto.moneymanager.ui.mixin.CanFormatAmount;
+import hhz.ktoeto.moneymanager.ui.mixin.HasCategoriesProvider;
+import hhz.ktoeto.moneymanager.ui.mixin.HasTransactionsProvider;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 
-public abstract class TransactionsGridPresenter implements TransactionsGridViewPresenter {
+public abstract class TransactionsGridPresenter implements ViewPresenter, HasTransactionsProvider, HasCategoriesProvider,
+        CanFormatAmount, CanEdit<Transaction> {
 
     protected final UserContextHolder userContextHolder;
     protected final FormattingService formattingService;
@@ -41,6 +46,10 @@ public abstract class TransactionsGridPresenter implements TransactionsGridViewP
         this.categoryDataProvider = categoryDataProvider;
         this.eventPublisher = eventPublisher;
     }
+
+    @Override
+    @PostConstruct
+    public abstract void initializeView();
 
     @Override
     public void onEditRequested(Transaction transaction) {

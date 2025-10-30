@@ -8,21 +8,21 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.NumberRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.view.renderer.TransactionCategoryDateRenderer;
+import hhz.ktoeto.moneymanager.ui.View;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
 
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public abstract class TransactionsGridView extends Composite<VerticalLayout> implements hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView {
+public abstract class TransactionsGridView extends Composite<VerticalLayout> implements View {
 
-    protected final transient TransactionsGridViewPresenter presenter;
+    protected final transient TransactionsGridPresenter presenter;
 
     protected final Grid<Transaction> grid;
 
-    public TransactionsGridView(TransactionsGridViewPresenter presenter) {
+    public TransactionsGridView(TransactionsGridPresenter presenter) {
         this.presenter = presenter;
 
         this.grid = new Grid<>();
