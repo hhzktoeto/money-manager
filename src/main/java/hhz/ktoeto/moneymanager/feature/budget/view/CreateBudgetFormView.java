@@ -1,11 +1,10 @@
 package hhz.ktoeto.moneymanager.feature.budget.view;
 
-import hhz.ktoeto.moneymanager.feature.budget.BudgetFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 
-public class CreateBudgetForm extends AbstractBudgetFormView {
+public class CreateBudgetFormView extends BudgetFormView {
 
-    public CreateBudgetForm(BudgetFormViewPresenter presenter, CategoryDataProvider categoryProvider) {
+    public CreateBudgetFormView(CreateBudgetFormPresenter presenter, CategoryDataProvider categoryProvider) {
         super(presenter, categoryProvider);
     }
 

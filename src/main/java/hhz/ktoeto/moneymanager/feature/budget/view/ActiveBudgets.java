@@ -30,8 +30,6 @@ public class ActiveBudgets extends Composite<Div> implements ActiveBudgetsView {
         this.presenter = presenter;
 
         this.addNewBudgetButton = new FlexLayout(VaadinIcon.PLUS.create(), new Span("Новый бюджет"));
-
-        this.presenter.initialize(this);
     }
 
     @Override

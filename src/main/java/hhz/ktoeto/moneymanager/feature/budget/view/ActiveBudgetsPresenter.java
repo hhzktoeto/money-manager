@@ -17,6 +17,7 @@ import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
 import hhz.ktoeto.moneymanager.ui.event.BudgetCreateRequested;
 import hhz.ktoeto.moneymanager.ui.event.BudgetEditRequested;
+import jakarta.annotation.PostConstruct;
 import lombok.Setter;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -50,6 +51,13 @@ public class ActiveBudgetsPresenter implements ActiveBudgetsViewPresenter, DataP
     }
 
     @Override
+    @PostConstruct
+    public void initializeView() {
+        this.view = new ActiveBudgets(this);
+        this.refresh();
+    }
+
+    @Override
     public void onDataChange(DataChangeEvent<Budget> dataChangeEvent) {
         this.refresh();
     }
@@ -62,12 +70,6 @@ public class ActiveBudgetsPresenter implements ActiveBudgetsViewPresenter, DataP
     @Override
     public void onEditRequested(Budget budget) {
         this.eventPublisher.publishEvent(new BudgetEditRequested(this, budget));
-    }
-
-    @Override
-    public void initialize(ActiveBudgetsView view) {
-        this.view = view;
-        this.refresh();
     }
 
     @Override

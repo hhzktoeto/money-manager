@@ -6,11 +6,11 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;
 import hhz.ktoeto.moneymanager.feature.home.view.TransactionsSummary;
-import hhz.ktoeto.moneymanager.ui.layout.MainLayout;
+import hhz.ktoeto.moneymanager.feature.transaction.view.RecentTransactionsGridPresenter;
 import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
 import hhz.ktoeto.moneymanager.ui.constant.Routes;
+import hhz.ktoeto.moneymanager.ui.layout.MainLayout;
 import jakarta.annotation.security.PermitAll;
 
 @UIScope
@@ -19,10 +19,10 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = Routes.Path.HOME, layout = MainLayout.class)
 public class HomeRouteView extends VerticalLayout {
 
-    public HomeRouteView(TransactionsGridView recentTransactionsGrid, TransactionsSummary transactionsSummary) {
+    public HomeRouteView(RecentTransactionsGridPresenter recentTransactionsGrid, TransactionsSummary transactionsSummary) {
         BasicContainer transactionsGridContainer = new BasicContainer();
         Details transactionsGridDetails = new Details("Недавние транзакции");
-        transactionsGridDetails.add(recentTransactionsGrid.asComponent());
+        transactionsGridDetails.add(recentTransactionsGrid.getView().asComponent());
         transactionsGridDetails.setOpened(true);
         transactionsGridDetails.setSizeFull();
         transactionsGridDetails.getSummary().addClassNames(

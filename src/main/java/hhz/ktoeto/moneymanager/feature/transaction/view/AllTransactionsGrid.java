@@ -11,8 +11,6 @@ import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.SortDirection;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridViewPresenter;
@@ -21,30 +19,25 @@ import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionsSummaries;
 import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@UIScope
-@SpringComponent
-public class AllTransactionsGrid extends AbstractTransactionsGridView {
+public class AllTransactionsGrid extends TransactionsGridView {
 
     private final Details gridSettings;
     private final Button expensesFilterButton;
     private final Button incomesFilterButton;
     private final Button totalFilterButton;
 
-    public AllTransactionsGrid(@Qualifier("allTransactionsPresenter") TransactionsGridViewPresenter presenter) {
+    public AllTransactionsGrid(TransactionsGridViewPresenter presenter) {
         super(presenter);
 
         this.gridSettings = new Details("Настройки");
         this.expensesFilterButton = new Button();
         this.incomesFilterButton = new Button();
         this.totalFilterButton = new Button();
-
-        presenter.initialize(this);
     }
 
     @Override

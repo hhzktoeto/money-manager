@@ -6,8 +6,9 @@ import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryFilter;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryService;
-import hhz.ktoeto.moneymanager.ui.AbstractFormView;
+import hhz.ktoeto.moneymanager.feature.transaction.view.EditTransactionFormView;
 import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
+import jakarta.annotation.PostConstruct;
 import org.springframework.context.event.EventListener;
 
 @UIScope
@@ -19,13 +20,13 @@ public class CreateCategoryFormPresenter extends CategoryFormPresenter {
     }
 
     @Override
-    protected String getDialogTitle() {
-        return "Новая категория";
+    public void initializeView() {
+        this.view = new CreateCategoryFormView(this);
     }
 
     @Override
-    protected AbstractFormView<Category> getForm() {
-        return new CreateCategoryFormView(this);
+    protected String getDialogTitle() {
+        return "Новая категория";
     }
 
     @Override

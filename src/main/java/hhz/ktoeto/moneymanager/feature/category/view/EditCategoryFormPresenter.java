@@ -5,7 +5,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryService;
-import hhz.ktoeto.moneymanager.ui.AbstractFormView;
+import hhz.ktoeto.moneymanager.feature.transaction.view.EditTransactionFormView;
+import jakarta.annotation.PostConstruct;
 
 @UIScope
 @SpringComponent
@@ -16,13 +17,13 @@ public class EditCategoryFormPresenter extends CategoryFormPresenter {
     }
 
     @Override
-    protected String getDialogTitle() {
-        return "Редактировать категорию";
+    public void initializeView() {
+        this.view = new EditCategoryFormView(this);
     }
 
     @Override
-    protected AbstractFormView<Category> getForm() {
-        return new EditCategoryFormView(this);
+    protected String getDialogTitle() {
+        return "Редактировать категорию";
     }
 
     @Override

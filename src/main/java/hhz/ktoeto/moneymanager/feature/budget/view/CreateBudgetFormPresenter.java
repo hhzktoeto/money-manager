@@ -3,7 +3,6 @@ package hhz.ktoeto.moneymanager.feature.budget.view;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
-import hhz.ktoeto.moneymanager.feature.budget.BudgetFormView;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
@@ -13,7 +12,7 @@ import org.springframework.context.event.EventListener;
 
 @UIScope
 @SpringComponent
-public class CreateBudgetFormPresenter extends AbstractBudgetFormViewPresenter {
+public class CreateBudgetFormPresenter extends BudgetFormPresenter {
 
     public CreateBudgetFormPresenter(BudgetService budgetService, UserContextHolder userContextHolder,
                                         ApplicationEventPublisher eventPublisher, CategoryDataProvider categoryDataProvider) {
@@ -21,13 +20,13 @@ public class CreateBudgetFormPresenter extends AbstractBudgetFormViewPresenter {
     }
 
     @Override
-    protected String getDialogTitle() {
-        return "Новый бюджет";
+    public void initializeView() {
+        this.view = new CreateBudgetFormView(this, this.categoryDataProvider);
     }
 
     @Override
-    protected BudgetFormView getForm() {
-        return new CreateBudgetForm(this, categoryDataProvider);
+    protected String getDialogTitle() {
+        return "Новый бюджет";
     }
 
     @Override

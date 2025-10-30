@@ -5,7 +5,7 @@ import hhz.ktoeto.moneymanager.ui.mixin.CanCreate;
 import hhz.ktoeto.moneymanager.ui.mixin.CanEdit;
 import hhz.ktoeto.moneymanager.ui.ViewPresenter;
 
-public interface ActiveBudgetsViewPresenter extends ViewPresenter<ActiveBudgetsView>, CanCreate, CanEdit<Budget> {
+public interface ActiveBudgetsViewPresenter extends ViewPresenter, CanCreate, CanEdit<Budget> {
 
     void onAddToFavourite(Budget budget);
 }

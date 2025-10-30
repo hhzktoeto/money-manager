@@ -1,15 +1,12 @@
 package hhz.ktoeto.moneymanager.feature.category.view;
 
-import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.view.validator.CategoryNameValidator;
 import hhz.ktoeto.moneymanager.ui.AbstractFormView;
 import hhz.ktoeto.moneymanager.ui.mixin.HasCustomErrors;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public abstract class CategoryFormView extends AbstractFormView<Category> implements HasCustomErrors {
 
@@ -19,19 +16,16 @@ public abstract class CategoryFormView extends AbstractFormView<Category> implem
         super(presenter, Category.class);
 
         this.nameField = new TextField("Имя");
-
-        presenter.initialize(this);
     }
 
     @Override
-    protected Collection<Component> getRootContent() {
+    protected void configureRootContent(FlexLayout root) {
         this.nameField.setWidthFull();
-
-        return new ArrayList<>(List.of(nameField));
+        root.add(this.nameField);
     }
 
     @Override
-    protected void configureBinder() {
+    protected void configureBinder(Binder<Category> binder) {
         binder.forField(nameField)
                 .withValidator(new CategoryNameValidator())
                 .bind(Category::getName, (category, name) -> category.setName(name.trim()));

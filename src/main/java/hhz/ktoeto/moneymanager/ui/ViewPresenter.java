@@ -1,7 +1,7 @@
 package hhz.ktoeto.moneymanager.ui;
 
 @FunctionalInterface
-public interface ViewPresenter<T extends View> {
+public interface ViewPresenter {
 
-    void initialize(T view);
+    void initializeView();
 }

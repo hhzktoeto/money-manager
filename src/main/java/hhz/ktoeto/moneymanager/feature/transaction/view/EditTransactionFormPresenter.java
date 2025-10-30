@@ -2,18 +2,20 @@ package hhz.ktoeto.moneymanager.feature.transaction.view;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormView;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
+import hhz.ktoeto.moneymanager.ui.AbstractFormView;
 import hhz.ktoeto.moneymanager.ui.event.TransactionEditRequested;
+import jakarta.annotation.PostConstruct;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 
 @UIScope
 @SpringComponent
-public class EditTransactionFormPresenter extends AbstractTransactionFormViewPresenter {
+public class EditTransactionFormPresenter extends TransactionFormPresenter {
 
     public EditTransactionFormPresenter(UserContextHolder userContextHolder, TransactionService transactionService,
                                         ApplicationEventPublisher eventPublisher, CategoryDataProvider categoryDataProvider) {
@@ -21,13 +23,13 @@ public class EditTransactionFormPresenter extends AbstractTransactionFormViewPre
     }
 
     @Override
-    protected String getDialogTitle() {
-        return "Редактировать транзакцию";
+    public void initializeView() {
+        this.view = new EditTransactionFormView(this, this.categoryDataProvider);
     }
 
     @Override
-    protected TransactionFormView getForm() {
-        return new EditTransactionForm(categoryDataProvider, this);
+    protected String getDialogTitle() {
+        return "Редактировать транзакцию";
     }
 
     @Override

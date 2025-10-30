@@ -5,6 +5,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.feature.transaction.view.AllTransactionsGridPresenter;
 import hhz.ktoeto.moneymanager.ui.constant.Routes;
 import hhz.ktoeto.moneymanager.ui.layout.MainLayout;
 import jakarta.annotation.security.PermitAll;
@@ -15,7 +16,7 @@ import jakarta.annotation.security.PermitAll;
 @Route(value = Routes.Path.TRANSACTIONS, layout = MainLayout.class)
 public class TransactionsRouteView extends VerticalLayout {
 
-    public TransactionsRouteView(TransactionsGridView allTransactionsGrid) {
+    public TransactionsRouteView(AllTransactionsGridPresenter allTransactionsGrid) {
         this.setPadding(false);
         this.setSpacing(false);
         this.addClassNames(
@@ -24,6 +25,6 @@ public class TransactionsRouteView extends VerticalLayout {
                 LumoUtility.AlignItems.START,
                 LumoUtility.JustifyContent.START
         );
-        this.add(allTransactionsGrid.asComponent());
+        this.add(allTransactionsGrid.getView().asComponent());
     }
 }

@@ -1,29 +1,29 @@
 package hhz.ktoeto.moneymanager.ui;
 
 import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
+import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public abstract class AbstractFormViewPresenter<T> implements FormViewPresenter<T, AbstractFormView<T>> {
+public abstract class AbstractFormViewPresenter<T> implements FormViewPresenter<T> {
 
     protected final CustomDialog dialog = new CustomDialog();
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
     protected AbstractFormView<T> view;
 
     protected abstract String getDialogTitle();
 
-    protected abstract AbstractFormView<T> getForm();
-
     @Override
-    public void initialize(AbstractFormView<T> view) {
-        this.view = view;
-    }
+    @PostConstruct
+    public abstract void initializeView();
 
     @Override
     public void openForm(T entity) {
-        AbstractFormView<T> form = this.getForm();
-        form.setEntity(entity);
+        this.view.setEntity(entity);
 
         this.dialog.setTitle(this.getDialogTitle());
-        this.dialog.addBody(form.asComponent());
+        this.dialog.addBody(this.view.asComponent());
         this.dialog.open();
     }
 

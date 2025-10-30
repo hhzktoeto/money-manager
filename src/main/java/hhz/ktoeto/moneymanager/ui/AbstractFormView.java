@@ -13,31 +13,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
-import java.util.Collection;
-
 public abstract class AbstractFormView<T> extends Composite<FlexLayout> implements FormView<T> {
 
     protected final transient AbstractFormViewPresenter<T> presenter;
-    protected final Binder<T> binder;
     protected final Logger log;
 
     private final Button submitButton;
     private final Button cancelButton;
     private final Button deleteButton;
 
+    private final Binder<T> binder;
+
     protected AbstractFormView(AbstractFormViewPresenter<T> presenter, Class<T> entityClass) {
         this.presenter = presenter;
-        this.binder = new Binder<>(entityClass);
         this.log = LoggerFactory.getLogger(this.getClass());
 
         this.submitButton = new Button("Сохранить");
         this.cancelButton = new Button("Отмена");
         this.deleteButton = new Button(MaterialIcons.DELETE.create());
+
+        this.binder = new Binder<>(entityClass);
     }
 
-    protected abstract Collection<Component> getRootContent();
+    protected abstract void configureRootContent(FlexLayout root);
 
-    protected abstract void configureBinder();
+    protected abstract void configureBinder(Binder<T> binder);
 
     protected abstract boolean isDeleteButtonVisible();
 
@@ -52,13 +52,12 @@ public abstract class AbstractFormView<T> extends Composite<FlexLayout> implemen
                 LumoUtility.AlignItems.STRETCH
         );
 
-        Collection<Component> rootContent = this.getRootContent();
+        this.configureRootContent(root);
+
         HorizontalLayout buttonsRow = this.getButtonsRow();
-        rootContent.add(buttonsRow);
+        root.add(buttonsRow);
 
-        root.add(rootContent);
-
-        this.configureBinder();
+        this.configureBinder(this.binder);
 
         return root;
     }

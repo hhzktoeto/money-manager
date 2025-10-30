@@ -1,17 +1,17 @@
 package hhz.ktoeto.moneymanager.feature.budget.view;
 
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
-import hhz.ktoeto.moneymanager.feature.budget.BudgetFormView;
-import hhz.ktoeto.moneymanager.feature.budget.BudgetFormViewPresenter;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.ui.AbstractFormViewPresenter;
 import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
+import hhz.ktoeto.moneymanager.ui.mixin.CanAddCategory;
 import org.springframework.context.ApplicationEventPublisher;
 
-public abstract class AbstractBudgetFormViewPresenter implements BudgetFormViewPresenter {
+public abstract class BudgetFormPresenter extends AbstractFormViewPresenter<Budget> implements CanAddCategory {
 
     protected final BudgetService budgetService;
     protected final UserContextHolder userContextHolder;
@@ -22,36 +22,12 @@ public abstract class AbstractBudgetFormViewPresenter implements BudgetFormViewP
 
     protected BudgetFormView view;
 
-    protected AbstractBudgetFormViewPresenter(BudgetService budgetService, UserContextHolder userContextHolder,
-                                           ApplicationEventPublisher eventPublisher, CategoryDataProvider categoryDataProvider) {
+    protected BudgetFormPresenter(BudgetService budgetService, UserContextHolder userContextHolder,
+                                  ApplicationEventPublisher eventPublisher, CategoryDataProvider categoryDataProvider) {
         this.budgetService = budgetService;
         this.userContextHolder = userContextHolder;
         this.eventPublisher = eventPublisher;
         this.categoryDataProvider = categoryDataProvider;
-    }
-
-    protected abstract String getDialogTitle();
-
-    protected abstract BudgetFormView getForm();
-
-    @Override
-    public void initialize(BudgetFormView view) {
-        this.view = view;
-    }
-
-    @Override
-    public void openForm(Budget budget) {
-        BudgetFormView form = this.getForm();
-        form.setEntity(budget);
-
-        this.dialog.setTitle(this.getDialogTitle());
-        this.dialog.addBody(form.asComponent());
-        this.dialog.open();
-    }
-
-    @Override
-    public void onCancel() {
-        this.dialog.close();
     }
 
     @Override

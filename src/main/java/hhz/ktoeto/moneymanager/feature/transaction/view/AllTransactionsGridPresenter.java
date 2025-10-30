@@ -13,11 +13,12 @@ import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionsSummaries;
+import jakarta.annotation.PostConstruct;
 import org.springframework.context.ApplicationEventPublisher;
 
 @UIScope
 @SpringComponent("allTransactionsPresenter")
-public class AllTransactionsGridPresenter extends AbstractTransactionsGridViewPresenter implements DataProviderListener<Transaction> {
+public class AllTransactionsGridPresenter extends TransactionsGridPresenter implements DataProviderListener<Transaction> {
 
     public AllTransactionsGridPresenter(UserContextHolder userContextHolder, FormattingService formattingService,
                                         TransactionService transactionService, AllTransactionsProvider dataProvider,
@@ -26,8 +27,9 @@ public class AllTransactionsGridPresenter extends AbstractTransactionsGridViewPr
     }
 
     @Override
-    public void initialize(TransactionsGridView view) {
-        this.view = view;
+    @PostConstruct
+    public void initializeView() {
+        this.view = new AllTransactionsGrid(this);
 
         this.dataProvider.addDataProviderListener(this);
         this.refresh();

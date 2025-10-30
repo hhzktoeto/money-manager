@@ -11,11 +11,12 @@ import hhz.ktoeto.moneymanager.feature.transaction.data.AbstractTransactionsData
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.ui.event.TransactionEditRequested;
+import lombok.Getter;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 
-public abstract class AbstractTransactionsGridViewPresenter implements TransactionsGridViewPresenter {
+public abstract class TransactionsGridPresenter implements TransactionsGridViewPresenter {
 
     protected final UserContextHolder userContextHolder;
     protected final FormattingService formattingService;
@@ -24,14 +25,15 @@ public abstract class AbstractTransactionsGridViewPresenter implements Transacti
     protected final CategoryDataProvider categoryDataProvider;
     protected final ApplicationEventPublisher eventPublisher;
 
+    @Getter
     protected TransactionsGridView view;
 
-    public AbstractTransactionsGridViewPresenter(UserContextHolder userContextHolder,
-                                                 FormattingService formattingService,
-                                                 TransactionService transactionService,
-                                                 AbstractTransactionsDataProvider dataProvider,
-                                                 CategoryDataProvider categoryDataProvider,
-                                                 ApplicationEventPublisher eventPublisher) {
+    public TransactionsGridPresenter(UserContextHolder userContextHolder,
+                                     FormattingService formattingService,
+                                     TransactionService transactionService,
+                                     AbstractTransactionsDataProvider dataProvider,
+                                     CategoryDataProvider categoryDataProvider,
+                                     ApplicationEventPublisher eventPublisher) {
         this.userContextHolder = userContextHolder;
         this.formattingService = formattingService;
         this.transactionService = transactionService;

@@ -4,16 +4,16 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormView;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.ui.event.TransactionCreateRequested;
+import jakarta.annotation.PostConstruct;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 
 @UIScope
 @SpringComponent
-public class CreateTransactionFormPresenter extends AbstractTransactionFormViewPresenter {
+public class CreateTransactionFormPresenter extends TransactionFormPresenter {
 
     public CreateTransactionFormPresenter(UserContextHolder userContextHolder, TransactionService transactionService,
                                           ApplicationEventPublisher eventPublisher, CategoryDataProvider categoryDataProvider) {
@@ -21,13 +21,13 @@ public class CreateTransactionFormPresenter extends AbstractTransactionFormViewP
     }
 
     @Override
-    protected String getDialogTitle() {
-        return "Новая транзакция";
+    public void initializeView() {
+        this.view = new CreateTransactionFormView(this, this.categoryDataProvider);
     }
 
     @Override
-    protected TransactionFormView getForm() {
-        return new CreateTransactionForm(categoryDataProvider, this);
+    protected String getDialogTitle() {
+        return "Новая транзакция";
     }
 
     @Override

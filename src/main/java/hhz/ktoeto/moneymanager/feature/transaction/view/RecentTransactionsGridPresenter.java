@@ -5,15 +5,15 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
-import hhz.ktoeto.moneymanager.feature.transaction.TransactionsGridView;
 import hhz.ktoeto.moneymanager.feature.transaction.data.RecentTransactionsProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.context.ApplicationEventPublisher;
 
 @UIScope
 @SpringComponent("recentTransactionsPresenter")
-public class RecentTransactionsGridPresenter extends AbstractTransactionsGridViewPresenter {
+public class RecentTransactionsGridPresenter extends TransactionsGridPresenter {
 
 
     public RecentTransactionsGridPresenter(UserContextHolder userContextHolder, FormattingService formattingService,
@@ -23,8 +23,9 @@ public class RecentTransactionsGridPresenter extends AbstractTransactionsGridVie
     }
 
     @Override
-    public void initialize(TransactionsGridView view) {
-        this.view = view;
+    @PostConstruct
+    public void initializeView() {
+        this.view = new RecentTransactionsGrid(this);
     }
 
     @Override

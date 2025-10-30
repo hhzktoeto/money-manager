@@ -8,13 +8,10 @@ import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionsSummaries;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@UIScope
-@SpringComponent
-public class RecentTransactionsGrid extends AbstractTransactionsGridView {
+public class RecentTransactionsGrid extends TransactionsGridView {
 
-    public RecentTransactionsGrid(@Qualifier("recentTransactionsPresenter") TransactionsGridViewPresenter presenter) {
+    public RecentTransactionsGrid(TransactionsGridViewPresenter presenter) {
         super(presenter);
-        presenter.initialize(this);
     }
 
     @Override
