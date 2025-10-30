@@ -4,15 +4,12 @@ import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryService;
 import hhz.ktoeto.moneymanager.ui.AbstractFormViewPresenter;
-import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 
 public abstract class CategoryFormPresenter extends AbstractFormViewPresenter<Category> {
 
     protected final CategoryService categoryService;
     protected final UserContextHolder userContextHolder;
-
-    protected final CustomDialog dialog = new CustomDialog();
 
     protected CategoryFormView view;
 

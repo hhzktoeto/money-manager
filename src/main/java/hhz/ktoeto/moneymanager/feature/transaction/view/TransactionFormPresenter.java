@@ -5,7 +5,6 @@ import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.ui.AbstractFormViewPresenter;
-import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
 import hhz.ktoeto.moneymanager.ui.mixin.CanAddCategory;
@@ -17,8 +16,6 @@ public abstract class TransactionFormPresenter extends AbstractFormViewPresenter
     protected final TransactionService transactionService;
     protected final ApplicationEventPublisher eventPublisher;
     protected final CategoryDataProvider categoryDataProvider;
-
-    protected final CustomDialog dialog = new CustomDialog();
 
     protected TransactionFormPresenter(UserContextHolder userContextHolder, TransactionService transactionService,
                                        ApplicationEventPublisher eventPublisher, CategoryDataProvider categoryDataProvider) {

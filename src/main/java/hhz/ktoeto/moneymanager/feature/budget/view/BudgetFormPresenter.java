@@ -5,7 +5,6 @@ import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.ui.AbstractFormViewPresenter;
-import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
 import hhz.ktoeto.moneymanager.ui.mixin.CanAddCategory;
@@ -17,8 +16,6 @@ public abstract class BudgetFormPresenter extends AbstractFormViewPresenter<Budg
     protected final UserContextHolder userContextHolder;
     protected final ApplicationEventPublisher eventPublisher;
     protected final CategoryDataProvider categoryDataProvider;
-
-    protected final CustomDialog dialog = new CustomDialog();
 
     protected BudgetFormPresenter(BudgetService budgetService, UserContextHolder userContextHolder,
                                   ApplicationEventPublisher eventPublisher, CategoryDataProvider categoryDataProvider) {
