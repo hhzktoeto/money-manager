@@ -6,7 +6,5 @@ import hhz.ktoeto.moneymanager.ui.mixin.CanSubmit;
 
 public interface FormViewPresenter<T, V extends FormView<T>> extends ViewPresenter<V>, CanSubmit, CanDelete, CanCancel {
 
-    void openCreateForm();
-
-    void openEditForm(T entity);
+    void openForm(T entity);
 }

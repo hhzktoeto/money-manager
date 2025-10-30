@@ -15,7 +15,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 
-public abstract class AbstractTransactionsGridPresenter implements TransactionsGridViewPresenter {
+public abstract class AbstractTransactionsGridViewPresenter implements TransactionsGridViewPresenter {
 
     protected final UserContextHolder userContextHolder;
     protected final FormattingService formattingService;
@@ -26,12 +26,12 @@ public abstract class AbstractTransactionsGridPresenter implements TransactionsG
 
     protected TransactionsGridView view;
 
-    public AbstractTransactionsGridPresenter(UserContextHolder userContextHolder,
-                                             FormattingService formattingService,
-                                             TransactionService transactionService,
-                                             AbstractTransactionsDataProvider dataProvider,
-                                             CategoryDataProvider categoryDataProvider,
-                                             ApplicationEventPublisher eventPublisher) {
+    public AbstractTransactionsGridViewPresenter(UserContextHolder userContextHolder,
+                                                 FormattingService formattingService,
+                                                 TransactionService transactionService,
+                                                 AbstractTransactionsDataProvider dataProvider,
+                                                 CategoryDataProvider categoryDataProvider,
+                                                 ApplicationEventPublisher eventPublisher) {
         this.userContextHolder = userContextHolder;
         this.formattingService = formattingService;
         this.transactionService = transactionService;

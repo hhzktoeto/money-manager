@@ -17,7 +17,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 @UIScope
 @SpringComponent("allTransactionsPresenter")
-public class AllTransactionsGridPresenter extends AbstractTransactionsGridPresenter implements DataProviderListener<Transaction> {
+public class AllTransactionsGridPresenter extends AbstractTransactionsGridViewPresenter implements DataProviderListener<Transaction> {
 
     public AllTransactionsGridPresenter(UserContextHolder userContextHolder, FormattingService formattingService,
                                         TransactionService transactionService, AllTransactionsProvider dataProvider,

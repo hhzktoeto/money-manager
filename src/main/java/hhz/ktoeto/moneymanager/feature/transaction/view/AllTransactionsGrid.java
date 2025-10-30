@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 @UIScope
 @SpringComponent
-public class AllTransactionsGrid extends AbstractTransactionsGrid {
+public class AllTransactionsGrid extends AbstractTransactionsGridView {
 
     private final Details gridSettings;
     private final Button expensesFilterButton;

@@ -1,11 +1,8 @@
 package hhz.ktoeto.moneymanager.ui;
 
-import hhz.ktoeto.moneymanager.ui.mixin.HasEditableEntity;
-import hhz.ktoeto.moneymanager.ui.mixin.Resettable;
+import hhz.ktoeto.moneymanager.ui.mixin.HasEntity;
 
-public interface FormView<T> extends View, HasEditableEntity<T>, Resettable<T> {
-
-    boolean isCreateMode();
+public interface FormView<T> extends View, HasEntity<T> {
 
     boolean writeToIfValid(T entity);
 }

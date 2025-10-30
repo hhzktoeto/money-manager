@@ -17,13 +17,13 @@ import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public abstract class AbstractTransactionsGrid extends Composite<VerticalLayout> implements TransactionsGridView {
+public abstract class AbstractTransactionsGridView extends Composite<VerticalLayout> implements TransactionsGridView {
 
     protected final transient TransactionsGridViewPresenter presenter;
 
     protected final Grid<Transaction> grid;
 
-    public AbstractTransactionsGrid(TransactionsGridViewPresenter presenter) {
+    public AbstractTransactionsGridView(TransactionsGridViewPresenter presenter) {
         this.presenter = presenter;
 
         this.grid = new Grid<>();

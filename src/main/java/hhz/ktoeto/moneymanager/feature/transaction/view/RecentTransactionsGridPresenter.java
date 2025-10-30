@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 @UIScope
 @SpringComponent("recentTransactionsPresenter")
-public class RecentTransactionsGridPresenter extends AbstractTransactionsGridPresenter {
+public class RecentTransactionsGridPresenter extends AbstractTransactionsGridViewPresenter {
 
 
     public RecentTransactionsGridPresenter(UserContextHolder userContextHolder, FormattingService formattingService,

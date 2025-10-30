@@ -15,29 +15,29 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.ui.constant.FormMode;
 import hhz.ktoeto.moneymanager.feature.budget.BudgetFormView;
 import hhz.ktoeto.moneymanager.feature.budget.BudgetFormViewPresenter;
-import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
-import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
-import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
-import hhz.ktoeto.moneymanager.ui.component.ToggleButtonGroup;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.view.validator.BudgetActivePeriodValidator;
 import hhz.ktoeto.moneymanager.feature.budget.view.validator.BudgetCategoriesValidator;
 import hhz.ktoeto.moneymanager.feature.budget.view.validator.BudgetDateRangeValidator;
 import hhz.ktoeto.moneymanager.feature.budget.view.validator.BudgetNameValidator;
-import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
-import lombok.extern.slf4j.Slf4j;
+import hhz.ktoeto.moneymanager.feature.category.domain.Category;
+import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
+import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
+import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
+import hhz.ktoeto.moneymanager.ui.component.ToggleButtonGroup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
-@Slf4j
-public class BudgetForm extends Composite<FlexLayout> implements BudgetFormView {
+public abstract class AbstractBudgetFormView extends Composite<FlexLayout> implements BudgetFormView {
 
-    private final transient BudgetFormViewPresenter presenter;
-    private final CategoryDataProvider categoryProvider;
-    private final FormMode mode;
+    protected final transient BudgetFormViewPresenter presenter;
+    protected final CategoryDataProvider categoryProvider;
+
+    protected final Binder<Budget> binder;
 
     private final IncomeExpenseToggle<Budget.Type> typeToggle;
     private final TextField nameField;
@@ -53,14 +53,14 @@ public class BudgetForm extends Composite<FlexLayout> implements BudgetFormView 
     private final Button cancelButton;
     private final Button deleteButton;
 
-    private final Binder<Budget> binder;
+    private final Logger log;
 
     private Budget.ActivePeriod previousActivePeriod;
 
-    public BudgetForm(CategoryDataProvider categoryProvider, BudgetFormViewPresenter presenter, FormMode mode) {
-        this.categoryProvider = categoryProvider;
-        this.mode = mode;
+    public AbstractBudgetFormView(BudgetFormViewPresenter presenter, CategoryDataProvider categoryProvider) {
         this.presenter = presenter;
+        this.categoryProvider = categoryProvider;
+        this.binder = new Binder<>(Budget.class);
 
         this.typeToggle = new IncomeExpenseToggle<>(Budget.Type.EXPENSE, Budget.Type.INCOME);
         this.nameField = new TextField("Название");
@@ -75,10 +75,12 @@ public class BudgetForm extends Composite<FlexLayout> implements BudgetFormView 
         this.cancelButton = new Button("Отмена");
         this.deleteButton = new Button(MaterialIcons.DELETE.create());
 
-        this.binder = new Binder<>(Budget.class);
+        this.log = LoggerFactory.getLogger(this.getClass());
 
         this.presenter.initialize(this);
     }
+
+    protected abstract boolean isDeleteButtonVisible();
 
     @Override
     protected FlexLayout initContent() {
@@ -95,7 +97,7 @@ public class BudgetForm extends Composite<FlexLayout> implements BudgetFormView 
         FlexLayout secondRowLayout = new FlexLayout();
         HorizontalLayout buttonsRow = new HorizontalLayout();
 
-        this.configureNameField();
+        this.nameField.setWidthFull();
         this.configureFirstRow(firstRowLayout);
         this.configureSecondRow(secondRowLayout);
         this.configureButtonsRow(buttonsRow);
@@ -114,26 +116,6 @@ public class BudgetForm extends Composite<FlexLayout> implements BudgetFormView 
     }
 
     @Override
-    public boolean isCreateMode() {
-        return mode == FormMode.CREATE;
-    }
-
-    @Override
-    public void setEditedEntity(Budget budget) {
-        binder.setBean(budget);
-    }
-
-    @Override
-    public Budget getEditedEntity() {
-        return binder.getBean();
-    }
-
-    @Override
-    public void reset(Budget resetBudget) {
-        binder.setBean(resetBudget);
-    }
-
-    @Override
     public boolean writeToIfValid(Budget budget) {
         try {
             binder.writeBean(budget);
@@ -146,12 +128,18 @@ public class BudgetForm extends Composite<FlexLayout> implements BudgetFormView 
     }
 
     @Override
-    public Component asComponent() {
-        return this;
+    public void setEntity(Budget resetBudget) {
+        binder.setBean(resetBudget);
     }
 
-    private void configureNameField() {
-        nameField.setWidthFull();
+    @Override
+    public Budget getEntity() {
+        return this.binder.getBean();
+    }
+
+    @Override
+    public Component asComponent() {
+        return this;
     }
 
     private void configureFirstRow(FlexLayout row) {
@@ -229,7 +217,7 @@ public class BudgetForm extends Composite<FlexLayout> implements BudgetFormView 
 
         deleteButton.addClickListener(event -> presenter.onDelete());
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
-        deleteButton.setVisible(mode == FormMode.EDIT);
+        deleteButton.setVisible(this.isDeleteButtonVisible());
 
         HorizontalLayout submitCancelLayout = new HorizontalLayout(cancelButton, submitButton);
         submitCancelLayout.addClassNames(
@@ -246,7 +234,7 @@ public class BudgetForm extends Composite<FlexLayout> implements BudgetFormView 
         );
     }
 
-    private void configureBinder() {
+    public void configureBinder() {
         binder.forField(nameField)
                 .withValidator(new BudgetNameValidator())
                 .bind(Budget::getName, Budget::setName);

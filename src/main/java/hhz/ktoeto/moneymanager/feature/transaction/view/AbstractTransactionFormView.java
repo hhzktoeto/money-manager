@@ -13,28 +13,27 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormView;
 import hhz.ktoeto.moneymanager.feature.transaction.TransactionFormViewPresenter;
-import hhz.ktoeto.moneymanager.ui.constant.FormMode;
-import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
-import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
-import hhz.ktoeto.moneymanager.ui.component.RussianDatePicker;
-import hhz.ktoeto.moneymanager.feature.category.domain.Category;
-import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.view.validator.TransactionAmountValidator;
 import hhz.ktoeto.moneymanager.feature.transaction.view.validator.TransactionDescriptionValidator;
-import lombok.extern.slf4j.Slf4j;
+import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
+import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
+import hhz.ktoeto.moneymanager.ui.component.RussianDatePicker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.time.LocalDate;
 
-@Slf4j
-public class TransactionForm extends Composite<FlexLayout> implements TransactionFormView {
+public abstract class AbstractTransactionFormView extends Composite<FlexLayout> implements TransactionFormView {
 
-    private final transient TransactionFormViewPresenter presenter;
-    private final CategoryDataProvider categoryProvider;
-    private final FormMode mode;
+    protected final transient TransactionFormViewPresenter presenter;
+    protected final CategoryDataProvider categoryProvider;
+    protected final Binder<Transaction> binder;
 
     private final IncomeExpenseToggle<Transaction.Type> typeToggle;
     private final ComboBox<Category> categorySelect;
@@ -46,12 +45,13 @@ public class TransactionForm extends Composite<FlexLayout> implements Transactio
     private final Button cancelButton;
     private final Button deleteButton;
 
-    private final Binder<Transaction> binder;
 
-    public TransactionForm(CategoryDataProvider categoryProvider, TransactionFormViewPresenter presenter, FormMode mode) {
+    private final Logger log;
+
+    protected AbstractTransactionFormView(CategoryDataProvider categoryProvider, TransactionFormViewPresenter presenter) {
         this.categoryProvider = categoryProvider;
-        this.mode = mode;
         this.presenter = presenter;
+        this.binder = new Binder<>(Transaction.class);
 
         this.typeToggle = new IncomeExpenseToggle<>(Transaction.Type.EXPENSE, Transaction.Type.INCOME);
         this.categorySelect = new ComboBox<>("Категория");
@@ -63,10 +63,12 @@ public class TransactionForm extends Composite<FlexLayout> implements Transactio
         this.cancelButton = new Button("Отмена");
         this.deleteButton = new Button(MaterialIcons.DELETE.create());
 
-        this.binder = new Binder<>(Transaction.class);
+        this.log = LoggerFactory.getLogger(this.getClass());
 
         this.presenter.initialize(this);
     }
+
+    protected abstract boolean isDeleteButtonVisible();
 
     @Override
     protected FlexLayout initContent() {
@@ -100,21 +102,6 @@ public class TransactionForm extends Composite<FlexLayout> implements Transactio
     }
 
     @Override
-    public boolean isCreateMode() {
-        return mode == FormMode.CREATE;
-    }
-
-    @Override
-    public void setEditedEntity(Transaction transaction) {
-        binder.setBean(transaction);
-    }
-
-    @Override
-    public Transaction getEditedEntity() {
-        return binder.getBean();
-    }
-
-    @Override
     public boolean writeToIfValid(Transaction transaction) {
         try {
             binder.writeBean(transaction);
@@ -127,8 +114,13 @@ public class TransactionForm extends Composite<FlexLayout> implements Transactio
     }
 
     @Override
-    public void reset(Transaction resetTransaction) {
-        binder.setBean(resetTransaction);
+    public void setEntity(Transaction entity) {
+        this.binder.setBean(entity);
+    }
+
+    @Override
+    public Transaction getEntity() {
+        return this.binder.getBean();
     }
 
     @Override
@@ -191,7 +183,7 @@ public class TransactionForm extends Composite<FlexLayout> implements Transactio
 
         deleteButton.addClickListener(e -> presenter.onDelete());
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
-        deleteButton.setVisible(mode == FormMode.EDIT);
+        deleteButton.setVisible(this.isDeleteButtonVisible());
 
         HorizontalLayout submitCancelLayout = new HorizontalLayout(cancelButton, submitButton);
         submitCancelLayout.addClassNames(

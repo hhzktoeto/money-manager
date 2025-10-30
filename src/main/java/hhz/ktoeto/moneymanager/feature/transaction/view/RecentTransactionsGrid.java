@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 @UIScope
 @SpringComponent
-public class RecentTransactionsGrid extends AbstractTransactionsGrid {
+public class RecentTransactionsGrid extends AbstractTransactionsGridView {
 
     public RecentTransactionsGrid(@Qualifier("recentTransactionsPresenter") TransactionsGridViewPresenter presenter) {
         super(presenter);
