@@ -88,7 +88,7 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
         this.expensesFilterButton.getStyle().set(StyleConstants.BORDER_RADIUS, StyleConstants.BorderRadius.LEFT_075REM);
         this.expensesFilterButton.addClassNames(
                 LumoUtility.Width.FULL,
-                LumoUtility.FontSize.XSMALL,
+                LumoUtility.FontSize.SMALL,
                 LumoUtility.FontSize.Breakpoint.Small.MEDIUM,
                 LumoUtility.TextColor.ERROR
         );
@@ -105,7 +105,7 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
         this.incomesFilterButton.addClassNames(
                 LumoUtility.Width.FULL,
                 LumoUtility.BorderRadius.NONE,
-                LumoUtility.FontSize.XSMALL,
+                LumoUtility.FontSize.SMALL,
                 LumoUtility.FontSize.Breakpoint.Small.MEDIUM,
                 LumoUtility.TextColor.SUCCESS
         );
@@ -123,7 +123,7 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
         this.totalFilterButton.addClassNames(
                 LumoUtility.Width.FULL,
                 LumoUtility.BorderRadius.NONE,
-                LumoUtility.FontSize.XSMALL,
+                LumoUtility.FontSize.SMALL,
                 LumoUtility.FontSize.Breakpoint.Small.MEDIUM,
                 LumoUtility.TextColor.BODY
         );
