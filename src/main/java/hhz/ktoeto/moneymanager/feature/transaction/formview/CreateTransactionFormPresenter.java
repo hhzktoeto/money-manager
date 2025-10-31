@@ -7,6 +7,7 @@ import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.ui.event.TransactionCreateRequested;
+import hhz.ktoeto.moneymanager.ui.mixin.HasCategoriesProvider;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 
@@ -21,7 +22,7 @@ public class CreateTransactionFormPresenter extends TransactionFormPresenter {
 
     @Override
     public void initialize() {
-        this.view = new CreateTransactionFormView(this, this.categoryDataProvider);
+        this.setView(new CreateTransactionFormView(this, this.getCategoryDataProvider()));
     }
 
     @Override
@@ -31,24 +32,24 @@ public class CreateTransactionFormPresenter extends TransactionFormPresenter {
 
     @Override
     public void onSubmit() {
-        long userId = userContextHolder.getCurrentUserId();
+        long userId = this.getUserContextHolder().getCurrentUserId();
 
         Transaction transaction = new Transaction();
         transaction.setUserId(userId);
 
-        boolean valid = view.writeToIfValid(transaction);
+        boolean valid = this.getView().writeToIfValid(transaction);
         if (!valid) {
             return;
         }
 
-        Transaction saved = transactionService.create(transaction);
+        Transaction saved = this.getTransactionService().create(transaction);
 
         Transaction resetTransaction = new Transaction();
         resetTransaction.setDate(saved.getDate());
         resetTransaction.setCategory(saved.getCategory());
         resetTransaction.setType(saved.getType());
 
-        view.setEntity(resetTransaction);
+        this.getView().setEntity(resetTransaction);
     }
 
     @EventListener(TransactionCreateRequested.class)

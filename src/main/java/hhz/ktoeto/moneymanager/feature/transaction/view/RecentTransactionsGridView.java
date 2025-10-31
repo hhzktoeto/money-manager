@@ -3,9 +3,9 @@ package hhz.ktoeto.moneymanager.feature.transaction.view;
 import com.vaadin.flow.component.grid.Grid;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 
-public class RecentTransactionsGrid extends TransactionsGridView {
+public class RecentTransactionsGridView extends TransactionsGridView {
 
-    public RecentTransactionsGrid(RecentTransactionsGridPresenter presenter) {
+    public RecentTransactionsGridView(RecentTransactionsGridPresenter presenter) {
         super(presenter);
     }
 
@@ -21,6 +21,6 @@ public class RecentTransactionsGrid extends TransactionsGridView {
 
     @Override
     protected void configurePagination(Grid<Transaction> grid) {
-        this.grid.setAllRowsVisible(true);
+        this.getRootGrid().setAllRowsVisible(true);
     }
 }

@@ -15,7 +15,9 @@ import hhz.ktoeto.moneymanager.ui.mixin.CanFormatAmount;
 import hhz.ktoeto.moneymanager.ui.mixin.HasCategoriesProvider;
 import hhz.ktoeto.moneymanager.ui.mixin.HasTransactionsProvider;
 import jakarta.annotation.PostConstruct;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
@@ -23,15 +25,19 @@ import java.math.BigDecimal;
 public abstract class TransactionsGridPresenter implements ViewPresenter, HasTransactionsProvider, HasCategoriesProvider,
         CanFormatAmount, CanEdit<Transaction> {
 
-    protected final transient UserContextHolder userContextHolder;
-    protected final transient FormattingService formattingService;
-    protected final transient TransactionService transactionService;
-    protected final transient ApplicationEventPublisher eventPublisher;
-    protected final AbstractTransactionsDataProvider dataProvider;
-    protected final CategoryDataProvider categoryDataProvider;
+    @Getter(AccessLevel.PROTECTED)
+    private final transient UserContextHolder userContextHolder;
+    private final transient FormattingService formattingService;
+    @Getter(AccessLevel.PROTECTED)
+    private final transient TransactionService transactionService;
+    private final transient ApplicationEventPublisher eventPublisher;
+    @Getter(AccessLevel.PROTECTED)
+    private final AbstractTransactionsDataProvider dataProvider;
+    private final CategoryDataProvider categoryDataProvider;
 
     @Getter
-    protected TransactionsGridView view;
+    @Setter(AccessLevel.PROTECTED)
+    private TransactionsGridView view;
 
     protected TransactionsGridPresenter(UserContextHolder userContextHolder,
                                      FormattingService formattingService,

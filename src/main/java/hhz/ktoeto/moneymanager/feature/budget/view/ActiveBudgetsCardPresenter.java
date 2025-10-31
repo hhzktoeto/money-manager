@@ -23,20 +23,20 @@ public class ActiveBudgetsCardPresenter extends BudgetsCardsPresenter implements
     }
 
     @Override
-    protected void setView() {
-        this.view = new ActiveBudgetsCardsView(this);
+    protected void preInitialize() {
+        this.setView(new ActiveBudgetsCardsView(this));
     }
 
     @Override
     public void onCreateRequested() {
-        this.eventPublisher.publishEvent(new BudgetCreateRequested(this));
+        this.getEventPublisher().publishEvent(new BudgetCreateRequested(this));
     }
 
     @Override
     public void onAddToFavourites(Budget budget) {
         budget.setFavourite(!budget.isFavourite());
 
-        this.budgetService.update(budget, this.userContextHolder.getCurrentUserId());
+        this.getBudgetService().update(budget, this.getUserContextHolder().getCurrentUserId());
     }
 }
 

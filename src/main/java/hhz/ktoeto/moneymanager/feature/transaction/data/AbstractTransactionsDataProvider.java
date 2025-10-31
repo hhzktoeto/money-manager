@@ -9,6 +9,7 @@ import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.context.event.EventListener;
 import org.springframework.lang.NonNull;
@@ -17,11 +18,13 @@ import java.util.stream.Stream;
 
 public abstract class AbstractTransactionsDataProvider extends AbstractBackEndDataProvider<Transaction, TransactionFilter> {
 
-    protected final transient UserContextHolder userContextHolder;
-    protected final transient TransactionService transactionService;
+    @Getter(AccessLevel.PROTECTED)
+    private final transient UserContextHolder userContextHolder;
+    @Getter(AccessLevel.PROTECTED)
+    private final transient TransactionService transactionService;
 
     @Getter
-    protected transient TransactionFilter currentFilter;
+    private transient TransactionFilter currentFilter;
 
     protected AbstractTransactionsDataProvider(UserContextHolder userContextHolder, TransactionService transactionService) {
         this.userContextHolder = userContextHolder;

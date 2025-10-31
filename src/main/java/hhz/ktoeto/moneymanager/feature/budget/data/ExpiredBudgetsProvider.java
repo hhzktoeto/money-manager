@@ -18,6 +18,6 @@ public class ExpiredBudgetsProvider extends BudgetsDataProvider {
 
     @Override
     protected Stream<Budget> fetchBudgets(long userId) {
-        return this.budgetService.getExpiredBudgets(userId).stream();
+        return this.getBudgetService().getExpiredBudgets(userId).stream();
     }
 }

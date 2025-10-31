@@ -47,7 +47,7 @@ public class FavouriteBudgetsCardsView extends BudgetsCardsView {
         data.forEach(card -> {
             card.setMinWidth(300, Unit.PIXELS);
             card.setMaxWidth(320, Unit.PIXELS);
-            card.addContentClickListener(event -> this.presenter.onEditRequested(card.getBudget()));
+            card.addContentClickListener(event -> this.getPresenter().onEditRequested(card.getBudget()));
             root.add(card);
         });
     }

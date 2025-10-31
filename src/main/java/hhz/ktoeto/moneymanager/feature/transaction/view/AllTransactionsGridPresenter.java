@@ -30,22 +30,22 @@ public class AllTransactionsGridPresenter extends TransactionsGridPresenter impl
 
     @Override
     public void initialize() {
-        AllTransactionsGridView allTransactionsView = new AllTransactionsGridView(this);
-        this.view = allTransactionsView;
-        this.hasUpdatableDataDelegate = allTransactionsView;
+        AllTransactionsGridView view = new AllTransactionsGridView(this);
+        this.setView(view);
+        this.hasUpdatableDataDelegate = view;
 
-        this.dataProvider.addDataProviderListener(this);
+        this.getDataProvider().addDataProviderListener(this);
         this.refresh();
     }
 
     @Override
     public TransactionFilter getFilter() {
-        return this.dataProvider.getCurrentFilter();
+        return this.getDataProvider().getCurrentFilter();
     }
 
     @Override
     public void setFilter(TransactionFilter filter) {
-        this.dataProvider.setCurrentFilter(filter);
+        this.getDataProvider().setCurrentFilter(filter);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class AllTransactionsGridPresenter extends TransactionsGridPresenter impl
     }
 
     private void refresh() {
-        TransactionsSummaries summaries = this.transactionService.getSummaries(this.userContextHolder.getCurrentUserId(), this.getFilter());
+        TransactionsSummaries summaries = this.getTransactionService().getSummaries(this.getUserContextHolder().getCurrentUserId(), this.getFilter());
         this.hasUpdatableDataDelegate.update(summaries);
     }
 }

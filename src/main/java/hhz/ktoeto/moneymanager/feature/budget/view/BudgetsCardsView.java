@@ -7,12 +7,15 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.View;
 import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
 import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 import java.util.List;
 
 public abstract class BudgetsCardsView extends Composite<Div> implements View, HasUpdatableData<List<BudgetCard>> {
 
-    protected final transient BudgetsCardsPresenter presenter;
+    @Getter(AccessLevel.PROTECTED)
+    private final transient BudgetsCardsPresenter presenter;
 
     protected BudgetsCardsView(BudgetsCardsPresenter presenter) {
         this.presenter = presenter;

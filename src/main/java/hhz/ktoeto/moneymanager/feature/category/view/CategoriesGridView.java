@@ -9,14 +9,14 @@ import hhz.ktoeto.moneymanager.ui.View;
 
 public abstract class CategoriesGridView extends Composite<VerticalLayout> implements View {
 
-    protected final transient CategoriesGridPresenter presenter;
+    private final transient CategoriesGridPresenter presenter;
 
-    protected final Grid<Category> grid;
+    private final Grid<Category> rootGrid;
 
     protected CategoriesGridView(CategoriesGridPresenter presenter) {
         this.presenter = presenter;
 
-        this.grid = new Grid<>();
+        this.rootGrid = new Grid<>();
     }
 
     protected abstract String getEmptyStateText();
@@ -34,7 +34,7 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
 
         this.configureGrid();
 
-        root.add(this.grid);
+        root.add(this.rootGrid);
 
         return root;
     }
@@ -46,6 +46,6 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
 
     //TODO: посмотреть модификаторы доступа для полей абстрактных классов, открыть доступ к полям для наследников через protected getter'ы
     private void configureGrid() {
-        this.grid.setDataProvider(this.presenter.getCategoriesProvider());
+        this.rootGrid.setDataProvider(this.presenter.getCategoriesProvider());
     }
 }

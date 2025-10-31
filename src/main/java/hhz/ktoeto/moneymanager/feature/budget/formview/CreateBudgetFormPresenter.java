@@ -21,7 +21,7 @@ public class CreateBudgetFormPresenter extends BudgetFormPresenter {
 
     @Override
     public void initialize() {
-        this.view = new CreateBudgetFormView(this, this.categoryDataProvider);
+        this.setView(new CreateBudgetFormView(this, this.getCategoryDataProvider()));
     }
 
     @Override
@@ -31,18 +31,18 @@ public class CreateBudgetFormPresenter extends BudgetFormPresenter {
 
     @Override
     public void onSubmit() {
-        long userId = this.userContextHolder.getCurrentUserId();
+        long userId = this.getUserContextHolder().getCurrentUserId();
 
         Budget budget = new Budget();
         budget.setUserId(userId);
 
-        boolean valid = view.writeToIfValid(budget);
+        boolean valid = this.getView().writeToIfValid(budget);
         if (!valid) {
             return;
         }
 
-        this.budgetService.create(budget);
-        this.dialog.close();
+        this.getBudgetService().create(budget);
+        this.getRootDialog().close();
     }
 
     @EventListener(BudgetCreateRequested.class)

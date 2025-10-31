@@ -15,8 +15,8 @@ import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 public abstract class AbstractFormView<T> extends Composite<FlexLayout> implements FormView<T> {
 
-    protected final transient AbstractFormViewPresenter<T> presenter;
-    protected final Logger log;
+    private final transient AbstractFormViewPresenter<T> presenter;
+    private final Logger log;
 
     private final Button submitButton;
     private final Button cancelButton;

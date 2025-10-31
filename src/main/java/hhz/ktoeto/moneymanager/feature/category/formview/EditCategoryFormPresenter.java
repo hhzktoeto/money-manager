@@ -16,7 +16,7 @@ public class EditCategoryFormPresenter extends CategoryFormPresenter {
 
     @Override
     public void initialize() {
-        this.view = new EditCategoryFormView(this);
+        this.setView(new EditCategoryFormView(this));
     }
 
     @Override
@@ -26,14 +26,14 @@ public class EditCategoryFormPresenter extends CategoryFormPresenter {
 
     @Override
     public void onSubmit() {
-        Category category = this.view.getEntity();
+        Category category = this.getView().getEntity();
 
-        boolean valid = this.view.writeToIfValid(category);
+        boolean valid = this.getView().writeToIfValid(category);
         if (!valid) {
             return;
         }
 
-        this.categoryService.update(category, this.userContextHolder.getCurrentUserId());
-        this.dialog.close();
+        this.getCategoryService().update(category, this.getUserContextHolder().getCurrentUserId());
+        this.getRootDialog().close();
     }
 }

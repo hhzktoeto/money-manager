@@ -15,22 +15,25 @@ import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.View;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
 
+@Getter(AccessLevel.PROTECTED)
 public abstract class TransactionsGridView extends Composite<VerticalLayout> implements View {
 
-    protected final transient TransactionsGridPresenter presenter;
+    private final transient TransactionsGridPresenter presenter;
 
-    protected final Grid<Transaction> grid;
+    private final Grid<Transaction> rootGrid;
 
     protected TransactionsGridView(TransactionsGridPresenter presenter) {
         this.presenter = presenter;
 
-        this.grid = new Grid<>();
+        this.rootGrid = new Grid<>();
     }
 
     protected abstract String getEmptyStateText();
@@ -48,7 +51,7 @@ public abstract class TransactionsGridView extends Composite<VerticalLayout> imp
 
         this.configureGrid();
 
-        root.add(this.grid);
+        root.add(this.rootGrid);
 
         return root;
     }
@@ -59,27 +62,27 @@ public abstract class TransactionsGridView extends Composite<VerticalLayout> imp
     }
 
     private void configureGrid() {
-        this.grid.setDataProvider(this.presenter.getTransactionsProvider());
-        this.grid.addClassNames(LumoUtility.Background.TRANSPARENT);
-        this.grid.addThemeVariants(
+        this.rootGrid.setDataProvider(this.presenter.getTransactionsProvider());
+        this.rootGrid.addClassNames(LumoUtility.Background.TRANSPARENT);
+        this.rootGrid.addThemeVariants(
                 GridVariant.LUMO_COMPACT,
                 GridVariant.LUMO_NO_BORDER,
                 GridVariant.LUMO_NO_ROW_BORDERS
         );
 
-        this.configurePagination(this.grid);
+        this.configurePagination(this.rootGrid);
 
-        this.grid.setSelectionMode(Grid.SelectionMode.NONE);
-        this.grid.addItemClickListener(event -> this.presenter.onEditRequested(event.getItem()));
+        this.rootGrid.setSelectionMode(Grid.SelectionMode.NONE);
+        this.rootGrid.addItemClickListener(event -> this.presenter.onEditRequested(event.getItem()));
 
         EmptyDataImage noTransactionsImage = new EmptyDataImage();
         noTransactionsImage.setText(this.getEmptyStateText());
-        this.grid.setEmptyStateComponent(noTransactionsImage);
+        this.rootGrid.setEmptyStateComponent(noTransactionsImage);
 
-        this.grid.addColumn(new TransactionCategoryDateRenderer())
+        this.rootGrid.addColumn(new TransactionCategoryDateRenderer())
                 .setKey("date")
                 .setSortable(this.isSortable());
-        this.grid.addColumn(new NumberRenderer<>(Transaction::getAmount, NumberFormat.getCurrencyInstance(Locale.getDefault())))
+        this.rootGrid.addColumn(new NumberRenderer<>(Transaction::getAmount, NumberFormat.getCurrencyInstance(Locale.getDefault())))
                 .setKey("amount")
                 .setTextAlign(ColumnTextAlign.END)
                 .setSortable(this.isSortable())

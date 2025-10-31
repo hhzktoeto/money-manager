@@ -59,7 +59,7 @@ public class ActiveBudgetsCardsView extends BudgetsCardsView {
 
         data.forEach(card -> {
             Budget budget = card.getBudget();
-            card.addContentClickListener(event -> this.presenter.onEditRequested(budget));
+            card.addContentClickListener(event -> this.getPresenter().onEditRequested(budget));
             card.addFavouriteButtonClickListener(event -> this.canAddToFavouriteDelegate.onAddToFavourites(budget));
             root.add(card);
         });

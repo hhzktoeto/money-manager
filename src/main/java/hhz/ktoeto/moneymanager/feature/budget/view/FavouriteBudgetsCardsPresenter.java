@@ -20,7 +20,7 @@ public class FavouriteBudgetsCardsPresenter extends BudgetsCardsPresenter {
     }
 
     @Override
-    protected void setView() {
-        this.view = new FavouriteBudgetsCardsView(this);
+    protected void preInitialize() {
+        this.setView(new FavouriteBudgetsCardsView(this));
     }
 }

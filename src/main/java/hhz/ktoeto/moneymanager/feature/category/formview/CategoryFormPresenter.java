@@ -5,13 +5,14 @@ import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryService;
 import hhz.ktoeto.moneymanager.ui.AbstractFormViewPresenter;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
+import lombok.AccessLevel;
+import lombok.Getter;
 
+@Getter(AccessLevel.PROTECTED)
 public abstract class CategoryFormPresenter extends AbstractFormViewPresenter<Category> {
 
-    protected final CategoryService categoryService;
-    protected final UserContextHolder userContextHolder;
-
-    protected CategoryFormView view;
+    private final CategoryService categoryService;
+    private final UserContextHolder userContextHolder;
 
     protected CategoryFormPresenter(CategoryService categoryService, UserContextHolder userContextHolder) {
         this.categoryService = categoryService;
@@ -24,10 +25,10 @@ public abstract class CategoryFormPresenter extends AbstractFormViewPresenter<Ca
         confirmDialog.setHeader("Удалить категорию?");
         confirmDialog.setText("Все транзакции, цели и бюджеты так же будут удалены");
         confirmDialog.addConfirmListener(event -> {
-            Category category = view.getEntity();
-            categoryService.delete(category.getId(), userContextHolder.getCurrentUserId());
+            Category category = this.getView().getEntity();
+            this.categoryService.delete(category.getId(), this.userContextHolder.getCurrentUserId());
             confirmDialog.close();
-            this.dialog.close();
+            this.getRootDialog().close();
         });
 
         confirmDialog.open();

@@ -2,15 +2,21 @@ package hhz.ktoeto.moneymanager.ui;
 
 import hhz.ktoeto.moneymanager.ui.component.CustomDialog;
 import jakarta.annotation.PostConstruct;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractFormViewPresenter<T> implements FormViewPresenter<T> {
 
-    protected final CustomDialog dialog = new CustomDialog();
-    protected final Logger log = LoggerFactory.getLogger(this.getClass());
+    @Getter(AccessLevel.PROTECTED)
+    private final CustomDialog rootDialog = new CustomDialog();
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    protected AbstractFormView<T> view;
+    @Getter(AccessLevel.PROTECTED)
+    @Setter(AccessLevel.PROTECTED)
+    private AbstractFormView<T> view;
 
     protected abstract String getDialogTitle();
 
@@ -22,13 +28,17 @@ public abstract class AbstractFormViewPresenter<T> implements FormViewPresenter<
     public void openForm(T entity) {
         this.view.setEntity(entity);
 
-        this.dialog.setTitle(this.getDialogTitle());
-        this.dialog.addBody(this.view.asComponent());
-        this.dialog.open();
+        this.rootDialog.setTitle(this.getDialogTitle());
+        this.rootDialog.addBody(this.view.asComponent());
+        this.rootDialog.open();
     }
 
     @Override
     public void onCancel() {
-        this.dialog.close();
+        this.rootDialog.close();
+    }
+
+    protected Logger log() {
+        return this.log;
     }
 }

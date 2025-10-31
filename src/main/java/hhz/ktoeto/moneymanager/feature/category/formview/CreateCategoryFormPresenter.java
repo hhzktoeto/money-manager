@@ -7,11 +7,14 @@ import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryFilter;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryService;
 import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
+import hhz.ktoeto.moneymanager.ui.mixin.HasCustomErrors;
 import org.springframework.context.event.EventListener;
 
 @UIScope
 @SpringComponent
 public class CreateCategoryFormPresenter extends CategoryFormPresenter {
+
+    private HasCustomErrors hasCustomErrorsDelegate;
 
     protected CreateCategoryFormPresenter(CategoryService categoryService, UserContextHolder userContextHolder) {
         super(categoryService, userContextHolder);
@@ -19,7 +22,9 @@ public class CreateCategoryFormPresenter extends CategoryFormPresenter {
 
     @Override
     public void initialize() {
-        this.view = new CreateCategoryFormView(this);
+        CreateCategoryFormView view = new CreateCategoryFormView(this);
+        this.setView(view);
+        this.hasCustomErrorsDelegate = view;
     }
 
     @Override
@@ -29,12 +34,12 @@ public class CreateCategoryFormPresenter extends CategoryFormPresenter {
 
     @Override
     public void onSubmit() {
-        long userId = this.userContextHolder.getCurrentUserId();
+        long userId = this.getUserContextHolder().getCurrentUserId();
 
         Category category = new Category();
         category.setUserId(userId);
 
-        boolean valid = this.view.writeToIfValid(category);
+        boolean valid = this.getView().writeToIfValid(category);
         if (!valid) {
             return;
         }
@@ -42,13 +47,13 @@ public class CreateCategoryFormPresenter extends CategoryFormPresenter {
         CategoryFilter nameFilter = new CategoryFilter();
         nameFilter.setName(category.getName());
 
-        if (this.categoryService.exist(userId, nameFilter)) {
-            this.view.setError("Категория с таким именем уже существует");
+        if (this.getCategoryService().exist(userId, nameFilter)) {
+            this.hasCustomErrorsDelegate.setError("Категория с таким именем уже существует");
             return;
         }
 
-        this.categoryService.create(category);
-        this.dialog.close();
+        this.getCategoryService().create(category);
+        this.getRootDialog().close();
     }
 
     @EventListener(CategoryCreateRequested.class)

@@ -21,7 +21,7 @@ public class EditTransactionFormPresenter extends TransactionFormPresenter {
 
     @Override
     public void initialize() {
-        this.view = new EditTransactionFormView(this, this.categoryDataProvider);
+        this.setView(new EditTransactionFormView(this, this.getCategoryDataProvider()));
     }
 
     @Override
@@ -31,15 +31,15 @@ public class EditTransactionFormPresenter extends TransactionFormPresenter {
 
     @Override
     public void onSubmit() {
-        Transaction transaction = view.getEntity();
+        Transaction transaction = this.getView().getEntity();
 
-        boolean valid = view.writeToIfValid(transaction);
+        boolean valid = this.getView().writeToIfValid(transaction);
         if (!valid) {
             return;
         }
 
-        transactionService.update(transaction, userContextHolder.getCurrentUserId());
-        this.dialog.close();
+        this.getTransactionService().update(transaction, this.getUserContextHolder().getCurrentUserId());
+        this.getRootDialog().close();
     }
 
     @EventListener(TransactionEditRequested.class)

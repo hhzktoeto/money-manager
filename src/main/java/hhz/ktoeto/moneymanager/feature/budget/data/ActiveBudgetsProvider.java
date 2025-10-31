@@ -18,6 +18,6 @@ public class ActiveBudgetsProvider extends BudgetsDataProvider {
 
     @Override
     public Stream<Budget> fetchBudgets(long userId) {
-        return this.budgetService.getActiveBudgets(userId).stream();
+        return this.getBudgetService().getActiveBudgets(userId).stream();
     }
 }

@@ -7,13 +7,16 @@ import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetFilter;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.springframework.context.event.EventListener;
 
 import java.util.stream.Stream;
 
 public abstract class BudgetsDataProvider extends AbstractBackEndDataProvider<Budget, BudgetFilter> {
 
-    protected final transient BudgetService budgetService;
+    @Getter(AccessLevel.PROTECTED)
+    private final transient BudgetService budgetService;
     private final transient UserContextHolder userContextHolder;
 
     protected BudgetsDataProvider(BudgetService budgetService, UserContextHolder userContextHolder) {

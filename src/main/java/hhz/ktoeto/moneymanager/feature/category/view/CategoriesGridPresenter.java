@@ -13,10 +13,10 @@ import org.springframework.context.ApplicationEventPublisher;
 
 public abstract class CategoriesGridPresenter implements ViewPresenter, HasCategoriesProvider, CanEdit<Category> {
 
-    protected final CategoryDataProvider dataProvider;
-    protected final transient CategoryService categoryService;
-    protected final transient UserContextHolder userContextHolder;
-    protected final transient ApplicationEventPublisher eventPublisher;
+    private final CategoryDataProvider dataProvider;
+    private final transient CategoryService categoryService;
+    private final transient UserContextHolder userContextHolder;
+    private final transient ApplicationEventPublisher eventPublisher;
 
     protected CategoriesGridPresenter(UserContextHolder userContextHolder, CategoryService categoryService,
                                       CategoryDataProvider dataProvider, ApplicationEventPublisher eventPublisher) {

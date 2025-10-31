@@ -32,12 +32,12 @@ public class RecentTransactionsProvider extends AbstractTransactionsDataProvider
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageRequest = PageRequest.of(0, 5, sort);
 
-        return this.transactionService.getPage(userId, pageRequest).stream();
+        return this.getTransactionService().getPage(userId, pageRequest).stream();
     }
 
     @Override
     protected int doCount(long userId, Query<Transaction, TransactionFilter> query) {
-        int actualCount = transactionService.count(userId);
+        int actualCount = this.getTransactionService().count(userId);
         return Math.min(actualCount, 5);
     }
 }

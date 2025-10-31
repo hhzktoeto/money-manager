@@ -73,15 +73,15 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
 
     @Override
     public void update(TransactionsSummaries summaries) {
-        expensesFilterButton.setText(this.presenter.formatAmount(summaries.expenses()));
-        incomesFilterButton.setText(this.presenter.formatAmount(summaries.incomes()));
-        totalFilterButton.setText(this.presenter.formatAmount(summaries.total()));
+        expensesFilterButton.setText(this.getPresenter().formatAmount(summaries.expenses()));
+        incomesFilterButton.setText(this.getPresenter().formatAmount(summaries.incomes()));
+        totalFilterButton.setText(this.getPresenter().formatAmount(summaries.total()));
     }
 
     private void configureGridHeader() {
-        Grid.Column<Transaction> categoryDateColumn = this.grid.getColumnByKey("date")
+        Grid.Column<Transaction> categoryDateColumn = this.getRootGrid().getColumnByKey("date")
                 .setHeader("По дате");
-        Grid.Column<Transaction> amountColumn = this.grid.getColumnByKey("amount")
+        Grid.Column<Transaction> amountColumn = this.getRootGrid().getColumnByKey("amount")
                 .setHeader("По сумме");
 
         this.expensesFilterButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
@@ -142,10 +142,10 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
                 LumoUtility.Margin.NONE
         );
 
-        HeaderRow summariesRow = this.grid.prependHeaderRow();
+        HeaderRow summariesRow = this.getRootGrid().prependHeaderRow();
         summariesRow.join(categoryDateColumn, amountColumn).setComponent(summariesDiv);
 
-        this.grid.sort(Collections.singletonList(
+        this.getRootGrid().sort(Collections.singletonList(
                 new GridSortOrder<>(categoryDateColumn, SortDirection.DESCENDING))
         );
     }
@@ -162,7 +162,7 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
             filter.setCategoriesIds(selectedCategoriesIds);
             this.hasFilterDelegate.setFilter(filter);
         });
-        categoryMultiSelect.setItems(this.presenter.getCategoriesProvider());
+        categoryMultiSelect.setItems(this.getPresenter().getCategoriesProvider());
 
         RussianDateRangePicker dateRangePicker = new RussianDateRangePicker("Период");
         TransactionFilter transactionFilter = this.hasFilterDelegate.getFilter();

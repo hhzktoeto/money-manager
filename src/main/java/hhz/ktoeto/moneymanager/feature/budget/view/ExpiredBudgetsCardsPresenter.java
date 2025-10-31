@@ -19,7 +19,7 @@ public class ExpiredBudgetsCardsPresenter extends BudgetsCardsPresenter {
     }
 
     @Override
-    protected void setView() {
-        this.view = new ExpiredBudgetsCardsView(this);
+    protected void preInitialize() {
+        this.setView(new ExpiredBudgetsCardsView(this));
     }
 }

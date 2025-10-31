@@ -18,7 +18,7 @@ public class ExpiredBudgetsCardsView extends BudgetsCardsView {
 
         data.forEach(card -> {
             card.hideAddToFavouriteButton();
-            card.addContentClickListener(event -> this.presenter.onEditRequested(card.getBudget()));
+            card.addContentClickListener(event -> this.getPresenter().onEditRequested(card.getBudget()));
             root.add(card);
         });
     }

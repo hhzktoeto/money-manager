@@ -25,7 +25,7 @@ public class AllTransactionsProvider extends AbstractTransactionsDataProvider {
 
     @Override
     protected Stream<Transaction> doFetch(long userId, Query<Transaction, TransactionFilter> query) {
-        TransactionFilter filter = query.getFilter().orElse(this.currentFilter);
+        TransactionFilter filter = query.getFilter().orElse(this.getCurrentFilter());
         Sort sort = query.getSortOrders().stream()
                 .map(order -> Sort.by(order.getDirection() == SortDirection.DESCENDING
                                 ? Sort.Direction.DESC
@@ -45,12 +45,12 @@ public class AllTransactionsProvider extends AbstractTransactionsDataProvider {
 
         Pageable pageRequest = PageRequest.of(page, limit, sort);
 
-        return this.transactionService.getPage(userId, filter, pageRequest).stream();
+        return this.getTransactionService().getPage(userId, filter, pageRequest).stream();
     }
 
     @Override
     protected int doCount(long userId, Query<Transaction, TransactionFilter> query) {
-        TransactionFilter filter = query.getFilter().orElse(this.currentFilter);
-        return transactionService.count(userId, filter);
+        TransactionFilter filter = query.getFilter().orElse(this.getCurrentFilter());
+        return getTransactionService().count(userId, filter);
     }
 }

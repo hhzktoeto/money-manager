@@ -8,14 +8,19 @@ import hhz.ktoeto.moneymanager.ui.AbstractFormViewPresenter;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
 import hhz.ktoeto.moneymanager.ui.mixin.CanAddCategory;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.springframework.context.ApplicationEventPublisher;
 
 public abstract class BudgetFormPresenter extends AbstractFormViewPresenter<Budget> implements CanAddCategory {
 
-    protected final BudgetService budgetService;
-    protected final UserContextHolder userContextHolder;
-    protected final ApplicationEventPublisher eventPublisher;
-    protected final CategoryDataProvider categoryDataProvider;
+    private final ApplicationEventPublisher eventPublisher;
+    @Getter(AccessLevel.PROTECTED)
+    private final BudgetService budgetService;
+    @Getter(AccessLevel.PROTECTED)
+    private final UserContextHolder userContextHolder;
+    @Getter(AccessLevel.PROTECTED)
+    private final CategoryDataProvider categoryDataProvider;
 
     protected BudgetFormPresenter(BudgetService budgetService, UserContextHolder userContextHolder,
                                   ApplicationEventPublisher eventPublisher, CategoryDataProvider categoryDataProvider) {
@@ -35,10 +40,10 @@ public abstract class BudgetFormPresenter extends AbstractFormViewPresenter<Budg
         DeleteConfirmDialog confirmDialog = new DeleteConfirmDialog();
         confirmDialog.setHeader("Удалить бюджет?");
         confirmDialog.addConfirmListener(event -> {
-            Budget budget = view.getEntity();
+            Budget budget = this.getView().getEntity();
             budgetService.delete(budget.getId(), userContextHolder.getCurrentUserId());
             confirmDialog.close();
-            this.dialog.close();
+            this.getRootDialog().close();
         });
 
         confirmDialog.open();

@@ -18,6 +18,6 @@ public class FavouriteBudgetsProvider extends BudgetsDataProvider {
 
     @Override
     protected Stream<Budget> fetchBudgets(long userId) {
-        return this.budgetService.getFavouriteBudgets(userId).stream();
+        return this.getBudgetService().getFavouriteBudgets(userId).stream();
     }
 }

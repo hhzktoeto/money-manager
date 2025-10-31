@@ -13,7 +13,9 @@ import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
 import hhz.ktoeto.moneymanager.ui.event.BudgetEditRequested;
 import hhz.ktoeto.moneymanager.ui.mixin.CanEdit;
 import jakarta.annotation.PostConstruct;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.lang.Nullable;
 
@@ -21,14 +23,18 @@ import java.util.List;
 
 public abstract class BudgetsCardsPresenter implements ViewPresenter, DataProviderListener<Budget>, CanEdit<Budget> {
 
-    protected final BudgetsDataProvider dataProvider;
-    protected final transient BudgetService budgetService;
-    protected final transient FormattingService formattingService;
-    protected final transient UserContextHolder userContextHolder;
-    protected final transient ApplicationEventPublisher eventPublisher;
+    private final BudgetsDataProvider dataProvider;
+    @Getter(AccessLevel.PROTECTED)
+    private final transient BudgetService budgetService;
+    private final transient FormattingService formattingService;
+    @Getter(AccessLevel.PROTECTED)
+    private final transient UserContextHolder userContextHolder;
+    @Getter(AccessLevel.PROTECTED)
+    private final transient ApplicationEventPublisher eventPublisher;
 
     @Getter
-    protected transient BudgetsCardsView view;
+    @Setter(AccessLevel.PROTECTED)
+    private transient BudgetsCardsView view;
 
     protected BudgetsCardsPresenter(BudgetsDataProvider dataProvider, BudgetService budgetService,
                                  FormattingService formattingService, UserContextHolder userContextHolder,
@@ -40,12 +46,12 @@ public abstract class BudgetsCardsPresenter implements ViewPresenter, DataProvid
         this.eventPublisher = eventPublisher;
     }
 
-    protected abstract void setView();
+    protected abstract void preInitialize();
 
     @Override
     @PostConstruct
     public void initialize() {
-        this.setView();
+        this.preInitialize();
         this.dataProvider.addDataProviderListener(this);
         // Call on init to make cards visible without updating
         this.onDataChange(null);

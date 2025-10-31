@@ -8,14 +8,19 @@ import hhz.ktoeto.moneymanager.ui.AbstractFormViewPresenter;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
 import hhz.ktoeto.moneymanager.ui.mixin.CanAddCategory;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.springframework.context.ApplicationEventPublisher;
 
 public abstract class TransactionFormPresenter extends AbstractFormViewPresenter<Transaction> implements CanAddCategory {
 
-    protected final UserContextHolder userContextHolder;
-    protected final TransactionService transactionService;
-    protected final ApplicationEventPublisher eventPublisher;
-    protected final CategoryDataProvider categoryDataProvider;
+    @Getter(AccessLevel.PROTECTED)
+    private final UserContextHolder userContextHolder;
+    @Getter(AccessLevel.PROTECTED)
+    private final TransactionService transactionService;
+    private final ApplicationEventPublisher eventPublisher;
+    @Getter(AccessLevel.PROTECTED)
+    private final CategoryDataProvider categoryDataProvider;
 
     protected TransactionFormPresenter(UserContextHolder userContextHolder, TransactionService transactionService,
                                        ApplicationEventPublisher eventPublisher, CategoryDataProvider categoryDataProvider) {
@@ -35,10 +40,10 @@ public abstract class TransactionFormPresenter extends AbstractFormViewPresenter
         DeleteConfirmDialog confirmDialog = new DeleteConfirmDialog();
         confirmDialog.setHeader("Удалить транзакцию?");
         confirmDialog.addConfirmListener(event -> {
-            Transaction transaction = this.view.getEntity();
-            transactionService.delete(transaction.getId(), userContextHolder.getCurrentUserId());
+            Transaction transaction = this.getView().getEntity();
+            this.transactionService.delete(transaction.getId(), this.userContextHolder.getCurrentUserId());
             confirmDialog.close();
-            this.dialog.close();
+            this.getRootDialog().close();
         });
 
         confirmDialog.open();
