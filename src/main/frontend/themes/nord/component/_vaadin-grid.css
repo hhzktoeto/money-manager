@@ -14,7 +14,7 @@ vaadin-grid::part(last-header-row-cell) {
     border-bottom: solid 1px;
     padding-top: 0.25rem;
     padding-bottom: 0.5rem;
-    border-color: var(--lumo-primary-color);
+    border-color: var(--lumo-primary-color-10pct);
 }
 
 vaadin-grid::part(row):hover {
@@ -33,6 +33,19 @@ vaadin-grid::part(expense) {
 
 vaadin-grid::part(income) {
     color: var(--lumo-success-color);
+}
+
+vaadin-grid-cell-content {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+vaadin-grid-sorter {
+    color: var(--lumo-disabled-text-color);
+}
+
+vaadin-grid-sorter[direction] {
+    color: var(--lumo-body-text-color);
 }
 
 @media screen and (max-width: 600px) {
