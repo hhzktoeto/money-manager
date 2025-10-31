@@ -38,7 +38,7 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
         super(presenter);
         this.hasFilterDelegate = presenter;
 
-        this.gridSettings = new Details("Настройки");
+        this.gridSettings = new Details("Фильтры");
         this.expensesFilterButton = new Button();
         this.incomesFilterButton = new Button();
         this.totalFilterButton = new Button();
