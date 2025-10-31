@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.error;
+package hhz.ktoeto.moneymanager.ui.core;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.notification.Notification;

@@ -10,7 +10,7 @@ import hhz.ktoeto.moneymanager.feature.budget.view.FavouriteBudgetsCardsPresente
 import hhz.ktoeto.moneymanager.feature.transaction.view.RecentTransactionsGridPresenter;
 import hhz.ktoeto.moneymanager.ui.component.BasicContainer;
 import hhz.ktoeto.moneymanager.ui.constant.Routes;
-import hhz.ktoeto.moneymanager.ui.layout.MainLayout;
+import hhz.ktoeto.moneymanager.ui.core.MainLayout;
 import jakarta.annotation.security.PermitAll;
 
 @UIScope

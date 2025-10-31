@@ -7,7 +7,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.category.view.AllCategoriesGridPresenter;
 import hhz.ktoeto.moneymanager.ui.constant.Routes;
-import hhz.ktoeto.moneymanager.ui.layout.MainLayout;
+import hhz.ktoeto.moneymanager.ui.core.MainLayout;
 import jakarta.annotation.security.PermitAll;
 
 @UIScope

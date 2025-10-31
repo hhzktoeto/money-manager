@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.layout;
+package hhz.ktoeto.moneymanager.ui.core;
 
 import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.UI;
