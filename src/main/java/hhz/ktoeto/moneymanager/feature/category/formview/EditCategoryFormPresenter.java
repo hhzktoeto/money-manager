@@ -5,6 +5,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryService;
+import hhz.ktoeto.moneymanager.ui.event.CategoryEditRequested;
+import org.springframework.context.event.EventListener;
 
 @UIScope
 @SpringComponent
@@ -35,5 +37,10 @@ public class EditCategoryFormPresenter extends CategoryFormPresenter {
 
         this.getCategoryService().update(category, this.getUserContextHolder().getCurrentUserId());
         this.getRootDialog().close();
+    }
+
+    @EventListener(CategoryEditRequested.class)
+    private void onCategoryEditRequested(CategoryEditRequested event) {
+        this.openForm(event.getCategory());
     }
 }

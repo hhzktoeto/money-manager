@@ -9,6 +9,9 @@ import hhz.ktoeto.moneymanager.ui.event.CategoryEditRequested;
 import hhz.ktoeto.moneymanager.ui.mixin.CanEdit;
 import hhz.ktoeto.moneymanager.ui.mixin.HasCategoriesProvider;
 import jakarta.annotation.PostConstruct;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.ApplicationEventPublisher;
 
 public abstract class CategoriesGridPresenter implements ViewPresenter, HasCategoriesProvider, CanEdit<Category> {
@@ -17,6 +20,10 @@ public abstract class CategoriesGridPresenter implements ViewPresenter, HasCateg
     private final transient CategoryService categoryService;
     private final transient UserContextHolder userContextHolder;
     private final transient ApplicationEventPublisher eventPublisher;
+
+    @Getter
+    @Setter(AccessLevel.PROTECTED)
+    private CategoriesGridView view;
 
     protected CategoriesGridPresenter(UserContextHolder userContextHolder, CategoryService categoryService,
                                       CategoryDataProvider dataProvider, ApplicationEventPublisher eventPublisher) {

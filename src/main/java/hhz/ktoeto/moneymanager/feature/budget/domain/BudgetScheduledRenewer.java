@@ -3,6 +3,8 @@ package hhz.ktoeto.moneymanager.feature.budget.domain;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,7 @@ public class BudgetScheduledRenewer {
 
     @Transactional
     @Scheduled(cron = "0 0 0 * * *")
+    @EventListener(ApplicationReadyEvent.class)
     public void autoRenew() {
         log.info("Started budgets auto renewing task");
         BudgetSpecification specification = BudgetSpecification.builder()
@@ -35,6 +38,7 @@ public class BudgetScheduledRenewer {
             if (budget.isFavourite()) {
                 budget.setFavourite(false);
             }
+            budget.setRenewable(false);
 
             repository.save(newBudget);
         }
