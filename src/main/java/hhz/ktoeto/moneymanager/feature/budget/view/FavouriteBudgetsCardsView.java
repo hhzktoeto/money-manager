@@ -18,13 +18,15 @@ public class FavouriteBudgetsCardsView extends BudgetsCardsView {
     protected Div initContent() {
         Div root = new Div();
         root.addClassNames(
+                LumoUtility.Display.GRID,
+                LumoUtility.Grid.FLOW_COLUMN,
+                LumoUtility.Grid.Row.ROWS_1,
+                LumoUtility.Flex.SHRINK_NONE,
                 LumoUtility.Width.FULL,
                 LumoUtility.Gap.MEDIUM,
-                LumoUtility.Display.FLEX,
-                LumoUtility.FlexDirection.ROW,
                 LumoUtility.Overflow.AUTO,
-                LumoUtility.JustifyContent.START,
-                LumoUtility.AlignItems.START
+                LumoUtility.AlignContent.START,
+                LumoUtility.AlignItems.STRETCH
         );
 
         return root;
@@ -45,8 +47,8 @@ public class FavouriteBudgetsCardsView extends BudgetsCardsView {
         }
 
         data.forEach(card -> {
-            card.setMinWidth(300, Unit.PIXELS);
-            card.setMaxWidth(320, Unit.PIXELS);
+            card.setMinWidth(18, Unit.REM);
+            card.setMaxWidth(25, Unit.REM);
             card.addContentClickListener(event -> this.getPresenter().onEditRequested(card.getBudget()));
             root.add(card);
         });
