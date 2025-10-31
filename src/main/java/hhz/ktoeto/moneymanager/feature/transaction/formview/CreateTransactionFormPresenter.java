@@ -7,7 +7,6 @@ import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.ui.event.TransactionCreateRequested;
-import hhz.ktoeto.moneymanager.ui.mixin.HasCategoriesProvider;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 

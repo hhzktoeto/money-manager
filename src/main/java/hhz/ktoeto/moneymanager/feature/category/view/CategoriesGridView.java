@@ -44,7 +44,6 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
         return this;
     }
 
-    //TODO: посмотреть модификаторы доступа для полей абстрактных классов, открыть доступ к полям для наследников через protected getter'ы
     private void configureGrid() {
         this.rootGrid.setDataProvider(this.presenter.getCategoriesProvider());
     }
