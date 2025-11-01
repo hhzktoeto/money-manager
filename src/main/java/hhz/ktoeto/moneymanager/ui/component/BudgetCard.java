@@ -15,26 +15,40 @@ import com.vaadin.flow.component.progressbar.ProgressBar;
 import com.vaadin.flow.component.progressbar.ProgressBarVariant;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
-import hhz.ktoeto.moneymanager.core.service.FormattingService;
-import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Builder;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.function.Function;
 
-@RequiredArgsConstructor
 public class BudgetCard extends Composite<BasicContainer> {
 
-    @Getter
-    private final transient Budget budget;
-    private final transient FormattingService formattingService;
+    private final String title;
+    private final BigDecimal currentAmount;
+    private final BigDecimal maxAmount;
+    private final BigDecimal remainingAmount;
+    private final LocalDate endDate;
+    private final String typeName;
+    private final boolean isFavourite;
+    private final boolean isExpense;
+    private final Function<BigDecimal, String> amountFormatter;
+    private final Function<LocalDate, String> dateFormatter;
 
     private final Button favouriteButton;
 
-    public BudgetCard(Budget budget, FormattingService formattingService) {
-        this.budget = budget;
-        this.formattingService = formattingService;
+    public BudgetCard(BudgetCardData budgetCardData) {
+        this.title = budgetCardData.title();
+        this.currentAmount = budgetCardData.currentAmount();
+        this.maxAmount = budgetCardData.maxAmount();
+        this.remainingAmount = budgetCardData.remainingAmount();
+        this.endDate = budgetCardData.endDate();
+        this.typeName = budgetCardData.typeName();
+        this.isFavourite = budgetCardData.isFavourite();
+        this.isExpense = budgetCardData.isExpense();
+        this.amountFormatter = budgetCardData.amountFormatter();
+        this.dateFormatter = budgetCardData.dateFormatter();
+
         this.favouriteButton = new Button(MaterialIcons.STAR_BORDER.create());
     }
 
@@ -72,13 +86,12 @@ public class BudgetCard extends Composite<BasicContainer> {
     }
 
     private void configureHeader(FlexLayout header) {
-        H3 title = new H3(budget.getName());
+        H3 title = new H3(this.title);
 
-        Span type = new Span(budget.getType().toString());
-        type.getElement().getThemeList().add(
-                Budget.Type.EXPENSE == budget.getType()
-                        ? StyleConstants.Badge.ERROR
-                        : StyleConstants.Badge.SUCCESS
+        Span type = new Span(this.typeName);
+        type.getElement().getThemeList().add(this.isExpense
+                ? StyleConstants.Badge.ERROR
+                : StyleConstants.Badge.SUCCESS
         );
 
         HorizontalLayout titleTypeLayout = new HorizontalLayout(title, type);
@@ -90,7 +103,7 @@ public class BudgetCard extends Composite<BasicContainer> {
         );
 
         this.favouriteButton.addThemeVariants(ButtonVariant.LUMO_LARGE, ButtonVariant.LUMO_TERTIARY_INLINE);
-        if (budget.isFavourite()) {
+        if (this.isFavourite) {
             this.favouriteButton.setIcon(MaterialIcons.STAR.create());
             this.favouriteButton.addThemeVariants(ButtonVariant.LUMO_WARNING);
         }
@@ -104,19 +117,16 @@ public class BudgetCard extends Composite<BasicContainer> {
     }
 
     private void configureContent(FlexLayout content) {
-        boolean isExpense = budget.getType() == Budget.Type.EXPENSE;
-        BigDecimal currentAmount = budget.getCurrentAmount();
-        BigDecimal maxAmount = budget.getGoalAmount();
-        BigDecimal safeAmount = currentAmount.min(maxAmount);
-        BigDecimal leftOver = currentAmount.subtract(safeAmount);
+        BigDecimal safeAmount = this.currentAmount.min(this.maxAmount);
+        BigDecimal leftOver = this.currentAmount.subtract(safeAmount);
 
-        Span current = new Span(formattingService.formatAmount(currentAmount));
+        Span current = new Span(this.amountFormatter.apply(this.currentAmount));
         current.addClassNames(
                 LumoUtility.FontSize.LARGE,
                 LumoUtility.FontWeight.BOLD
         );
 
-        Span goal = new Span("из " + formattingService.formatAmount(maxAmount));
+        Span goal = new Span("из " + this.amountFormatter.apply(this.maxAmount));
         goal.addClassNames(
                 LumoUtility.FontSize.SMALL,
                 LumoUtility.FontWeight.LIGHT,
@@ -140,22 +150,22 @@ public class BudgetCard extends Composite<BasicContainer> {
                 LumoUtility.TextAlignment.CENTER
         );
 
-        ProgressBar progressBar = new ProgressBar(0, maxAmount.doubleValue());
+        ProgressBar progressBar = new ProgressBar(0, this.maxAmount.doubleValue());
         progressBar.setValue(safeAmount.doubleValue());
         progressBar.addClassName(LumoUtility.Height.XSMALL);
         progressBarWrapper.add(progressBar);
 
         StringBuilder progressTextBuilder = new StringBuilder();
-        if (isExpense) {
+        if (this.isExpense) {
             progressTextBuilder.append("Можно потратить");
         } else {
             progressTextBuilder.append("Осталось получить");
         }
         progressTextBuilder
                 .append(" ")
-                .append(formattingService.formatAmount(budget.getRemainingAmount()))
+                .append(this.amountFormatter.apply(this.remainingAmount))
                 .append(" до ")
-                .append(formattingService.formatDate(budget.getEndDate()));
+                .append(this.dateFormatter.apply(this.endDate));
         Span progressSpan = new Span(progressTextBuilder.toString());
         progressSpan.addClassNames(
                 LumoUtility.FontSize.XSMALL,
@@ -167,36 +177,51 @@ public class BudgetCard extends Composite<BasicContainer> {
 
         if (leftOver.compareTo(BigDecimal.ZERO) > 0) {
             progressBar.addThemeVariants(ProgressBarVariant.LUMO_CONTRAST);
-            ProgressBar overflowBar = new ProgressBar(0, maxAmount.doubleValue());
+            ProgressBar overflowBar = new ProgressBar(0, this.maxAmount.doubleValue());
             overflowBar.addClassNames(
                     LumoUtility.Position.ABSOLUTE,
                     LumoUtility.Position.Top.NONE,
                     LumoUtility.Height.XSMALL
             );
-            overflowBar.addThemeVariants(isExpense
+            overflowBar.addThemeVariants(this.isExpense
                     ? ProgressBarVariant.LUMO_ERROR
                     : ProgressBarVariant.LUMO_SUCCESS
             );
-            overflowBar.setValue(leftOver.min(maxAmount).doubleValue());
+            overflowBar.setValue(leftOver.min(this.maxAmount).doubleValue());
 
             progressBarWrapper.add(overflowBar);
 
-            StringBuilder overflowText = new StringBuilder(budget.getType().toString())
+            StringBuilder overflowText = new StringBuilder(this.typeName)
                     .append(" превышен на ")
-                    .append(formattingService.formatAmount(leftOver))
+                    .append(this.amountFormatter.apply(leftOver))
                     .append(" ");
-            if (isExpense) {
+            if (this.isExpense) {
                 overflowText.append("\uD83D\uDE22");
             } else {
                 overflowText.append("\uD83D\uDC4D");
             }
 
             progressSpan.setText(overflowText.toString());
-            progressSpan.getElement().getThemeList().add(isExpense ? StyleConstants.Badge.ERROR : StyleConstants.Badge.SUCCESS);
+            progressSpan.getElement().getThemeList().add(this.isExpense ? StyleConstants.Badge.ERROR : StyleConstants.Badge.SUCCESS);
         }
 
         content.addClassName(StyleConstants.CLICKABLE);
         content.setFlexDirection(FlexLayout.FlexDirection.COLUMN);
         content.add(amountsLayout, progressBarWrapper);
+    }
+
+    @Builder
+    public record BudgetCardData(
+            String title,
+            BigDecimal currentAmount,
+            BigDecimal maxAmount,
+            BigDecimal remainingAmount,
+            LocalDate endDate,
+            String typeName,
+            boolean isFavourite,
+            boolean isExpense,
+            Function<BigDecimal, String> amountFormatter,
+            Function<LocalDate, String> dateFormatter
+    ) {
     }
 }

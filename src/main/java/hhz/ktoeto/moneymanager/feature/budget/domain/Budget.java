@@ -1,6 +1,7 @@
 package hhz.ktoeto.moneymanager.feature.budget.domain;
 
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -116,6 +118,9 @@ public class Budget {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @Transient
+    private List<Transaction> transactions;
 
     @Transient
     private BigDecimal currentAmount;

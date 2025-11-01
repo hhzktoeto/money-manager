@@ -5,22 +5,15 @@ import hhz.ktoeto.moneymanager.core.event.BudgetDeletedEvent;
 import hhz.ktoeto.moneymanager.core.event.BudgetUpdatedEvent;
 import hhz.ktoeto.moneymanager.core.exception.EntityNotFoundException;
 import hhz.ktoeto.moneymanager.core.exception.NonOwnerRequestException;
-import hhz.ktoeto.moneymanager.feature.category.domain.Category;
-import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
-import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
-import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -28,38 +21,17 @@ import java.util.stream.Collectors;
 public class BudgetService {
 
     private final BudgetRepository repository;
-    private final TransactionService transactionService;
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
-    public List<Budget> getFavouriteBudgets(long userId) {
-        log.debug("Fetching favourite budgets for user with id {}", userId);
-        BudgetFilter filter = BudgetFilter.favouriteBudgetsFilter();
+    public List<Budget> getAll(long userId, BudgetFilter filter, Sort sort) {
+        log.debug("Fetching budgets for user with id {}. Filter - {}, Sort - {}", userId, filter, sort);
+        BudgetSpecification specification = BudgetSpecification.builder()
+                .userId(userId)
+                .filter(filter)
+                .build();
 
-        Sort sort = Sort.by(Sort.Direction.ASC, "goalAmount");
-
-        return this.getAllFromRepository(userId, filter, sort);
-    }
-
-    @Transactional
-    public List<Budget> getActiveBudgets(long userId) {
-        log.debug("Fetching active budgets for user with id {}", userId);
-        BudgetFilter filter = BudgetFilter.activeBudgetsFilter();
-
-        Sort sort = Sort.by(Sort.Direction.DESC, "isFavourite")
-                .and(Sort.by(Sort.Direction.ASC, "goalAmount"));
-
-        return this.getAllFromRepository(userId, filter, sort);
-    }
-
-    @Transactional
-    public List<Budget> getExpiredBudgets(long userId) {
-        log.debug("Fetching expired budgets for user with id {}", userId);
-        BudgetFilter filter = BudgetFilter.expiredBudgetsFilter();
-
-        Sort sort = Sort.by(Sort.Direction.ASC, "endDate");
-
-        return this.getAllFromRepository(userId, filter, sort);
+        return repository.findAll(specification, sort);
     }
 
     @Transactional
@@ -108,41 +80,5 @@ public class BudgetService {
     private Budget getBudgetFromRepository(long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Could not find Budget with id %d".formatted(id)));
-    }
-
-    private List<Budget> getAllFromRepository(long userId, BudgetFilter filter, @Nullable Sort sort) {
-        BudgetSpecification specification = BudgetSpecification.builder()
-                .userId(userId)
-                .filter(filter)
-                .build();
-
-        List<Budget> budgets;
-        if (sort == null) {
-            budgets = repository.findAll(specification);
-        } else {
-            budgets = repository.findAll(specification, sort);
-        }
-        budgets.forEach(budget -> {
-            TransactionFilter transactionFilter = new TransactionFilter();
-            transactionFilter.setFromDate(budget.getStartDate());
-            transactionFilter.setToDate(budget.getEndDate());
-            transactionFilter.setCategoriesIds(
-                    budget.getCategories().stream()
-                            .map(Category::getId)
-                            .collect(Collectors.toSet())
-            );
-            transactionFilter.setType(
-                    Budget.Type.EXPENSE == budget.getType()
-                            ? Transaction.Type.EXPENSE
-                            : Transaction.Type.INCOME
-            );
-            List<Transaction> transactions = transactionService.getAll(userId, transactionFilter);
-            BigDecimal currentAmount = transactionService.calculateTotal(transactions);
-
-            budget.setCurrentAmount(currentAmount);
-        });
-
-        return budgets;
-
     }
 }

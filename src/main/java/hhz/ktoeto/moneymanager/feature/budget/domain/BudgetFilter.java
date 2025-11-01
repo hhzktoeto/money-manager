@@ -8,6 +8,7 @@ public class BudgetFilter {
     private Boolean isActive;
     private Boolean isRenewable;
     private Boolean isFavourite;
+    private boolean withCategories = false;
 
     public static BudgetFilter expiredRenewableBudgetsFilter() {
         BudgetFilter filter = new BudgetFilter();

@@ -1,12 +1,9 @@
 package hhz.ktoeto.moneymanager.feature.budget.view;
 
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
-import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
-
-import java.util.List;
 
 public class FavouriteBudgetsCardsView extends BudgetsCardsView {
 
@@ -16,41 +13,35 @@ public class FavouriteBudgetsCardsView extends BudgetsCardsView {
 
     @Override
     protected Div initContent() {
-        Div root = new Div();
+        Div root = super.initContent();
+        root.removeClassNames(
+                LumoUtility.Grid.FLOW_ROW,
+                LumoUtility.Grid.Column.COLUMNS_1,
+                LumoUtility.Grid.Breakpoint.Small.COLUMNS_2,
+                LumoUtility.Grid.Breakpoint.Large.COLUMNS_3
+        );
         root.addClassNames(
-                LumoUtility.Display.GRID,
                 LumoUtility.Grid.FLOW_COLUMN,
                 LumoUtility.Grid.Row.ROWS_1,
                 LumoUtility.Flex.SHRINK_NONE,
-                LumoUtility.Width.FULL,
-                LumoUtility.Gap.MEDIUM,
-                LumoUtility.Overflow.AUTO,
-                LumoUtility.AlignContent.START,
-                LumoUtility.AlignItems.STRETCH
+                LumoUtility.Overflow.AUTO
         );
 
         return root;
     }
 
     @Override
-    public void update(List<BudgetCard> data) {
-        Div root = this.getContent();
-        root.removeAll();
+    protected String getEmptyStateText() {
+        return "Здесь будут избранные бюджеты";
+    }
 
-        if (data.isEmpty()) {
-            EmptyDataImage emptyDataImage = new EmptyDataImage();
-            emptyDataImage.setText("Здесь будут избранные бюджеты");
-            emptyDataImage.setImageMaxWidth(13, Unit.REM);
+    @Override
+    protected boolean isAddBudgetButtonVisible() {
+        return false;
+    }
 
-            root.add(emptyDataImage);
-            return;
-        }
-
-        data.forEach(card -> {
-            card.setMinWidth(18, Unit.REM);
-            card.setMaxWidth(25, Unit.REM);
-            card.addContentClickListener(event -> this.getPresenter().onEditRequested(card.getBudget()));
-            root.add(card);
-        });
+    @Override
+    protected BudgetCard mapBudgetToCard(Budget budget) {
+        return null;
     }
 }

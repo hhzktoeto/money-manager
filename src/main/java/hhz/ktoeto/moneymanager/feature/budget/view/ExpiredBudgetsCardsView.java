@@ -1,9 +1,7 @@
 package hhz.ktoeto.moneymanager.feature.budget.view;
 
-import com.vaadin.flow.component.html.Div;
+import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
-
-import java.util.List;
 
 public class ExpiredBudgetsCardsView extends BudgetsCardsView {
 
@@ -12,14 +10,17 @@ public class ExpiredBudgetsCardsView extends BudgetsCardsView {
     }
 
     @Override
-    public void update(List<BudgetCard> data) {
-        Div root = this.getContent();
-        root.removeAll();
+    protected String getEmptyStateText() {
+        return "Нет бюджетов с истёкшим сроком действия";
+    }
 
-        data.forEach(card -> {
-            card.hideAddToFavouriteButton();
-            card.addContentClickListener(event -> this.getPresenter().onEditRequested(card.getBudget()));
-            root.add(card);
-        });
+    @Override
+    protected boolean isAddBudgetButtonVisible() {
+        return false;
+    }
+
+    @Override
+    protected BudgetCard mapBudgetToCard(Budget budget) {
+        return null;
     }
 }

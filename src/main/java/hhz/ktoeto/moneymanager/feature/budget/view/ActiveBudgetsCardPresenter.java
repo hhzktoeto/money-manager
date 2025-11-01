@@ -7,7 +7,6 @@ import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.feature.budget.data.ActiveBudgetsProvider;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
-import hhz.ktoeto.moneymanager.ui.event.BudgetCreateRequested;
 import hhz.ktoeto.moneymanager.ui.mixin.CanAddToFavourite;
 import hhz.ktoeto.moneymanager.ui.mixin.CanCreate;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,18 +24,6 @@ public class ActiveBudgetsCardPresenter extends BudgetsCardsPresenter implements
     @Override
     protected void preInitialize() {
         this.setView(new ActiveBudgetsCardsView(this));
-    }
-
-    @Override
-    public void onCreateRequested() {
-        this.getEventPublisher().publishEvent(new BudgetCreateRequested(this));
-    }
-
-    @Override
-    public void onAddToFavourites(Budget budget) {
-        budget.setFavourite(!budget.isFavourite());
-
-        this.getBudgetService().update(budget, this.getUserContextHolder().getCurrentUserId());
     }
 }
 

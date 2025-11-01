@@ -1,68 +1,52 @@
 package hhz.ktoeto.moneymanager.feature.budget.view;
 
-import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
-import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
-import hhz.ktoeto.moneymanager.ui.mixin.CanAddToFavourite;
-import hhz.ktoeto.moneymanager.ui.mixin.CanCreate;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 public class ActiveBudgetsCardsView extends BudgetsCardsView {
 
-    private final CanCreate canCreateDelegate;
-    private final CanAddToFavourite<Budget> canAddToFavouriteDelegate;
-
-    private final FlexLayout addNewBudgetButton;
-
     public ActiveBudgetsCardsView(ActiveBudgetsCardPresenter presenter) {
         super(presenter);
-        this.canCreateDelegate = presenter;
-        this.canAddToFavouriteDelegate = presenter;
-
-        this.addNewBudgetButton = new FlexLayout(VaadinIcon.PLUS.create(), new Span("Новый бюджет"));
     }
 
     @Override
-    protected Div initContent() {
-        Div root = super.initContent();
-
-        this.addNewBudgetButton.addClassNames(
-                StyleConstants.CLICKABLE,
-                LumoUtility.BorderRadius.LARGE,
-                LumoUtility.Gap.SMALL,
-                LumoUtility.AlignItems.CENTER,
-                LumoUtility.JustifyContent.CENTER,
-                LumoUtility.Background.TRANSPARENT,
-                LumoUtility.Border.ALL,
-                LumoUtility.BorderColor.PRIMARY_50,
-                LumoUtility.TextColor.PRIMARY,
-                LumoUtility.FontSize.MEDIUM,
-                LumoUtility.FontWeight.BOLD
-        );
-        this.addNewBudgetButton.setMinHeight(3, Unit.REM);
-        this.addNewBudgetButton.addClickListener(e -> this.canCreateDelegate.onCreateRequested());
-
-        return root;
+    protected String getEmptyStateText() {
+        return "Нет активных бюджетов";
     }
 
     @Override
-    public void update(List<BudgetCard> data) {
-        Div root = this.getContent();
-        root.removeAll();
+    protected boolean isAddBudgetButtonVisible() {
+        return true;
+    }
 
-        data.forEach(card -> {
-            Budget budget = card.getBudget();
-            card.addContentClickListener(event -> this.getPresenter().onEditRequested(budget));
-            card.addFavouriteButtonClickListener(event -> this.canAddToFavouriteDelegate.onAddToFavourites(budget));
-            root.add(card);
-        });
-        root.add(this.addNewBudgetButton);
+    @Override
+    protected BudgetCard mapBudgetToCard(Budget budget) {
+        BigDecimal currentAmount = budget.getTransactions()
+                .stream()
+                .map(Transaction::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal maxAmount = budget.getGoalAmount();
+
+        BudgetCard.BudgetCardData budgetCardData = BudgetCard.BudgetCardData.builder()
+                .currentAmount(currentAmount)
+                .maxAmount(maxAmount)
+                .remainingAmount(maxAmount.subtract(currentAmount))
+                .endDate(budget.getEndDate())
+                .title(budget.getName())
+                .isFavourite(budget.isFavourite())
+                .isExpense(Budget.Type.EXPENSE == budget.getType())
+                .typeName(budget.getType().toString())
+                .amountFormatter(this.getPresenter()::formatAmount)
+                .dateFormatter(this.getPresenter()::formatDate)
+                .build();
+
+        BudgetCard card = new BudgetCard(budgetCardData);
+        card.addContentClickListener(event -> this.getPresenter().onEditRequested(budget));
+        card.addFavouriteButtonClickListener(event -> this.getPresenter().onAddToFavourites(budget));
+
+        return card;
     }
 }

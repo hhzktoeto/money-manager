@@ -29,7 +29,7 @@ public class BudgetSpecification implements Specification<Budget> {
         }
 
         if (filter.getIsActive() != null) {
-            if (Boolean.TRUE.equals(filter.getIsActive())) {
+            if (filter.getIsActive()) {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.greaterThanOrEqualTo(root.get("endDate"), LocalDate.now()));
             } else {
@@ -47,6 +47,9 @@ public class BudgetSpecification implements Specification<Budget> {
             predicate = criteriaBuilder.and(predicate,
                     criteriaBuilder.equal(root.get("isFavourite"), filter.getIsFavourite())
             );
+        }
+        if (filter.isWithCategories()) {
+            root.fetch("categories", JoinType.LEFT);
         }
 
         return predicate;
