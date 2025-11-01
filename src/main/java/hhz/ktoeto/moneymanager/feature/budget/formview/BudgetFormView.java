@@ -100,6 +100,7 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
                             budget.setEndDate(dateRange.getEndDate());
                         });
         binder.forField(this.amountInputCalculator)
+                .asRequired()
                 .withValidator(new BudgetAmountValidator())
                 .bind(Budget::getGoalAmount, Budget::setGoalAmount);
     }
