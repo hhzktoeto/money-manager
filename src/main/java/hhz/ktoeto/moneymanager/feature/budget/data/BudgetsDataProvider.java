@@ -46,6 +46,8 @@ public abstract class BudgetsDataProvider extends AbstractBackEndDataProvider<Bu
             BudgetCreatedEvent.class,
             BudgetUpdatedEvent.class,
             BudgetDeletedEvent.class,
+            CategoryDeletedEvent.class,
+            CategoryUpdatedEvent.class,
             TransactionCreatedEvent.class,
             TransactionUpdatedEvent.class,
             TransactionDeletedEvent.class
