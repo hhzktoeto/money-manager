@@ -12,6 +12,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import org.springframework.lang.Nullable;
 
 import java.math.BigDecimal;
 import java.util.function.Consumer;
@@ -31,7 +32,7 @@ public class AmountInputCalculator extends CustomField<BigDecimal> {
 
         Button calculateButton = new Button(VaadinIcon.CALC.create());
         calculateButton.setTooltipText("Режим калькулятора");
-        calculateButton.addClickListener(event -> expressionDialog.open());
+        calculateButton.addClickListener(event -> expressionDialog.open(numberField.getValue()));
 
         HorizontalLayout container = new HorizontalLayout(numberField, calculateButton);
         container.setPadding(false);
@@ -43,6 +44,21 @@ public class AmountInputCalculator extends CustomField<BigDecimal> {
         );
 
         add(container);
+    }
+
+    @Override
+    public void setRequiredIndicatorVisible(boolean requiredIndicatorVisible) {
+        this.numberField.setRequiredIndicatorVisible(requiredIndicatorVisible);
+    }
+
+    @Override
+    public void setInvalid(boolean invalid) {
+        this.numberField.setInvalid(invalid);
+    }
+
+    @Override
+    public void setErrorMessage(String errorMessage) {
+        this.numberField.setErrorMessage(errorMessage);
     }
 
     @Override
@@ -94,8 +110,11 @@ public class AmountInputCalculator extends CustomField<BigDecimal> {
             return root;
         }
 
-        private void open() {
+        private void open(@Nullable BigDecimal initialValue) {
             this.getContent().open();
+            if (initialValue != null) {
+                expressionField.setValue(String.valueOf(initialValue.doubleValue()));
+            }
             expressionField.focus();
         }
 
