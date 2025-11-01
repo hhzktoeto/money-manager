@@ -12,10 +12,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
-import hhz.ktoeto.moneymanager.feature.budget.formview.validator.BudgetActivePeriodValidator;
-import hhz.ktoeto.moneymanager.feature.budget.formview.validator.BudgetCategoriesValidator;
-import hhz.ktoeto.moneymanager.feature.budget.formview.validator.BudgetDateRangeValidator;
-import hhz.ktoeto.moneymanager.feature.budget.formview.validator.BudgetNameValidator;
+import hhz.ktoeto.moneymanager.feature.budget.formview.validator.*;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.AbstractFormView;
@@ -103,7 +100,7 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
                             budget.setEndDate(dateRange.getEndDate());
                         });
         binder.forField(this.amountInputCalculator)
-                .asRequired("Не введена сумма")
+                .withValidator(new BudgetAmountValidator())
                 .bind(Budget::getGoalAmount, Budget::setGoalAmount);
     }
 

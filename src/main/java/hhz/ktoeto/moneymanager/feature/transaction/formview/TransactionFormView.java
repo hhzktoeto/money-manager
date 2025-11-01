@@ -75,7 +75,6 @@ public abstract class TransactionFormView extends AbstractFormView<Transaction> 
                 .asRequired("Не выбрана категория")
                 .bind(Transaction::getCategory, Transaction::setCategory);
         binder.forField(this.amountInput)
-                .asRequired("Не введена сумма")
                 .withValidator(new TransactionAmountValidator())
                 .bind(Transaction::getAmount, Transaction::setAmount);
         binder.forField(this.datePicker)
