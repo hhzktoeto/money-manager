@@ -116,8 +116,8 @@ public abstract class BudgetsCardsView extends Composite<Div> implements View, H
                 .isFavourite(budget.isFavourite())
                 .isExpense(Budget.Type.EXPENSE == budget.getType())
                 .typeName(budget.getType().toString())
-                .amountFormatter(this.getPresenter()::formatAmount)
-                .dateFormatter(this.getPresenter()::formatDate)
+                .amountFormatter(this.presenter::formatAmount)
+                .dateFormatter(this.presenter::formatDate)
                 .build();
 
         BudgetCard card = new BudgetCard(budgetCardData);

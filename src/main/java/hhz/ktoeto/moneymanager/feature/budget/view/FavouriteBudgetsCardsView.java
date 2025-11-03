@@ -1,5 +1,6 @@
 package hhz.ktoeto.moneymanager.feature.budget.view;
 
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
@@ -43,5 +44,7 @@ public class FavouriteBudgetsCardsView extends BudgetsCardsView {
     @Override
     protected void configureBudgetCard(BudgetCard card, Budget budget) {
         card.addContentClickListener(event -> this.getPresenter().onEditRequested(budget));
+        card.setMinWidth(18, Unit.REM);
+        card.setMaxWidth(25, Unit.REM);
     }
 }

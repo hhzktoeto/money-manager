@@ -1,9 +1,6 @@
 package hhz.ktoeto.moneymanager.ui.component;
 
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
@@ -13,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
 import com.vaadin.flow.component.progressbar.ProgressBarVariant;
+import com.vaadin.flow.function.SerializableFunction;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 import lombok.Builder;
@@ -20,7 +18,6 @@ import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.function.Function;
 
 public class BudgetCard extends Composite<BasicContainer> {
 
@@ -32,10 +29,11 @@ public class BudgetCard extends Composite<BasicContainer> {
     private final String typeName;
     private final boolean isFavourite;
     private final boolean isExpense;
-    private final Function<BigDecimal, String> amountFormatter;
-    private final Function<LocalDate, String> dateFormatter;
+    private final SerializableFunction<BigDecimal, String> amountFormatter;
+    private final SerializableFunction<LocalDate, String> dateFormatter;
 
     private final Button favouriteButton;
+    private final Span progressSpan;
 
     public BudgetCard(BudgetCardData budgetCardData) {
         this.title = budgetCardData.title();
@@ -50,6 +48,7 @@ public class BudgetCard extends Composite<BasicContainer> {
         this.dateFormatter = budgetCardData.dateFormatter();
 
         this.favouriteButton = new Button(MaterialIcons.STAR_BORDER.create());
+        this.progressSpan = new Span();
     }
 
     @Override
@@ -77,6 +76,14 @@ public class BudgetCard extends Composite<BasicContainer> {
         this.favouriteButton.setVisible(false);
     }
 
+    public void hideProgressSpan() {
+        this.progressSpan.setVisible(false);
+    }
+
+    public void addToContentArea(Component... components) {
+        this.getContent().getContent().add(components);
+    }
+
     public void setMinWidth(float width, Unit unit) {
         this.getContent().setMinWidth(width, unit);
     }
@@ -86,15 +93,15 @@ public class BudgetCard extends Composite<BasicContainer> {
     }
 
     private void configureHeader(FlexLayout header) {
-        H3 title = new H3(this.title);
+        H3 titleHeader = new H3(this.title);
 
-        Span type = new Span(this.typeName);
-        type.getElement().getThemeList().add(this.isExpense
+        Span typeSpan = new Span(this.typeName);
+        typeSpan.getElement().getThemeList().add(this.isExpense
                 ? StyleConstants.Badge.ERROR
                 : StyleConstants.Badge.SUCCESS
         );
 
-        HorizontalLayout titleTypeLayout = new HorizontalLayout(title, type);
+        HorizontalLayout titleTypeLayout = new HorizontalLayout(titleHeader, typeSpan);
         titleTypeLayout.setSpacing(false);
         titleTypeLayout.setPadding(false);
         titleTypeLayout.addClassNames(
@@ -166,14 +173,14 @@ public class BudgetCard extends Composite<BasicContainer> {
                 .append(this.amountFormatter.apply(this.remainingAmount))
                 .append(" до ")
                 .append(this.dateFormatter.apply(this.endDate));
-        Span progressSpan = new Span(progressTextBuilder.toString());
-        progressSpan.addClassNames(
+        this.progressSpan.setText(progressTextBuilder.toString());
+        this.progressSpan.addClassNames(
                 LumoUtility.FontSize.XSMALL,
                 LumoUtility.FontSize.Breakpoint.Medium.SMALL,
                 LumoUtility.TextColor.DISABLED
         );
 
-        progressBarWrapper.add(progressSpan);
+        progressBarWrapper.add(this.progressSpan);
 
         if (leftOver.compareTo(BigDecimal.ZERO) > 0) {
             progressBar.addThemeVariants(ProgressBarVariant.LUMO_CONTRAST);
@@ -201,8 +208,10 @@ public class BudgetCard extends Composite<BasicContainer> {
                 overflowText.append("\uD83D\uDC4D");
             }
 
-            progressSpan.setText(overflowText.toString());
-            progressSpan.getElement().getThemeList().add(this.isExpense ? StyleConstants.Badge.ERROR : StyleConstants.Badge.SUCCESS);
+            this.progressSpan.setText(overflowText.toString());
+            this.progressSpan.addClassNames(this.isExpense
+                    ? LumoUtility.TextColor.ERROR
+                    : LumoUtility.TextColor.SUCCESS);
         }
 
         content.addClassName(StyleConstants.CLICKABLE);
@@ -220,8 +229,8 @@ public class BudgetCard extends Composite<BasicContainer> {
             String typeName,
             boolean isFavourite,
             boolean isExpense,
-            Function<BigDecimal, String> amountFormatter,
-            Function<LocalDate, String> dateFormatter
+            SerializableFunction<BigDecimal, String> amountFormatter,
+            SerializableFunction<LocalDate, String> dateFormatter
     ) {
     }
 }
