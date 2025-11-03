@@ -11,39 +11,42 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.springframework.lang.Nullable;
 
 import java.math.BigDecimal;
-import java.util.function.Consumer;
 
 public class AmountInputCalculator extends CustomField<BigDecimal> {
 
     private final BigDecimalField numberField;
+    private final Button calculateButton;
     private final ExpressionDialog expressionDialog;
 
+    private final HorizontalLayout container;
+
     public AmountInputCalculator() {
-        setWidthFull();
+        this.numberField = new BigDecimalField("Сумма");
+        this.calculateButton = new Button(VaadinIcon.CALC.create());
+        this.expressionDialog = new ExpressionDialog(this::setValue);
 
-        numberField = new BigDecimalField("Сумма");
-        numberField.setWidthFull();
+        this.container = new HorizontalLayout(this.numberField, this.calculateButton);
 
-        expressionDialog = new ExpressionDialog(this::setValue);
+        this.numberField.setWidthFull();
 
-        Button calculateButton = new Button(VaadinIcon.CALC.create());
-        calculateButton.setTooltipText("Режим калькулятора");
-        calculateButton.addClickListener(event -> expressionDialog.open(numberField.getValue()));
+        this.calculateButton.setTooltipText("Режим калькулятора");
+        this.calculateButton.addClickListener(event -> this.expressionDialog.open(this.numberField.getValue()));
 
-        HorizontalLayout container = new HorizontalLayout(numberField, calculateButton);
-        container.setPadding(false);
-        container.addClassNames(
+        this.container.setPadding(false);
+        this.container.addClassNames(
                 LumoUtility.Width.FULL,
                 LumoUtility.AlignItems.END,
                 LumoUtility.JustifyContent.BETWEEN,
                 LumoUtility.Gap.XSMALL
         );
 
-        add(container);
+        this.setWidthFull();
+        this.add(this.container);
     }
 
     @Override
@@ -77,9 +80,9 @@ public class AmountInputCalculator extends CustomField<BigDecimal> {
         private final Button submitButton = new Button("Рассчитать");
         private final Button cancelButton = new Button("Отмена");
 
-        private final Consumer<BigDecimal> onSubmit;
+        private final SerializableConsumer<BigDecimal> onSubmit;
 
-        public ExpressionDialog(Consumer<BigDecimal> onSubmit) {
+        public ExpressionDialog(SerializableConsumer<BigDecimal> onSubmit) {
             this.onSubmit = onSubmit;
         }
 
