@@ -27,8 +27,6 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
 
     protected abstract String getEmptyStateText();
 
-    protected abstract boolean isSortable();
-
     protected abstract void configurePagination(Grid<Category> grid);
 
     @Override
@@ -69,7 +67,6 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
         this.rootGrid.setEmptyStateComponent(noCategoriesImage);
 
         this.rootGrid.addColumn(Category::getName)
-                .setKey("name")
-                .setSortable(this.isSortable());
+                .setKey("name");
     }
 }

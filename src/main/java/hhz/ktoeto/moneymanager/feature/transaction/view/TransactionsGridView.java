@@ -38,8 +38,6 @@ public abstract class TransactionsGridView extends Composite<VerticalLayout> imp
 
     protected abstract String getEmptyStateText();
 
-    protected abstract boolean isSortable();
-
     protected abstract void configurePagination(Grid<Transaction> grid);
 
     @Override
@@ -80,12 +78,10 @@ public abstract class TransactionsGridView extends Composite<VerticalLayout> imp
         this.rootGrid.setEmptyStateComponent(noTransactionsImage);
 
         this.rootGrid.addColumn(new TransactionCategoryDateRenderer())
-                .setKey("date")
-                .setSortable(this.isSortable());
+                .setKey("date");
         this.rootGrid.addColumn(new NumberRenderer<>(Transaction::getAmount, NumberFormat.getCurrencyInstance(Locale.getDefault())))
                 .setKey("amount")
                 .setTextAlign(ColumnTextAlign.END)
-                .setSortable(this.isSortable())
                 .setPartNameGenerator(transaction -> {
                     StringBuilder stringBuilder = new StringBuilder("amount-column ");
                     if (transaction.getType() == Transaction.Type.EXPENSE) {

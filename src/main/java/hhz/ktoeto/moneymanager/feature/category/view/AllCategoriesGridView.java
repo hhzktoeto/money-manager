@@ -29,18 +29,14 @@ public class AllCategoriesGridView extends CategoriesGridView {
     }
 
     @Override
-    protected boolean isSortable() {
-        return true;
-    }
-
-    @Override
     protected void configurePagination(Grid<Category> grid) {
         grid.setPageSize(10);
     }
 
     private void configureGridHeader() {
         Grid.Column<Category> categoryNameColumn = this.getRootGrid().getColumnByKey("name")
-                .setHeader("По имени");
+                .setHeader("По имени")
+                .setSortable(true);
 
         this.getRootGrid().sort(Collections.singletonList(
                 new GridSortOrder<>(categoryNameColumn, SortDirection.ASCENDING)

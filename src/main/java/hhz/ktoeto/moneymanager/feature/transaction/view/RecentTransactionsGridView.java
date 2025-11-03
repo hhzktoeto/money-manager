@@ -15,11 +15,6 @@ public class RecentTransactionsGridView extends TransactionsGridView {
     }
 
     @Override
-    protected boolean isSortable() {
-        return false;
-    }
-
-    @Override
     protected void configurePagination(Grid<Transaction> grid) {
         this.getRootGrid().setAllRowsVisible(true);
     }

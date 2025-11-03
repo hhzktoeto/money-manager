@@ -62,11 +62,6 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
     }
 
     @Override
-    protected boolean isSortable() {
-        return true;
-    }
-
-    @Override
     protected void configurePagination(Grid<Transaction> grid) {
         grid.setPageSize(25);
     }
@@ -80,9 +75,11 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
 
     private void configureGridHeader() {
         Grid.Column<Transaction> categoryDateColumn = this.getRootGrid().getColumnByKey("date")
-                .setHeader("По дате");
+                .setHeader("По дате")
+                .setSortable(true);
         Grid.Column<Transaction> amountColumn = this.getRootGrid().getColumnByKey("amount")
-                .setHeader("По сумме");
+                .setHeader("По сумме")
+                .setSortable(true);
 
         this.expensesFilterButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
         this.expensesFilterButton.getStyle().set(StyleConstants.BORDER_RADIUS, StyleConstants.BorderRadius.LEFT_075REM);
