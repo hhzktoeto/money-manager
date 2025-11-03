@@ -123,46 +123,38 @@ public class Budget {
     private List<Transaction> transactions;
 
     @Transient
-    private BigDecimal currentAmount;
-
-    @Transient
-    public BigDecimal getRemainingAmount(){
-        return goalAmount.subtract(currentAmount);
-    }
-
-    @Transient
     public void calculateActiveDates() {
         LocalDate today = LocalDate.now();
-        LocalDate startDate;
-        LocalDate endDate;
+        LocalDate effectiveStartDate;
+        LocalDate effectiveEndDate;
 
         switch (activePeriod) {
             case DAY -> {
-                startDate = today;
-                endDate = today;
+                effectiveStartDate = today;
+                effectiveEndDate = today;
             }
             case WEEK -> {
-                startDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-                endDate = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+                effectiveStartDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+                effectiveEndDate = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
             }
             case MONTH -> {
-                startDate = today.with(TemporalAdjusters.firstDayOfMonth());
-                endDate = today.with(TemporalAdjusters.lastDayOfMonth());
+                effectiveStartDate = today.with(TemporalAdjusters.firstDayOfMonth());
+                effectiveEndDate = today.with(TemporalAdjusters.lastDayOfMonth());
             }
             case QUARTER -> {
                 int month = today.getMonthValue();
                 int quarterStartMonth = ((month - 1) / 3) * 3 + 1;
-                startDate = today.withMonth(quarterStartMonth).with(TemporalAdjusters.firstDayOfMonth());
-                endDate = startDate.plusMonths(2).with(TemporalAdjusters.lastDayOfMonth());
+                effectiveStartDate = today.withMonth(quarterStartMonth).with(TemporalAdjusters.firstDayOfMonth());
+                effectiveEndDate = effectiveStartDate.plusMonths(2).with(TemporalAdjusters.lastDayOfMonth());
             }
             case YEAR -> {
-                startDate = today.with(TemporalAdjusters.firstDayOfYear());
-                endDate = today.with(TemporalAdjusters.lastDayOfYear());
+                effectiveStartDate = today.with(TemporalAdjusters.firstDayOfYear());
+                effectiveEndDate = today.with(TemporalAdjusters.lastDayOfYear());
             }
             default -> throw new IllegalStateException("Unexpected value on budget active period: " + activePeriod);
         }
 
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDate = effectiveStartDate;
+        this.endDate = effectiveEndDate;
     }
 }

@@ -9,6 +9,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.View;
 import hhz.ktoeto.moneymanager.ui.component.BudgetCard;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
@@ -17,6 +18,7 @@ import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
 import lombok.AccessLevel;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public abstract class BudgetsCardsView extends Composite<Div> implements View, HasUpdatableData<List<Budget>> {
@@ -35,7 +37,7 @@ public abstract class BudgetsCardsView extends Composite<Div> implements View, H
 
     protected abstract boolean isAddBudgetButtonVisible();
 
-    protected abstract BudgetCard mapBudgetToCard(Budget budget);
+    protected abstract void configureBudgetCard(BudgetCard card, Budget budget);
 
     @Override
     protected Div initContent() {
@@ -96,5 +98,31 @@ public abstract class BudgetsCardsView extends Composite<Div> implements View, H
                 .map(this::mapBudgetToCard)
                 .forEach(root::add);
         root.add(addNewBudgetButton);
+    }
+
+    private BudgetCard mapBudgetToCard(Budget budget) {
+        BigDecimal currentAmount = budget.getTransactions()
+                .stream()
+                .map(Transaction::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal maxAmount = budget.getGoalAmount();
+
+        BudgetCard.BudgetCardData budgetCardData = BudgetCard.BudgetCardData.builder()
+                .currentAmount(currentAmount)
+                .maxAmount(maxAmount)
+                .remainingAmount(maxAmount.subtract(currentAmount))
+                .endDate(budget.getEndDate())
+                .title(budget.getName())
+                .isFavourite(budget.isFavourite())
+                .isExpense(Budget.Type.EXPENSE == budget.getType())
+                .typeName(budget.getType().toString())
+                .amountFormatter(this.getPresenter()::formatAmount)
+                .dateFormatter(this.getPresenter()::formatDate)
+                .build();
+
+        BudgetCard card = new BudgetCard(budgetCardData);
+        this.configureBudgetCard(card, budget);
+
+        return card;
     }
 }

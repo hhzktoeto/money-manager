@@ -20,7 +20,8 @@ public class ExpiredBudgetsCardsView extends BudgetsCardsView {
     }
 
     @Override
-    protected BudgetCard mapBudgetToCard(Budget budget) {
-        return null;
+    protected void configureBudgetCard(BudgetCard card, Budget budget) {
+        card.addContentClickListener(event -> this.getPresenter().onEditRequested(budget));
+        card.hideAddToFavouriteButton();
     }
 }

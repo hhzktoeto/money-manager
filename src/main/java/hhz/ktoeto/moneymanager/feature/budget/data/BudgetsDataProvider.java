@@ -7,27 +7,59 @@ import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetFilter;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
-import lombok.AccessLevel;
-import lombok.Getter;
+import hhz.ktoeto.moneymanager.feature.category.domain.Category;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Sort;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class BudgetsDataProvider extends AbstractBackEndDataProvider<Budget, BudgetFilter> {
 
-    @Getter(AccessLevel.PROTECTED)
     private final transient BudgetService budgetService;
     private final transient UserContextHolder userContextHolder;
+    private final transient TransactionService transactionService;
 
-    protected BudgetsDataProvider(BudgetService budgetService, UserContextHolder userContextHolder) {
+    protected BudgetsDataProvider(BudgetService budgetService, UserContextHolder userContextHolder, TransactionService transactionService) {
         this.budgetService = budgetService;
         this.userContextHolder = userContextHolder;
+        this.transactionService = transactionService;
     }
 
-    protected abstract Stream<Budget> fetchBudgets(long userId);
+    protected abstract BudgetFilter getFilter();
+
+    protected abstract Sort getSort();
 
     public Stream<Budget> fetch() {
-        return fetchBudgets(userContextHolder.getCurrentUserId());
+        long userId = this.userContextHolder.getCurrentUserId();
+        BudgetFilter budgetFilter = this.getFilter();
+        budgetFilter.setWithCategories(true);
+
+        Sort budgetSort = this.getSort();
+
+        List<Budget> budgets = this.budgetService.getAll(userId, budgetFilter, budgetSort);
+        budgets.forEach(budget -> {
+            TransactionFilter transactionFilter = new TransactionFilter();
+            transactionFilter.setCategoriesIds(budget.getCategories()
+                    .stream()
+                    .map(Category::getId)
+                    .collect(Collectors.toSet())
+            );
+            transactionFilter.setType(Budget.Type.EXPENSE == budget.getType()
+                    ? Transaction.Type.EXPENSE
+                    : Transaction.Type.INCOME
+            );
+            transactionFilter.setFromDate(budget.getStartDate());
+            transactionFilter.setToDate(budget.getEndDate());
+            List<Transaction> transactions = transactionService.getAll(userId, transactionFilter);
+            budget.setTransactions(transactions);
+        });
+
+        return budgets.stream();
     }
 
     @Override
