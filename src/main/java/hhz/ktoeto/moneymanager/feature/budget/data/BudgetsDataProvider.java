@@ -7,15 +7,12 @@ import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetFilter;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
-import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
-import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class BudgetsDataProvider extends AbstractBackEndDataProvider<Budget, BudgetFilter> {
@@ -43,19 +40,7 @@ public abstract class BudgetsDataProvider extends AbstractBackEndDataProvider<Bu
 
         List<Budget> budgets = this.budgetService.getAll(userId, budgetFilter, budgetSort);
         budgets.forEach(budget -> {
-            TransactionFilter transactionFilter = new TransactionFilter();
-            transactionFilter.setCategoriesIds(budget.getCategories()
-                    .stream()
-                    .map(Category::getId)
-                    .collect(Collectors.toSet())
-            );
-            transactionFilter.setType(Budget.Type.EXPENSE == budget.getType()
-                    ? Transaction.Type.EXPENSE
-                    : Transaction.Type.INCOME
-            );
-            transactionFilter.setFromDate(budget.getStartDate());
-            transactionFilter.setToDate(budget.getEndDate());
-            List<Transaction> transactions = transactionService.getAll(userId, transactionFilter);
+            List<Transaction> transactions = transactionService.getAllForBudget(budget);
             budget.setTransactions(transactions);
         });
 

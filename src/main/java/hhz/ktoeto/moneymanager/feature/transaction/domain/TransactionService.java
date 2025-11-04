@@ -5,6 +5,8 @@ import hhz.ktoeto.moneymanager.core.event.TransactionDeletedEvent;
 import hhz.ktoeto.moneymanager.core.event.TransactionUpdatedEvent;
 import hhz.ktoeto.moneymanager.core.exception.EntityNotFoundException;
 import hhz.ktoeto.moneymanager.core.exception.NonOwnerRequestException;
+import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
+import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +17,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -33,6 +35,23 @@ public class TransactionService {
                 .build();
 
         return repository.findAll(specification);
+    }
+
+    public List<Transaction> getAllForBudget(Budget budget) {
+        TransactionFilter filter = new TransactionFilter();
+        filter.setCategoriesIds(budget.getCategories()
+                .stream()
+                .map(Category::getId)
+                .collect(Collectors.toSet())
+        );
+        filter.setType(Budget.Type.EXPENSE == budget.getType()
+                ? Transaction.Type.EXPENSE
+                : Transaction.Type.INCOME
+        );
+        filter.setFromDate(budget.getStartDate());
+        filter.setToDate(budget.getEndDate());
+
+        return this.getAll(budget.getUserId(), filter);
     }
 
     public Page<Transaction> getPage(long userId, Pageable pageable) {
@@ -110,13 +129,6 @@ public class TransactionService {
 
     public int count(long userId, TransactionFilter filter) {
         return doCount(userId, filter);
-    }
-
-    public BigDecimal calculateTotal(Collection<Transaction> transactions) {
-        return transactions
-                .stream()
-                .map(Transaction::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private Transaction getTransactionFromRepository(long id) {
