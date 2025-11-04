@@ -2,6 +2,7 @@ package hhz.ktoeto.moneymanager.feature.category.view;
 
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoriesDataProvider;
+import hhz.ktoeto.moneymanager.feature.category.data.EnhancedCategoriesProvider;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.domain.CategoryService;
 import hhz.ktoeto.moneymanager.ui.ViewPresenter;
@@ -16,7 +17,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 public abstract class CategoriesGridPresenter implements ViewPresenter, HasCategoriesProvider, CanEdit<Category> {
 
-    private final CategoriesDataProvider dataProvider;
+    private final EnhancedCategoriesProvider dataProvider;
     private final transient CategoryService categoryService;
     private final transient UserContextHolder userContextHolder;
     private final transient ApplicationEventPublisher eventPublisher;
@@ -26,7 +27,7 @@ public abstract class CategoriesGridPresenter implements ViewPresenter, HasCateg
     private CategoriesGridView view;
 
     protected CategoriesGridPresenter(UserContextHolder userContextHolder, CategoryService categoryService,
-                                      CategoriesDataProvider dataProvider, ApplicationEventPublisher eventPublisher) {
+                                      EnhancedCategoriesProvider dataProvider, ApplicationEventPublisher eventPublisher) {
         this.userContextHolder = userContextHolder;
         this.categoryService = categoryService;
         this.dataProvider = dataProvider;

@@ -3,7 +3,7 @@ package hhz.ktoeto.moneymanager.feature.budget.formview;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
-import hhz.ktoeto.moneymanager.feature.category.data.SimpleAllCategoriesProvider;
+import hhz.ktoeto.moneymanager.feature.category.data.SimpleCategoriesProvider;
 import hhz.ktoeto.moneymanager.ui.AbstractFormViewPresenter;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
@@ -20,10 +20,10 @@ public abstract class BudgetFormPresenter extends AbstractFormViewPresenter<Budg
     @Getter(AccessLevel.PROTECTED)
     private final transient UserContextHolder userContextHolder;
     @Getter(AccessLevel.PROTECTED)
-    private final SimpleAllCategoriesProvider categoryDataProvider;
+    private final SimpleCategoriesProvider categoryDataProvider;
 
     protected BudgetFormPresenter(BudgetService budgetService, UserContextHolder userContextHolder,
-                                  ApplicationEventPublisher eventPublisher, SimpleAllCategoriesProvider categoryDataProvider) {
+                                  ApplicationEventPublisher eventPublisher, SimpleCategoriesProvider categoryDataProvider) {
         this.budgetService = budgetService;
         this.userContextHolder = userContextHolder;
         this.eventPublisher = eventPublisher;

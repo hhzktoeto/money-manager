@@ -9,7 +9,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.feature.category.data.SimpleAllCategoriesProvider;
+import hhz.ktoeto.moneymanager.feature.category.data.SimpleCategoriesProvider;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.formview.validator.TransactionAmountValidator;
@@ -25,7 +25,7 @@ import java.time.LocalDate;
 public abstract class TransactionFormView extends AbstractFormView<Transaction> {
 
     private final CanAddCategory categoryAddDelegate;
-    private final SimpleAllCategoriesProvider categoryProvider;
+    private final SimpleCategoriesProvider categoryProvider;
 
     private final IncomeExpenseToggle<Transaction.Type> typeToggle;
     private final ComboBox<Category> categorySelect;
@@ -34,7 +34,7 @@ public abstract class TransactionFormView extends AbstractFormView<Transaction> 
     private final TextArea descriptionArea;
     private final Button createCategoryButton;
 
-    protected TransactionFormView(TransactionFormPresenter presenter, SimpleAllCategoriesProvider categoryProvider) {
+    protected TransactionFormView(TransactionFormPresenter presenter, SimpleCategoriesProvider categoryProvider) {
         super(presenter, Transaction.class);
         this.categoryAddDelegate = presenter;
         this.categoryProvider = categoryProvider;

@@ -13,7 +13,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.formview.validator.*;
-import hhz.ktoeto.moneymanager.feature.category.data.SimpleAllCategoriesProvider;
+import hhz.ktoeto.moneymanager.feature.category.data.SimpleCategoriesProvider;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.AbstractFormView;
 import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
@@ -25,7 +25,7 @@ import hhz.ktoeto.moneymanager.ui.mixin.CanAddCategory;
 public abstract class BudgetFormView extends AbstractFormView<Budget> {
 
     private final CanAddCategory categoryAddDelegate;
-    private final SimpleAllCategoriesProvider categoryProvider;
+    private final SimpleCategoriesProvider categoryProvider;
 
     private final IncomeExpenseToggle<Budget.Type> typeToggle;
     private final TextField nameField;
@@ -39,7 +39,7 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
 
     private Budget.ActivePeriod previousActivePeriod;
 
-    protected BudgetFormView(BudgetFormPresenter presenter, SimpleAllCategoriesProvider categoryProvider) {
+    protected BudgetFormView(BudgetFormPresenter presenter, SimpleCategoriesProvider categoryProvider) {
         super(presenter, Budget.class);
         this.categoryAddDelegate = presenter;
         this.categoryProvider = categoryProvider;

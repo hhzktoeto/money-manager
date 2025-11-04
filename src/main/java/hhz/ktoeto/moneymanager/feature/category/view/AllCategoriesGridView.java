@@ -34,12 +34,17 @@ public class AllCategoriesGridView extends CategoriesGridView {
     }
 
     private void configureGridHeader() {
-        Grid.Column<Category> categoryNameColumn = this.getRootGrid().getColumnByKey("name")
+        Grid<Category> grid = this.getRootGrid();
+
+        grid.getColumnByKey("name")
                 .setHeader("По имени")
                 .setSortable(true);
+        Grid.Column<Category> categoryTransactionsCountColumn = grid.getColumnByKey("transactions.count")
+                .setHeader("По популярности")
+                .setSortable(true);
 
-        this.getRootGrid().sort(Collections.singletonList(
-                new GridSortOrder<>(categoryNameColumn, SortDirection.ASCENDING)
+        grid.sort(Collections.singletonList(
+                new GridSortOrder<>(categoryTransactionsCountColumn, SortDirection.DESCENDING)
         ));
     }
 }

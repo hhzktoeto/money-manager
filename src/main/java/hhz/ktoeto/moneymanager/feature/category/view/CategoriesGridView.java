@@ -4,13 +4,21 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.grid.SortOrderProvider;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.provider.QuerySortOrder;
+import com.vaadin.flow.data.provider.SortDirection;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.View;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
 import lombok.AccessLevel;
 import lombok.Getter;
+
+import java.util.stream.Stream;
 
 public abstract class CategoriesGridView extends Composite<VerticalLayout> implements View {
 
@@ -68,5 +76,42 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
 
         this.rootGrid.addColumn(Category::getName)
                 .setKey("name");
+
+        this.rootGrid.addColumn(new CategoryTransactionsCountRenderer())
+                .setKey("transactions.count");
+    }
+
+    private static final class CategoryTransactionsCountRenderer extends ComponentRenderer<HorizontalLayout, Category> {
+
+        public CategoryTransactionsCountRenderer() {
+            super(category -> {
+                int transactionsCount = category.getTransactions().size();
+
+                Span countSpan = new Span(Integer.toString(transactionsCount));
+                countSpan.addClassNames(LumoUtility.FontWeight.BOLD);
+
+                String transactionsText = transactionsCount % 100 >= 11 && transactionsCount % 100 <= 19
+                        ? "транзакций"
+                        : switch (transactionsCount % 10) {
+                    case 1 -> "транзакция";
+                    case 2, 3, 4 -> "транзакции";
+                    default -> "транзакций";
+                };
+
+                Span textSpan = new Span(transactionsText);
+                textSpan.addClassNames(
+                        LumoUtility.TextColor.SECONDARY,
+                        LumoUtility.FontWeight.LIGHT
+                );
+
+                HorizontalLayout layout = new HorizontalLayout(countSpan, textSpan);
+                layout.addClassNames(
+                        LumoUtility.Gap.SMALL,
+                        LumoUtility.AlignItems.CENTER
+                );
+
+                return layout;
+            });
+        }
     }
 }

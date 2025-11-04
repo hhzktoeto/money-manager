@@ -10,9 +10,9 @@ import java.util.Comparator;
 
 @SpringComponent
 @VaadinSessionScope
-public class SimpleAllCategoriesProvider extends CategoriesDataProvider {
+public class SimpleCategoriesProvider extends CategoriesDataProvider {
 
-    public SimpleAllCategoriesProvider(CategoryService categoryService, UserContextHolder userContextHolder) {
+    public SimpleCategoriesProvider(CategoryService categoryService, UserContextHolder userContextHolder) {
         super(categoryService, userContextHolder);
     }
 

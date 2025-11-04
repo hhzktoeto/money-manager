@@ -4,7 +4,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
-import hhz.ktoeto.moneymanager.feature.category.data.SimpleAllCategoriesProvider;
+import hhz.ktoeto.moneymanager.feature.category.data.SimpleCategoriesProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.data.RecentTransactionsProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,7 +16,7 @@ public class RecentTransactionsGridPresenter extends TransactionsGridPresenter {
 
     public RecentTransactionsGridPresenter(UserContextHolder userContextHolder, FormattingService formattingService,
                                            TransactionService transactionService, RecentTransactionsProvider dataProvider,
-                                           SimpleAllCategoriesProvider categoryDataProvider, ApplicationEventPublisher eventPublisher) {
+                                           SimpleCategoriesProvider categoryDataProvider, ApplicationEventPublisher eventPublisher) {
         super(userContextHolder, formattingService, transactionService, dataProvider, categoryDataProvider, eventPublisher);
     }
 

@@ -22,28 +22,11 @@ public class CategoryService {
     private final ApplicationEventPublisher eventPublisher;
 
     public List<Category> getAll(long userId) {
-        log.debug("Fetching all categories for user with id {}", userId);
-        CategorySpecification specification = CategorySpecification.builder()
-                .userId(userId)
-                .build();
-
-        return repository.findAll(specification);
+        return doGetAll(userId, null);
     }
 
-    @Transactional
-    public List<Category> getAllEnhanced(long userId) {
-        log.debug("Fetching all categories and internal entities for user with id {}", userId);
-        CategorySpecification specification = CategorySpecification.builder()
-                .userId(userId)
-                .build();
-
-        List<Category> categories = repository.findAll(specification);
-        categories.forEach(category -> {
-            category.setBudgets(category.getBudgets());
-            category.setTransactions(category.getTransactions());
-        });
-
-        return categories;
+    public List<Category> getAll(long userId, CategoryFilter filter) {
+        return doGetAll(userId, filter);
     }
 
     @Transactional
@@ -94,5 +77,15 @@ public class CategoryService {
     private Category getCategoryFromRepository(long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Could not find Transaction with id %s".formatted(id)));
+    }
+
+    private List<Category> doGetAll(long userId, CategoryFilter filter) {
+        log.debug("Fetching all categories for user with id {}. Filter - {}", userId, filter);
+        CategorySpecification specification = CategorySpecification.builder()
+                .userId(userId)
+                .filter(filter)
+                .build();
+
+        return repository.findAll(specification);
     }
 }

@@ -50,6 +50,7 @@ public class BudgetSpecification implements Specification<Budget> {
         }
         if (filter.isWithCategories()) {
             root.fetch("categories", JoinType.LEFT);
+            query.distinct(true);
         }
 
         return predicate;

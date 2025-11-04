@@ -5,7 +5,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
-import hhz.ktoeto.moneymanager.feature.category.data.SimpleAllCategoriesProvider;
+import hhz.ktoeto.moneymanager.feature.category.data.SimpleCategoriesProvider;
 import hhz.ktoeto.moneymanager.ui.event.BudgetEditRequested;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -15,7 +15,7 @@ import org.springframework.context.event.EventListener;
 public class EditBudgetFormPresenter extends BudgetFormPresenter {
 
     protected EditBudgetFormPresenter(BudgetService budgetService, UserContextHolder userContextHolder,
-                                      ApplicationEventPublisher eventPublisher, SimpleAllCategoriesProvider categoryDataProvider) {
+                                      ApplicationEventPublisher eventPublisher, SimpleCategoriesProvider categoryDataProvider) {
         super(budgetService, userContextHolder, eventPublisher, categoryDataProvider);
     }
 

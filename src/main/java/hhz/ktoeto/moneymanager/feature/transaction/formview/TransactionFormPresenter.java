@@ -1,7 +1,7 @@
 package hhz.ktoeto.moneymanager.feature.transaction.formview;
 
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
-import hhz.ktoeto.moneymanager.feature.category.data.SimpleAllCategoriesProvider;
+import hhz.ktoeto.moneymanager.feature.category.data.SimpleCategoriesProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.ui.AbstractFormViewPresenter;
@@ -20,10 +20,10 @@ public abstract class TransactionFormPresenter extends AbstractFormViewPresenter
     private final transient TransactionService transactionService;
     private final transient ApplicationEventPublisher eventPublisher;
     @Getter(AccessLevel.PROTECTED)
-    private final SimpleAllCategoriesProvider categoryDataProvider;
+    private final SimpleCategoriesProvider categoryDataProvider;
 
     protected TransactionFormPresenter(UserContextHolder userContextHolder, TransactionService transactionService,
-                                       ApplicationEventPublisher eventPublisher, SimpleAllCategoriesProvider categoryDataProvider) {
+                                       ApplicationEventPublisher eventPublisher, SimpleCategoriesProvider categoryDataProvider) {
         this.userContextHolder = userContextHolder;
         this.transactionService = transactionService;
         this.eventPublisher = eventPublisher;
