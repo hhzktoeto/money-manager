@@ -3,7 +3,7 @@ package hhz.ktoeto.moneymanager.feature.transaction.view;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.core.service.FormattingService;
-import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.feature.category.data.SimpleAllCategoriesProvider;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.data.AbstractTransactionsDataProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
@@ -33,7 +33,7 @@ public abstract class TransactionsGridPresenter implements ViewPresenter, HasTra
     private final transient ApplicationEventPublisher eventPublisher;
     @Getter(AccessLevel.PROTECTED)
     private final AbstractTransactionsDataProvider dataProvider;
-    private final CategoryDataProvider categoryDataProvider;
+    private final SimpleAllCategoriesProvider categoryDataProvider;
 
     @Getter
     @Setter(AccessLevel.PROTECTED)
@@ -43,7 +43,7 @@ public abstract class TransactionsGridPresenter implements ViewPresenter, HasTra
                                      FormattingService formattingService,
                                      TransactionService transactionService,
                                      AbstractTransactionsDataProvider dataProvider,
-                                     CategoryDataProvider categoryDataProvider,
+                                     SimpleAllCategoriesProvider categoryDataProvider,
                                      ApplicationEventPublisher eventPublisher) {
         this.userContextHolder = userContextHolder;
         this.formattingService = formattingService;

@@ -20,18 +20,18 @@ public abstract class CategoriesDataProvider extends ListDataProvider<Category> 
     private final transient CategoryService categoryService;
     private final transient UserContextHolder userContextHolder;
 
-    public CategoriesDataProvider(CategoryService categoryService, UserContextHolder userContextHolder) {
+    protected CategoriesDataProvider(CategoryService categoryService, UserContextHolder userContextHolder) {
         super(new ArrayList<>());
         this.categoryService = categoryService;
         this.userContextHolder = userContextHolder;
     }
 
-    @PostConstruct
-    protected abstract void loadData();
+    protected abstract void loadData(long userId);
 
+    @PostConstruct
     private void doLoadData() {
         this.getItems().clear();
-        this.loadData();
+        this.loadData(this.userContextHolder.getCurrentUserId());
         this.refreshAll();
     }
 
@@ -41,6 +41,6 @@ public abstract class CategoriesDataProvider extends ListDataProvider<Category> 
             CategoryDeletedEvent.class
     })
     private void onAnyUpdates() {
-        this.loadData();
+        this.doLoadData();
     }
 }

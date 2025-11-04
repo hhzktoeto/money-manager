@@ -1,7 +1,7 @@
 package hhz.ktoeto.moneymanager.feature.transaction.formview;
 
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
-import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.feature.category.data.SimpleAllCategoriesProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.ui.AbstractFormViewPresenter;
@@ -15,15 +15,15 @@ import org.springframework.context.ApplicationEventPublisher;
 public abstract class TransactionFormPresenter extends AbstractFormViewPresenter<Transaction> implements CanAddCategory {
 
     @Getter(AccessLevel.PROTECTED)
-    private final UserContextHolder userContextHolder;
+    private final transient UserContextHolder userContextHolder;
     @Getter(AccessLevel.PROTECTED)
-    private final TransactionService transactionService;
-    private final ApplicationEventPublisher eventPublisher;
+    private final transient TransactionService transactionService;
+    private final transient ApplicationEventPublisher eventPublisher;
     @Getter(AccessLevel.PROTECTED)
-    private final CategoryDataProvider categoryDataProvider;
+    private final SimpleAllCategoriesProvider categoryDataProvider;
 
     protected TransactionFormPresenter(UserContextHolder userContextHolder, TransactionService transactionService,
-                                       ApplicationEventPublisher eventPublisher, CategoryDataProvider categoryDataProvider) {
+                                       ApplicationEventPublisher eventPublisher, SimpleAllCategoriesProvider categoryDataProvider) {
         this.userContextHolder = userContextHolder;
         this.transactionService = transactionService;
         this.eventPublisher = eventPublisher;

@@ -3,7 +3,7 @@ package hhz.ktoeto.moneymanager.feature.budget.formview;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetService;
-import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.feature.category.data.SimpleAllCategoriesProvider;
 import hhz.ktoeto.moneymanager.ui.AbstractFormViewPresenter;
 import hhz.ktoeto.moneymanager.ui.component.DeleteConfirmDialog;
 import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
@@ -14,16 +14,16 @@ import org.springframework.context.ApplicationEventPublisher;
 
 public abstract class BudgetFormPresenter extends AbstractFormViewPresenter<Budget> implements CanAddCategory {
 
-    private final ApplicationEventPublisher eventPublisher;
+    private final transient ApplicationEventPublisher eventPublisher;
     @Getter(AccessLevel.PROTECTED)
-    private final BudgetService budgetService;
+    private final transient BudgetService budgetService;
     @Getter(AccessLevel.PROTECTED)
-    private final UserContextHolder userContextHolder;
+    private final transient UserContextHolder userContextHolder;
     @Getter(AccessLevel.PROTECTED)
-    private final CategoryDataProvider categoryDataProvider;
+    private final SimpleAllCategoriesProvider categoryDataProvider;
 
     protected BudgetFormPresenter(BudgetService budgetService, UserContextHolder userContextHolder,
-                                  ApplicationEventPublisher eventPublisher, CategoryDataProvider categoryDataProvider) {
+                                  ApplicationEventPublisher eventPublisher, SimpleAllCategoriesProvider categoryDataProvider) {
         this.budgetService = budgetService;
         this.userContextHolder = userContextHolder;
         this.eventPublisher = eventPublisher;

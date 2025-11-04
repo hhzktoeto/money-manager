@@ -31,6 +31,22 @@ public class CategoryService {
     }
 
     @Transactional
+    public List<Category> getAllEnhanced(long userId) {
+        log.debug("Fetching all categories and internal entities for user with id {}", userId);
+        CategorySpecification specification = CategorySpecification.builder()
+                .userId(userId)
+                .build();
+
+        List<Category> categories = repository.findAll(specification);
+        categories.forEach(category -> {
+            category.setBudgets(category.getBudgets());
+            category.setTransactions(category.getTransactions());
+        });
+
+        return categories;
+    }
+
+    @Transactional
     public Category create(Category category) {
         log.debug("Creating category for user with id {}. Category: {}", category.getUserId(), category);
 

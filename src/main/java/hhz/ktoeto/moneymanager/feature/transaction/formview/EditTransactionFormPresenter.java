@@ -3,7 +3,7 @@ package hhz.ktoeto.moneymanager.feature.transaction.formview;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
-import hhz.ktoeto.moneymanager.feature.category.data.CategoryDataProvider;
+import hhz.ktoeto.moneymanager.feature.category.data.SimpleAllCategoriesProvider;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import hhz.ktoeto.moneymanager.ui.event.TransactionEditRequested;
@@ -15,7 +15,7 @@ import org.springframework.context.event.EventListener;
 public class EditTransactionFormPresenter extends TransactionFormPresenter {
 
     public EditTransactionFormPresenter(UserContextHolder userContextHolder, TransactionService transactionService,
-                                        ApplicationEventPublisher eventPublisher, CategoryDataProvider categoryDataProvider) {
+                                        ApplicationEventPublisher eventPublisher, SimpleAllCategoriesProvider categoryDataProvider) {
         super(userContextHolder, transactionService, eventPublisher, categoryDataProvider);
     }
 
