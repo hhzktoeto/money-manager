@@ -2,14 +2,12 @@ package hhz.ktoeto.moneymanager.feature.category.view;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.grid.SortOrderProvider;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.provider.QuerySortOrder;
-import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
@@ -17,8 +15,6 @@ import hhz.ktoeto.moneymanager.ui.View;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
 import lombok.AccessLevel;
 import lombok.Getter;
-
-import java.util.stream.Stream;
 
 public abstract class CategoriesGridView extends Composite<VerticalLayout> implements View {
 
@@ -78,7 +74,8 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
                 .setKey("name");
 
         this.rootGrid.addColumn(new CategoryTransactionsCountRenderer())
-                .setKey("transactions.count");
+                .setKey("transactions.count")
+                .setTextAlign(ColumnTextAlign.END);
     }
 
     private static final class CategoryTransactionsCountRenderer extends ComponentRenderer<HorizontalLayout, Category> {
@@ -107,7 +104,7 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
                 HorizontalLayout layout = new HorizontalLayout(countSpan, textSpan);
                 layout.addClassNames(
                         LumoUtility.Gap.SMALL,
-                        LumoUtility.AlignItems.CENTER
+                        LumoUtility.JustifyContent.END
                 );
 
                 return layout;

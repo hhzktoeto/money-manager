@@ -7,6 +7,7 @@ import com.vaadin.flow.data.provider.SortDirection;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 
 import java.util.Collections;
+import java.util.Comparator;
 
 public class AllCategoriesGridView extends CategoriesGridView {
 
@@ -41,7 +42,8 @@ public class AllCategoriesGridView extends CategoriesGridView {
                 .setSortable(true);
         Grid.Column<Category> categoryTransactionsCountColumn = grid.getColumnByKey("transactions.count")
                 .setHeader("По популярности")
-                .setSortable(true);
+                .setSortable(true)
+                .setComparator(Comparator.comparingInt(category -> category.getTransactions().size()));
 
         grid.sort(Collections.singletonList(
                 new GridSortOrder<>(categoryTransactionsCountColumn, SortDirection.DESCENDING)
