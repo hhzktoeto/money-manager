@@ -34,11 +34,9 @@ public abstract class BudgetsDataProvider extends AbstractBackEndDataProvider<Bu
     public Stream<Budget> fetch() {
         long userId = this.userContextHolder.getCurrentUserId();
         BudgetFilter budgetFilter = this.getFilter();
-        budgetFilter.setWithCategories(true);
-
         Sort budgetSort = this.getSort();
 
-        List<Budget> budgets = this.budgetService.getAll(userId, budgetFilter, budgetSort);
+        List<Budget> budgets = this.budgetService.getAllWithRelations(userId, budgetFilter, budgetSort);
         budgets.forEach(budget -> {
             List<Transaction> transactions = transactionService.getAllForBudget(budget);
             budget.setTransactions(transactions);

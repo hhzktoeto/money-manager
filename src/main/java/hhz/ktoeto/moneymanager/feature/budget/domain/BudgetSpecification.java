@@ -48,10 +48,6 @@ public class BudgetSpecification implements Specification<Budget> {
                     criteriaBuilder.equal(root.get("isFavourite"), filter.getIsFavourite())
             );
         }
-        if (filter.isWithCategories()) {
-            root.fetch("categories", JoinType.LEFT);
-            query.distinct(true);
-        }
 
         return predicate;
     }

@@ -120,6 +120,7 @@ public class Budget {
     private LocalDateTime updatedAt;
 
     @Transient
+    @ToString.Exclude
     private List<Transaction> transactions;
 
     @Transient

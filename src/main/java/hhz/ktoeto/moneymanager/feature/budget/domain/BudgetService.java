@@ -5,11 +5,14 @@ import hhz.ktoeto.moneymanager.core.event.BudgetDeletedEvent;
 import hhz.ktoeto.moneymanager.core.event.BudgetUpdatedEvent;
 import hhz.ktoeto.moneymanager.core.exception.EntityNotFoundException;
 import hhz.ktoeto.moneymanager.core.exception.NonOwnerRequestException;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -23,15 +26,21 @@ public class BudgetService {
     private final BudgetRepository repository;
     private final ApplicationEventPublisher eventPublisher;
 
-    @Transactional
-    public List<Budget> getAll(long userId, BudgetFilter filter, Sort sort) {
-        log.debug("Fetching budgets for user with id {}. Filter - {}, Sort - {}", userId, filter, sort);
-        BudgetSpecification specification = BudgetSpecification.builder()
+    public List<Budget> getAllWithRelations(long userId, BudgetFilter filter, Sort sort) {
+        Specification<Budget> specification = BudgetSpecification.builder()
                 .userId(userId)
                 .filter(filter)
-                .build();
+                .build()
+                .and((Specification<Budget>) (root, query, criteriaBuilder) -> {
+                    root.fetch("categories", JoinType.LEFT);
+                    if (query != null) {
+                        query.distinct(true);
+                    }
 
-        return repository.findAll(specification, sort);
+                    return criteriaBuilder.conjunction();
+                });
+
+        return doGetAll(specification, sort);
     }
 
     @Transactional
@@ -80,5 +89,13 @@ public class BudgetService {
     private Budget getBudgetFromRepository(long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Could not find Budget with id %d".formatted(id)));
+    }
+
+    private List<Budget> doGetAll(Specification<Budget> specification, @Nullable Sort sort) {
+        if (sort != null) {
+            return repository.findAll(specification, sort);
+        } else {
+            return repository.findAll(specification);
+        }
     }
 }
