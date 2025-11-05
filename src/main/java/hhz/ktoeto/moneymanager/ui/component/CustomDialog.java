@@ -5,10 +5,10 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 public class CustomDialog extends Dialog {
 
@@ -34,7 +34,7 @@ public class CustomDialog extends Dialog {
         title = new H3();
         header.add(title);
 
-        closeButton = new Button(VaadinIcon.CLOSE.create());
+        closeButton = new Button(MaterialIcons.CLOSE.create());
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE, ButtonVariant.LUMO_LARGE);
         closeButton.addClickListener(e -> this.close());
         header.add(closeButton);

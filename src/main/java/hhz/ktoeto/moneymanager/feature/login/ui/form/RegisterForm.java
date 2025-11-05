@@ -5,7 +5,6 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -21,6 +20,7 @@ import hhz.ktoeto.moneymanager.feature.login.ui.form.validator.PasswordValidator
 import hhz.ktoeto.moneymanager.feature.login.ui.form.validator.PhoneValidator;
 import hhz.ktoeto.moneymanager.feature.login.ui.form.validator.UsernameValidator;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
+import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 public class RegisterForm extends Composite<VerticalLayout> {
 
@@ -45,23 +45,27 @@ public class RegisterForm extends Composite<VerticalLayout> {
 
         loginField = new TextField("Логин");
         loginField.setWidthFull();
-        loginField.setPrefixComponent(VaadinIcon.USER.create());
+        loginField.setPrefixComponent(MaterialIcons.PERSON.create());
+        loginField.getPrefixComponent().addClassName(LumoUtility.FontSize.SMALL);
         root.add(loginField);
 
         passwordField = new PasswordField("Пароль");
         passwordField.setWidthFull();
-        passwordField.setPrefixComponent(VaadinIcon.KEY.create());
+        passwordField.setPrefixComponent(MaterialIcons.PASSWORD.create());
+        passwordField.getPrefixComponent().addClassName(LumoUtility.FontSize.SMALL);
         root.add(passwordField);
 
         emailField = new EmailField("E-mail");
         emailField.setWidthFull();
-        emailField.setPrefixComponent(VaadinIcon.AT.create());
+        emailField.setPrefixComponent(MaterialIcons.MAIL.create());
+        emailField.getPrefixComponent().addClassName(LumoUtility.FontSize.SMALL);
         emailField.setPlaceholder("e-mail@example.com");
         root.add(emailField);
 
         phoneField = new TextField("Телефон");
         phoneField.setWidthFull();
-        phoneField.setPrefixComponent(VaadinIcon.PHONE.create());
+        phoneField.setPrefixComponent(MaterialIcons.PHONE.create());
+        phoneField.getPrefixComponent().addClassName(LumoUtility.FontSize.SMALL);
         phoneField.setPlaceholder("+7");
         root.add(phoneField);
 

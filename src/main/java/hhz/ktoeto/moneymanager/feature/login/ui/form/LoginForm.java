@@ -7,7 +7,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Input;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -19,6 +18,7 @@ import hhz.ktoeto.moneymanager.feature.login.ui.form.validator.PasswordValidator
 import hhz.ktoeto.moneymanager.feature.login.ui.form.validator.UsernameValidator;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 import lombok.RequiredArgsConstructor;
+import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 @RequiredArgsConstructor
 public class LoginForm extends Composite<VerticalLayout> {
@@ -54,12 +54,14 @@ public class LoginForm extends Composite<VerticalLayout> {
 
         loginField = new TextField("Логин");
         loginField.setWidthFull();
-        loginField.setPrefixComponent(VaadinIcon.USER.create());
+        loginField.setPrefixComponent(MaterialIcons.PERSON.create());
+        loginField.getPrefixComponent().addClassName(LumoUtility.FontSize.SMALL);
         root.add(loginField);
 
         passwordField = new PasswordField("Пароль");
         passwordField.setWidthFull();
-        passwordField.setPrefixComponent(VaadinIcon.KEY.create());
+        passwordField.setPrefixComponent(MaterialIcons.PASSWORD.create());
+        passwordField.getPrefixComponent().addClassName(LumoUtility.FontSize.SMALL);
         passwordField.addKeyPressListener(Key.ENTER, ignored -> formLogic.onSubmit(this));
         root.add(passwordField);
 

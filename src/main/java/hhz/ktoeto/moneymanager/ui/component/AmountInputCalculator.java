@@ -7,13 +7,13 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.springframework.lang.Nullable;
+import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.math.BigDecimal;
 
@@ -27,7 +27,7 @@ public class AmountInputCalculator extends CustomField<BigDecimal> {
 
     public AmountInputCalculator() {
         this.numberField = new BigDecimalField("Сумма");
-        this.calculateButton = new Button(VaadinIcon.CALC.create());
+        this.calculateButton = new Button(MaterialIcons.CALCULATE.create());
         this.expressionDialog = new ExpressionDialog(this::setValue);
 
         this.container = new HorizontalLayout(this.numberField, this.calculateButton);
