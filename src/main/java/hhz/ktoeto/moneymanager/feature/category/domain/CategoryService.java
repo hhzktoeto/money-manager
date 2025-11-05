@@ -5,13 +5,16 @@ import hhz.ktoeto.moneymanager.core.event.CategoryDeletedEvent;
 import hhz.ktoeto.moneymanager.core.event.CategoryUpdatedEvent;
 import hhz.ktoeto.moneymanager.core.exception.EntityNotFoundException;
 import hhz.ktoeto.moneymanager.core.exception.NonOwnerRequestException;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -22,11 +25,31 @@ public class CategoryService {
     private final ApplicationEventPublisher eventPublisher;
 
     public List<Category> getAll(long userId) {
-        return doGetAll(userId, null);
+        return doGetAll(userId);
     }
 
-    public List<Category> getAll(long userId, CategoryFilter filter) {
-        return doGetAll(userId, filter);
+    @Transactional
+    public List<Category> getAllWithTransactionsCount(long userId) {
+        List<Category> categories = doGetAll(userId);
+        categories.forEach(category -> {
+            int incomesCount = 0;
+            int expensesCount = 0;
+
+            Set<Transaction> transactions = category.getTransactions();
+            for (Transaction transaction : transactions) {
+                if (Transaction.Type.INCOME.equals(transaction.getType())) {
+                    incomesCount++;
+                } else {
+                    expensesCount++;
+                }
+            }
+
+            category.setTransactionsCount(transactions.size());
+            category.setIncomeTransactionsCount(incomesCount);
+            category.setExpenseTransactionsCount(expensesCount);
+        });
+
+        return categories;
     }
 
     @Transactional
@@ -79,11 +102,10 @@ public class CategoryService {
                 .orElseThrow(() -> new EntityNotFoundException("Could not find Transaction with id %s".formatted(id)));
     }
 
-    private List<Category> doGetAll(long userId, CategoryFilter filter) {
-        log.debug("Fetching all categories for user with id {}. Filter - {}", userId, filter);
-        CategorySpecification specification = CategorySpecification.builder()
+    private List<Category> doGetAll(long userId) {
+        log.debug("Fetching all categories for user with id {}", userId);
+        Specification<Category> specification = CategorySpecification.builder()
                 .userId(userId)
-                .filter(filter)
                 .build();
 
         return repository.findAll(specification);

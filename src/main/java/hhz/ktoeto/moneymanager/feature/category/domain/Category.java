@@ -49,4 +49,16 @@ public class Category {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @Transient
+    @ToString.Exclude
+    private int transactionsCount;
+
+    @Transient
+    @ToString.Exclude
+    private int expenseTransactionsCount;
+
+    @Transient
+    @ToString.Exclude
+    private int incomeTransactionsCount;
 }

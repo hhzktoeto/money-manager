@@ -6,7 +6,4 @@ import lombok.Data;
 public class CategoryFilter {
 
     private String name;
-    private boolean withTransactions;
-    private boolean withBudgets;
-    private boolean withGoals;
 }

@@ -82,7 +82,7 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
 
         public CategoryTransactionsCountRenderer() {
             super(category -> {
-                int transactionsCount = category.getTransactions().size();
+                int transactionsCount = category.getTransactionsCount();
 
                 Span countSpan = new Span(Integer.toString(transactionsCount));
                 countSpan.addClassNames(LumoUtility.FontWeight.BOLD);

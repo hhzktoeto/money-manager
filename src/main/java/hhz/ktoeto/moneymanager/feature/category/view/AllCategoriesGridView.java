@@ -43,7 +43,7 @@ public class AllCategoriesGridView extends CategoriesGridView {
         Grid.Column<Category> categoryTransactionsCountColumn = grid.getColumnByKey("transactions.count")
                 .setHeader("По популярности")
                 .setSortable(true)
-                .setComparator(Comparator.comparingInt(category -> category.getTransactions().size()));
+                .setComparator(Comparator.comparingInt(Category::getTransactionsCount));
 
         grid.sort(Collections.singletonList(
                 new GridSortOrder<>(categoryTransactionsCountColumn, SortDirection.DESCENDING)

@@ -1,6 +1,9 @@
 package hhz.ktoeto.moneymanager.feature.category.domain;
 
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.Builder;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
@@ -34,19 +37,6 @@ public class CategorySpecification implements Specification<Category> {
                             searchPattern
                     )
             );
-        }
-
-        if (filter.isWithTransactions()) {
-            root.fetch("transactions", JoinType.LEFT);
-            query.distinct(true);
-        }
-        if (filter.isWithBudgets()) {
-            root.fetch("budgets", JoinType.LEFT);
-            query.distinct(true);
-        }
-        if (filter.isWithGoals()) {
-            root.fetch("goals", JoinType.LEFT);
-            query.distinct(true);
         }
 
         return predicate;
