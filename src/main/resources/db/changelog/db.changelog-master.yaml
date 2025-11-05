@@ -17,3 +17,5 @@ databaseChangeLog:
       file: db/changelog/changes/after-migration/budget_V000__initial.sql
   - include:
       file: db/changelog/changes/after-migration/budget_V001__added_favorites.sql
+  - include:
+      file: db/changelog/changes/after-migration/categories_V003__added-icon.sql

@@ -27,24 +27,17 @@ public abstract class TransactionFormView extends AbstractFormView<Transaction> 
     private final CanAddCategory categoryAddDelegate;
     private final SimpleCategoriesProvider categoryProvider;
 
-    private final IncomeExpenseToggle<Transaction.Type> typeToggle;
-    private final ComboBox<Category> categorySelect;
-    private final AmountInputCalculator amountInput;
-    private final DatePicker datePicker;
-    private final TextArea descriptionArea;
-    private final Button createCategoryButton;
+    private final IncomeExpenseToggle<Transaction.Type> typeToggle = new IncomeExpenseToggle<>(Transaction.Type.EXPENSE, Transaction.Type.INCOME);
+    private final ComboBox<Category> categorySelect = new ComboBox<>("Категория");
+    private final AmountInputCalculator amountInput = new AmountInputCalculator();
+    private final DatePicker datePicker = new RussianDatePicker("Дата", LocalDate.now());
+    private final TextArea descriptionArea = new TextArea("Описание");
+    private final Button createCategoryButton = new Button(VaadinIcon.PLUS.create());
 
     protected TransactionFormView(TransactionFormPresenter presenter, SimpleCategoriesProvider categoryProvider) {
         super(presenter, Transaction.class);
         this.categoryAddDelegate = presenter;
         this.categoryProvider = categoryProvider;
-
-        this.typeToggle = new IncomeExpenseToggle<>(Transaction.Type.EXPENSE, Transaction.Type.INCOME);
-        this.categorySelect = new ComboBox<>("Категория");
-        this.amountInput = new AmountInputCalculator();
-        this.datePicker = new RussianDatePicker("Дата", LocalDate.now());
-        this.descriptionArea = new TextArea("Описание");
-        this.createCategoryButton = new Button(VaadinIcon.PLUS.create());
     }
 
     @Override

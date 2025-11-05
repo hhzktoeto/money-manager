@@ -50,6 +50,9 @@ public class Category {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "icon_file_name", nullable = false)
+    private String iconFileName = "default_icon.png";
+
     @Transient
     @ToString.Exclude
     private int transactionsCount;

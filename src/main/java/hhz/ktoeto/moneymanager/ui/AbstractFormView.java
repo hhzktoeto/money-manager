@@ -33,6 +33,7 @@ public abstract class AbstractFormView<T> extends Composite<FlexLayout> implemen
         this.deleteButton = new Button(MaterialIcons.DELETE.create());
 
         this.binder = new Binder<>(entityClass);
+        this.configureBinder(this.binder);
     }
 
     protected abstract void configureRootContent(FlexLayout root);
@@ -57,15 +58,13 @@ public abstract class AbstractFormView<T> extends Composite<FlexLayout> implemen
         HorizontalLayout buttonsRow = this.getButtonsRow();
         root.add(buttonsRow);
 
-        this.configureBinder(this.binder);
-
         return root;
     }
 
     @Override
     public boolean writeToIfValid(T entity) {
         try {
-            binder.writeBean(entity);
+            this.binder.writeBean(entity);
             return true;
         } catch (ValidationException e) {
             log.error("Failed to validate the entity - {}", entity.getClass().getSimpleName());
@@ -76,12 +75,12 @@ public abstract class AbstractFormView<T> extends Composite<FlexLayout> implemen
 
     @Override
     public void setEntity(T entity) {
-        binder.setBean(entity);
+        this.binder.readBean(entity);
     }
 
     @Override
     public T getEntity() {
-        return binder.getBean();
+        return this.binder.getBean();
     }
 
     @Override
