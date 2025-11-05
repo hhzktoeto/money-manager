@@ -60,7 +60,7 @@ public class LoginForm extends Composite<VerticalLayout> {
 
         passwordField = new PasswordField("Пароль");
         passwordField.setWidthFull();
-        passwordField.setPrefixComponent(MaterialIcons.PASSWORD.create());
+        passwordField.setPrefixComponent(MaterialIcons.LOCK.create());
         passwordField.getPrefixComponent().addClassName(LumoUtility.FontSize.SMALL);
         passwordField.addKeyPressListener(Key.ENTER, ignored -> formLogic.onSubmit(this));
         root.add(passwordField);

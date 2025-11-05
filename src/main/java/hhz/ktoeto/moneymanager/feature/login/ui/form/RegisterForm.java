@@ -51,7 +51,7 @@ public class RegisterForm extends Composite<VerticalLayout> {
 
         passwordField = new PasswordField("Пароль");
         passwordField.setWidthFull();
-        passwordField.setPrefixComponent(MaterialIcons.PASSWORD.create());
+        passwordField.setPrefixComponent(MaterialIcons.LOCK.create());
         passwordField.getPrefixComponent().addClassName(LumoUtility.FontSize.SMALL);
         root.add(passwordField);
 
