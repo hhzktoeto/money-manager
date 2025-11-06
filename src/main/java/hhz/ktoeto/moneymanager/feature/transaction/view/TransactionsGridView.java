@@ -97,7 +97,6 @@ public abstract class TransactionsGridView extends Composite<VerticalLayout> imp
 
     private static final class TransactionCategoryDateRenderer extends ComponentRenderer<HorizontalLayout, Transaction> {
 
-        //TODO: Добавить иконки для категория, когда они появятся
         public TransactionCategoryDateRenderer() {
             super(transaction -> {
                 Category transactionCategory = transaction.getCategory();
