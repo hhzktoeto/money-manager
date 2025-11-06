@@ -2,9 +2,11 @@ package hhz.ktoeto.moneymanager.feature.transaction.view;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -98,9 +100,11 @@ public abstract class TransactionsGridView extends Composite<VerticalLayout> imp
         //TODO: Добавить иконки для категория, когда они появятся
         public TransactionCategoryDateRenderer() {
             super(transaction -> {
-                HorizontalLayout layout = new HorizontalLayout();
-                layout.addClassNames(LumoUtility.Padding.XSMALL);
                 Category transactionCategory = transaction.getCategory();
+                Image categoryIcon = new Image("categories/" + transactionCategory.getIconFileName(), "");
+                categoryIcon.setWidth(2, Unit.REM);
+                categoryIcon.setHeight(2, Unit.REM);
+
                 DateTimeFormatter formatter = new DateTimeFormatterBuilder()
                         .appendPattern("dd MMMM yyyy")
                         .toFormatter()
@@ -122,7 +126,13 @@ public abstract class TransactionsGridView extends Composite<VerticalLayout> imp
                 nameDateLayout.setPadding(false);
                 nameDateLayout.addClassName(LumoUtility.Gap.XSMALL);
 
-                layout.add(nameDateLayout);
+                HorizontalLayout layout = new HorizontalLayout(categoryIcon, nameDateLayout);
+                layout.setSpacing(false);
+                layout.addClassNames(
+                        LumoUtility.Gap.MEDIUM,
+                        LumoUtility.Padding.XSMALL,
+                        LumoUtility.AlignItems.CENTER);
+
                 return layout;
             });
         }
