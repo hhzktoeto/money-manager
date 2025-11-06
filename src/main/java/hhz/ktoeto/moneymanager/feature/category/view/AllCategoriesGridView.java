@@ -19,6 +19,7 @@ import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class AllCategoriesGridView extends CategoriesGridView {
 
@@ -42,7 +43,7 @@ public class AllCategoriesGridView extends CategoriesGridView {
 
     @Override
     protected void configurePagination(Grid<Category> grid) {
-        grid.setPageSize(10);
+        grid.setPageSize(25);
     }
 
     private void configureGrid() {
@@ -63,7 +64,7 @@ public class AllCategoriesGridView extends CategoriesGridView {
         grid.sort(Collections.singletonList(
                 new GridSortOrder<>(categoryTransactionsCountColumn, SortDirection.DESCENDING)
         ));
-        grid.setColumnOrder(detailsOpenColumn, nameColumn, categoryTransactionsCountColumn);
+        grid.setColumnOrder(List.of(detailsOpenColumn, nameColumn, categoryTransactionsCountColumn));
 
         grid.setItemDetailsRenderer(new CategoryDetailsRenderer(this.getPresenter()::formatAmount));
         grid.setDetailsVisibleOnClick(false);
