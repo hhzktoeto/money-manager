@@ -9,6 +9,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
@@ -22,7 +24,10 @@ public abstract class AbstractFormView<T> extends Composite<FlexLayout> implemen
     private final Button cancelButton;
     private final Button deleteButton;
 
+    @Getter(AccessLevel.PROTECTED)
     private final Binder<T> binder;
+
+    private T entity;
 
     protected AbstractFormView(AbstractFormViewPresenter<T> presenter, Class<T> entityClass) {
         this.presenter = presenter;
@@ -33,7 +38,6 @@ public abstract class AbstractFormView<T> extends Composite<FlexLayout> implemen
         this.deleteButton = new Button(MaterialIcons.DELETE.create());
 
         this.binder = new Binder<>(entityClass);
-        this.configureBinder(this.binder);
     }
 
     protected abstract void configureRootContent(FlexLayout root);
@@ -58,6 +62,8 @@ public abstract class AbstractFormView<T> extends Composite<FlexLayout> implemen
         HorizontalLayout buttonsRow = this.getButtonsRow();
         root.add(buttonsRow);
 
+        this.configureBinder(this.binder);
+
         return root;
     }
 
@@ -74,13 +80,16 @@ public abstract class AbstractFormView<T> extends Composite<FlexLayout> implemen
     }
 
     @Override
-    public void setEntity(T entity) {
-        this.binder.readBean(entity);
+    public T getEntity() {
+        return this.entity;
     }
 
     @Override
-    public T getEntity() {
-        return this.binder.getBean();
+    public void setEntity(T entity) {
+        this.entity = entity;
+        if (this.isAttached() || this.getContent() != null) {
+            this.binder.readBean(entity);
+        }
     }
 
     @Override

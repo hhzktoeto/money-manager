@@ -27,15 +27,15 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
     private final CanAddCategory categoryAddDelegate;
     private final SimpleCategoriesProvider categoryProvider;
 
-    private final IncomeExpenseToggle<Budget.Type> typeToggle = new IncomeExpenseToggle<>(Budget.Type.EXPENSE, Budget.Type.INCOME);
-    private final TextField nameField = new TextField("Название");
-    private final ToggleButtonGroup<Budget.Scope> scopeToggle = new ToggleButtonGroup<>("Учитываемые транзакции");
-    private final MultiSelectComboBox<Category> categoriesSelect = new MultiSelectComboBox<>("Выберите категории");
-    private final Button createCategoryButton = new Button(VaadinIcon.PLUS.create());
-    private final Checkbox renewableCheckbox = new Checkbox("Обновлять автоматически", true);
-    private final ToggleButtonGroup<Budget.ActivePeriod> activePeriodToggle = new ToggleButtonGroup<>();
-    private final RussianDateRangePicker dateRangePicker = new RussianDateRangePicker("Период активности бюджета");
-    private final AmountInputCalculator amountInputCalculator = new AmountInputCalculator();
+    private final IncomeExpenseToggle<Budget.Type> typeToggle;
+    private final TextField nameField;
+    private final ToggleButtonGroup<Budget.Scope> scopeToggle;
+    private final MultiSelectComboBox<Category> categoriesSelect;
+    private final Button createCategoryButton;
+    private final Checkbox renewableCheckbox;
+    private final ToggleButtonGroup<Budget.ActivePeriod> activePeriodToggle;
+    private final RussianDateRangePicker dateRangePicker;
+    private final AmountInputCalculator amountInputCalculator;
 
     private Budget.ActivePeriod previousActivePeriod;
 
@@ -43,6 +43,16 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
         super(presenter, Budget.class);
         this.categoryAddDelegate = presenter;
         this.categoryProvider = categoryProvider;
+
+        this.typeToggle = new IncomeExpenseToggle<>(Budget.Type.EXPENSE, Budget.Type.INCOME);
+        this.nameField = new TextField("Название");
+        this.scopeToggle = new ToggleButtonGroup<>("Учитываемые транзакции");
+        this.categoriesSelect = new MultiSelectComboBox<>("Выберите категории");
+        this.createCategoryButton = new Button(VaadinIcon.PLUS.create());
+        this.renewableCheckbox = new Checkbox("Обновлять автоматически", true);
+        this.activePeriodToggle = new ToggleButtonGroup<>();
+        this.dateRangePicker = new RussianDateRangePicker("Период активности бюджета");
+        this.amountInputCalculator = new AmountInputCalculator();
     }
 
     @Override

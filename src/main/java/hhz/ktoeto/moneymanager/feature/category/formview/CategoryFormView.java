@@ -9,16 +9,18 @@ import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.category.formview.validator.CategoryNameValidator;
 import hhz.ktoeto.moneymanager.ui.AbstractFormView;
 import hhz.ktoeto.moneymanager.ui.component.IconSelector;
-import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 import hhz.ktoeto.moneymanager.ui.mixin.HasCustomErrors;
 
 public abstract class CategoryFormView extends AbstractFormView<Category> implements HasCustomErrors {
 
-    private final IconSelector iconSelector = new IconSelector();
-    private final TextField nameField = new TextField("Имя");
+    private final IconSelector iconSelector;
+    private final TextField nameField;
 
     protected CategoryFormView(CategoryFormPresenter presenter) {
         super(presenter, Category.class);
+
+        this.iconSelector = new IconSelector();
+        this.nameField = new TextField("Имя");
     }
 
     @Override
