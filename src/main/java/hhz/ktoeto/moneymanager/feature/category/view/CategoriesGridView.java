@@ -2,9 +2,11 @@ package hhz.ktoeto.moneymanager.feature.category.view;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -18,6 +20,7 @@ import lombok.Getter;
 
 public abstract class CategoriesGridView extends Composite<VerticalLayout> implements View {
 
+    @Getter(AccessLevel.PROTECTED)
     private final transient CategoriesGridPresenter presenter;
 
     @Getter(AccessLevel.PROTECTED)
@@ -56,7 +59,6 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
         this.rootGrid.setDataProvider(this.presenter.getCategoriesProvider());
         this.rootGrid.addClassNames(LumoUtility.Background.TRANSPARENT);
         this.rootGrid.addThemeVariants(
-                GridVariant.LUMO_COMPACT,
                 GridVariant.LUMO_NO_BORDER,
                 GridVariant.LUMO_NO_ROW_BORDERS
         );
@@ -70,12 +72,41 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
         noCategoriesImage.setText(this.getEmptyStateText());
         this.rootGrid.setEmptyStateComponent(noCategoriesImage);
 
-        this.rootGrid.addColumn(Category::getName)
-                .setKey("name");
+        this.rootGrid.addColumn(new CategoryNameIconRenderer())
+                .setKey("name")
+                .setTextAlign(ColumnTextAlign.START);
 
         this.rootGrid.addColumn(new CategoryTransactionsCountRenderer())
                 .setKey("transactions.count")
                 .setTextAlign(ColumnTextAlign.END);
+    }
+
+    private static final class CategoryNameIconRenderer extends ComponentRenderer<HorizontalLayout, Category> {
+
+        public CategoryNameIconRenderer() {
+            super(category -> {
+                Image icon = new Image("categories/" + category.getIconFileName(), "");
+                icon.setWidth(2, Unit.REM);
+                icon.setHeight(2, Unit.REM);
+
+                Span name = new Span(category.getName());
+                name.addClassNames(
+                        LumoUtility.FontWeight.BOLD,
+                        LumoUtility.FontSize.MEDIUM
+                );
+
+                HorizontalLayout layout = new HorizontalLayout(icon, name);
+                layout.setSpacing(false);
+                layout.setPadding(false);
+                layout.addClassNames(
+                        LumoUtility.Gap.MEDIUM,
+                        LumoUtility.Padding.XSMALL,
+                        LumoUtility.AlignItems.CENTER
+                );
+
+                return layout;
+            });
+        }
     }
 
     private static final class CategoryTransactionsCountRenderer extends ComponentRenderer<HorizontalLayout, Category> {

@@ -1,13 +1,13 @@
 package hhz.ktoeto.moneymanager.feature.category.view;
 
-import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
+import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.feature.category.data.CategoriesDataProvider;
 import hhz.ktoeto.moneymanager.feature.category.data.EnhancedCategoriesProvider;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
-import hhz.ktoeto.moneymanager.feature.category.domain.CategoryService;
 import hhz.ktoeto.moneymanager.ui.ViewPresenter;
 import hhz.ktoeto.moneymanager.ui.event.CategoryEditRequested;
 import hhz.ktoeto.moneymanager.ui.mixin.CanEdit;
+import hhz.ktoeto.moneymanager.ui.mixin.CanFormatAmount;
 import hhz.ktoeto.moneymanager.ui.mixin.HasCategoriesProvider;
 import jakarta.annotation.PostConstruct;
 import lombok.AccessLevel;
@@ -15,28 +15,33 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.ApplicationEventPublisher;
 
-public abstract class CategoriesGridPresenter implements ViewPresenter, HasCategoriesProvider, CanEdit<Category> {
+import java.math.BigDecimal;
+
+public abstract class CategoriesGridPresenter implements ViewPresenter, HasCategoriesProvider, CanEdit<Category>, CanFormatAmount {
 
     private final EnhancedCategoriesProvider dataProvider;
-    private final transient CategoryService categoryService;
-    private final transient UserContextHolder userContextHolder;
+    private final transient FormattingService formattingService;
     private final transient ApplicationEventPublisher eventPublisher;
 
     @Getter
     @Setter(AccessLevel.PROTECTED)
     private CategoriesGridView view;
 
-    protected CategoriesGridPresenter(UserContextHolder userContextHolder, CategoryService categoryService,
-                                      EnhancedCategoriesProvider dataProvider, ApplicationEventPublisher eventPublisher) {
-        this.userContextHolder = userContextHolder;
-        this.categoryService = categoryService;
+    protected CategoriesGridPresenter(EnhancedCategoriesProvider dataProvider, ApplicationEventPublisher eventPublisher,
+                                      FormattingService formattingService) {
         this.dataProvider = dataProvider;
         this.eventPublisher = eventPublisher;
+        this.formattingService = formattingService;
     }
 
     @Override
     @PostConstruct
     public abstract void initialize();
+
+    @Override
+    public String formatAmount(BigDecimal amount) {
+        return this.formattingService.formatAmount(amount);
+    }
 
     @Override
     public void onEditRequested(Category category) {

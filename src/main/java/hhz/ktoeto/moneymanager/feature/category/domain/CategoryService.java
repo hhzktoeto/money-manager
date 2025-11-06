@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -32,21 +33,32 @@ public class CategoryService {
     public List<Category> getAllWithTransactionsCount(long userId) {
         List<Category> categories = doGetAll(userId);
         categories.forEach(category -> {
+            BigDecimal allTransactionsAmount = BigDecimal.ZERO;
+            BigDecimal expensesAmount = BigDecimal.ZERO;
+            BigDecimal incomesAmount = BigDecimal.ZERO;
             int incomesCount = 0;
             int expensesCount = 0;
 
             Set<Transaction> transactions = category.getTransactions();
             for (Transaction transaction : transactions) {
+                BigDecimal amount = transaction.getAmount();
                 if (Transaction.Type.INCOME.equals(transaction.getType())) {
                     incomesCount++;
+                    incomesAmount = incomesAmount.add(amount);
                 } else {
                     expensesCount++;
+                    expensesAmount = expensesAmount.add(amount);
                 }
+                allTransactionsAmount = allTransactionsAmount.add(amount);
             }
 
             category.setTransactionsCount(transactions.size());
             category.setIncomeTransactionsCount(incomesCount);
             category.setExpenseTransactionsCount(expensesCount);
+
+            category.setTransactionsAmount(allTransactionsAmount);
+            category.setIncomeTransactionsAmount(incomesAmount);
+            category.setExpenseTransactionsAmount(expensesAmount);
         });
 
         return categories;

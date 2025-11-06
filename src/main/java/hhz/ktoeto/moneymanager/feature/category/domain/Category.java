@@ -9,6 +9,7 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -59,9 +60,21 @@ public class Category {
 
     @Transient
     @ToString.Exclude
+    private BigDecimal transactionsAmount;
+
+    @Transient
+    @ToString.Exclude
     private int expenseTransactionsCount;
 
     @Transient
     @ToString.Exclude
+    private BigDecimal expenseTransactionsAmount;
+
+    @Transient
+    @ToString.Exclude
     private int incomeTransactionsCount;
+
+    @Transient
+    @ToString.Exclude
+    private BigDecimal incomeTransactionsAmount;
 }
