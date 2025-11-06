@@ -14,19 +14,21 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class IconSelector extends CustomField<String> {
 
+    private static final String DEFAULT_ICON_NAME = "default_icon.png";
+
     private final FlexLayout dialogOpenButton;
     private final IconSelectDialog iconSelectDialog;
     private final String iconFilePathPrefix;
     private final Image selectedIconImage;
 
-    private String selectedIconFileName = "default_icon.png";
+    private String selectedIconFileName = DEFAULT_ICON_NAME;
 
     public IconSelector(String iconFilePathPrefix) {
         this.iconFilePathPrefix = iconFilePathPrefix;
@@ -57,7 +59,7 @@ public class IconSelector extends CustomField<String> {
 
     @Override
     protected void setPresentationValue(String iconFileName) {
-        this.selectedIconFileName = iconFileName != null ? iconFileName : "default_icon.png";
+        this.selectedIconFileName = iconFileName != null ? iconFileName : DEFAULT_ICON_NAME;
         this.selectedIconImage.setSrc(this.iconFilePathPrefix + this.selectedIconFileName);
     }
 
@@ -82,20 +84,19 @@ public class IconSelector extends CustomField<String> {
                     LumoUtility.Gap.MEDIUM,
                     LumoUtility.Overflow.AUTO
             );
-            List<String> iconFiles = new ArrayList<>();
+            List<String> iconFiles;
             try {
                 ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
                 Resource[] resources = resolver.getResources("classpath:/META-INF/resources/" + this.iconFilePathPrefix + "*.png");
-                iconFiles.addAll(
-                        Arrays.stream(resources)
-                                .map(Resource::getFilename)
-                                .filter(Objects::nonNull)
-                                .sorted()
-                                .toList()
-                );
+                iconFiles = Arrays.stream(resources)
+                        .map(Resource::getFilename)
+                        .filter(Objects::nonNull)
+                        .filter(name -> !Objects.equals(DEFAULT_ICON_NAME, name))
+                        .sorted()
+                        .toList();
             } catch (IOException e) {
                 log.error("Failed to load icons in IconSelectDialog", e);
-                iconFiles.add("default_icon.png");
+                throw new UncheckedIOException(e);
             }
 
             for (String iconFile : iconFiles) {
