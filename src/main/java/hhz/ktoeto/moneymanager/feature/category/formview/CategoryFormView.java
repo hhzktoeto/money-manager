@@ -19,7 +19,7 @@ public abstract class CategoryFormView extends AbstractFormView<Category> implem
     protected CategoryFormView(CategoryFormPresenter presenter) {
         super(presenter, Category.class);
 
-        this.iconSelector = new IconSelector();
+        this.iconSelector = new IconSelector("categories/");
         this.nameField = new TextField("Имя");
     }
 

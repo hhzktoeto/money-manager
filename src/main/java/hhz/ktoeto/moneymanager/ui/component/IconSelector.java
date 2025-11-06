@@ -8,21 +8,31 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class IconSelector extends CustomField<String> {
 
     private final FlexLayout dialogOpenButton;
     private final IconSelectDialog iconSelectDialog;
+    private final String iconFilePathPrefix;
+    private final Image selectedIconImage;
 
     private String selectedIconFileName = "default_icon.png";
-    private Image selectedIconImage;
 
-    public IconSelector() {
+    public IconSelector(String iconFilePathPrefix) {
+        this.iconFilePathPrefix = iconFilePathPrefix;
         this.dialogOpenButton = new FlexLayout();
-        this.iconSelectDialog = new IconSelectDialog(this::setValue);
-        this.selectedIconImage = new Image("categories/" + this.selectedIconFileName, "");
+        this.iconSelectDialog = new IconSelectDialog(this::setValue, this.iconFilePathPrefix);
+        this.selectedIconImage = new Image(this.iconFilePathPrefix + this.selectedIconFileName, "");
 
         this.selectedIconImage.setWidth(3, Unit.REM);
 
@@ -48,17 +58,20 @@ public class IconSelector extends CustomField<String> {
     @Override
     protected void setPresentationValue(String iconFileName) {
         this.selectedIconFileName = iconFileName != null ? iconFileName : "default_icon.png";
-        this.selectedIconImage.setSrc("categories/" + this.selectedIconFileName);
+        this.selectedIconImage.setSrc(this.iconFilePathPrefix + this.selectedIconFileName);
     }
 
+    @Slf4j
     private static final class IconSelectDialog extends Composite<CustomDialog> {
 
         private final FlexLayout layout = new FlexLayout();
 
         private final SerializableConsumer<String> onSubmit;
+        private final String iconFilePathPrefix;
 
-        public IconSelectDialog(SerializableConsumer<String> onSubmit) {
+        public IconSelectDialog(SerializableConsumer<String> onSubmit, String iconFilePathPrefix) {
             this.onSubmit = onSubmit;
+            this.iconFilePathPrefix = iconFilePathPrefix;
         }
 
         @Override
@@ -69,7 +82,21 @@ public class IconSelector extends CustomField<String> {
                     LumoUtility.Gap.MEDIUM,
                     LumoUtility.Overflow.AUTO
             );
-            List<String> iconFiles = List.of("default_icon.png", "travel.png");
+            List<String> iconFiles = new ArrayList<>();
+            try {
+                ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+                Resource[] resources = resolver.getResources("classpath:/META-INF/resources/" + this.iconFilePathPrefix + "*.png");
+                iconFiles.addAll(
+                        Arrays.stream(resources)
+                                .map(Resource::getFilename)
+                                .filter(Objects::nonNull)
+                                .sorted()
+                                .toList()
+                );
+            } catch (IOException e) {
+                log.error("Failed to load icons in IconSelectDialog", e);
+                iconFiles.add("default_icon.png");
+            }
 
             for (String iconFile : iconFiles) {
                 FlexLayout iconContainer = new FlexLayout();
@@ -82,7 +109,7 @@ public class IconSelector extends CustomField<String> {
                         LumoUtility.JustifyContent.CENTER
                 );
 
-                Image icon = new Image("categories/" + iconFile, "");
+                Image icon = new Image(this.iconFilePathPrefix + iconFile, "");
                 icon.setWidth(3, Unit.REM);
 
                 iconContainer.add(icon);
