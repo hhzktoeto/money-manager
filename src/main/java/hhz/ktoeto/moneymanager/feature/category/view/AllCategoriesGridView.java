@@ -31,7 +31,7 @@ public class AllCategoriesGridView extends CategoriesGridView {
     protected VerticalLayout initContent() {
         VerticalLayout root = super.initContent();
 
-        this.configureGrid();
+        this.configureSortingAndDetails();
 
         return root;
     }
@@ -46,7 +46,7 @@ public class AllCategoriesGridView extends CategoriesGridView {
         grid.setPageSize(25);
     }
 
-    private void configureGrid() {
+    private void configureSortingAndDetails() {
         Grid<Category> grid = this.getRootGrid();
 
         Grid.Column<Category> detailsOpenColumn = grid.addColumn(new CategoryDetailsOpenerRenderer(grid))
@@ -136,6 +136,13 @@ public class AllCategoriesGridView extends CategoriesGridView {
                             LumoUtility.TextColor.SUCCESS,
                             MaterialIcons.TRENDING_UP
                     ));
+                }
+                if (category.getTransactionsCount() == 0 && category.getIncomeTransactionsCount() == 0) {
+                    Span noTransactions = new Span("Нет транзакций");
+                    noTransactions.addClassNames(
+                            LumoUtility.TextColor.DISABLED
+                    );
+                    statsContainer.add(noTransactions);
                 }
 
                 layout.add(statsContainer);
