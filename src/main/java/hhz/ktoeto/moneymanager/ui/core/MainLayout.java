@@ -75,6 +75,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
             this.content.getElement().removeAllChildren();
             this.content.getElement().appendChild(content.getElement());
         }
+
+        this.desktopNavigation.highlightSelected();
+        this.mobileNavigation.highlightSelected();
     }
 
     private void updateResponsive(int screenWidth) {

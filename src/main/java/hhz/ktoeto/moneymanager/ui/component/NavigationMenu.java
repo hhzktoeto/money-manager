@@ -1,6 +1,7 @@
 package hhz.ktoeto.moneymanager.ui.component;
 
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -11,28 +12,32 @@ import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.constant.Routes;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.List;
 
-@RequiredArgsConstructor
 public class NavigationMenu extends Composite<HorizontalLayout> {
 
     private final Mode mode;
+    private final Tabs tabs;
+
+    public NavigationMenu(Mode mode) {
+        this.mode = mode;
+        this.tabs = new Tabs();
+    }
 
     @Override
     protected HorizontalLayout initContent() {
         HorizontalLayout root = new HorizontalLayout();
         root.addClassNames(rootClassNames());
 
-        Tabs tabs = new Tabs();
-        tabs.addThemeVariants(TabsVariant.LUMO_EQUAL_WIDTH_TABS, TabsVariant.LUMO_MINIMAL);
-        tabs.addClassNames(
+        this.tabs.addThemeVariants(TabsVariant.LUMO_EQUAL_WIDTH_TABS, TabsVariant.LUMO_MINIMAL);
+        this.tabs.addClassNames(
                 LumoUtility.BoxSizing.BORDER,
                 LumoUtility.Width.FULL,
                 LumoUtility.Gap.MEDIUM
         );
-        root.add(tabs);
+        root.add(this.tabs);
 
         if (mode == Mode.MOBILE) {
             root.setVisible(false);
@@ -42,9 +47,27 @@ public class NavigationMenu extends Composite<HorizontalLayout> {
         Arrays.stream(Routes.values())
                 .filter(Routes::isMenuItem)
                 .map(this::createLink)
-                .forEach(link -> tabs.add(new Tab(link)));
+                .forEach(link -> this.tabs.add(new Tab(link)));
 
         return root;
+    }
+
+    public void highlightSelected() {
+        String currentPath = UI.getCurrent().getInternals().getActiveViewLocation().getPath();
+        List<Tab> tabList = this.tabs.getChildren()
+                .filter(Tab.class::isInstance)
+                .map(Tab.class::cast)
+                .toList();
+
+        for (Tab tab : tabList) {
+            if (tab.getChildren().findFirst().orElse(null) instanceof RouterLink link) {
+                String href = link.getHref();
+                if (currentPath.equals(href)) {
+                    this.tabs.setSelectedTab(tab);
+                    return;
+                }
+            }
+        }
     }
 
     private RouterLink createLink(Routes route) {
