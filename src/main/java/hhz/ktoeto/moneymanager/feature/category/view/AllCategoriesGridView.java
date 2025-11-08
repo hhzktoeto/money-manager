@@ -46,6 +46,11 @@ public class AllCategoriesGridView extends CategoriesGridView {
         grid.setPageSize(25);
     }
 
+    @Override
+    protected boolean isAddNewCategoryButtonVisible() {
+        return true;
+    }
+
     private void configureSortingAndDetails() {
         Grid<Category> grid = this.getRootGrid();
 
@@ -55,7 +60,8 @@ public class AllCategoriesGridView extends CategoriesGridView {
                 .setTextAlign(ColumnTextAlign.CENTER);
         Grid.Column<Category> nameColumn = grid.getColumnByKey("name")
                 .setHeader("По имени")
-                .setSortable(true);
+                .setSortable(true)
+                .setComparator(Comparator.comparing(Category::getName, String.CASE_INSENSITIVE_ORDER));
         Grid.Column<Category> categoryTransactionsCountColumn = grid.getColumnByKey("transactions.count")
                 .setHeader("По популярности")
                 .setSortable(true)

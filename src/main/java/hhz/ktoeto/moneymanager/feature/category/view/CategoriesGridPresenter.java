@@ -5,7 +5,9 @@ import hhz.ktoeto.moneymanager.feature.category.data.CategoriesDataProvider;
 import hhz.ktoeto.moneymanager.feature.category.data.EnhancedCategoriesProvider;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.ViewPresenter;
+import hhz.ktoeto.moneymanager.ui.event.CategoryCreateRequested;
 import hhz.ktoeto.moneymanager.ui.event.CategoryEditRequested;
+import hhz.ktoeto.moneymanager.ui.mixin.CanCreate;
 import hhz.ktoeto.moneymanager.ui.mixin.CanEdit;
 import hhz.ktoeto.moneymanager.ui.mixin.CanFormatAmount;
 import hhz.ktoeto.moneymanager.ui.mixin.HasCategoriesProvider;
@@ -17,7 +19,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 
-public abstract class CategoriesGridPresenter implements ViewPresenter, HasCategoriesProvider, CanEdit<Category>, CanFormatAmount {
+public abstract class CategoriesGridPresenter implements ViewPresenter, HasCategoriesProvider, CanEdit<Category>, CanCreate, CanFormatAmount {
 
     private final EnhancedCategoriesProvider dataProvider;
     private final transient FormattingService formattingService;
@@ -46,6 +48,11 @@ public abstract class CategoriesGridPresenter implements ViewPresenter, HasCateg
     @Override
     public void onEditRequested(Category category) {
         this.eventPublisher.publishEvent(new CategoryEditRequested(this, category));
+    }
+
+    @Override
+    public void onCreateRequested() {
+        this.eventPublisher.publishEvent(new CategoryCreateRequested(this));
     }
 
     @Override

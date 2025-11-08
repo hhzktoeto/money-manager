@@ -8,6 +8,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -15,8 +16,10 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.View;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
+import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 public abstract class CategoriesGridView extends Composite<VerticalLayout> implements View {
 
@@ -26,26 +29,52 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
     @Getter(AccessLevel.PROTECTED)
     private final Grid<Category> rootGrid;
 
+    private final FlexLayout addNewCategoryButton;
+
     protected CategoriesGridView(CategoriesGridPresenter presenter) {
         this.presenter = presenter;
 
         this.rootGrid = new Grid<>();
+        this.addNewCategoryButton = new FlexLayout(MaterialIcons.ADD.create(), new Span("Новая категория"));
     }
 
     protected abstract String getEmptyStateText();
 
     protected abstract void configurePagination(Grid<Category> grid);
 
+    protected abstract boolean isAddNewCategoryButtonVisible();
+
     @Override
     protected VerticalLayout initContent() {
         VerticalLayout root = new VerticalLayout();
         root.setPadding(false);
-        root.setSpacing(false);
-        root.setSizeFull();
+        root.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.Height.FULL,
+                LumoUtility.Gap.SMALL
+        );
 
         this.configureGrid();
 
-        root.add(this.rootGrid);
+        this.addNewCategoryButton.addClassNames(
+                StyleConstants.CLICKABLE,
+                LumoUtility.Width.FULL,
+                LumoUtility.BorderRadius.LARGE,
+                LumoUtility.Gap.SMALL,
+                LumoUtility.AlignItems.CENTER,
+                LumoUtility.JustifyContent.CENTER,
+                LumoUtility.Background.TRANSPARENT,
+                LumoUtility.Border.ALL,
+                LumoUtility.BorderColor.PRIMARY_50,
+                LumoUtility.TextColor.PRIMARY,
+                LumoUtility.FontSize.MEDIUM,
+                LumoUtility.FontWeight.BOLD
+        );
+        this.addNewCategoryButton.setHeight(2.5f, Unit.REM);
+        this.addNewCategoryButton.addClickListener(e -> this.presenter.onCreateRequested());
+        this.addNewCategoryButton.setVisible(this.isAddNewCategoryButtonVisible());
+
+        root.add(this.addNewCategoryButton, this.rootGrid);
 
         return root;
     }
@@ -59,6 +88,7 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
         this.rootGrid.setDataProvider(this.presenter.getCategoriesProvider());
         this.rootGrid.addClassNames(LumoUtility.Background.TRANSPARENT);
         this.rootGrid.addThemeVariants(
+                GridVariant.LUMO_COMPACT,
                 GridVariant.LUMO_NO_BORDER,
                 GridVariant.LUMO_NO_ROW_BORDERS
         );
