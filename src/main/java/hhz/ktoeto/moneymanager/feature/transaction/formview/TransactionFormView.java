@@ -3,7 +3,6 @@ package hhz.ktoeto.moneymanager.feature.transaction.formview;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -19,6 +18,7 @@ import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
 import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
 import hhz.ktoeto.moneymanager.ui.component.RussianDatePicker;
 import hhz.ktoeto.moneymanager.ui.mixin.CanAddCategory;
+import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.time.LocalDate;
 
@@ -44,7 +44,7 @@ public abstract class TransactionFormView extends AbstractFormView<Transaction> 
         this.amountInput = new AmountInputCalculator();
         this.datePicker = new RussianDatePicker("Дата", LocalDate.now());
         this.descriptionArea = new TextArea("Описание");
-        this.createCategoryButton = new Button(VaadinIcon.PLUS.create());
+        this.createCategoryButton = new Button(MaterialIcons.ADD.create());
     }
 
     @Override

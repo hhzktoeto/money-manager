@@ -6,7 +6,6 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Page;
@@ -19,12 +18,13 @@ import hhz.ktoeto.moneymanager.ui.component.NavigationMenu;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 import hhz.ktoeto.moneymanager.ui.event.TransactionCreateRequested;
 import org.springframework.context.ApplicationEventPublisher;
+import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 @UIScope
 @SpringComponent
 public class MainLayout extends VerticalLayout implements RouterLayout {
 
-    private final ApplicationEventPublisher eventPublisher;
+    private final transient ApplicationEventPublisher eventPublisher;
 
     private final NavigationMenu desktopNavigation;
     private final NavigationMenu mobileNavigation;
@@ -46,7 +46,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         this.content = new VerticalLayout();
 
         this.mobileNavigation = new NavigationMenu(NavigationMenu.Mode.MOBILE);
-        this.addTransactionButtonMobile = new Button(VaadinIcon.PLUS.create());
+        this.addTransactionButtonMobile = new Button(MaterialIcons.ADD.create());
 
         this.configureHeader();
         this.configureAppLogo();

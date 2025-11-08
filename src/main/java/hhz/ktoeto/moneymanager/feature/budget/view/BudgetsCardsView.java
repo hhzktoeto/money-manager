@@ -5,7 +5,6 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
@@ -17,6 +16,7 @@ import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,7 +30,7 @@ public abstract class BudgetsCardsView extends Composite<Div> implements View, H
 
     protected BudgetsCardsView(BudgetsCardsPresenter presenter) {
         this.presenter = presenter;
-        this.addNewBudgetButton = new FlexLayout(VaadinIcon.PLUS.create(), new Span("Новый бюджет"));
+        this.addNewBudgetButton = new FlexLayout(MaterialIcons.ADD.create(), new Span("Новый бюджет"));
     }
 
     protected abstract String getEmptyStateText();

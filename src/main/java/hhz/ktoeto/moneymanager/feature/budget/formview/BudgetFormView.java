@@ -4,7 +4,6 @@ import com.vaadin.componentfactory.DateRange;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
@@ -21,6 +20,7 @@ import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
 import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
 import hhz.ktoeto.moneymanager.ui.component.ToggleButtonGroup;
 import hhz.ktoeto.moneymanager.ui.mixin.CanAddCategory;
+import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 public abstract class BudgetFormView extends AbstractFormView<Budget> {
 
@@ -48,7 +48,7 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
         this.nameField = new TextField("Название");
         this.scopeToggle = new ToggleButtonGroup<>("Учитываемые транзакции");
         this.categoriesSelect = new MultiSelectComboBox<>("Выберите категории");
-        this.createCategoryButton = new Button(VaadinIcon.PLUS.create());
+        this.createCategoryButton = new Button(MaterialIcons.ADD.create());
         this.renewableCheckbox = new Checkbox("Обновлять автоматически", true);
         this.activePeriodToggle = new ToggleButtonGroup<>();
         this.dateRangePicker = new RussianDateRangePicker("Период активности бюджета");
