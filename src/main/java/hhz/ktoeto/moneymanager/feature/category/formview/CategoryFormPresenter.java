@@ -11,8 +11,8 @@ import lombok.Getter;
 @Getter(AccessLevel.PROTECTED)
 public abstract class CategoryFormPresenter extends AbstractFormViewPresenter<Category> {
 
-    private final CategoryService categoryService;
-    private final UserContextHolder userContextHolder;
+    private final transient CategoryService categoryService;
+    private final transient UserContextHolder userContextHolder;
 
     protected CategoryFormPresenter(CategoryService categoryService, UserContextHolder userContextHolder) {
         this.categoryService = categoryService;
@@ -23,7 +23,7 @@ public abstract class CategoryFormPresenter extends AbstractFormViewPresenter<Ca
     public void onDelete() {
         DeleteConfirmDialog confirmDialog = new DeleteConfirmDialog();
         confirmDialog.setHeader("Удалить категорию?");
-        confirmDialog.setText("Все транзакции, цели и бюджеты так же будут удалены");
+        confirmDialog.setText("Все транзакции, связанные с категорией, так же будут удалены");
         confirmDialog.addConfirmListener(event -> {
             Category category = this.getView().getEntity();
             this.categoryService.delete(category.getId(), this.userContextHolder.getCurrentUserId());
