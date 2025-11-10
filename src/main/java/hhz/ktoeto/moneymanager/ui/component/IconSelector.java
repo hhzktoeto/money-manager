@@ -6,6 +6,7 @@ import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.function.SerializableConsumer;
+import com.vaadin.flow.function.SerializableSupplier;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class IconSelector extends CustomField<String> {
     public IconSelector(String iconFilePathPrefix) {
         this.iconFilePathPrefix = iconFilePathPrefix;
         this.dialogOpenButton = new FlexLayout();
-        this.iconSelectDialog = new IconSelectDialog(this::setValue, this.iconFilePathPrefix);
+        this.iconSelectDialog = new IconSelectDialog(this::setValue, this::getValue, this.iconFilePathPrefix);
         this.selectedIconImage = new Image(this.iconFilePathPrefix + this.selectedIconFileName, "");
 
         this.selectedIconImage.setWidth(3, Unit.REM);
@@ -69,21 +70,42 @@ public class IconSelector extends CustomField<String> {
         private final FlexLayout layout = new FlexLayout();
 
         private final SerializableConsumer<String> onSubmit;
+        private final SerializableSupplier<String> onGetSelected;
         private final String iconFilePathPrefix;
 
-        public IconSelectDialog(SerializableConsumer<String> onSubmit, String iconFilePathPrefix) {
+        public IconSelectDialog(SerializableConsumer<String> onSubmit,
+                                SerializableSupplier<String> onGetSelected,
+                                String iconFilePathPrefix) {
             this.onSubmit = onSubmit;
+            this.onGetSelected = onGetSelected;
             this.iconFilePathPrefix = iconFilePathPrefix;
         }
 
         @Override
         protected CustomDialog initContent() {
             CustomDialog root = new CustomDialog();
+            root.setTitle("Выберите иконку");
             this.layout.addClassNames(
                     LumoUtility.FlexWrap.WRAP,
                     LumoUtility.Gap.MEDIUM,
-                    LumoUtility.Overflow.AUTO
+                    LumoUtility.Overflow.AUTO,
+                    LumoUtility.JustifyContent.CENTER,
+                    LumoUtility.Padding.Bottom.MEDIUM
             );
+
+            loadIcons();
+            root.add(this.layout);
+            return root;
+        }
+
+        private void open() {
+            loadIcons();
+            this.getContent().open();
+        }
+
+        private void loadIcons() {
+            this.layout.removeAll();
+
             List<String> iconFiles;
             try {
                 ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
@@ -99,6 +121,8 @@ public class IconSelector extends CustomField<String> {
                 throw new UncheckedIOException(e);
             }
 
+            String selectedNow = this.onGetSelected.get();
+
             for (String iconFile : iconFiles) {
                 FlexLayout iconContainer = new FlexLayout();
                 iconContainer.addClassNames(
@@ -110,24 +134,29 @@ public class IconSelector extends CustomField<String> {
                         LumoUtility.JustifyContent.CENTER
                 );
 
+                if (Objects.equals(selectedNow, iconFile)) {
+                    iconContainer.removeClassNames(LumoUtility.Background.CONTRAST_10);
+                    iconContainer.addClassNames(
+                            LumoUtility.Background.CONTRAST_20,
+                            LumoUtility.BorderColor.PRIMARY,
+                            LumoUtility.Border.ALL
+                    );
+                }
+
                 Image icon = new Image(this.iconFilePathPrefix + iconFile, "");
                 icon.setWidth(3, Unit.REM);
 
                 iconContainer.add(icon);
                 iconContainer.addClickListener(event -> {
+                    this.layout.getChildren().forEach(c -> c.removeClassNames(LumoUtility.BorderColor.PRIMARY, LumoUtility.Border.ALL));
+                    iconContainer.addClassNames(LumoUtility.BorderColor.PRIMARY, LumoUtility.Border.ALL);
+
                     onSubmit.accept(iconFile);
-                    root.close();
+                    getContent().close();
                 });
 
                 this.layout.add(iconContainer);
             }
-
-            root.add(this.layout);
-            return root;
-        }
-
-        private void open() {
-            this.getContent().open();
         }
     }
 }
