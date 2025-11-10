@@ -21,6 +21,7 @@
 
         <date.range.picker.version>5.0.2</date.range.picker.version>
         <material.icons.version>3.0.1</material.icons.version>
+        <apex.charts.version>24.0.1</apex.charts.version>
     </properties>
 
     <repositories>
@@ -105,6 +106,11 @@
             <groupId>org.vaadin.addons.gl0b3</groupId>
             <artifactId>materialicons-flow</artifactId>
             <version>${material.icons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.appreciated</groupId>
+            <artifactId>apexcharts</artifactId>
+            <version>${apex.charts.version}</version>
         </dependency>
 
         <dependency>
