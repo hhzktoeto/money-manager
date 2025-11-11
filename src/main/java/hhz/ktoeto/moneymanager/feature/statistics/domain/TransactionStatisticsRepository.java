@@ -13,8 +13,8 @@ public interface TransactionStatisticsRepository extends JpaRepository<Transacti
 
     @Query("""
             SELECT DISTINCT
-                FUNCTION('YEAR', t.date) AS year,
-                FUNCTION('MONTH', t.date) AS month
+                EXTRACT(YEAR FROM t.date) AS year,
+                EXTRACT(MONTH FROM t.date) AS month
             FROM Transaction t
             WHERE t.userId = :userId
             ORDER BY 1 DESC, 2 DESC
