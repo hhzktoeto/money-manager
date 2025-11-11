@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.YearMonth;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,10 @@ public class ExpensesPiePresenter implements ViewPresenter, DataProviderListener
         this.dataProvider.addDataProviderListener(this);
         // Call on init to make charts visible without updating
         this.onDataChange(null);
+    }
+
+    public Set<YearMonth> getAvailableYearMonths() {
+        return this.dataProvider.fetchAvailableYearMonths();
     }
 
     public void setSelectedYearMonth(YearMonth selectedYearMonth) {

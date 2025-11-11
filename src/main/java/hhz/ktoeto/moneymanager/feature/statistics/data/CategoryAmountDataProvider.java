@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 
 import java.time.YearMonth;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @SpringComponent
@@ -25,6 +26,11 @@ public class CategoryAmountDataProvider extends AbstractBackEndDataProvider<Cate
     public Stream<CategoryAmount> fetch(YearMonth yearMonth) {
         long userId = userContextHolder.getCurrentUserId();
         return statisticsService.getExpensePieData(userId, yearMonth).stream();
+    }
+
+    public Set<YearMonth> fetchAvailableYearMonths() {
+        long userId = userContextHolder.getCurrentUserId();
+        return statisticsService.getTransactionsYearMonths(userId);
     }
 
     @Override

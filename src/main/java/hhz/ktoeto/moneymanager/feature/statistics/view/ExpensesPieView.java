@@ -9,11 +9,10 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import hhz.ktoeto.moneymanager.core.service.FormattingService;
 import hhz.ktoeto.moneymanager.feature.statistics.domain.CategoryAmount;
 import hhz.ktoeto.moneymanager.ui.View;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
-import hhz.ktoeto.moneymanager.ui.component.YearMonthPicker;
+import hhz.ktoeto.moneymanager.ui.component.ToggleButtonGroup;
 import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
 
 import java.math.BigDecimal;
@@ -23,11 +22,11 @@ import java.util.Set;
 public class ExpensesPieView extends Composite<FlexLayout> implements View, HasUpdatableData<Set<CategoryAmount>> {
 
     private final ExpensesPiePresenter presenter;
-    private final YearMonthPicker yearMonthPicker;
+    private final ToggleButtonGroup<YearMonth> yearMonthPicker;
 
     public ExpensesPieView(ExpensesPiePresenter presenter) {
         this.presenter = presenter;
-        this.yearMonthPicker = new YearMonthPicker(new FormattingService());
+        this.yearMonthPicker = new ToggleButtonGroup<>();
     }
 
     @Override
@@ -44,8 +43,9 @@ public class ExpensesPieView extends Composite<FlexLayout> implements View, HasU
                 LumoUtility.AlignItems.STRETCH
         );
 
-        this.yearMonthPicker.addChangeEventHandler((from, to) ->
-                this.presenter.setSelectedYearMonth(YearMonth.of(from.getYear(), to.getMonth()))
+        this.yearMonthPicker.setItems(this.presenter.getAvailableYearMonths().toArray(YearMonth[]::new));
+        this.yearMonthPicker.addValueChangeListener(event ->
+            this.presenter.setSelectedYearMonth(event.getValue())
         );
 
         root.add(this.yearMonthPicker);
