@@ -16,7 +16,7 @@ spring:
       max-age: ${REMEMBER_ME_MAX_AGE}
 
 vaadin:
-  allowed-packages: com.vaadin,org.vaadin,com.flowingcode,hhz.ktoeto
+  allowed-packages: com.vaadin,org.vaadin,com.flowingcode,hhz.ktoeto,com.github.appreciated.apexcharts,com.storedobject
 
 server:
   port: ${MONEY_MANAGER_PORT}

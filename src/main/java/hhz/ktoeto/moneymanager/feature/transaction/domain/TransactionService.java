@@ -25,16 +25,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TransactionService {
 
-    private final TransactionsRepository repository;
+    private final TransactionRepository repository;
     private final ApplicationEventPublisher eventPublisher;
 
-    public List<Transaction> getAll(long userId, TransactionFilter filter) {
-        TransactionSpecification specification = TransactionSpecification.builder()
-                .userId(userId)
-                .filter(filter)
-                .build();
+    public List<Transaction> getAll(long userId) {
+        return doGetAll(userId, null);
+    }
 
-        return repository.findAll(specification);
+    public List<Transaction> getAll(long userId, TransactionFilter filter) {
+        return doGetAll(userId, filter);
     }
 
     public List<Transaction> getAllForBudget(Budget budget) {
@@ -153,5 +152,14 @@ public class TransactionService {
                 .build();
 
         return repository.findAll(specification, pageable);
+    }
+
+    private List<Transaction> doGetAll(long userId, @Nullable TransactionFilter filter) {
+        TransactionSpecification specification = TransactionSpecification.builder()
+                .userId(userId)
+                .filter(filter)
+                .build();
+
+        return repository.findAll(specification);
     }
 }
