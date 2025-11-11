@@ -1,13 +1,14 @@
 package hhz.ktoeto.moneymanager.feature.statistics.domain;
 
+import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategoryAmount;
+import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.Statistics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -16,17 +17,23 @@ public class StatisticsService {
 
     private final TransactionStatisticsRepository transactionRepository;
 
-    public Set<YearMonth> getTransactionsYearMonths(long userId) {
+    public List<YearMonth> getTransactionsYearMonths(long userId) {
         return transactionRepository.findAllTransactionsYearMonths(userId)
                 .stream()
                 .map(projection -> YearMonth.of(projection.getYear(), projection.getMonth()))
-                .collect(Collectors.toSet());
+                .toList();
     }
 
-    public Set<CategoryAmount> getExpensePieData(long userId, YearMonth yearMonth) {
+    public Statistics getMonthCategoryStatistics(long userId, YearMonth yearMonth) {
         LocalDate fromDate = yearMonth.atDay(1);
         LocalDate toDate = yearMonth.atEndOfMonth();
 
-        return transactionRepository.findExpensesSumByCategory(userId, fromDate, toDate);
+        List<CategoryAmount> expenses = transactionRepository.findExpensesSumByCategory(userId, fromDate, toDate);
+        List<CategoryAmount> incomes = transactionRepository.findIncomesSumByCategory(userId, fromDate, toDate);
+
+        return Statistics.builder()
+                .expensesCategoryAmounts(expenses)
+                .incomesCategoryAmounts(incomes)
+                .build();
     }
 }

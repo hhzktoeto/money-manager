@@ -6,41 +6,43 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import hhz.ktoeto.moneymanager.core.event.*;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
-import hhz.ktoeto.moneymanager.feature.statistics.domain.CategoryAmount;
+import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.Statistics;
 import hhz.ktoeto.moneymanager.feature.statistics.domain.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 
 import java.time.YearMonth;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Stream;
 
 @SpringComponent
 @VaadinSessionScope
 @RequiredArgsConstructor
-public class CategoryAmountDataProvider extends AbstractBackEndDataProvider<CategoryAmount, Void> {
+public class MonthCategoryStatisticsProvider extends AbstractBackEndDataProvider<Statistics, Void> {
 
-    private final UserContextHolder userContextHolder;
-    private final StatisticsService statisticsService;
+    private final transient UserContextHolder userContextHolder;
+    private final transient StatisticsService statisticsService;
 
-    public Stream<CategoryAmount> fetch(YearMonth yearMonth) {
+    public Statistics getStatistics(YearMonth yearMonth) {
         long userId = userContextHolder.getCurrentUserId();
-        return statisticsService.getExpensePieData(userId, yearMonth).stream();
+
+        return statisticsService.getMonthCategoryStatistics(userId, yearMonth);
     }
 
-    public Set<YearMonth> fetchAvailableYearMonths() {
+    public List<YearMonth> getAvailableYearMonths() {
         long userId = userContextHolder.getCurrentUserId();
+
         return statisticsService.getTransactionsYearMonths(userId);
     }
 
     @Override
-    protected Stream<CategoryAmount> fetchFromBackEnd(Query<CategoryAmount, Void> query) {
+    protected Stream<Statistics> fetchFromBackEnd(Query<Statistics, Void> query) {
         // Unused
         return Stream.empty();
     }
 
     @Override
-    protected int sizeInBackEnd(Query<CategoryAmount, Void> query) {
+    protected int sizeInBackEnd(Query<Statistics, Void> query) {
         // Unused
         return 0;
     }
