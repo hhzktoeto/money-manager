@@ -26,6 +26,6 @@ public class StatisticsRouteView extends VerticalLayout {
                 LumoUtility.JustifyContent.START
         );
 
-        this.add(expensesPiePresenter.getView().asComponent(), expensesPiePresenter.getSoCharts().asComponent());
+        this.add(expensesPiePresenter.getView().asComponent());
     }
 }

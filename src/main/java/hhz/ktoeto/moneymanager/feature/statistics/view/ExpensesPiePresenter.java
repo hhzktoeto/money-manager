@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.YearMonth;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,9 +24,6 @@ public class ExpensesPiePresenter implements ViewPresenter, DataProviderListener
     @Getter
     @Setter(AccessLevel.PRIVATE)
     private ExpensesPieView view;
-    @Getter
-    @Setter(AccessLevel.PRIVATE)
-    private SOCharts soCharts;
 
     private YearMonth selectedYearMonth = YearMonth.now();
 
@@ -38,11 +34,8 @@ public class ExpensesPiePresenter implements ViewPresenter, DataProviderListener
     @Override
     @PostConstruct
     public void initialize() {
-        ExpensesPieView view = new ExpensesPieView(this);
-        this.setView(view);
-
-        SOCharts vaadinCharts = new SOCharts(this);
-        this.setSoCharts(vaadinCharts);
+        ExpensesPieView expensesPieView = new ExpensesPieView(this);
+        this.setView(expensesPieView);
 
         this.dataProvider.addDataProviderListener(this);
         // Call on init to make charts visible without updating
@@ -62,6 +55,5 @@ public class ExpensesPiePresenter implements ViewPresenter, DataProviderListener
     public void onDataChange(DataChangeEvent<CategoryAmount> event) {
         Set<CategoryAmount> categoryAmounts = this.dataProvider.fetch(this.selectedYearMonth).collect(Collectors.toSet());
         this.view.update(categoryAmounts);
-        this.soCharts.update(categoryAmounts);
     }
 }

@@ -1,9 +1,9 @@
 package hhz.ktoeto.moneymanager.feature.statistics.view;
 
-import com.github.appreciated.apexcharts.ApexCharts;
-import com.github.appreciated.apexcharts.ApexChartsBuilder;
-import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
-import com.github.appreciated.apexcharts.config.chart.Type;
+import com.storedobject.chart.CategoryData;
+import com.storedobject.chart.Data;
+import com.storedobject.chart.PieChart;
+import com.storedobject.chart.SOChart;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Unit;
@@ -61,8 +61,8 @@ public class ExpensesPieView extends Composite<FlexLayout> implements View, HasU
     public void update(Set<CategoryAmount> data) {
         FlexLayout root = this.getContent();
         root.removeAll();
-
         root.add(this.yearMonthPicker);
+
         if (data.isEmpty()) {
             EmptyDataImage emptyDataImage = new EmptyDataImage();
             emptyDataImage.setText("Нет транзакций для отображения статистики");
@@ -71,20 +71,22 @@ public class ExpensesPieView extends Composite<FlexLayout> implements View, HasU
             return;
         }
 
-        ApexCharts chart = this.mapToChart(data);
+        SOChart chart = new SOChart();
+        PieChart pieChart = this.mapToChart(data);
+        chart.add(pieChart);
+
         root.add(chart);
     }
 
-    private ApexCharts mapToChart(Set<CategoryAmount> data) {
-        return ApexChartsBuilder.get()
-                .withChart(ChartBuilder.get().withType(Type.PIE).build())
-                .withLabels(data.stream()
-                        .map(CategoryAmount::categoryName)
-                        .toArray(String[]::new))
-                .withSeries(data.stream()
-                        .map(CategoryAmount::amount)
-                        .map(BigDecimal::doubleValue)
-                        .toArray(Double[]::new))
-                .build();
+    private PieChart mapToChart(Set<CategoryAmount> data) {
+        CategoryData categoryNames = new CategoryData(data.stream()
+                .map(CategoryAmount::categoryName)
+                .toArray(String[]::new));
+        Data categoryAmounts = new Data(data.stream()
+                .map(CategoryAmount::amount)
+                .map(BigDecimal::doubleValue)
+                .toArray(Double[]::new));
+
+        return new PieChart(categoryNames, categoryAmounts);
     }
 }
