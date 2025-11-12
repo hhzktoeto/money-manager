@@ -11,19 +11,10 @@ public final class StyleConstants {
     public static final String TRANSFORM = "transform";
     public static final String BORDER_RADIUS = "border-radius";
 
-    public static final com.storedobject.chart.Color[] CHARTS_COLORS = {
-            new com.storedobject.chart.Color("#A44E58"), new com.storedobject.chart.Color("#6B8BAB"),
-            new com.storedobject.chart.Color("#EBCB8B"), new com.storedobject.chart.Color("#8FBCBB"),
-            new com.storedobject.chart.Color("#486B95"), new com.storedobject.chart.Color("#5E81AC"),
-            new com.storedobject.chart.Color("#B48EAD"), new com.storedobject.chart.Color("#D08770"),
-            new com.storedobject.chart.Color("#88C0D0"), new com.storedobject.chart.Color("#81A1C1"),
-            new com.storedobject.chart.Color("#C57B85"), new com.storedobject.chart.Color("#8EAA76"),
-            new com.storedobject.chart.Color("#BF616A"), new com.storedobject.chart.Color("#9E7897"),
-            new com.storedobject.chart.Color("#D5B575"), new com.storedobject.chart.Color("#A3BE8C"),
-            new com.storedobject.chart.Color("#79A6A5"), new com.storedobject.chart.Color("#DE9260"),
-            new com.storedobject.chart.Color("#BA7160"), new com.storedobject.chart.Color("#A94B54"),
-            new com.storedobject.chart.Color("#72AAB9"), new com.storedobject.chart.Color("#6A9AB0"),
-            new com.storedobject.chart.Color("#8DA876")
+    public static final String[] DONUT_CHARTS_COLORS = {
+            "#A44E58", "#6B8BAB", "#EBCB8B", "#8FBCBB", "#486B95", "#5E81AC", "#B48EAD", "#D08770",
+            "#88C0D0", "#81A1C1", "#C57B85", "#8EAA76", "#BF616A", "#9E7897", "#D5B575", "#A3BE8C",
+            "#79A6A5", "#DE9260", "#BA7160", "#A94B54", "#72AAB9", "#6A9AB0", "#8DA876"
     };
 
     public static final class Color {

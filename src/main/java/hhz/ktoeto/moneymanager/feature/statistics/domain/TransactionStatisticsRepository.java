@@ -1,6 +1,6 @@
 package hhz.ktoeto.moneymanager.feature.statistics.domain;
 
-import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategoryAmount;
+import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,7 +23,7 @@ public interface TransactionStatisticsRepository extends JpaRepository<Transacti
     List<YearMonthProjection> findAllTransactionsYearMonths(long userId);
 
     @Query("""
-            SELECT new hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategoryAmount(
+            SELECT new hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum(
                 c.name,
                 SUM(t.amount)
             )
@@ -35,10 +35,10 @@ public interface TransactionStatisticsRepository extends JpaRepository<Transacti
             HAVING SUM(t.amount) > 0
             ORDER BY SUM(t.amount) DESC
             """)
-    List<CategoryAmount> findExpensesSumByCategory(long userId, LocalDate from, LocalDate to);
+    List<CategorySum> findExpensesSumByCategory(long userId, LocalDate from, LocalDate to);
 
     @Query("""
-            SELECT new hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategoryAmount(
+            SELECT new hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum(
                 c.name,
                 SUM(t.amount)
             )
@@ -50,7 +50,7 @@ public interface TransactionStatisticsRepository extends JpaRepository<Transacti
             HAVING SUM(t.amount) > 0
             ORDER BY SUM(t.amount) DESC
             """)
-    List<CategoryAmount> findIncomesSumByCategory(long userId, LocalDate from, LocalDate to);
+    List<CategorySum> findIncomesSumByCategory(long userId, LocalDate from, LocalDate to);
 
     interface YearMonthProjection {
         int getYear();

@@ -82,10 +82,10 @@ public abstract class TransactionsGridView extends Composite<VerticalLayout> imp
         this.rootGrid.addColumn(new TransactionCategoryDateRenderer())
                 .setKey("date");
         this.rootGrid.addColumn(new NumberRenderer<>(Transaction::getAmount, NumberFormat.getCurrencyInstance(Locale.getDefault())))
-                .setKey("amount")
+                .setKey("sum")
                 .setTextAlign(ColumnTextAlign.END)
                 .setPartNameGenerator(transaction -> {
-                    StringBuilder stringBuilder = new StringBuilder("amount-column ");
+                    StringBuilder stringBuilder = new StringBuilder("sum-column ");
                     if (transaction.getType() == Transaction.Type.EXPENSE) {
                         stringBuilder.append("expense");
                     } else {

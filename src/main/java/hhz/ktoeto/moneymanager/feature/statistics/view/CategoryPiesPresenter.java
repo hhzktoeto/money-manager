@@ -24,6 +24,7 @@ public class CategoryPiesPresenter implements ViewPresenter, DataProviderListene
     @Setter(AccessLevel.PRIVATE)
     private CategoryPiesView view;
 
+    @Getter
     private YearMonth selectedYearMonth = YearMonth.now();
 
     public CategoryPiesPresenter(MonthCategoryStatisticsProvider dataProvider) {

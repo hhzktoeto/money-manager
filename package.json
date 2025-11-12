@@ -18,7 +18,6 @@
     "apexcharts": "3.49.0",
     "construct-style-sheets-polyfill": "3.1.0",
     "date-fns": "2.29.3",
-    "echarts": "5.6.0",
     "lit": "3.3.1",
     "onecolor": "4.1.0",
     "react": "18.3.1",
@@ -125,8 +124,7 @@
     "@vaadin-component-factory/vcf-date-range-picker": "$@vaadin-component-factory/vcf-date-range-picker",
     "@gl0b3/materialicons": "$@gl0b3/materialicons",
     "apexcharts": "$apexcharts",
-    "onecolor": "$onecolor",
-    "echarts": "$echarts"
+    "onecolor": "$onecolor"
   },
   "vaadin": {
     "dependencies": {
@@ -145,7 +143,6 @@
       "apexcharts": "3.49.0",
       "construct-style-sheets-polyfill": "3.1.0",
       "date-fns": "2.29.3",
-      "echarts": "5.6.0",
       "lit": "3.3.1",
       "onecolor": "4.1.0",
       "react": "18.3.1",
@@ -173,6 +170,6 @@
       "workbox-core": "7.3.0",
       "workbox-precaching": "7.3.0"
     },
-    "hash": "efa76fd290b55e0a7f6e15939e5068b10b4b730e45ee8afb5aaed71e35691713"
+    "hash": "42ec8b13afdc8cf2173d0a65a07fd8711633128dcf1ddc542e6f07b361d76497"
   }
 }

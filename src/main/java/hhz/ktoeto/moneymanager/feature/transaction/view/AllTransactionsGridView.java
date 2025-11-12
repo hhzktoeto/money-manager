@@ -77,7 +77,7 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
         Grid.Column<Transaction> categoryDateColumn = this.getRootGrid().getColumnByKey("date")
                 .setHeader("По дате")
                 .setSortable(true);
-        Grid.Column<Transaction> amountColumn = this.getRootGrid().getColumnByKey("amount")
+        Grid.Column<Transaction> amountColumn = this.getRootGrid().getColumnByKey("sum")
                 .setHeader("По сумме")
                 .setSortable(true);
 

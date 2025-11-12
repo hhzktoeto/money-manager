@@ -1,6 +1,6 @@
 package hhz.ktoeto.moneymanager.feature.statistics.domain;
 
-import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategoryAmount;
+import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum;
 import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.Statistics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +28,8 @@ public class StatisticsService {
         LocalDate fromDate = yearMonth.atDay(1);
         LocalDate toDate = yearMonth.atEndOfMonth();
 
-        List<CategoryAmount> expenses = transactionRepository.findExpensesSumByCategory(userId, fromDate, toDate);
-        List<CategoryAmount> incomes = transactionRepository.findIncomesSumByCategory(userId, fromDate, toDate);
+        List<CategorySum> expenses = transactionRepository.findExpensesSumByCategory(userId, fromDate, toDate);
+        List<CategorySum> incomes = transactionRepository.findIncomesSumByCategory(userId, fromDate, toDate);
 
         return Statistics.builder()
                 .expensesCategoryAmounts(expenses)
