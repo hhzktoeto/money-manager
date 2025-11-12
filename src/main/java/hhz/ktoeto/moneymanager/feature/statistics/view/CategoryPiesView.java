@@ -1,9 +1,6 @@
 package hhz.ktoeto.moneymanager.feature.statistics.view;
 
-import com.storedobject.chart.CategoryData;
-import com.storedobject.chart.Data;
-import com.storedobject.chart.PieChart;
-import com.storedobject.chart.SOChart;
+import com.storedobject.chart.*;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Unit;
@@ -14,6 +11,7 @@ import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.Statistics;
 import hhz.ktoeto.moneymanager.ui.View;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
 import hhz.ktoeto.moneymanager.ui.component.ToggleButtonGroup;
+import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
 
 import java.math.BigDecimal;
@@ -81,48 +79,46 @@ public class CategoryPiesView extends Composite<FlexLayout> implements View, Has
                 LumoUtility.AlignItems.STRETCH
         );
 
-        FlexLayout expensesChartContainer = new FlexLayout();
         List<CategoryAmount> expenses = data.expensesCategoryAmounts();
-        if (expenses.isEmpty()) {
-            EmptyDataImage emptyDataImage = new EmptyDataImage();
-            emptyDataImage.setText("Нет расходов для отображения статистики");
-            emptyDataImage.setImageMaxWidth(9, Unit.REM);
-            expensesChartContainer.add(emptyDataImage);
-        } else {
-            SOChart chart = new SOChart();
-            PieChart expensesPieChart = this.mapToChart(expenses);
-            chart.add(expensesPieChart);
-            expensesChartContainer.add(chart);
-        }
+        FlexLayout expensesChartContainer = this.getChartContainer(expenses, "Нет расходов для отображения статистики");
         piesLayout.add(expensesChartContainer);
 
-        FlexLayout incomesChartContainer = new FlexLayout();
         List<CategoryAmount> incomes = data.incomesCategoryAmounts();
-        if (incomes.isEmpty()) {
-            EmptyDataImage emptyDataImage = new EmptyDataImage();
-            emptyDataImage.setText("Нет доходов для отображения статистики");
-            emptyDataImage.setImageMaxWidth(9, Unit.REM);
-            incomesChartContainer.add(emptyDataImage);
-        } else {
-            SOChart chart = new SOChart();
-            PieChart incomesPieChart = this.mapToChart(incomes);
-            chart.add(incomesPieChart);
-            incomesChartContainer.add(chart);
-        }
+        FlexLayout incomesChartContainer = this.getChartContainer(incomes, "Нет доходов для отображения статистики");
         piesLayout.add(incomesChartContainer);
 
         root.add(piesLayout);
     }
 
-    private PieChart mapToChart(Collection<CategoryAmount> data) {
-        CategoryData categoryNames = new CategoryData(data.stream()
-                .map(CategoryAmount::categoryName)
-                .toArray(String[]::new));
-        Data categoryAmounts = new Data(data.stream()
-                .map(CategoryAmount::amount)
-                .map(BigDecimal::doubleValue)
-                .toArray(Double[]::new));
+    private FlexLayout getChartContainer(Collection<CategoryAmount> data, String emptyDataImageText) {
+        FlexLayout container = new FlexLayout();
+        container.addClassNames(LumoUtility.Width.FULL);
 
-        return new PieChart(categoryNames, categoryAmounts);
+        if (data.isEmpty()) {
+            EmptyDataImage image = new EmptyDataImage();
+            image.setText(emptyDataImageText);
+            image.setImageMaxWidth(9, Unit.REM);
+            container.add(image);
+        } else {
+            CategoryData categoryNames = new CategoryData(data.stream()
+                    .map(CategoryAmount::categoryName)
+                    .toArray(String[]::new));
+            Data categoryAmounts = new Data(data.stream()
+                    .map(CategoryAmount::amount)
+                    .map(BigDecimal::doubleValue)
+                    .toArray(Double[]::new));
+
+            PieChart pieChart = new PieChart(categoryNames, categoryAmounts);
+            pieChart.setColors(StyleConstants.CHARTS_COLORS);
+
+            SOChart chart = new SOChart();
+            chart.add(pieChart);
+            chart.disableDefaultLegend();
+            chart.getDefaultTooltip().setName("АААААААА");
+
+            container.add(chart);
+        }
+
+        return container;
     }
 }
