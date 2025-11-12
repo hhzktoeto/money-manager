@@ -4,27 +4,19 @@ import com.github.appreciated.apexcharts.ApexChartsBuilder;
 import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
 import com.github.appreciated.apexcharts.config.builder.DataLabelsBuilder;
 import com.github.appreciated.apexcharts.config.builder.LegendBuilder;
-import com.github.appreciated.apexcharts.config.builder.TitleSubtitleBuilder;
+import com.github.appreciated.apexcharts.config.builder.ResponsiveBuilder;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.legend.Position;
 import com.github.appreciated.apexcharts.config.legend.builder.LabelsBuilder;
-import com.github.appreciated.apexcharts.config.subtitle.Align;
-import com.github.appreciated.apexcharts.config.subtitle.builder.StyleBuilder;
+import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 
 import java.util.Collection;
 
 public class DonutChartBuilder extends ApexChartsBuilder {
 
-    public DonutChartBuilder(String title, Collection<String> labels, Collection<Double> series) {
-        this.withTitle(TitleSubtitleBuilder.get()
-                        .withText(title)
-                        .withAlign(Align.CENTER)
-                        .withStyle(StyleBuilder.get()
-                                .withColor(StyleConstants.Color.SECONDARY_TEXT)
-                                .build())
-                        .build())
-                .withChart(ChartBuilder.get()
+    public DonutChartBuilder(Collection<String> labels, Collection<Double> series) {
+        this.withChart(ChartBuilder.get()
                         .withType(Type.DONUT)
                         .build())
                 .withLabels(labels.toArray(String[]::new))
@@ -38,6 +30,14 @@ public class DonutChartBuilder extends ApexChartsBuilder {
                         .withPosition(Position.RIGHT)
                         .withLabels(LabelsBuilder.get()
                                 .withUseSeriesColors(true)
+                                .build())
+                        .build())
+                .withResponsive(ResponsiveBuilder.get()
+                        .withBreakpoint(480.0)
+                        .withOptions(OptionsBuilder.get()
+                                .withLegend(LegendBuilder.get()
+                                        .withPosition(Position.BOTTOM)
+                                        .build())
                                 .build())
                         .build());
     }

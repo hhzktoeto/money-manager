@@ -7,9 +7,8 @@ import java.util.Collection;
 
 public class CategorySumDonutBuilder extends DonutChartBuilder {
 
-    public CategorySumDonutBuilder(String title, Collection<CategorySum> data) {
-        super(title,
-                data.stream()
+    public CategorySumDonutBuilder(Collection<CategorySum> data) {
+        super(data.stream()
                         .map(CategorySum::categoryName)
                         .toList(),
                 data.stream()

@@ -1,0 +1,60 @@
+package hhz.ktoeto.moneymanager.feature.statistics.view;
+
+import com.vaadin.flow.data.provider.DataChangeEvent;
+import com.vaadin.flow.data.provider.DataProviderListener;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
+import hhz.ktoeto.moneymanager.feature.statistics.data.CategorySumProvider;
+import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum;
+import hhz.ktoeto.moneymanager.ui.ViewPresenter;
+import jakarta.annotation.PostConstruct;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@UIScope
+@SpringComponent
+public class CategoryDonutPresenter implements ViewPresenter, DataProviderListener<CategorySum> {
+
+    private final CategorySumProvider dataProvider;
+    @Getter
+    private CategoryDonutView view;
+
+    @Getter
+    private LocalDate fromDate;
+    @Setter
+    private LocalDate toDate;
+
+    public CategoryDonutPresenter(CategorySumProvider dataProvider) {
+        this.dataProvider = dataProvider;
+    }
+
+    @Override
+    @PostConstruct
+    public void initialize() {
+        this.view = new CategoryDonutView(this);
+
+        this.dataProvider.addDataProviderListener(this);
+        // Call on init to make charts visible without updating
+        this.onDataChange(null);
+    }
+
+    public void setDates(LocalDate fromDate, LocalDate toDate) {
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+        this.onDataChange(null);
+    }
+
+    @Override
+    public void onDataChange(DataChangeEvent<CategorySum> event) {
+        List<CategorySum> categorySums = this.dataProvider.getCategorySums(
+                this.fromDate,
+                this.toDate,
+                this.view.getSelectedTransactionType()
+        );
+
+        this.view.update(categorySums);
+    }
+}
