@@ -100,7 +100,8 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
             this.visibleComponent = image;
         } else {
             ApexCharts chart = new CategorySumDonutBuilder(data).build();
-            chart.setHeight("320");
+            // it actually sets max height
+            chart.setHeight("600");
             this.visibleComponent = chart;
         }
 

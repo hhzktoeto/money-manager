@@ -1,12 +1,11 @@
 package hhz.ktoeto.moneymanager.ui.component.chart;
 
 import com.github.appreciated.apexcharts.ApexChartsBuilder;
-import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
-import com.github.appreciated.apexcharts.config.builder.DataLabelsBuilder;
-import com.github.appreciated.apexcharts.config.builder.LegendBuilder;
+import com.github.appreciated.apexcharts.config.builder.*;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.legend.Position;
 import com.github.appreciated.apexcharts.config.legend.builder.LabelsBuilder;
+import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 
 import java.util.Collection;
@@ -16,6 +15,9 @@ public class DonutChartBuilder extends ApexChartsBuilder {
     public DonutChartBuilder(Collection<String> labels, Collection<Double> series) {
         this.withChart(ChartBuilder.get()
                         .withType(Type.DONUT)
+                        .build())
+                .withStroke(StrokeBuilder.get()
+                        .withShow(false)
                         .build())
                 .withLabels(labels.toArray(String[]::new))
                 .withSeries(series.toArray(Double[]::new))
@@ -28,6 +30,15 @@ public class DonutChartBuilder extends ApexChartsBuilder {
                         .withPosition(Position.BOTTOM)
                         .withLabels(LabelsBuilder.get()
                                 .withUseSeriesColors(true)
+                                .build())
+                        .withFontSize("16px")
+                        .build())
+                .withResponsive(ResponsiveBuilder.get()
+                        .withBreakpoint(480.0)
+                        .withOptions(OptionsBuilder.get()
+                                .withLegend(LegendBuilder.get()
+                                        .withFontSize("14px")
+                                        .build())
                                 .build())
                         .build());
     }
