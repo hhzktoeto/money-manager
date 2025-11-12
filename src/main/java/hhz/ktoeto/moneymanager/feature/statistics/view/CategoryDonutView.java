@@ -1,5 +1,6 @@
 package hhz.ktoeto.moneymanager.feature.statistics.view;
 
+import com.github.appreciated.apexcharts.ApexCharts;
 import com.vaadin.componentfactory.DateRange;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
@@ -40,28 +41,29 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
         root.addClassNames(
                 LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.Width.FULL,
+                LumoUtility.Height.MEDIUM,
                 LumoUtility.Gap.MEDIUM,
                 LumoUtility.AlignContent.CENTER,
                 LumoUtility.JustifyContent.BETWEEN
         );
 
-        FlexLayout settingsContainer = new FlexLayout(this.incomeExpenseToggle, this.dateRangePicker);
+        FlexLayout settingsContainer = new FlexLayout(this.dateRangePicker, this.incomeExpenseToggle);
         settingsContainer.addClassNames(
-                LumoUtility.Display.GRID,
-                LumoUtility.Grid.FLOW_COLUMN,
-                LumoUtility.Grid.Column.COLUMNS_1,
-                LumoUtility.Grid.Breakpoint.Small.COLUMNS_2,
+                LumoUtility.FlexDirection.COLUMN,
+                LumoUtility.FlexDirection.Breakpoint.Small.ROW,
                 LumoUtility.Width.FULL,
                 LumoUtility.Gap.SMALL,
-                LumoUtility.JustifyContent.BETWEEN,
+                LumoUtility.JustifyContent.EVENLY,
                 LumoUtility.AlignItems.BASELINE
         );
 
+        this.incomeExpenseToggle.setWidthFull();
         this.incomeExpenseToggle.setValue(Transaction.Type.EXPENSE);
         this.incomeExpenseToggle.addValueChangeListener(event ->
                 this.presenter.onDataChange(null)
         );
 
+        this.dateRangePicker.setWidthFull();
         this.dateRangePicker.addValueChangeListener(event -> {
             DateRange dateRange = event.getValue();
             this.presenter.setDates(dateRange.getStartDate(), dateRange.getEndDate());
@@ -93,11 +95,13 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
         if (data.isEmpty()) {
             EmptyDataImage image = new EmptyDataImage();
             image.setText("Нет транзакций для отображения статистики");
-            image.setImageMaxWidth(9, Unit.REM);
+            image.setImageMaxWidth(13, Unit.REM);
 
             this.visibleComponent = image;
         } else {
-            this.visibleComponent = new CategorySumDonutBuilder(data).build();
+            ApexCharts chart = new CategorySumDonutBuilder(data).build();
+            chart.setHeight("320");
+            this.visibleComponent = chart;
         }
 
         root.add(this.visibleComponent);

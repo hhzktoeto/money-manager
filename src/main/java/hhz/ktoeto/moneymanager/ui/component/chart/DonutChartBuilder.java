@@ -4,11 +4,9 @@ import com.github.appreciated.apexcharts.ApexChartsBuilder;
 import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
 import com.github.appreciated.apexcharts.config.builder.DataLabelsBuilder;
 import com.github.appreciated.apexcharts.config.builder.LegendBuilder;
-import com.github.appreciated.apexcharts.config.builder.ResponsiveBuilder;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.legend.Position;
 import com.github.appreciated.apexcharts.config.legend.builder.LabelsBuilder;
-import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 
 import java.util.Collection;
@@ -27,17 +25,9 @@ public class DonutChartBuilder extends ApexChartsBuilder {
                 .withColors(StyleConstants.DONUT_CHARTS_COLORS)
                 .withLegend(LegendBuilder.get()
                         .withFontFamily("Fira Sans Condensed")
-                        .withPosition(Position.RIGHT)
+                        .withPosition(Position.BOTTOM)
                         .withLabels(LabelsBuilder.get()
                                 .withUseSeriesColors(true)
-                                .build())
-                        .build())
-                .withResponsive(ResponsiveBuilder.get()
-                        .withBreakpoint(480.0)
-                        .withOptions(OptionsBuilder.get()
-                                .withLegend(LegendBuilder.get()
-                                        .withPosition(Position.BOTTOM)
-                                        .build())
                                 .build())
                         .build());
     }
