@@ -1,6 +1,7 @@
 package hhz.ktoeto.moneymanager.feature.statistics.view;
 
 import com.github.appreciated.apexcharts.ApexCharts;
+import com.storedobject.chart.SOChart;
 import com.vaadin.componentfactory.DateRange;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
@@ -14,6 +15,8 @@ import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
 import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
 import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
 import hhz.ktoeto.moneymanager.ui.component.chart.CategorySumDonutBuilder;
+import hhz.ktoeto.moneymanager.ui.component.chart.SOCategorySumDonutBuilder;
+import hhz.ktoeto.moneymanager.ui.component.chart.SODonutChartBuilder;
 import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
 
 import java.time.LocalDate;
@@ -98,10 +101,7 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
 
             this.visibleComponent = image;
         } else {
-            ApexCharts chart = new CategorySumDonutBuilder(data).build();
-            // it actually sets max height
-            chart.setHeight("600");
-            this.visibleComponent = chart;
+            this.visibleComponent = new SOCategorySumDonutBuilder(data).build();
         }
 
         root.add(this.visibleComponent);
