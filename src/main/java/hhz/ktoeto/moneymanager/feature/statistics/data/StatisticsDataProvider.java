@@ -8,6 +8,7 @@ import hhz.ktoeto.moneymanager.core.event.*;
 import hhz.ktoeto.moneymanager.core.security.UserContextHolder;
 import hhz.ktoeto.moneymanager.feature.statistics.domain.StatisticsService;
 import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum;
+import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.TransactionSum;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -19,7 +20,7 @@ import java.util.stream.Stream;
 @SpringComponent
 @VaadinSessionScope
 @RequiredArgsConstructor
-public class CategorySumProvider extends AbstractBackEndDataProvider<CategorySum, Void> {
+public class StatisticsDataProvider extends AbstractBackEndDataProvider<Object, Void> {
 
     private final transient UserContextHolder userContextHolder;
     private final transient StatisticsService statisticsService;
@@ -30,14 +31,20 @@ public class CategorySumProvider extends AbstractBackEndDataProvider<CategorySum
         return statisticsService.getCategorySums(userId, from, to, type);
     }
 
+    public List<TransactionSum> getTransactionSums() {
+        long userId = userContextHolder.getCurrentUserId();
+
+        return statisticsService.getTransactionSums(userId);
+    }
+
     @Override
-    protected Stream<CategorySum> fetchFromBackEnd(Query<CategorySum, Void> query) {
+    protected Stream<Object> fetchFromBackEnd(Query<Object, Void> query) {
         // Unused
         return Stream.empty();
     }
 
     @Override
-    protected int sizeInBackEnd(Query<CategorySum, Void> query) {
+    protected int sizeInBackEnd(Query<Object, Void> query) {
         // Unused
         return 0;
     }

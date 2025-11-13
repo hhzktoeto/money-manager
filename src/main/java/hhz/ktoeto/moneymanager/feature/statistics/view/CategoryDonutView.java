@@ -41,7 +41,6 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
         root.addClassNames(
                 LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.Width.FULL,
-                LumoUtility.Height.MEDIUM,
                 LumoUtility.Gap.MEDIUM,
                 LumoUtility.AlignContent.CENTER,
                 LumoUtility.JustifyContent.BETWEEN

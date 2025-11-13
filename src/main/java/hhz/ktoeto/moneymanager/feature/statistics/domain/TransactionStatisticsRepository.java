@@ -1,6 +1,7 @@
 package hhz.ktoeto.moneymanager.feature.statistics.domain;
 
 import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum;
+import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.TransactionSum;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,4 +27,18 @@ public interface TransactionStatisticsRepository extends JpaRepository<Transacti
             ORDER BY SUM(t.amount) DESC
             """)
     List<CategorySum> findCategoriesSums(long userId, LocalDate from, LocalDate to, Transaction.Type type);
+
+    @Query("""
+            SELECT new hhz.ktoeto.moneymanager.feature.statistics.domain.dto.TransactionSum(
+                EXTRACT(YEAR FROM t.date),
+                EXTRACT(MONTH FROM t.date),
+                SUM(CASE WHEN t.type = hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction.Type.EXPENSE THEN t.amount ELSE 0 END),
+                SUM(CASE WHEN t.type = hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction.Type.INCOME THEN t.amount ELSE 0 END)
+            )
+            FROM Transaction t
+            WHERE t.userId = :userId
+            GROUP BY EXTRACT(YEAR FROM t.date), EXTRACT(MONTH FROM t.date)
+            ORDER BY EXTRACT(YEAR FROM t.date) DESC, EXTRACT(MONTH FROM t.date) DESC
+            """)
+    List<TransactionSum> findTransactionsSums(long userId);
 }

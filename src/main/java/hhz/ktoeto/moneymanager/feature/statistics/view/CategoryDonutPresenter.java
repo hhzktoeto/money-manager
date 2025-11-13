@@ -4,7 +4,7 @@ import com.vaadin.flow.data.provider.DataChangeEvent;
 import com.vaadin.flow.data.provider.DataProviderListener;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import hhz.ktoeto.moneymanager.feature.statistics.data.CategorySumProvider;
+import hhz.ktoeto.moneymanager.feature.statistics.data.StatisticsDataProvider;
 import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum;
 import hhz.ktoeto.moneymanager.ui.ViewPresenter;
 import jakarta.annotation.PostConstruct;
@@ -16,9 +16,9 @@ import java.util.List;
 
 @UIScope
 @SpringComponent
-public class CategoryDonutPresenter implements ViewPresenter, DataProviderListener<CategorySum> {
+public class CategoryDonutPresenter implements ViewPresenter, DataProviderListener<Object> {
 
-    private final CategorySumProvider dataProvider;
+    private final StatisticsDataProvider dataProvider;
     @Getter
     private CategoryDonutView view;
 
@@ -27,7 +27,7 @@ public class CategoryDonutPresenter implements ViewPresenter, DataProviderListen
     @Setter
     private LocalDate toDate;
 
-    public CategoryDonutPresenter(CategorySumProvider dataProvider) {
+    public CategoryDonutPresenter(StatisticsDataProvider dataProvider) {
         this.dataProvider = dataProvider;
     }
 
@@ -48,7 +48,7 @@ public class CategoryDonutPresenter implements ViewPresenter, DataProviderListen
     }
 
     @Override
-    public void onDataChange(DataChangeEvent<CategorySum> event) {
+    public void onDataChange(DataChangeEvent<Object> event) {
         List<CategorySum> categorySums = this.dataProvider.getCategorySums(
                 this.fromDate,
                 this.toDate,
