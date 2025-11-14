@@ -100,7 +100,6 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
         } else {
             SOChart chartContainer = new SOChart();
             chartContainer.setWidthFull();
-            chartContainer.setMinHeight(25, Unit.REM);
 
             CategorySumDonut donutChart = new CategorySumDonut(data);
             chartContainer.add(donutChart, donutChart.getLegend());

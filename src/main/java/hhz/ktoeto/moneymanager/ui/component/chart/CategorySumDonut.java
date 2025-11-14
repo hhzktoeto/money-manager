@@ -31,9 +31,6 @@ public class CategorySumDonut extends CustomDonutChart {
         legendPosition.setBottom(Size.percentage(0));
         legendPosition.setTop(Size.percentage(80));
 
-        Padding padding = new Padding();
-        padding.setGetPaddingBottom(0);
-
         Legend legend = new Legend();
         legend.setTextStyle(textStyle);
         legend.setPosition(legendPosition);
