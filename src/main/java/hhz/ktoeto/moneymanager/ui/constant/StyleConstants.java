@@ -4,8 +4,8 @@ public final class StyleConstants {
 
     private StyleConstants() {}
 
-    public static final String CLICKABLE = "clickable";
     public static final String BG_COLOR = "background-color";
+    public static final String CLICKABLE = "clickable";
     public static final String COLOR = "color";
     public static final String TRANSITION = "transition";
     public static final String TRANSFORM = "transform";
@@ -17,9 +17,18 @@ public final class StyleConstants {
             "#79A6A5", "#DE9260", "#BA7160", "#A94B54", "#72AAB9", "#6A9AB0", "#8DA876"
     };
 
+    public static final class FontFamily {
+
+        private FontFamily() {}
+
+        public static final String MAIN_FONT = "Fira Sans Condensed";
+    }
+
     public static final class Color {
 
         private Color() {}
+
+        public static final String BASE = "var(--lumo-base-color)";
 
         public static final String PRIMARY_CONTRAST_40 = "var(--lumo-primary-contrast-color-40pct)";
 

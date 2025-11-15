@@ -1,6 +1,5 @@
 package hhz.ktoeto.moneymanager.feature.statistics.view;
 
-import com.github.appreciated.apexcharts.ApexCharts;
 import com.vaadin.componentfactory.DateRange;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
@@ -98,10 +97,7 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
 
             this.visibleComponent = image;
         } else {
-            ApexCharts chart = new CategorySumDonutBuilder(data).build();
-            // it actually sets max height
-            chart.setHeight("600");
-            this.visibleComponent = chart;
+            this.visibleComponent = new CategorySumDonutBuilder(data).build();
         }
 
         root.add(this.visibleComponent);
