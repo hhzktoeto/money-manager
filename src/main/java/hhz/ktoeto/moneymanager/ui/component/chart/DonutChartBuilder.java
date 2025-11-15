@@ -7,6 +7,7 @@ import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.chart.builder.EventsBuilder;
 import com.github.appreciated.apexcharts.config.datalables.builder.DropShadowBuilder;
 import com.github.appreciated.apexcharts.config.datalables.builder.StyleBuilder;
+import com.github.appreciated.apexcharts.config.legend.OnItemClick;
 import com.github.appreciated.apexcharts.config.legend.Position;
 import com.github.appreciated.apexcharts.config.legend.builder.LabelsBuilder;
 import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder;
@@ -56,6 +57,7 @@ public class DonutChartBuilder extends ApexChartsBuilder {
                         .withUseSeriesColors(true)
                         .build())
                 .withFontSize("16px")
+                .withOnItemClick(new OnItemClick(false))
                 .build();
     }
 
