@@ -38,7 +38,7 @@ public interface TransactionStatisticsRepository extends JpaRepository<Transacti
             FROM Transaction t
             WHERE t.userId = :userId
             GROUP BY EXTRACT(YEAR FROM t.date), EXTRACT(MONTH FROM t.date)
-            ORDER BY EXTRACT(YEAR FROM t.date) DESC, EXTRACT(MONTH FROM t.date) DESC
+            ORDER BY EXTRACT(YEAR FROM t.date) ASC, EXTRACT(MONTH FROM t.date) ASC
             """)
     List<TransactionSum> findTransactionsSums(long userId);
 }
