@@ -6,20 +6,40 @@ import com.github.appreciated.apexcharts.config.builder.*;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.chart.builder.ToolbarBuilder;
 import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder;
+import com.github.appreciated.apexcharts.config.stroke.Curve;
+import com.github.appreciated.apexcharts.config.theme.Mode;
 import com.github.appreciated.apexcharts.config.xaxis.builder.LabelsBuilder;
 import com.github.appreciated.apexcharts.config.xaxis.labels.builder.StyleBuilder;
 import com.github.appreciated.apexcharts.helper.Series;
 import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.TransactionSum;
+import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
+import hhz.ktoeto.moneymanager.ui.formatter.DoubleAsCompactFormatter;
 
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 public class TransactionSumArea extends ApexCharts {
 
-    public TransactionSumArea(Collection<TransactionSum> data) {
+    public TransactionSumArea() {
+        super.setChart(this.getChart());
+        super.setLegend(this.getLegend());
+        super.setDataLabels(this.getDataLabels());
+        super.setTooltip(this.getTooltip());
+        super.setResponsive(this.getResponsive());
+        super.setColors(StyleConstants.Color.ERROR, StyleConstants.Color.SUCCESS);
+        super.setGrid(this.getGrid());
+        super.setStroke(this.getStroke());
+        super.setTheme(ThemeBuilder.get()
+                .withMode(Mode.DARK)
+                .build());
+    }
+
+    public void updateData(Collection<TransactionSum> data) {
         String[] xLabels = data.stream()
                 .map(transactionSum -> {
                     YearMonth yearMonth = YearMonth.of(transactionSum.year(), transactionSum.month());
@@ -33,21 +53,19 @@ public class TransactionSumArea extends ApexCharts {
                 .map(transactionSum -> transactionSum.incomesSum().doubleValue())
                 .toArray(Double[]::new);
 
-        super.setChart(this.getChart());
-        super.setSeries(new Series<>("Расходы", expenses), new Series<>("Доходы", incomes));
-        super.setLegend(this.getLegend());
-        super.setDataLabels(this.getDataLabels());
         super.setYaxis(new YAxis[]{this.getYAxis()});
         super.setXaxis(this.getXAxis(xLabels));
-        super.setTooltip(this.getTooltip());
-        super.setResponsive(this.getResponsive());
-        super.setColors(StyleConstants.Color.ERROR, StyleConstants.Color.SUCCESS);
-        super.setGrid(this.getGrid());
+        super.setSeries(
+                new Series<>(Transaction.Type.EXPENSE.toString(), expenses),
+                new Series<>(Transaction.Type.INCOME.toString(), incomes)
+        );
+        super.updateConfig();
     }
 
     private Chart getChart() {
         return ChartBuilder.get()
                 .withType(Type.AREA)
+                .withBackground(StyleConstants.Color.BASE)
                 .withHeight("500")
                 .withToolbar(ToolbarBuilder.get()
                         .withShow(false)
@@ -64,31 +82,25 @@ public class TransactionSumArea extends ApexCharts {
     private DataLabels getDataLabels() {
         return DataLabelsBuilder.get()
                 .withEnabled(false)
-                .withStyle(com.github.appreciated.apexcharts.config.datalables.builder.StyleBuilder.get()
-                        .withFontSize("10px")
-                        .withFontFamily(StyleConstants.FontFamily.MAIN_FONT)
-                        .build())
                 .build();
     }
 
     private YAxis getYAxis() {
         return YAxisBuilder.get()
-                .withShow(true)
                 .withLabels(com.github.appreciated.apexcharts.config.yaxis.builder.LabelsBuilder.get()
-                        .withFormatter("""
-                                function(value) {
-                                    const formatter = new Intl.NumberFormat("ru", {
-                                      notation: "compact",
-                                      compactDisplay: "short"
-                                    });
-                                    return formatter.format(value);
-                                }
-                                """)
+                        .withFormatter(new DoubleAsCompactFormatter())
+                        .withStyle(com.github.appreciated.apexcharts.config.yaxis.labels.builder.StyleBuilder.get()
+                                .withColors(List.of(StyleConstants.Color.BODY_TEXT))
+                                .build())
                         .build())
                 .build();
     }
 
     private XAxis getXAxis(String[] labels) {
+        List<String> labelColors = new ArrayList<>(labels.length);
+        for (int i = 0; i < labels.length; i++) {
+            labelColors.add(StyleConstants.Color.BODY_TEXT);
+        }
         return XAxisBuilder.get()
                 .withCategories(labels)
                 .withLabels(LabelsBuilder.get()
@@ -97,6 +109,7 @@ public class TransactionSumArea extends ApexCharts {
                         .withRotateAlways(true)
                         .withStyle(StyleBuilder.get()
                                 .withFontSize("12px")
+                                .withColors(labelColors)
                                 .build())
                         .build())
                 .withTooltip(TooltipBuilder.get()
@@ -111,7 +124,6 @@ public class TransactionSumArea extends ApexCharts {
                 .withFillSeriesColor(false)
                 .withStyle(com.github.appreciated.apexcharts.config.tooltip.builder.StyleBuilder.get()
                         .build())
-                .withTheme("dark")
                 .build();
     }
 
@@ -137,6 +149,12 @@ public class TransactionSumArea extends ApexCharts {
         return GridBuilder.get()
                 .withStrokeDashArray(3.0)
                 .withBorderColor(StyleConstants.Color.DISABLED_TEXT)
+                .build();
+    }
+
+    private Stroke getStroke() {
+        return StrokeBuilder.get()
+                .withCurve(Curve.STRAIGHT)
                 .build();
     }
 }

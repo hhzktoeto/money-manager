@@ -19,7 +19,17 @@ public class TransactionAreaView extends Composite<FlexLayout> implements View, 
 
     private final TransactionAreaPresenter presenter;
 
-    private Component visibleComponent;
+    private final EmptyDataImage emptyDataImage;
+    private final TransactionSumArea transactionSumArea;
+
+    public TransactionAreaView(TransactionAreaPresenter presenter) {
+        this.presenter = presenter;
+
+        this.emptyDataImage = new EmptyDataImage();
+        this.emptyDataImage.setText("Нет транзакций для отображения статистики");
+        this.emptyDataImage.setImageMaxWidth(16, Unit.REM);
+        this.transactionSumArea = new TransactionSumArea();
+    }
 
     @Override
     protected FlexLayout initContent() {
@@ -29,6 +39,8 @@ public class TransactionAreaView extends Composite<FlexLayout> implements View, 
                 LumoUtility.AlignContent.CENTER,
                 LumoUtility.JustifyContent.CENTER
         );
+
+        root.add(this.emptyDataImage, transactionSumArea);
 
         return root;
     }
@@ -40,20 +52,13 @@ public class TransactionAreaView extends Composite<FlexLayout> implements View, 
 
     @Override
     public void update(List<TransactionSum> data) {
-        FlexLayout root = this.getContent();
-        if (this.visibleComponent != null) {
-            root.remove(this.visibleComponent);
-        }
         if (data.isEmpty()) {
-            EmptyDataImage image = new EmptyDataImage();
-            image.setText("Нет транзакций для отображения статистики");
-            image.setImageMaxWidth(13, Unit.REM);
-
-            this.visibleComponent = image;
+            this.emptyDataImage.setVisible(true);
+            this.transactionSumArea.setVisible(false);
         } else {
-            this.visibleComponent = new TransactionSumArea(data);
+            this.emptyDataImage.setVisible(false);
+            this.transactionSumArea.updateData(data);
+            this.transactionSumArea.setVisible(true);
         }
-
-        root.add(this.visibleComponent);
     }
 }

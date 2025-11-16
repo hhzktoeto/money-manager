@@ -25,12 +25,12 @@ public class StatisticsRouteView extends VerticalLayout {
                 LumoUtility.Height.FULL,
                 LumoUtility.AlignItems.START,
                 LumoUtility.JustifyContent.START,
-                LumoUtility.Gap.MEDIUM
+                LumoUtility.Gap.XSMALL
         );
 
         this.add(
-                transactionAreaPresenter.getView().asComponent(),
-                categoryDonutPresenter.getView().asComponent()
+                categoryDonutPresenter.getView().asComponent(),
+                transactionAreaPresenter.getView().asComponent()
         );
     }
 }
