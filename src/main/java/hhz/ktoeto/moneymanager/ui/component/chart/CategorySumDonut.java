@@ -5,10 +5,17 @@ import com.github.appreciated.apexcharts.config.*;
 import com.github.appreciated.apexcharts.config.builder.*;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.legend.Position;
+import com.github.appreciated.apexcharts.config.legend.builder.ItemMarginBuilder;
 import com.github.appreciated.apexcharts.config.legend.builder.LabelsBuilder;
+import com.github.appreciated.apexcharts.config.plotoptions.builder.PieBuilder;
+import com.github.appreciated.apexcharts.config.plotoptions.pie.builder.DonutBuilder;
+import com.github.appreciated.apexcharts.config.plotoptions.pie.builder.TotalBuilder;
+import com.github.appreciated.apexcharts.config.plotoptions.pie.builder.ValueBuilder;
 import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder;
 import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
+import hhz.ktoeto.moneymanager.ui.formatter.DoubleAsCurrencyFormatter;
+import hhz.ktoeto.moneymanager.ui.formatter.DonutTotalAsCurrencyFormatter;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,6 +30,7 @@ public class CategorySumDonut extends ApexCharts {
         super.setTooltip(this.getTooltip());
         super.setResponsive(this.getResponsive());
         super.setStroke(this.getStroke());
+        super.setPlotOptions(this.getPlotOptions());
     }
 
     public void updateData(Collection<CategorySum> data) {
@@ -40,6 +48,7 @@ public class CategorySumDonut extends ApexCharts {
 
         super.setLabels(labels);
         super.setSeries(series);
+        super.updateConfig();
     }
 
     private Chart getChart() {
@@ -59,6 +68,10 @@ public class CategorySumDonut extends ApexCharts {
         return LegendBuilder.get()
                 .withFontFamily(StyleConstants.FontFamily.MAIN_FONT)
                 .withPosition(Position.BOTTOM)
+                .withItemMargin(ItemMarginBuilder.get()
+                        .withHorizontal(10.0)
+                        .withVertical(5.0)
+                        .build())
                 .withLabels(LabelsBuilder.get()
                         .withUseSeriesColors(true)
                         .build())
@@ -68,8 +81,7 @@ public class CategorySumDonut extends ApexCharts {
 
     private Tooltip getTooltip() {
         return TooltipBuilder.get()
-                .withEnabled(true)
-                .withFillSeriesColor(false)
+                .withEnabled(false)
                 .build();
     }
 
@@ -77,9 +89,6 @@ public class CategorySumDonut extends ApexCharts {
         return ResponsiveBuilder.get()
                 .withBreakpoint(480.0)
                 .withOptions(OptionsBuilder.get()
-                        .withChart(ChartBuilder.get()
-                                .withHeight("300")
-                                .build())
                         .withLegend(LegendBuilder.get()
                                 .withFontSize("14px")
                                 .build())
@@ -92,6 +101,29 @@ public class CategorySumDonut extends ApexCharts {
                 .withWidth(1.0)
                 .withColors(StyleConstants.Color.BASE)
                 .withShow(true)
+                .build();
+    }
+
+    private PlotOptions getPlotOptions() {
+        return PlotOptionsBuilder.get()
+                .withPie(PieBuilder.get()
+                        .withExpandOnClick(false)
+                        .withDonut(DonutBuilder.get()
+                                .withLabels(com.github.appreciated.apexcharts.config.plotoptions.pie.builder.LabelsBuilder.get()
+                                        .withShow(true)
+                                        .withTotal(TotalBuilder.get()
+                                                .withShow(true)
+                                                .withLabel("Всего")
+                                                .withFormatter(new DonutTotalAsCurrencyFormatter())
+                                                .withColor(StyleConstants.Color.BODY_TEXT)
+                                                .build())
+                                        .withValue(ValueBuilder.get()
+                                                .withColor(StyleConstants.Color.BODY_TEXT)
+                                                .withFormatter(new DoubleAsCurrencyFormatter())
+                                                .build())
+                                        .build())
+                                .build())
+                        .build())
                 .build();
     }
 }
