@@ -15,8 +15,6 @@ import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
 import hhz.ktoeto.moneymanager.ui.component.chart.CategorySumDonut;
 import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
 
-import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 public class CategoryDonutView extends Composite<FlexLayout> implements View, HasUpdatableData<List<CategorySum>> {
@@ -72,13 +70,9 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
             DateRange dateRange = event.getValue();
             this.presenter.setDates(dateRange.getStartDate(), dateRange.getEndDate());
         });
-        this.dateRangePicker.addAttachListener(event -> {
-            DateRange dateRange = new DateRange(
-                    LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()),
-                    LocalDate.now().with(TemporalAdjusters.lastDayOfMonth())
-            );
-            this.dateRangePicker.setValue(dateRange);
-        });
+        this.dateRangePicker.addAttachListener(event ->
+                this.dateRangePicker.setValue(new DateRange(this.presenter.getFromDate(), this.presenter.getToDate()))
+        );
 
         FlexLayout donutContainer = new FlexLayout(this.emptyDataImage, this.categorySumDonut);
         donutContainer.addClassNames(

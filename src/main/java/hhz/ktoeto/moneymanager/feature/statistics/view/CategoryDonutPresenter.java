@@ -9,9 +9,9 @@ import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum;
 import hhz.ktoeto.moneymanager.ui.ViewPresenter;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @UIScope
@@ -24,7 +24,7 @@ public class CategoryDonutPresenter implements ViewPresenter, DataProviderListen
 
     @Getter
     private LocalDate fromDate;
-    @Setter
+    @Getter
     private LocalDate toDate;
 
     public CategoryDonutPresenter(StatisticsDataProvider dataProvider) {
@@ -35,6 +35,9 @@ public class CategoryDonutPresenter implements ViewPresenter, DataProviderListen
     @PostConstruct
     public void initialize() {
         this.view = new CategoryDonutView(this);
+
+        this.fromDate = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        this.toDate = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
 
         this.dataProvider.addDataProviderListener(this);
         // Call on init to make charts visible without updating
