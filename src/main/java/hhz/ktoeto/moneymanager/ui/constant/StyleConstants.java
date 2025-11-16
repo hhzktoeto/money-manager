@@ -43,6 +43,7 @@ public final class StyleConstants {
         public static final String SUCCESS_CONTRAST = "var(--lumo-success-contrast-color)";
         public static final String ERROR_CONTRAST = "var(--lumo-error-contrast-color)";
 
+        public static final String BODY_TEXT = "var(--lumo-body-text-color)";
         public static final String SECONDARY_TEXT = "var(--lumo-secondary-text-color)";
         public static final String DISABLED_TEXT = "var(--lumo-disabled-text-color)";
     }
