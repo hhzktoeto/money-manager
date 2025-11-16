@@ -28,6 +28,9 @@ public class DonutChartBuilder extends ApexChartsBuilder {
             actualLabels.add(label);
         }
         this.withChart(this.getChart())
+                .withStroke(StrokeBuilder.get()
+                        .withShow(false)
+                        .build())
                 .withLabels(actualLabels.toArray(String[]::new))
                 .withSeries(series.toArray(Double[]::new))
                 .withDataLabels(this.getDataLabels())
