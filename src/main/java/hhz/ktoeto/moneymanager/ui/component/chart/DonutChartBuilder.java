@@ -4,22 +4,31 @@ import com.github.appreciated.apexcharts.ApexChartsBuilder;
 import com.github.appreciated.apexcharts.config.*;
 import com.github.appreciated.apexcharts.config.builder.*;
 import com.github.appreciated.apexcharts.config.chart.Type;
-import com.github.appreciated.apexcharts.config.chart.builder.EventsBuilder;
-import com.github.appreciated.apexcharts.config.datalables.builder.DropShadowBuilder;
-import com.github.appreciated.apexcharts.config.datalables.builder.StyleBuilder;
-import com.github.appreciated.apexcharts.config.legend.OnItemClick;
 import com.github.appreciated.apexcharts.config.legend.Position;
 import com.github.appreciated.apexcharts.config.legend.builder.LabelsBuilder;
 import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 public class DonutChartBuilder extends ApexChartsBuilder {
 
     public DonutChartBuilder(Collection<String> labels, Collection<Double> series) {
+        Double seriesSum = series.stream().reduce(0d, Double::sum);
+        Iterator<String> labelsIterator = labels.iterator();
+        Iterator<Double> seriesIterator = series.iterator();
+
+        List<String> actualLabels = new ArrayList<>(labels.size());
+        while (labelsIterator.hasNext() && seriesIterator.hasNext()) {
+            Double spendingPercent = seriesIterator.next() / seriesSum * 100;
+            String label = "%s (%.1f%%)".formatted(labelsIterator.next(), spendingPercent);
+            actualLabels.add(label);
+        }
         this.withChart(this.getChart())
-                .withLabels(labels.toArray(String[]::new))
+                .withLabels(actualLabels.toArray(String[]::new))
                 .withSeries(series.toArray(Double[]::new))
                 .withDataLabels(this.getDataLabels())
                 .withColors(StyleConstants.DONUT_CHARTS_COLORS)
@@ -38,14 +47,7 @@ public class DonutChartBuilder extends ApexChartsBuilder {
 
     private DataLabels getDataLabels() {
         return DataLabelsBuilder.get()
-                .withStyle(StyleBuilder.get()
-                        .withFontFamily(StyleConstants.FontFamily.MAIN_FONT)
-                        .build())
-                .withDropShadow(DropShadowBuilder.get()
-                        .withEnable(true)
-                        .withOpacity(1.0)
-                        .build())
-                .withEnabled(true)
+                .withEnabled(false)
                 .build();
     }
 
@@ -57,7 +59,6 @@ public class DonutChartBuilder extends ApexChartsBuilder {
                         .withUseSeriesColors(true)
                         .build())
                 .withFontSize("16px")
-                .withOnItemClick(new OnItemClick(false))
                 .build();
     }
 
@@ -73,9 +74,7 @@ public class DonutChartBuilder extends ApexChartsBuilder {
                 .withBreakpoint(480.0)
                 .withOptions(OptionsBuilder.get()
                         .withChart(ChartBuilder.get()
-                                .withEvents(EventsBuilder.get()
-                                        .withDataPointSelection("")
-                                        .build())
+                                .withHeight("300")
                                 .build())
                         .withLegend(LegendBuilder.get()
                                 .withFontSize("14px")
