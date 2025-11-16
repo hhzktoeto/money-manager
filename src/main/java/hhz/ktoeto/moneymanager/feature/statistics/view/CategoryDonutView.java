@@ -12,7 +12,7 @@ import hhz.ktoeto.moneymanager.ui.View;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
 import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
 import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
-import hhz.ktoeto.moneymanager.ui.component.chart.CategorySumDonutBuilder;
+import hhz.ktoeto.moneymanager.ui.component.chart.CategorySumDonut;
 import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
 
 import java.time.LocalDate;
@@ -25,13 +25,19 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
     private final RussianDateRangePicker dateRangePicker;
     private final IncomeExpenseToggle<Transaction.Type> incomeExpenseToggle;
 
-    private Component visibleComponent;
+    private final EmptyDataImage emptyDataImage;
+    private final CategorySumDonut categorySumDonut;
 
     public CategoryDonutView(CategoryDonutPresenter presenter) {
         this.presenter = presenter;
 
         this.dateRangePicker = new RussianDateRangePicker("Период");
         this.incomeExpenseToggle = new IncomeExpenseToggle<>(Transaction.Type.EXPENSE, Transaction.Type.INCOME);
+
+        this.emptyDataImage = new EmptyDataImage();
+        this.emptyDataImage.setText("Нет транзакций для отображения статистики");
+        this.emptyDataImage.setImageMaxWidth(16, Unit.REM);
+        this.categorySumDonut = new CategorySumDonut();
     }
 
     @Override
@@ -74,7 +80,13 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
             this.dateRangePicker.setValue(dateRange);
         });
 
-        root.add(settingsContainer);
+        FlexLayout donutContainer = new FlexLayout(this.emptyDataImage, this.categorySumDonut);
+        donutContainer.addClassNames(
+                LumoUtility.Width.FULL,
+                LumoUtility.AlignItems.CENTER
+        );
+
+        root.add(settingsContainer, donutContainer);
 
         return root;
     }
@@ -86,21 +98,14 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
 
     @Override
     public void update(List<CategorySum> data) {
-        FlexLayout root = this.getContent();
-        if (this.visibleComponent != null) {
-            root.remove(this.visibleComponent);
-        }
         if (data.isEmpty()) {
-            EmptyDataImage image = new EmptyDataImage();
-            image.setText("Нет транзакций для отображения статистики");
-            image.setImageMaxWidth(13, Unit.REM);
-
-            this.visibleComponent = image;
+            this.emptyDataImage.setVisible(true);
+            this.categorySumDonut.setVisible(false);
         } else {
-            this.visibleComponent = new CategorySumDonutBuilder(data).build();
+            this.emptyDataImage.setVisible(false);
+            this.categorySumDonut.updateData(data);
+            this.categorySumDonut.setVisible(true);
         }
-
-        root.add(this.visibleComponent);
     }
 
     Transaction.Type getSelectedTransactionType() {

@@ -1,44 +1,45 @@
 package hhz.ktoeto.moneymanager.ui.component.chart;
 
-import com.github.appreciated.apexcharts.ApexChartsBuilder;
+import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.config.*;
 import com.github.appreciated.apexcharts.config.builder.*;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.legend.Position;
 import com.github.appreciated.apexcharts.config.legend.builder.LabelsBuilder;
 import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder;
+import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
-public class DonutChartBuilder extends ApexChartsBuilder {
+public class CategorySumDonut extends ApexCharts {
 
-    public DonutChartBuilder(Collection<String> labels, Collection<Double> series) {
-        Double seriesSum = series.stream().reduce(0d, Double::sum);
-        Iterator<String> labelsIterator = labels.iterator();
-        Iterator<Double> seriesIterator = series.iterator();
+    public CategorySumDonut() {
+        super.setChart(this.getChart());
+        super.setDataLabels(this.getDataLabels());
+        super.setColors(StyleConstants.DONUT_CHARTS_COLORS.toArray(String[]::new));
+        super.setLegend(this.getLegend());
+        super.setTooltip(this.getTooltip());
+        super.setResponsive(this.getResponsive());
+        super.setStroke(this.getStroke());
+    }
 
-        List<String> actualLabels = new ArrayList<>(labels.size());
-        while (labelsIterator.hasNext() && seriesIterator.hasNext()) {
-            Double spendingPercent = seriesIterator.next() / seriesSum * 100;
-            String label = "%s (%.1f%%)".formatted(labelsIterator.next(), spendingPercent);
-            actualLabels.add(label);
-        }
-        this.withChart(this.getChart())
-                .withStroke(StrokeBuilder.get()
-                        .withShow(false)
-                        .build())
-                .withLabels(actualLabels.toArray(String[]::new))
-                .withSeries(series.toArray(Double[]::new))
-                .withDataLabels(this.getDataLabels())
-                .withColors(StyleConstants.DONUT_CHARTS_COLORS)
-                .withLegend(this.getLegend())
-                .withTooltip(this.getTooltip())
-                .withResponsive(this.getResponsive())
-                .withStroke(this.getStroke());
+    public void updateData(Collection<CategorySum> data) {
+        Double[] series = data.stream()
+                .map(categorySum -> categorySum.sum().doubleValue())
+                .toArray(Double[]::new);
+        Double seriesSum = Arrays.stream(series).reduce(0.0, Double::sum);
+        String[] labels = data.stream()
+                .map(categorySum -> {
+                    Double value = categorySum.sum().doubleValue();
+                    Double percentage = value / seriesSum * 100;
+                    return "%s (%.1f%%)".formatted(categorySum.categoryName(), percentage);
+                })
+                .toArray(String[]::new);
+
+        super.setLabels(labels);
+        super.setSeries(series);
     }
 
     private Chart getChart() {

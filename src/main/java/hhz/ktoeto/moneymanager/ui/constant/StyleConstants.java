@@ -1,5 +1,7 @@
 package hhz.ktoeto.moneymanager.ui.constant;
 
+import java.util.List;
+
 public final class StyleConstants {
 
     private StyleConstants() {}
@@ -11,11 +13,11 @@ public final class StyleConstants {
     public static final String TRANSFORM = "transform";
     public static final String BORDER_RADIUS = "border-radius";
 
-    public static final String[] DONUT_CHARTS_COLORS = {
-            "#A44E58", "#6B8BAB", "#EBCB8B", "#8FBCBB", "#486B95", "#5E81AC", "#B48EAD", "#D08770",
-            "#88C0D0", "#81A1C1", "#C57B85", "#8EAA76", "#BF616A", "#9E7897", "#D5B575", "#A3BE8C",
-            "#79A6A5", "#DE9260", "#BA7160", "#A94B54", "#72AAB9", "#6A9AB0", "#8DA876"
-    };
+    public static final List<String> DONUT_CHARTS_COLORS = List.of(
+            "#8FBCBB", "#A3BE8C", "#5E81AC", "#EBCB8B", "#B48EAD", "#88C0D0", "#D08770", "#BF616A", "#A3D0CD",
+            "#B7D7A0", "#7A99C9", "#F2D9A7", "#CFA9C7", "#9BD4E3", "#D89C82", "#CC7781", "#B7DFDC", "#C9E8BA", "#A6C1E0",
+            "#F6E3C1", "#D9C1D9", "#AEE4EE", "#E1A88F", "#D68E94"
+    );
 
     public static final class FontFamily {
 
@@ -42,6 +44,7 @@ public final class StyleConstants {
         public static final String ERROR_CONTRAST = "var(--lumo-error-contrast-color)";
 
         public static final String SECONDARY_TEXT = "var(--lumo-secondary-text-color)";
+        public static final String DISABLED_TEXT = "var(--lumo-disabled-text-color)";
     }
 
     public static final class Translate {

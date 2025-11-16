@@ -8,7 +8,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.TransactionSum;
 import hhz.ktoeto.moneymanager.ui.View;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
-import hhz.ktoeto.moneymanager.ui.component.chart.TransactionSumAreaBuilder;
+import hhz.ktoeto.moneymanager.ui.component.chart.TransactionSumArea;
 import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
 import lombok.RequiredArgsConstructor;
 
@@ -51,7 +51,7 @@ public class TransactionAreaView extends Composite<FlexLayout> implements View, 
 
             this.visibleComponent = image;
         } else {
-            this.visibleComponent = new TransactionSumAreaBuilder(data).build();
+            this.visibleComponent = new TransactionSumArea(data);
         }
 
         root.add(this.visibleComponent);

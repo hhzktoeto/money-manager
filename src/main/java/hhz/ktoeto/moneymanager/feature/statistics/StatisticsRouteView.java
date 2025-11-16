@@ -29,8 +29,8 @@ public class StatisticsRouteView extends VerticalLayout {
         );
 
         this.add(
-                categoryDonutPresenter.getView().asComponent(),
-                transactionAreaPresenter.getView().asComponent()
+                transactionAreaPresenter.getView().asComponent(),
+                categoryDonutPresenter.getView().asComponent()
         );
     }
 }
