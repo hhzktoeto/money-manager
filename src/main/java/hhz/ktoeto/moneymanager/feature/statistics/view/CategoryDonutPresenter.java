@@ -1,5 +1,6 @@
 package hhz.ktoeto.moneymanager.feature.statistics.view;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.data.provider.DataChangeEvent;
 import com.vaadin.flow.data.provider.DataProviderListener;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -58,6 +59,6 @@ public class CategoryDonutPresenter implements ViewPresenter, DataProviderListen
                 this.view.getSelectedTransactionType()
         );
 
-        this.view.update(categorySums);
+        UI.getCurrent().access(() -> this.view.update(categorySums));
     }
 }

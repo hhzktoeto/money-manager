@@ -24,7 +24,9 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
     private final IncomeExpenseToggle<Transaction.Type> incomeExpenseToggle;
 
     private final EmptyDataImage emptyDataImage;
-    private final CategorySumDonut categorySumDonut;
+    private final FlexLayout donutContainer;
+
+    private CategorySumDonut categorySumDonut;
 
     public CategoryDonutView(CategoryDonutPresenter presenter) {
         this.presenter = presenter;
@@ -35,7 +37,7 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
         this.emptyDataImage = new EmptyDataImage();
         this.emptyDataImage.setText("Нет транзакций для отображения статистики");
         this.emptyDataImage.setImageMaxWidth(16, Unit.REM);
-        this.categorySumDonut = new CategorySumDonut();
+        this.donutContainer = new FlexLayout(this.emptyDataImage);
     }
 
     @Override
@@ -74,13 +76,12 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
                 this.dateRangePicker.setValue(new DateRange(this.presenter.getFromDate(), this.presenter.getToDate()))
         );
 
-        FlexLayout donutContainer = new FlexLayout(this.emptyDataImage, this.categorySumDonut);
-        donutContainer.addClassNames(
+        this.donutContainer.addClassNames(
                 LumoUtility.Width.FULL,
                 LumoUtility.AlignItems.CENTER
         );
 
-        root.add(settingsContainer, donutContainer);
+        root.add(settingsContainer, this.donutContainer);
 
         return root;
     }
@@ -91,15 +92,28 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
     }
 
     @Override
+    // a lot of pain is inside this method and it is finally working. Don't touch it until you REALLY sure you can make it work another way
     public void update(List<CategorySum> data) {
+        boolean isChartInContainer = this.donutContainer.getChildren()
+                .anyMatch(child -> child.equals(this.categorySumDonut));
+
         if (data.isEmpty()) {
+            if (isChartInContainer) {
+                this.donutContainer.remove(this.categorySumDonut);
+            }
             this.emptyDataImage.setVisible(true);
-            this.categorySumDonut.setVisible(false);
-        } else {
-            this.emptyDataImage.setVisible(false);
-            this.categorySumDonut.updateData(data);
-            this.categorySumDonut.setVisible(true);
+            return;
         }
+
+        if (this.categorySumDonut == null) {
+            this.categorySumDonut = new CategorySumDonut();
+        }
+        this.categorySumDonut.updateData(data);
+        if (!isChartInContainer) {
+            this.donutContainer.add(this.categorySumDonut);
+        }
+        this.emptyDataImage.setVisible(false);
+        this.categorySumDonut.setVisible(true);
     }
 
     Transaction.Type getSelectedTransactionType() {

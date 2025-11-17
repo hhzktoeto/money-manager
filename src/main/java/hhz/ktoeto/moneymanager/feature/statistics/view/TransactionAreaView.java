@@ -20,7 +20,8 @@ public class TransactionAreaView extends Composite<FlexLayout> implements View, 
     private final TransactionAreaPresenter presenter;
 
     private final EmptyDataImage emptyDataImage;
-    private final TransactionSumArea transactionSumArea;
+
+    private TransactionSumArea transactionSumArea;
 
     public TransactionAreaView(TransactionAreaPresenter presenter) {
         this.presenter = presenter;
@@ -28,7 +29,6 @@ public class TransactionAreaView extends Composite<FlexLayout> implements View, 
         this.emptyDataImage = new EmptyDataImage();
         this.emptyDataImage.setText("Нет транзакций для отображения статистики");
         this.emptyDataImage.setImageMaxWidth(16, Unit.REM);
-        this.transactionSumArea = new TransactionSumArea();
     }
 
     @Override
@@ -40,7 +40,7 @@ public class TransactionAreaView extends Composite<FlexLayout> implements View, 
                 LumoUtility.JustifyContent.CENTER
         );
 
-        root.add(this.emptyDataImage, transactionSumArea);
+        root.add(this.emptyDataImage);
 
         return root;
     }
@@ -52,13 +52,26 @@ public class TransactionAreaView extends Composite<FlexLayout> implements View, 
 
     @Override
     public void update(List<TransactionSum> data) {
+        FlexLayout root = this.getContent();
+        boolean isChartInRoot = root.getChildren()
+                .anyMatch(child -> child.equals(this.transactionSumArea));
+
         if (data.isEmpty()) {
+            if (isChartInRoot) {
+                root.remove(this.transactionSumArea);
+            }
             this.emptyDataImage.setVisible(true);
-            this.transactionSumArea.setVisible(false);
-        } else {
-            this.emptyDataImage.setVisible(false);
-            this.transactionSumArea.updateData(data);
-            this.transactionSumArea.setVisible(true);
+            return;
         }
+
+        if (this.transactionSumArea == null) {
+            this.transactionSumArea = new TransactionSumArea();
+        }
+        this.transactionSumArea.updateData(data);
+        if (!isChartInRoot) {
+            root.add(this.transactionSumArea);
+        }
+        this.emptyDataImage.setVisible(false);
+        this.transactionSumArea.setVisible(true);
     }
 }

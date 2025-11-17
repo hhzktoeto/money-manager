@@ -1,5 +1,6 @@
 package hhz.ktoeto.moneymanager.feature.statistics.view;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.data.provider.DataChangeEvent;
 import com.vaadin.flow.data.provider.DataProviderListener;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -24,13 +25,6 @@ public class TransactionAreaPresenter implements ViewPresenter, DataProviderList
     private TransactionAreaView view;
 
     @Override
-    public void onDataChange(DataChangeEvent<Object> event) {
-        List<TransactionSum> transactionSums = this.dataProvider.getTransactionSums();
-
-        this.view.update(transactionSums);
-    }
-
-    @Override
     @PostConstruct
     public void initialize() {
         this.view = new TransactionAreaView(this);
@@ -38,5 +32,12 @@ public class TransactionAreaPresenter implements ViewPresenter, DataProviderList
         this.dataProvider.addDataProviderListener(this);
         // Call on init to make charts visible without updating
         this.onDataChange(null);
+    }
+
+    @Override
+    public void onDataChange(DataChangeEvent<Object> event) {
+        List<TransactionSum> transactionSums = this.dataProvider.getTransactionSums();
+
+        UI.getCurrent().access(() -> this.view.update(transactionSums));
     }
 }
