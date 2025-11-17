@@ -4,6 +4,7 @@ import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.config.*;
 import com.github.appreciated.apexcharts.config.builder.*;
 import com.github.appreciated.apexcharts.config.chart.Type;
+import com.github.appreciated.apexcharts.config.legend.HorizontalAlign;
 import com.github.appreciated.apexcharts.config.legend.Position;
 import com.github.appreciated.apexcharts.config.legend.builder.ItemMarginBuilder;
 import com.github.appreciated.apexcharts.config.legend.builder.LabelsBuilder;
@@ -14,8 +15,8 @@ import com.github.appreciated.apexcharts.config.plotoptions.pie.builder.ValueBui
 import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder;
 import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
-import hhz.ktoeto.moneymanager.ui.formatter.DoubleAsCurrencyFormatter;
 import hhz.ktoeto.moneymanager.ui.formatter.DonutTotalAsCurrencyFormatter;
+import hhz.ktoeto.moneymanager.ui.formatter.DoubleAsCurrencyFormatter;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -54,7 +55,7 @@ public class CategorySumDonut extends ApexCharts {
     private Chart getChart() {
         return ChartBuilder.get()
                 .withType(Type.DONUT)
-                .withHeight("450")
+                .withHeight("500")
                 .build();
     }
 
@@ -69,9 +70,10 @@ public class CategorySumDonut extends ApexCharts {
                 .withFontFamily(StyleConstants.FontFamily.MAIN_FONT)
                 .withPosition(Position.BOTTOM)
                 .withItemMargin(ItemMarginBuilder.get()
-                        .withHorizontal(10.0)
                         .withVertical(5.0)
                         .build())
+                .withHorizontalAlign(HorizontalAlign.CENTER)
+                .withHeight(85.0)
                 .withLabels(LabelsBuilder.get()
                         .withUseSeriesColors(true)
                         .build())
