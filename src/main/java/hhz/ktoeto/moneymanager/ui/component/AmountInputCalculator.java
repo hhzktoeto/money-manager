@@ -56,12 +56,13 @@ public class AmountInputCalculator extends CustomField<BigDecimal> {
 
     @Override
     public void setInvalid(boolean invalid) {
+        super.setInvalid(invalid);
         this.numberField.setInvalid(invalid);
     }
 
     @Override
     public void setErrorMessage(String errorMessage) {
-        this.numberField.setErrorMessage(errorMessage);
+        super.setErrorMessage(errorMessage);
     }
 
     @Override
