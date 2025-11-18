@@ -1,4 +1,4 @@
-package hhz.ktoeto.moneymanager.ui.component;
+package hhz.ktoeto.moneymanager.ui.component.field;
 
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.customfield.CustomField;

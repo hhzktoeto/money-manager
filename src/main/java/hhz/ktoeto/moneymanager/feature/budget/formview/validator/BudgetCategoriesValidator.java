@@ -3,7 +3,7 @@ package hhz.ktoeto.moneymanager.feature.budget.formview.validator;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.binder.ValueContext;
-import hhz.ktoeto.moneymanager.ui.component.ToggleButtonGroup;
+import hhz.ktoeto.moneymanager.ui.component.field.ToggleButtonGroup;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import lombok.RequiredArgsConstructor;

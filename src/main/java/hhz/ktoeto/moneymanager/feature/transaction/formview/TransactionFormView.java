@@ -1,24 +1,21 @@
 package hhz.ktoeto.moneymanager.feature.transaction.formview;
 
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.category.data.SimpleCategoriesProvider;
-import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.formview.validator.TransactionAmountValidator;
+import hhz.ktoeto.moneymanager.feature.transaction.formview.validator.TransactionCategoryValidator;
 import hhz.ktoeto.moneymanager.feature.transaction.formview.validator.TransactionDescriptionValidator;
 import hhz.ktoeto.moneymanager.ui.AbstractFormView;
-import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
-import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
-import hhz.ktoeto.moneymanager.ui.component.RussianDatePicker;
+import hhz.ktoeto.moneymanager.ui.component.field.AmountInputCalculator;
+import hhz.ktoeto.moneymanager.ui.component.field.CategorySelectField;
+import hhz.ktoeto.moneymanager.ui.component.field.IncomeExpenseToggle;
+import hhz.ktoeto.moneymanager.ui.component.field.RussianDatePicker;
 import hhz.ktoeto.moneymanager.ui.mixin.CanAddCategory;
-import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.time.LocalDate;
 
@@ -28,11 +25,10 @@ public abstract class TransactionFormView extends AbstractFormView<Transaction> 
     private final SimpleCategoriesProvider categoryProvider;
 
     private final IncomeExpenseToggle<Transaction.Type> typeToggle;
-    private final ComboBox<Category> categorySelect;
+    private final CategorySelectField categorySelect;
     private final AmountInputCalculator amountInput;
     private final DatePicker datePicker;
     private final TextArea descriptionArea;
-    private final Button createCategoryButton;
 
     protected TransactionFormView(TransactionFormPresenter presenter, SimpleCategoriesProvider categoryProvider) {
         super(presenter, Transaction.class);
@@ -40,11 +36,10 @@ public abstract class TransactionFormView extends AbstractFormView<Transaction> 
         this.categoryProvider = categoryProvider;
 
         this.typeToggle = new IncomeExpenseToggle<>(Transaction.Type.EXPENSE, Transaction.Type.INCOME);
-        this.categorySelect = new ComboBox<>("Категория");
+        this.categorySelect = new CategorySelectField();
         this.amountInput = new AmountInputCalculator();
         this.datePicker = new RussianDatePicker("Дата", LocalDate.now());
         this.descriptionArea = new TextArea("Описание");
-        this.createCategoryButton = new Button(MaterialIcons.ADD.create());
     }
 
     @Override
@@ -72,10 +67,9 @@ public abstract class TransactionFormView extends AbstractFormView<Transaction> 
                 .asRequired("Не выбран тип")
                 .bind(Transaction::getType, Transaction::setType);
         binder.forField(this.categorySelect)
-                .asRequired("Не выбрана категория")
+                .withValidator(new TransactionCategoryValidator())
                 .bind(Transaction::getCategory, Transaction::setCategory);
         binder.forField(this.amountInput)
-                .asRequired()
                 .withValidator(new TransactionAmountValidator())
                 .bind(Transaction::getAmount, Transaction::setAmount);
         binder.forField(this.datePicker)
@@ -88,23 +82,9 @@ public abstract class TransactionFormView extends AbstractFormView<Transaction> 
 
     private void configureFirstRow(FlexLayout row) {
         this.categorySelect.setItems(this.categoryProvider);
-        this.categorySelect.setItemLabelGenerator(Category::getName);
-        this.categorySelect.setWidthFull();
+        this.categorySelect.addButtonClickListener(event -> this.categoryAddDelegate.onCategoryAdd());
 
-        this.createCategoryButton.addClickListener(event -> this.categoryAddDelegate.onCategoryAdd());
-        this.createCategoryButton.setHeight(this.categorySelect.getHeight());
-        this.createCategoryButton.setTooltipText("Добавить категорию");
-
-        HorizontalLayout categoryWrapper = new HorizontalLayout(this.categorySelect, this.createCategoryButton);
-        categoryWrapper.setPadding(false);
-        categoryWrapper.addClassNames(
-                LumoUtility.Width.FULL,
-                LumoUtility.AlignItems.END,
-                LumoUtility.JustifyContent.BETWEEN,
-                LumoUtility.Gap.XSMALL
-        );
-
-        row.add(this.typeToggle, categoryWrapper);
+        row.add(this.typeToggle, this.categorySelect);
         row.addClassNames(
                 LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.FlexDirection.Breakpoint.Small.ROW,

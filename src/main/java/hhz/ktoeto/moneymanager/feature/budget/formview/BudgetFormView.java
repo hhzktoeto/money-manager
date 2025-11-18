@@ -1,11 +1,8 @@
 package hhz.ktoeto.moneymanager.feature.budget.formview;
 
 import com.vaadin.componentfactory.DateRange;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -13,14 +10,9 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.budget.domain.Budget;
 import hhz.ktoeto.moneymanager.feature.budget.formview.validator.*;
 import hhz.ktoeto.moneymanager.feature.category.data.SimpleCategoriesProvider;
-import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.ui.AbstractFormView;
-import hhz.ktoeto.moneymanager.ui.component.AmountInputCalculator;
-import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
-import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
-import hhz.ktoeto.moneymanager.ui.component.ToggleButtonGroup;
+import hhz.ktoeto.moneymanager.ui.component.field.*;
 import hhz.ktoeto.moneymanager.ui.mixin.CanAddCategory;
-import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 public abstract class BudgetFormView extends AbstractFormView<Budget> {
 
@@ -30,8 +22,7 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
     private final IncomeExpenseToggle<Budget.Type> typeToggle;
     private final TextField nameField;
     private final ToggleButtonGroup<Budget.Scope> scopeToggle;
-    private final MultiSelectComboBox<Category> categoriesSelect;
-    private final Button createCategoryButton;
+    private final CategoryMultiselectField categoryMultiselectField;
     private final Checkbox renewableCheckbox;
     private final ToggleButtonGroup<Budget.ActivePeriod> activePeriodToggle;
     private final RussianDateRangePicker dateRangePicker;
@@ -47,8 +38,7 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
         this.typeToggle = new IncomeExpenseToggle<>(Budget.Type.EXPENSE, Budget.Type.INCOME);
         this.nameField = new TextField("Название");
         this.scopeToggle = new ToggleButtonGroup<>("Учитываемые транзакции");
-        this.categoriesSelect = new MultiSelectComboBox<>("Выберите категории");
-        this.createCategoryButton = new Button(MaterialIcons.ADD.create());
+        this.categoryMultiselectField = new CategoryMultiselectField();
         this.renewableCheckbox = new Checkbox("Обновлять автоматически", true);
         this.activePeriodToggle = new ToggleButtonGroup<>();
         this.dateRangePicker = new RussianDateRangePicker("Период активности бюджета");
@@ -84,7 +74,7 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
         binder.forField(this.scopeToggle)
                 .asRequired("Не выбраны учитываемые транзакции")
                 .bind(Budget::getScope, Budget::setScope);
-        binder.forField(this.categoriesSelect)
+        binder.forField(this.categoryMultiselectField)
                 .withValidator(new BudgetCategoriesValidator(this.scopeToggle))
                 .bind(Budget::getCategories, Budget::setCategories);
         binder.forField(this.renewableCheckbox)
@@ -106,37 +96,24 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
     }
 
     private void configureFirstRow(FlexLayout row) {
-        this.categoriesSelect.setItems(categoryProvider);
-        this.categoriesSelect.setItemLabelGenerator(Category::getName);
-        this.categoriesSelect.setWidthFull();
-
-        this.createCategoryButton.addClickListener(event -> this.categoryAddDelegate.onCategoryAdd());
-        this.createCategoryButton.setTooltipText("Добавить категорию");
-
-        HorizontalLayout categoriesWrapper = new HorizontalLayout(this.categoriesSelect, this.createCategoryButton);
-        categoriesWrapper.setVisible(false);
-        categoriesWrapper.setPadding(false);
-        categoriesWrapper.addClassNames(
-                LumoUtility.Width.FULL,
-                LumoUtility.AlignItems.END,
-                LumoUtility.JustifyContent.BETWEEN,
-                LumoUtility.Gap.XSMALL
-        );
+        this.categoryMultiselectField.setItems(categoryProvider);
+        this.categoryMultiselectField.addButtonClickListener(event -> this.categoryAddDelegate.onCategoryAdd());
+        this.categoryMultiselectField.setVisible(false);
 
         this.scopeToggle.setItems(Budget.Scope.values());
         this.scopeToggle.setValue(Budget.Scope.ALL);
         this.scopeToggle.setItemLabelGenerator(Budget.Scope::toString);
         this.scopeToggle.setToggleable(false);
         this.scopeToggle.addValueChangeListener(event ->
-                categoriesWrapper.setVisible(event.getValue() == Budget.Scope.BY_CATEGORIES)
+                categoryMultiselectField.setVisible(event.getValue() == Budget.Scope.BY_CATEGORIES)
         );
 
+        row.add(this.scopeToggle, categoryMultiselectField);
         row.addClassNames(
                 LumoUtility.Gap.SMALL,
                 LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.FlexDirection.Breakpoint.Small.ROW
         );
-        row.add(this.scopeToggle, categoriesWrapper);
     }
 
     private void configureSecondRow(FlexLayout row) {
@@ -154,7 +131,6 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
                     boolean autoRenew = event.getValue();
                     activePeriodScroller.setVisible(autoRenew);
                     dateRangePicker.setVisible(!autoRenew);
-                    dateRangePicker.suppressKeyboard();
 
                     if (autoRenew) {
                         activePeriodToggle.setValue(previousActivePeriod);

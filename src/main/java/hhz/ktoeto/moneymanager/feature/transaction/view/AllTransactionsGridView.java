@@ -16,7 +16,7 @@ import hhz.ktoeto.moneymanager.feature.category.domain.Category;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionsSummaries;
-import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
+import hhz.ktoeto.moneymanager.ui.component.field.RussianDateRangePicker;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 import hhz.ktoeto.moneymanager.ui.mixin.HasFilter;
 import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
@@ -170,7 +170,6 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
             filter.setFromDate(selectedRange.getStartDate());
             filter.setToDate(selectedRange.getEndDate());
             this.hasFilterDelegate.setFilter(filter);
-            dateRangePicker.suppressKeyboard();
         });
 
         Div content = new Div(categoryMultiSelect, dateRangePicker);

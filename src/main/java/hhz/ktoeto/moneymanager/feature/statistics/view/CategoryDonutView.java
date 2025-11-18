@@ -10,8 +10,8 @@ import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.View;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
-import hhz.ktoeto.moneymanager.ui.component.IncomeExpenseToggle;
-import hhz.ktoeto.moneymanager.ui.component.RussianDateRangePicker;
+import hhz.ktoeto.moneymanager.ui.component.field.IncomeExpenseToggle;
+import hhz.ktoeto.moneymanager.ui.component.field.RussianDateRangePicker;
 import hhz.ktoeto.moneymanager.ui.component.chart.CategorySumDonut;
 import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
 

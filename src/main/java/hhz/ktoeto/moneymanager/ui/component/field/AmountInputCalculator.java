@@ -1,11 +1,10 @@
-package hhz.ktoeto.moneymanager.ui.component;
+package hhz.ktoeto.moneymanager.ui.component.field;
 
 import com.udojava.evalex.Expression;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
@@ -17,62 +16,14 @@ import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.math.BigDecimal;
 
-public class AmountInputCalculator extends CustomField<BigDecimal> {
-
-    private final BigDecimalField numberField;
-    private final Button calculateButton;
-    private final ExpressionDialog expressionDialog;
-
-    private final HorizontalLayout container;
+public class AmountInputCalculator extends AbstractFieldWithAction<BigDecimal, BigDecimalField> {
 
     public AmountInputCalculator() {
-        this.numberField = new BigDecimalField("Сумма");
-        this.calculateButton = new Button(MaterialIcons.CALCULATE.create());
-        this.expressionDialog = new ExpressionDialog(this::setValue);
+        super(new BigDecimalField("Сумма"), MaterialIcons.CALCULATE);
+        this.getActionButton().setTooltipText("Режим калькулятора");
 
-        this.container = new HorizontalLayout(this.numberField, this.calculateButton);
-
-        this.numberField.setWidthFull();
-
-        this.calculateButton.setTooltipText("Режим калькулятора");
-        this.calculateButton.addClickListener(event -> this.expressionDialog.open(this.numberField.getValue()));
-
-        this.container.setPadding(false);
-        this.container.addClassNames(
-                LumoUtility.Width.FULL,
-                LumoUtility.AlignItems.END,
-                LumoUtility.JustifyContent.BETWEEN,
-                LumoUtility.Gap.XSMALL
-        );
-
-        this.setWidthFull();
-        this.add(this.container);
-    }
-
-    @Override
-    public void setRequiredIndicatorVisible(boolean requiredIndicatorVisible) {
-        this.numberField.setRequiredIndicatorVisible(requiredIndicatorVisible);
-    }
-
-    @Override
-    public void setInvalid(boolean invalid) {
-        super.setInvalid(invalid);
-        this.numberField.setInvalid(invalid);
-    }
-
-    @Override
-    public void setErrorMessage(String errorMessage) {
-        super.setErrorMessage(errorMessage);
-    }
-
-    @Override
-    protected BigDecimal generateModelValue() {
-        return numberField.getValue();
-    }
-
-    @Override
-    protected void setPresentationValue(BigDecimal bigDecimal) {
-        numberField.setValue(bigDecimal);
+        ExpressionDialog expressionDialog = new ExpressionDialog(this::setValue);
+        super.addButtonClickListener(event -> expressionDialog.open(this.getField().getValue()));
     }
 
     private static class ExpressionDialog extends Composite<Dialog> {
