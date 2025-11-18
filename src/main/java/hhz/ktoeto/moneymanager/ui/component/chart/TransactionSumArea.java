@@ -121,8 +121,6 @@ public class TransactionSumArea extends ApexCharts {
         return TooltipBuilder.get()
                 .withEnabled(true)
                 .withFillSeriesColor(false)
-                .withStyle(com.github.appreciated.apexcharts.config.tooltip.builder.StyleBuilder.get()
-                        .build())
                 .build();
     }
 
