@@ -66,6 +66,7 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
     @Override
     protected void configureBinder(Binder<Budget> binder) {
         binder.forField(this.nameField)
+                .asRequired()
                 .withValidator(new BudgetNameValidator())
                 .bind(Budget::getName, Budget::setName);
         binder.forField(this.typeToggle)
@@ -105,10 +106,10 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
         this.scopeToggle.setItemLabelGenerator(Budget.Scope::toString);
         this.scopeToggle.setToggleable(false);
         this.scopeToggle.addValueChangeListener(event ->
-                categoryMultiselectField.setVisible(event.getValue() == Budget.Scope.BY_CATEGORIES)
+                this.categoryMultiselectField.setVisible(event.getValue() == Budget.Scope.BY_CATEGORIES)
         );
 
-        row.add(this.scopeToggle, categoryMultiselectField);
+        row.add(this.scopeToggle, this.categoryMultiselectField);
         row.addClassNames(
                 LumoUtility.Gap.SMALL,
                 LumoUtility.FlexDirection.COLUMN,
@@ -117,26 +118,27 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
     }
 
     private void configureSecondRow(FlexLayout row) {
-        activePeriodToggle.setItems(Budget.ActivePeriod.values());
-        activePeriodToggle.setValue(Budget.ActivePeriod.MONTH);
-        activePeriodToggle.setItemLabelGenerator(Budget.ActivePeriod::toString);
-        activePeriodToggle.setToggleable(false);
+        this.activePeriodToggle.setItems(Budget.ActivePeriod.values());
+        this.activePeriodToggle.setValue(Budget.ActivePeriod.MONTH);
+        this.activePeriodToggle.setItemLabelGenerator(Budget.ActivePeriod::toString);
+        this.activePeriodToggle.setToggleable(false);
 
-        dateRangePicker.setVisible(false);
+        this.dateRangePicker.setVisible(false);
+        this.dateRangePicker.setRequiredIndicatorVisible(true);
 
-        Scroller activePeriodScroller = new Scroller(activePeriodToggle);
+        Scroller activePeriodScroller = new Scroller(this.activePeriodToggle);
         activePeriodScroller.setScrollDirection(Scroller.ScrollDirection.HORIZONTAL);
 
-        renewableCheckbox.addValueChangeListener(event -> {
+        this.renewableCheckbox.addValueChangeListener(event -> {
                     boolean autoRenew = event.getValue();
                     activePeriodScroller.setVisible(autoRenew);
-                    dateRangePicker.setVisible(!autoRenew);
+                    this.dateRangePicker.setVisible(!autoRenew);
 
                     if (autoRenew) {
-                        activePeriodToggle.setValue(previousActivePeriod);
+                        this.activePeriodToggle.setValue(previousActivePeriod);
                     } else {
-                        previousActivePeriod = activePeriodToggle.getValue();
-                        activePeriodToggle.setValue(null);
+                        previousActivePeriod = this.activePeriodToggle.getValue();
+                        this.activePeriodToggle.setValue(null);
                     }
                 }
         );
@@ -145,6 +147,6 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
                 LumoUtility.Gap.SMALL,
                 LumoUtility.FlexDirection.COLUMN
         );
-        row.add(renewableCheckbox, activePeriodScroller, dateRangePicker);
+        row.add(this.renewableCheckbox, activePeriodScroller, this.dateRangePicker);
     }
 }

@@ -338,4 +338,14 @@ public class ToggleButtonGroup<T> extends CustomField<T> {
     protected void setPresentationValue(T t) {
 
     }
+
+    @Override
+    public boolean isRequiredIndicatorVisible() {
+        return false;
+    }
+
+    @Override
+    public void setRequiredIndicatorVisible(boolean ignored) {
+        super.setRequiredIndicatorVisible(false);
+    }
 }

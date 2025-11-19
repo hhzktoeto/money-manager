@@ -32,4 +32,9 @@ public class RussianDateRangePicker extends EnhancedDateRangePicker {
         this.setPattern("dd.MM.yyyy");
         this.setClearButtonVisible(true);
     }
+
+    @Override
+    public void setRequiredIndicatorVisible(boolean required) {
+        super.setRequiredIndicatorVisible(required);
+    }
 }
