@@ -8,7 +8,6 @@ import hhz.ktoeto.moneymanager.feature.budget.domain.BudgetScheduledRenewer;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -64,11 +63,12 @@ class BudgetScheduledRenewerTest {
 
         assertAll(
                 () -> assertFalse(reloaded.isFavourite()),
+                () -> assertFalse(reloaded.isRenewable()),
                 () -> assertTrue(newBudget.isFavourite()),
                 () -> assertTrue(newBudget.isRenewable()),
                 () -> assertThat(repository.findAll()).hasSize(2),
                 () -> assertEquals(reloaded.getName(), newBudget.getName()),
-                () -> assertEquals(reloaded.isRenewable(), newBudget.isRenewable()),
+                () -> assertNotEquals(reloaded.isRenewable(), newBudget.isRenewable()),
                 () -> assertNotEquals(reloaded.isFavourite(), newBudget.isFavourite()),
                 () -> assertEquals(reloaded.getType(), newBudget.getType()),
                 () -> assertEquals(reloaded.getScope(), newBudget.getScope()),
