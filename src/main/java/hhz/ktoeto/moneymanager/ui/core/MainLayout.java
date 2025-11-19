@@ -73,9 +73,13 @@ public class MainLayout extends FlexLayout implements RouterLayout {
     }
 
     @Override
+    public void removeRouterLayoutContent(HasElement oldContent) {
+        this.contentContainer.getElement().removeChild(oldContent.getElement());
+    }
+
+    @Override
     public void showRouterLayoutContent(HasElement content) {
         if (content != null) {
-            this.contentContainer.getElement().removeAllChildren();
             this.contentContainer.getElement().appendChild(content.getElement());
         }
 
