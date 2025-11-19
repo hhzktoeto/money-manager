@@ -14,6 +14,8 @@ import hhz.ktoeto.moneymanager.ui.AbstractFormView;
 import hhz.ktoeto.moneymanager.ui.component.field.*;
 import hhz.ktoeto.moneymanager.ui.mixin.CanAddCategory;
 
+import java.util.Arrays;
+
 public abstract class BudgetFormView extends AbstractFormView<Budget> {
 
     private final CanAddCategory categoryAddDelegate;
@@ -101,7 +103,7 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
         this.categoryMultiselectField.addButtonClickListener(event -> this.categoryAddDelegate.onCategoryAdd());
         this.categoryMultiselectField.setVisible(false);
 
-        this.scopeToggle.setItems(Budget.Scope.values());
+        this.scopeToggle.setItems(Arrays.asList(Budget.Scope.values()));
         this.scopeToggle.setValue(Budget.Scope.ALL);
         this.scopeToggle.setItemLabelGenerator(Budget.Scope::toString);
         this.scopeToggle.setToggleable(false);
@@ -118,7 +120,7 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
     }
 
     private void configureSecondRow(FlexLayout row) {
-        this.activePeriodToggle.setItems(Budget.ActivePeriod.values());
+        this.activePeriodToggle.setItems(Arrays.asList(Budget.ActivePeriod.values()));
         this.activePeriodToggle.setValue(Budget.ActivePeriod.MONTH);
         this.activePeriodToggle.setItemLabelGenerator(Budget.ActivePeriod::toString);
         this.activePeriodToggle.setToggleable(false);

@@ -1,26 +1,12 @@
-
 .toggle-button-group {
 
 }
 
 .toggle-button-group-button-h {
     border-style: solid;
-    border-color: var(--lumo-primary-color-10pct);
-}
-
-.toggle-button-group-first-button-h {
-    border-radius: 5px 0 0 5px;
-    border-width: 1px 0 1px 1px;
-}
-
-.toggle-button-group-middle-button-h {
-    border-radius: 0;
-    border-width: 1px 0 1px 1px;
-}
-
-.toggle-button-group-last-button-h {
-    border-radius: 0 5px 5px 0;
-    border-width: 1px 1px 1px 1px;
+    border-color: var(--lumo-primary-color-50pct);
+    border-radius: 2rem;
+    border-width: 1px;
 }
 
 .toggle-button-group-button-v {

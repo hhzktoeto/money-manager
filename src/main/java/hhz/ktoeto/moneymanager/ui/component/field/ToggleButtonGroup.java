@@ -18,7 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -32,6 +31,7 @@ public class ToggleButtonGroup<T> extends CustomField<T> {
     @Getter
     private List<T> items;
     private T selected;
+    @Getter
     private SerializableFunction<T, String> itemLabelGenerator = Object::toString;
     @Getter
     private SerializableFunction<T, String> selectedItemClassNameGenerator = item -> "";
@@ -41,6 +41,7 @@ public class ToggleButtonGroup<T> extends CustomField<T> {
     private SerializableFunction<T, String> itemTooltipTextGenerator;
     @Getter
     private SerializableFunction<T, Boolean> itemEnabledProvider = item -> Boolean.TRUE;
+    @Getter
     private SerializableFunction<T, Serializable> itemIdGenerator = Objects::hashCode;
     @Getter
     private SerializableFunction<T, Integer> itemOrderProvider;
@@ -78,11 +79,12 @@ public class ToggleButtonGroup<T> extends CustomField<T> {
         for (int i = 0; i < items.size(); i++) {
             T item = items.get(i);
             buttons[i] = createButton(item);
-            applyButtonStyles(buttons[i], i);
             buttonToItemMap.put(buttons[i], item);
             idToButtonMap.put(itemIdGenerator.apply(item), buttons[i]);
         }
 
+        hLayout.addClassNames(LumoUtility.Gap.SMALL);
+        vLayout.addClassNames(LumoUtility.Gap.SMALL);
         addButtonsToLayout(buttons);
         updateStyles(getValue(), getValue());
     }
@@ -118,39 +120,9 @@ public class ToggleButtonGroup<T> extends CustomField<T> {
         if (itemTooltipTextGenerator != null) {
             button.setTooltipText(itemTooltipTextGenerator.apply(item));
         }
-        button.addClassName(LumoUtility.TextColor.TERTIARY);
+        String baseClass = "toggle-button-group-button-%s".formatted(orientation == Orientation.HORIZONTAL ? "h" : "v");
+        button.addClassNames(baseClass, LumoUtility.TextColor.TERTIARY);
         return button;
-    }
-
-    protected void applyButtonStyles(Button button, int index) {
-        getButtonsBaseClass().ifPresent(button::addClassName);
-        if (index == 0) {
-            getFirstButtonClass().ifPresent(button::addClassName);
-        } else if (index == items.size() - 1) {
-            getLastButtonClass().ifPresent(button::addClassName);
-        } else {
-            getMiddleButtonClass().ifPresent(button::addClassName);
-        }
-    }
-
-    protected Optional<String> getButtonsBaseClass() {
-        return Optional.of("toggle-button-group-button-" + getOrientationStylePostfix());
-    }
-
-    protected Optional<String> getFirstButtonClass() {
-        return Optional.of("toggle-button-group-first-button-" + getOrientationStylePostfix());
-    }
-
-    protected Optional<String> getMiddleButtonClass() {
-        return Optional.of("toggle-button-group-middle-button-" + getOrientationStylePostfix());
-    }
-
-    protected Optional<String> getLastButtonClass() {
-        return Optional.of("toggle-button-group-last-button-" + getOrientationStylePostfix());
-    }
-
-    private String getOrientationStylePostfix() {
-        return orientation == Orientation.HORIZONTAL ? "h" : "v";
     }
 
     private Comparator<T> getDefaultComparator() {
@@ -210,10 +182,6 @@ public class ToggleButtonGroup<T> extends CustomField<T> {
         init();
     }
 
-    public void setItems(T... items) {
-        setItems(Arrays.asList(items));
-    }
-
     private void initializeOriginalOrderMap() {
         originalOrderMap.clear();
         IntStream.range(0, items.size()).forEach(i ->
@@ -225,10 +193,6 @@ public class ToggleButtonGroup<T> extends CustomField<T> {
         init();
     }
 
-    public Function<T, String> getItemLabelGenerator() {
-        return itemLabelGenerator;
-    }
-
     public void setItemLabelGenerator(SerializableFunction<T, String> itemLabelGenerator) {
         this.itemLabelGenerator = itemLabelGenerator;
         init();
@@ -237,10 +201,6 @@ public class ToggleButtonGroup<T> extends CustomField<T> {
     public void setItemIconGenerator(SerializableFunction<T, Icon> itemIconGenerator) {
         this.itemIconGenerator = itemIconGenerator;
         init();
-    }
-
-    public Function<T, Serializable> getItemIdGenerator() {
-        return itemIdGenerator;
     }
 
     public void setItemIdGenerator(SerializableFunction<T, Serializable> itemIdGenerator) {
