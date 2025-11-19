@@ -1,11 +1,10 @@
 package hhz.ktoeto.moneymanager.ui.core;
 
-import com.vaadin.flow.component.HasElement;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Page;
@@ -22,14 +21,14 @@ import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 @UIScope
 @SpringComponent
-public class MainLayout extends VerticalLayout implements RouterLayout {
+public class MainLayout extends FlexLayout implements RouterLayout {
 
     private final transient ApplicationEventPublisher eventPublisher;
 
     private final NavigationMenu desktopNavigation;
     private final NavigationMenu mobileNavigation;
     private final HorizontalLayout header;
-    private final VerticalLayout content;
+    private final VerticalLayout contentContainer;
 
     private final Button addTransactionButtonDesktop;
     private final Button addTransactionButtonMobile;
@@ -42,8 +41,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         this.desktopNavigation = new NavigationMenu(NavigationMenu.Mode.DESKTOP);
         this.addTransactionButtonDesktop = new Button("Добавить транзакцию");
         this.header = new HorizontalLayout(this.appLogo, this.desktopNavigation, this.addTransactionButtonDesktop);
-
-        this.content = new VerticalLayout();
+        this.contentContainer = new VerticalLayout();
 
         this.mobileNavigation = new NavigationMenu(NavigationMenu.Mode.MOBILE);
         this.addTransactionButtonMobile = new Button(MaterialIcons.ADD.create());
@@ -51,17 +49,22 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         this.configureHeader();
         this.configureAppLogo();
         this.configureAddTransactionButtonDesktop();
-        this.configureContent();
+        this.configureContentContainer();
         this.configureAddTransactionButtonMobile();
 
-        this.setSpacing(false);
         this.addClassNames(
                 LumoUtility.Width.FULL,
                 LumoUtility.Height.FULL,
+                LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.Padding.NONE,
                 LumoUtility.AlignItems.STRETCH
         );
-        this.add(header, content, addTransactionButtonMobile, mobileNavigation);
+        this.add(
+                this.header,
+                this.contentContainer,
+                this.addTransactionButtonMobile,
+                this.mobileNavigation
+        );
         this.addAttachListener(attachEvent -> {
             Page page = attachEvent.getUI().getPage();
             page.addBrowserWindowResizeListener(resizeEvent -> this.updateResponsive(resizeEvent.getWidth()));
@@ -72,8 +75,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
     @Override
     public void showRouterLayoutContent(HasElement content) {
         if (content != null) {
-            this.content.getElement().removeAllChildren();
-            this.content.getElement().appendChild(content.getElement());
+            this.contentContainer.getElement().removeAllChildren();
+            this.contentContainer.getElement().appendChild(content.getElement());
         }
 
         this.desktopNavigation.highlightSelected();
@@ -91,7 +94,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
             this.header.setJustifyContentMode(JustifyContentMode.CENTER);
             this.header.addClassName(LumoUtility.TextAlignment.CENTER);
 
-            this.content.getStyle().set("margin-bottom", "10vh");
+            this.contentContainer.getStyle().set("margin-bottom", "10vh");
         } else {
             this.desktopNavigation.setVisible(true);
             this.addTransactionButtonDesktop.setVisible(true);
@@ -102,7 +105,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
             this.header.setJustifyContentMode(JustifyContentMode.BETWEEN);
             this.header.removeClassName(LumoUtility.TextAlignment.CENTER);
 
-            this.content.getStyle().remove("margin-bottom");
+            this.contentContainer.getStyle().remove("margin-bottom");
         }
     }
 
@@ -135,8 +138,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         this.addTransactionButtonDesktop.addClassName(LumoUtility.AlignSelf.CENTER);
     }
 
-    private void configureContent() {
-        this.content.addClassNames(
+    private void configureContentContainer() {
+        this.contentContainer.addClassNames(
                 LumoUtility.Padding.Horizontal.MEDIUM,
                 LumoUtility.Padding.Vertical.MEDIUM,
                 LumoUtility.Width.FULL,
