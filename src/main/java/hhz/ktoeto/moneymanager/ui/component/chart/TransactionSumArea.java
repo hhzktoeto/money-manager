@@ -5,6 +5,7 @@ import com.github.appreciated.apexcharts.config.*;
 import com.github.appreciated.apexcharts.config.builder.*;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.chart.builder.ToolbarBuilder;
+import com.github.appreciated.apexcharts.config.chart.toolbar.AutoSelected;
 import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder;
 import com.github.appreciated.apexcharts.config.stroke.Curve;
 import com.github.appreciated.apexcharts.config.theme.Mode;
@@ -68,7 +69,7 @@ public class TransactionSumArea extends ApexCharts {
                 .withBackground(StyleConstants.Color.BASE)
                 .withHeight("500")
                 .withToolbar(ToolbarBuilder.get()
-                        .withShow(false)
+                        .withAutoSelected(AutoSelected.PAN)
                         .build())
                 .build();
     }
