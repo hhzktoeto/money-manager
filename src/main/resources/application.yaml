@@ -19,9 +19,9 @@ vaadin:
   allowed-packages: com.vaadin,org.vaadin,com.flowingcode,hhz.ktoeto,com.github.appreciated
 
 server:
-  port: ${MONEY_MANAGER_PORT}
   tomcat:
     max-http-form-post-size: 5MB
+  forward-headers-strategy: native
 
 logging:
   group:

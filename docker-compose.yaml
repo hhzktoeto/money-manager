@@ -1,6 +1,8 @@
 services:
   money-manager:
     container_name: money-manager
+    ports:
+      - "127.0.0.1:${MONEY_MANAGER_PORT}:8080"
     build: ./
     env_file:
       - ./.env
