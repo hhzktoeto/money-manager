@@ -3,7 +3,7 @@ FROM eclipse-temurin:21-jdk AS builder
 WORKDIR /app
 COPY . .
 
-RUN ./mvnw clean package -Pproduction
+RUN ./mvnw clean package -Pproduction -Dvaadin.force.production.build=true
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
