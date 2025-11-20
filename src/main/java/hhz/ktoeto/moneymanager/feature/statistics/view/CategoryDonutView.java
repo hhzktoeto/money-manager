@@ -1,6 +1,5 @@
 package hhz.ktoeto.moneymanager.feature.statistics.view;
 
-import com.vaadin.componentfactory.DateRange;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Unit;
@@ -10,10 +9,13 @@ import hhz.ktoeto.moneymanager.feature.statistics.domain.dto.CategorySum;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.Transaction;
 import hhz.ktoeto.moneymanager.ui.View;
 import hhz.ktoeto.moneymanager.ui.component.EmptyDataImage;
+import hhz.ktoeto.moneymanager.ui.component.chart.CategorySumDonut;
 import hhz.ktoeto.moneymanager.ui.component.field.IncomeExpenseToggle;
 import hhz.ktoeto.moneymanager.ui.component.field.RussianDateRangePicker;
-import hhz.ktoeto.moneymanager.ui.component.chart.CategorySumDonut;
 import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
+import software.xdev.vaadin.daterange_picker.business.DateRangeModel;
+import software.xdev.vaadin.daterange_picker.business.SimpleDateRange;
+import software.xdev.vaadin.daterange_picker.business.SimpleDateRanges;
 
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
     public CategoryDonutView(CategoryDonutPresenter presenter) {
         this.presenter = presenter;
 
-        this.dateRangePicker = new RussianDateRangePicker("Период");
+        this.dateRangePicker = new RussianDateRangePicker();
         this.incomeExpenseToggle = new IncomeExpenseToggle<>(Transaction.Type.EXPENSE, Transaction.Type.INCOME);
 
         this.emptyDataImage = new EmptyDataImage();
@@ -69,12 +71,19 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
 
         this.dateRangePicker.setWidthFull();
         this.dateRangePicker.addValueChangeListener(event -> {
-            DateRange dateRange = event.getValue();
-            this.presenter.setDates(dateRange.getStartDate(), dateRange.getEndDate());
+            DateRangeModel<SimpleDateRange> dateRange = event.getValue();
+            this.presenter.setDates(dateRange.getStart(), dateRange.getStart());
         });
-        this.dateRangePicker.addAttachListener(event ->
-                this.dateRangePicker.setValue(new DateRange(this.presenter.getFromDate(), this.presenter.getToDate()))
-        );
+        this.dateRangePicker.addAttachListener(event -> {
+            SimpleDateRange dateRange = this.dateRangePicker.getDateRange() == null
+                    ? SimpleDateRanges.MONTH
+                    : this.dateRangePicker.getDateRange();
+            DateRangeModel<SimpleDateRange> value = new DateRangeModel<>(
+                    this.presenter.getFromDate(),
+                    this.presenter.getToDate(),
+                    dateRange);
+            this.dateRangePicker.setValue(value);
+        });
 
         this.donutContainer.addClassNames(
                 LumoUtility.Width.FULL,

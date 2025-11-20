@@ -81,7 +81,7 @@ public abstract class TransactionsGridView extends Composite<VerticalLayout> imp
 
         this.rootGrid.addColumn(new TransactionCategoryDateRenderer())
                 .setKey("date");
-        this.rootGrid.addColumn(new NumberRenderer<>(Transaction::getAmount, NumberFormat.getCurrencyInstance(Locale.getDefault())))
+        this.rootGrid.addColumn(new NumberRenderer<>(Transaction::getAmount, NumberFormat.getCurrencyInstance(Locale.of("RU", "ru"))))
                 .setKey("sum")
                 .setTextAlign(ColumnTextAlign.END)
                 .setPartNameGenerator(transaction -> {
