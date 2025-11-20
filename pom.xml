@@ -139,6 +139,9 @@
                         <groupId>com.vaadin</groupId>
                         <artifactId>vaadin-maven-plugin</artifactId>
                         <version>${vaadin.version}</version>
+                        <configuration>
+                            <optimizeBundle>false</optimizeBundle>
+                        </configuration>
                         <executions>
                             <execution>
                                 <goals>

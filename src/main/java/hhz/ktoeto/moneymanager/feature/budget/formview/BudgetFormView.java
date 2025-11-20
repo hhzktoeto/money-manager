@@ -68,7 +68,7 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
     @Override
     protected void configureBinder(Binder<Budget> binder) {
         binder.forField(this.nameField)
-                .asRequired()
+                .asRequired("Не указано название бюджета")
                 .withValidator(new BudgetNameValidator())
                 .bind(Budget::getName, Budget::setName);
         binder.forField(this.typeToggle)
