@@ -1,6 +1,5 @@
 package hhz.ktoeto.moneymanager.feature.budget.formview;
 
-import com.vaadin.componentfactory.DateRange;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
@@ -13,6 +12,8 @@ import hhz.ktoeto.moneymanager.feature.category.data.SimpleCategoriesProvider;
 import hhz.ktoeto.moneymanager.ui.AbstractFormView;
 import hhz.ktoeto.moneymanager.ui.component.field.*;
 import hhz.ktoeto.moneymanager.ui.mixin.CanAddCategory;
+import software.xdev.vaadin.daterange_picker.business.DateRangeModel;
+import software.xdev.vaadin.daterange_picker.business.SimpleDateRanges;
 
 import java.util.Arrays;
 
@@ -43,7 +44,7 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
         this.categoryMultiselectField = new CategoryMultiselectField();
         this.renewableCheckbox = new Checkbox("Обновлять автоматически", true);
         this.activePeriodToggle = new ToggleButtonGroup<>();
-        this.dateRangePicker = new RussianDateRangePicker("Период активности бюджета");
+        this.dateRangePicker = new RussianDateRangePicker();
         this.amountInputCalculator = new AmountInputCalculator();
     }
 
@@ -87,10 +88,10 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
                 .bind(Budget::getActivePeriod, Budget::setActivePeriod);
         binder.forField(this.dateRangePicker)
                 .withValidator(new BudgetDateRangeValidator(this.renewableCheckbox))
-                .bind(budget -> new DateRange(budget.getStartDate(), budget.getEndDate()),
+                .bind(budget -> new DateRangeModel<>(budget.getStartDate(), budget.getEndDate(), SimpleDateRanges.FREE),
                         (budget, dateRange) -> {
-                            budget.setStartDate(dateRange.getStartDate());
-                            budget.setEndDate(dateRange.getEndDate());
+                            budget.setStartDate(dateRange.getStart());
+                            budget.setEndDate(dateRange.getEnd());
                         });
         binder.forField(this.amountInputCalculator)
                 .asRequired()

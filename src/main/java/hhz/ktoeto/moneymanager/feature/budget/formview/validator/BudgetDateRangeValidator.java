@@ -1,14 +1,15 @@
 package hhz.ktoeto.moneymanager.feature.budget.formview.validator;
 
-import com.vaadin.componentfactory.DateRange;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.binder.ValueContext;
 import lombok.RequiredArgsConstructor;
+import software.xdev.vaadin.daterange_picker.business.DateRangeModel;
+import software.xdev.vaadin.daterange_picker.business.SimpleDateRange;
 
 @RequiredArgsConstructor
-public class BudgetDateRangeValidator implements Validator<DateRange> {
+public class BudgetDateRangeValidator implements Validator<DateRangeModel<SimpleDateRange>> {
 
     private final Checkbox renewableCheckbox;
 
@@ -18,21 +19,21 @@ public class BudgetDateRangeValidator implements Validator<DateRange> {
     private static final String NO_END_ERROR_MESSAGE = "Не выбрана дата окончания действия бюджета";
 
     @Override
-    public ValidationResult apply(DateRange dateRange, ValueContext valueContext) {
+    public ValidationResult apply(DateRangeModel<SimpleDateRange> dateRange, ValueContext valueContext) {
         boolean isRenewable = renewableCheckbox.getValue();
         if (isRenewable) {
             return ValidationResult.ok();
         }
-        if (dateRange.getStartDate() == null && dateRange.getEndDate() == null) {
+        if (dateRange.getStart() == null && dateRange.getEnd() == null) {
             return ValidationResult.error(NO_RANGE_ERROR_MESSAGE);
         }
-        if (dateRange.getStartDate() == null) {
+        if (dateRange.getStart() == null) {
             return ValidationResult.error(NO_START_ERROR_MESSAGE);
         }
-        if (dateRange.getEndDate() == null) {
+        if (dateRange.getEnd() == null) {
             return ValidationResult.error(NO_END_ERROR_MESSAGE);
         }
-        if (dateRange.getEndDate().isBefore(dateRange.getStartDate())) {
+        if (dateRange.getEnd().isBefore(dateRange.getStart())) {
             return ValidationResult.error(END_BEFORE_START_ERROR_MESSAGE);
         }
 
