@@ -3,13 +3,26 @@ package hhz.ktoeto.moneymanager.ui.component;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
+import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.textfield.BigDecimalField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import hhz.ktoeto.moneymanager.ui.component.field.RussianDatePicker;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
+@Uses(TextArea.class)
+@Uses(Scroller.class)
+@Uses(ComboBox.class)
+@Uses(MultiSelectComboBox.class)
+@Uses(RussianDatePicker.class)
+@Uses(BigDecimalField.class)
 public class CustomDialog extends Dialog {
 
     private final H3 title;
