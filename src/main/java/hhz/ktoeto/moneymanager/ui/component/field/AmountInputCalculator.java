@@ -15,11 +15,15 @@ import org.springframework.lang.Nullable;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 public class AmountInputCalculator extends AbstractFieldWithAction<BigDecimal, BigDecimalField> {
 
     public AmountInputCalculator() {
         super(new BigDecimalField("Сумма"), MaterialIcons.CALCULATE);
+        this.getField().setLocale(Locale.of("RU", "ru"));
         this.getActionButton().setTooltipText("Режим калькулятора");
 
         ExpressionDialog expressionDialog = new ExpressionDialog(this::setValue);
@@ -31,11 +35,16 @@ public class AmountInputCalculator extends AbstractFieldWithAction<BigDecimal, B
         private final TextField expressionField = new TextField("Введите выражение");
         private final Button submitButton = new Button("Рассчитать");
         private final Button cancelButton = new Button("Отмена");
+        private final DecimalFormat formatter;
 
         private final SerializableConsumer<BigDecimal> onSubmit;
 
         public ExpressionDialog(SerializableConsumer<BigDecimal> onSubmit) {
             this.onSubmit = onSubmit;
+
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.of("RU", "ru"));
+            symbols.setDecimalSeparator(',');
+            this.formatter = new DecimalFormat("#0.00", symbols);
         }
 
         @Override
@@ -68,7 +77,8 @@ public class AmountInputCalculator extends AbstractFieldWithAction<BigDecimal, B
         private void open(@Nullable BigDecimal initialValue) {
             this.getContent().open();
             if (initialValue != null) {
-                expressionField.setValue(String.valueOf(initialValue.doubleValue()));
+                String formattedValue = this.formatter.format(initialValue);
+                expressionField.setValue(formattedValue);
             }
             expressionField.focus();
         }
@@ -80,7 +90,8 @@ public class AmountInputCalculator extends AbstractFieldWithAction<BigDecimal, B
 
         private void submit() {
             try {
-                BigDecimal value = new Expression(expressionField.getValue()).eval();
+                String expression = expressionField.getValue().replace(",", ".");
+                BigDecimal value = new Expression(expression).eval();
                 onSubmit.accept(value);
                 close();
             } catch (Exception e) {

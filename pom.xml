@@ -19,7 +19,7 @@
 
         <eval.ex.version>2.7</eval.ex.version>
 
-        <date.range.picker.version>5.0.2</date.range.picker.version>
+        <date.range.picker.version>4.2.3</date.range.picker.version>
         <material.icons.version>3.0.1</material.icons.version>
         <apex.charts.version>24.0.2</apex.charts.version>
     </properties>
@@ -98,8 +98,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.vaadin.componentfactory</groupId>
-            <artifactId>vcf-date-range-picker</artifactId>
+            <groupId>software.xdev</groupId>
+            <artifactId>vaadin-date-range-picker</artifactId>
             <version>${date.range.picker.version}</version>
         </dependency>
         <dependency>
@@ -125,26 +125,34 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <finalName>money-manager</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-maven-plugin</artifactId>
-                <version>${vaadin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-frontend</goal>
-                            <goal>build-frontend</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <profiles>
+        <profile>
+            <id>production</id>
+            <build>
+                <finalName>money-manager</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.vaadin</groupId>
+                        <artifactId>vaadin-maven-plugin</artifactId>
+                        <version>${vaadin.version}</version>
+                        <configuration>
+                            <optimizeBundle>false</optimizeBundle>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-frontend</goal>
+                                    <goal>build-frontend</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

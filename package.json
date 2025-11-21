@@ -5,7 +5,6 @@
   "dependencies": {
     "@gl0b3/materialicons": "3.0.2",
     "@polymer/polymer": "3.5.2",
-    "@vaadin-component-factory/vcf-date-range-picker": "5.0.2",
     "@vaadin/bundles": "24.9.5",
     "@vaadin/common-frontend": "0.0.19",
     "@vaadin/polymer-legacy-adapter": "24.9.5",
@@ -117,7 +116,6 @@
     "@polymer/polymer": "$@polymer/polymer",
     "react": "$react",
     "react-router": "$react-router",
-    "@vaadin-component-factory/vcf-date-range-picker": "$@vaadin-component-factory/vcf-date-range-picker",
     "@gl0b3/materialicons": "$@gl0b3/materialicons",
     "date-fns": "$date-fns",
     "apexcharts": "$apexcharts",
@@ -130,7 +128,6 @@
     "dependencies": {
       "@gl0b3/materialicons": "3.0.2",
       "@polymer/polymer": "3.5.2",
-      "@vaadin-component-factory/vcf-date-range-picker": "5.0.2",
       "@vaadin/bundles": "24.9.5",
       "@vaadin/common-frontend": "0.0.19",
       "@vaadin/polymer-legacy-adapter": "24.9.5",
@@ -170,6 +167,6 @@
       "workbox-core": "7.3.0",
       "workbox-precaching": "7.3.0"
     },
-    "hash": "4a8ab5eced22ed6c7433df5e05e0f675429e7590cef78a4730d44b484cf354c6"
+    "hash": "2d48a9ba48cc9ab510ac5ced1f7471fd897eb4e28e65b92faf38eddc3001866b"
   }
 }

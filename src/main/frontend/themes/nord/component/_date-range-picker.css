@@ -1,0 +1,11 @@
+.date-range-picker-button {
+    background-color: var(--lumo-contrast-10pct);
+    border-radius: var(--lumo-border-radius-m);
+}
+
+.date-range-picker-overlay-layout {
+    z-index: 101;
+    border: solid 1px var(--lumo-primary-color-10pct);
+    border-radius: var(--lumo-border-radius-m);
+    box-shadow: var(--lumo-box-shadow-m);
+}

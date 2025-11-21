@@ -1,6 +1,5 @@
 package hhz.ktoeto.moneymanager.feature.transaction.view;
 
-import com.vaadin.componentfactory.DateRange;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
@@ -20,6 +19,9 @@ import hhz.ktoeto.moneymanager.ui.component.field.RussianDateRangePicker;
 import hhz.ktoeto.moneymanager.ui.constant.StyleConstants;
 import hhz.ktoeto.moneymanager.ui.mixin.HasFilter;
 import hhz.ktoeto.moneymanager.ui.mixin.HasUpdatableData;
+import software.xdev.vaadin.daterange_picker.business.DateRangeModel;
+import software.xdev.vaadin.daterange_picker.business.SimpleDateRange;
+import software.xdev.vaadin.daterange_picker.business.SimpleDateRanges;
 
 import java.util.Collections;
 import java.util.Set;
@@ -161,14 +163,17 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
         });
         categoryMultiSelect.setItems(this.getPresenter().getCategoriesProvider());
 
-        RussianDateRangePicker dateRangePicker = new RussianDateRangePicker("Период");
+        RussianDateRangePicker dateRangePicker = new RussianDateRangePicker();
         TransactionFilter transactionFilter = this.hasFilterDelegate.getFilter();
-        dateRangePicker.setValue(new DateRange(transactionFilter.getFromDate(), transactionFilter.getToDate()));
+        SimpleDateRange dateRange = dateRangePicker.getDateRange() == null
+                ? SimpleDateRanges.MONTH
+                : dateRangePicker.getDateRange();
+        dateRangePicker.setValue(new DateRangeModel<>(transactionFilter.getFromDate(), transactionFilter.getToDate(), dateRange));
         dateRangePicker.addValueChangeListener(event -> {
             TransactionFilter filter = this.hasFilterDelegate.getFilter();
-            DateRange selectedRange = dateRangePicker.getValue();
-            filter.setFromDate(selectedRange.getStartDate());
-            filter.setToDate(selectedRange.getEndDate());
+            DateRangeModel<SimpleDateRange> selectedRange = dateRangePicker.getValue();
+            filter.setFromDate(selectedRange.getStart());
+            filter.setToDate(selectedRange.getEnd());
             this.hasFilterDelegate.setFilter(filter);
         });
 
@@ -179,7 +184,8 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
                 LumoUtility.Display.GRID,
                 LumoUtility.Grid.FLOW_ROW,
                 LumoUtility.Grid.Column.COLUMNS_1,
-                LumoUtility.Grid.Breakpoint.Small.COLUMNS_2
+                LumoUtility.Grid.Breakpoint.Small.COLUMNS_2,
+                LumoUtility.AlignItems.BASELINE
         );
 
         this.gridSettings.setWidthFull();

@@ -10,6 +10,9 @@ import hhz.ktoeto.moneymanager.ui.event.BudgetCreateRequested;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+
 @UIScope
 @SpringComponent
 public class CreateBudgetFormPresenter extends BudgetFormPresenter {
@@ -47,6 +50,10 @@ public class CreateBudgetFormPresenter extends BudgetFormPresenter {
 
     @EventListener(BudgetCreateRequested.class)
     private void onBudgetCreateRequested() {
-        this.openForm(new Budget());
+        Budget budget = new Budget();
+        budget.setStartDate(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()));
+        budget.setEndDate(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()));
+
+        this.openForm(budget);
     }
 }
