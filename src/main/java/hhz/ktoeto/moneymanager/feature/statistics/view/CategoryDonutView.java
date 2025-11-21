@@ -72,7 +72,7 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
         this.dateRangePicker.setWidthFull();
         this.dateRangePicker.addValueChangeListener(event -> {
             DateRangeModel<SimpleDateRange> dateRange = event.getValue();
-            this.presenter.setDates(dateRange.getStart(), dateRange.getStart());
+            this.presenter.setDates(dateRange.getStart(), dateRange.getEnd());
         });
         this.dateRangePicker.addAttachListener(event -> {
             SimpleDateRange dateRange = this.dateRangePicker.getDateRange() == null
