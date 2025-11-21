@@ -1,4 +1,3 @@
-name: moneymanager
 services:
   money-manager:
     container_name: money-manager
@@ -31,3 +30,4 @@ volumes:
 networks:
   app-net:
     driver: bridge
+    name: moneymanager_app-net
