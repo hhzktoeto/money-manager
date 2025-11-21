@@ -12,8 +12,20 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class RussianDateRangePicker extends DateRangePicker<SimpleDateRange> {
+
+    private static final Map<SimpleDateRange, String> DATE_RANGE_MAPPINGS = Map.of(
+            SimpleDateRanges.TODAY, "Сегодня",
+            SimpleDateRanges.DAY, "День",
+            SimpleDateRanges.WEEK, "Неделя",
+            SimpleDateRanges.MONTH, "Месяц",
+            SimpleDateRanges.QUARTER, "Квартал",
+            SimpleDateRanges.HALF_YEAR, "Полугодие",
+            SimpleDateRanges.YEAR, "Год",
+            SimpleDateRanges.FREE, "Свободный"
+    );
 
     public RussianDateRangePicker() {
         super(() -> new DateRangeModel<>(
@@ -22,27 +34,13 @@ public class RussianDateRangePicker extends DateRangePicker<SimpleDateRange> {
                         SimpleDateRanges.MONTH),
                 SimpleDateRanges.allValues()
         );
-        this.withDateRangeLocalizerFunction(dr -> {
-            if (dr.equals(SimpleDateRanges.TODAY)) return "Сегодня";
-            if (dr.equals(SimpleDateRanges.DAY)) return "День";
-            if (dr.equals(SimpleDateRanges.WEEK)) return "Неделя";
-            if (dr.equals(SimpleDateRanges.MONTH)) return "Месяц";
-            if (dr.equals(SimpleDateRanges.QUARTER)) return "Квартал";
-            if (dr.equals(SimpleDateRanges.HALF_YEAR)) return "Полугодие";
-            if (dr.equals(SimpleDateRanges.YEAR)) return "Год";
-            if (dr.equals(SimpleDateRanges.FREE)) return "Свободный";
-            return "?";
-        })
+        this.withDateRangeLocalizerFunction(dr -> DATE_RANGE_MAPPINGS.getOrDefault(dr, "?"))
                 .withStartLabel("Начало")
                 .withEndLabel("Конец")
                 .withDateRangeOptionsLabel("Диапазон")
                 .withDatePickerI18n(this.getI18n())
-                .withFormatLocale(Locale.of("RU", "ru"));
-    }
-
-    @Override
-    public void setRequiredIndicatorVisible(boolean required) {
-        super.setRequiredIndicatorVisible(required);
+                .withFormatLocale(Locale.of("RU", "ru"))
+                .withAllowRangeLimitExceeding(false);
     }
 
     private DatePickerI18n getI18n() {
