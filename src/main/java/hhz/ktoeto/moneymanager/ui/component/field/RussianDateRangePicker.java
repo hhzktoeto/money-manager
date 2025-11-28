@@ -46,6 +46,7 @@ public class RussianDateRangePicker extends DateRangePicker<SimpleDateRange> {
     private DatePickerI18n getI18n() {
         DateFormatSymbols symbols = new DateFormatSymbols(Locale.of("ru", "RU"));
         return new DatePickerI18n()
+                .setDateFormat("dd.MM.yyyy")
                 .setMonthNames(List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"))
                 .setFirstDayOfWeek(1)
                 .setWeekdays(Arrays.stream(symbols.getWeekdays())

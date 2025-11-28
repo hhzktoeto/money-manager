@@ -11,6 +11,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.renderer.NumberRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import hhz.ktoeto.moneymanager.feature.category.domain.Category;
@@ -94,6 +95,26 @@ public abstract class TransactionsGridView extends Composite<VerticalLayout> imp
                     return stringBuilder.toString();
                 });
     }
+
+    private static final LitRenderer<Transaction> TRANSACTION_CATEGORY_DATE_RENDERER = LitRenderer.<Transaction>of(
+            """
+                    <vaadin-horizontal-layout class="gap-m padding-xs align-center">
+                        <img src="categories/${item.iconFileName}" style="width: 2rem; height: 2rem;">
+                        <vaadin-vertical-layout class="gap-xs" style="padding: 0;">
+                            <span class="font-weight-bold font-size-m">${item.categoryName}</span>
+                            <span class="text-secondary font-weight-light font-size-s">${item.dateFormatted}</span>
+                        </vaadin-vertical-layout>
+                    </vaadin-horizontal-layout>
+                    """)
+            .withProperty("iconFileName", transaction -> transaction.getCategory().getIconFileName())
+            .withProperty("categoryName", transaction -> transaction.getCategory().getName())
+            .withProperty("dateFormatted", transaction -> {
+                DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                        .appendPattern("dd MMMM yyyy")
+                        .toFormatter()
+                        .withLocale(Locale.of("ru"));
+                return formatter.format(transaction.getDate());
+            });
 
     private static final class TransactionCategoryDateRenderer extends ComponentRenderer<HorizontalLayout, Transaction> {
 
