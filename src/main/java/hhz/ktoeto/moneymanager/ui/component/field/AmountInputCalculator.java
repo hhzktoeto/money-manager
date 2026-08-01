@@ -11,7 +11,7 @@ import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 import java.math.BigDecimal;
@@ -27,7 +27,7 @@ public class AmountInputCalculator extends AbstractFieldWithAction<BigDecimal, B
         this.getActionButton().setTooltipText("Режим калькулятора");
 
         ExpressionDialog expressionDialog = new ExpressionDialog(this::setValue);
-        super.addButtonClickListener(event -> expressionDialog.open(this.getField().getValue()));
+        super.addButtonClickListener(_ -> expressionDialog.open(this.getField().getValue()));
     }
 
     private static class ExpressionDialog extends Composite<Dialog> {
@@ -53,13 +53,13 @@ public class AmountInputCalculator extends AbstractFieldWithAction<BigDecimal, B
             root.setCloseOnOutsideClick(false);
 
             expressionField.setWidthFull();
-            expressionField.addKeyPressListener(Key.ENTER, event -> this.submit());
+            expressionField.addKeyPressListener(Key.ENTER, _ -> this.submit());
             root.add(expressionField);
 
             submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-            submitButton.addClickListener(event -> this.submit());
+            submitButton.addClickListener(_ -> this.submit());
 
-            cancelButton.addClickListener(event -> this.close());
+            cancelButton.addClickListener(_ -> this.close());
 
             HorizontalLayout buttons = new HorizontalLayout(cancelButton, submitButton);
             buttons.setWidthFull();
@@ -94,7 +94,7 @@ public class AmountInputCalculator extends AbstractFieldWithAction<BigDecimal, B
                 BigDecimal value = new Expression(expression).eval();
                 onSubmit.accept(value);
                 close();
-            } catch (Exception e) {
+            } catch (Exception _) {
                 expressionField.setErrorMessage("Некорректное выражение");
                 expressionField.setInvalid(true);
             }

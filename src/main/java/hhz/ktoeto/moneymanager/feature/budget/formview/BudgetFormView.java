@@ -101,7 +101,7 @@ public abstract class BudgetFormView extends AbstractFormView<Budget> {
 
     private void configureFirstRow(FlexLayout row) {
         this.categoryMultiselectField.setItems(categoryProvider);
-        this.categoryMultiselectField.addButtonClickListener(event -> this.categoryAddDelegate.onCategoryAdd());
+        this.categoryMultiselectField.addButtonClickListener(_ -> this.categoryAddDelegate.onCategoryAdd());
         this.categoryMultiselectField.setVisible(false);
 
         this.scopeToggle.setItems(Arrays.asList(Budget.Scope.values()));

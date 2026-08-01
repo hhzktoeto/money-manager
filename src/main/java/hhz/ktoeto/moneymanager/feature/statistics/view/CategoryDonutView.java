@@ -65,7 +65,7 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
 
         this.incomeExpenseToggle.setWidthFull();
         this.incomeExpenseToggle.setValue(Transaction.Type.EXPENSE);
-        this.incomeExpenseToggle.addValueChangeListener(event ->
+        this.incomeExpenseToggle.addValueChangeListener(_ ->
                 this.presenter.onDataChange(null)
         );
 
@@ -74,7 +74,7 @@ public class CategoryDonutView extends Composite<FlexLayout> implements View, Ha
             DateRangeModel<SimpleDateRange> dateRange = event.getValue();
             this.presenter.setDates(dateRange.getStart(), dateRange.getEnd());
         });
-        this.dateRangePicker.addAttachListener(event -> {
+        this.dateRangePicker.addAttachListener(_ -> {
             SimpleDateRange dateRange = this.dateRangePicker.getDateRange() == null
                     ? SimpleDateRanges.MONTH
                     : this.dateRangePicker.getDateRange();

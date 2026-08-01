@@ -39,7 +39,7 @@ public abstract class BudgetFormPresenter extends AbstractFormViewPresenter<Budg
     public void onDelete() {
         DeleteConfirmDialog confirmDialog = new DeleteConfirmDialog();
         confirmDialog.setHeader("Удалить бюджет?");
-        confirmDialog.addConfirmListener(event -> {
+        confirmDialog.addConfirmListener(_ -> {
             Budget budget = this.getView().getEntity();
             budgetService.delete(budget.getId(), userContextHolder.getCurrentUserId());
             confirmDialog.close();

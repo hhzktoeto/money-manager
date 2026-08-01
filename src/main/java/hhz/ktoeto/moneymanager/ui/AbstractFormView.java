@@ -17,8 +17,9 @@ import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
 public abstract class AbstractFormView<T> extends Composite<FlexLayout> implements FormView<T> {
 
+    private final transient Logger log = LoggerFactory.getLogger(this.getClass());
+
     private final transient AbstractFormViewPresenter<T> presenter;
-    private final Logger log;
 
     private final Button submitButton;
     private final Button cancelButton;
@@ -27,11 +28,10 @@ public abstract class AbstractFormView<T> extends Composite<FlexLayout> implemen
     @Getter(AccessLevel.PROTECTED)
     private final Binder<T> binder;
 
-    private T entity;
+    private transient T entity;
 
     protected AbstractFormView(AbstractFormViewPresenter<T> presenter, Class<T> entityClass) {
         this.presenter = presenter;
-        this.log = LoggerFactory.getLogger(this.getClass());
 
         this.submitButton = new Button("Сохранить");
         this.cancelButton = new Button("Отмена");
@@ -99,12 +99,12 @@ public abstract class AbstractFormView<T> extends Composite<FlexLayout> implemen
 
     private HorizontalLayout getButtonsRow() {
         HorizontalLayout row = new HorizontalLayout();
-        submitButton.addClickListener(e -> presenter.onSubmit());
+        submitButton.addClickListener(_ -> presenter.onSubmit());
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        cancelButton.addClickListener(e -> presenter.onCancel());
+        cancelButton.addClickListener(_ -> presenter.onCancel());
 
-        deleteButton.addClickListener(e -> presenter.onDelete());
+        deleteButton.addClickListener(_ -> presenter.onDelete());
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
         deleteButton.setVisible(isDeleteButtonVisible());
 

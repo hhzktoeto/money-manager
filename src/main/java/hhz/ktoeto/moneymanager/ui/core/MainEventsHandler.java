@@ -98,7 +98,7 @@ public class MainEventsHandler {
         };
         Button closeButton = new Button(MaterialIcons.CLOSE.create());
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        closeButton.addClickListener(e -> notification.close());
+        closeButton.addClickListener(_ -> notification.close());
 
         HorizontalLayout notificationLayout = new HorizontalLayout();
         notificationLayout.setAlignItems(FlexComponent.Alignment.CENTER);

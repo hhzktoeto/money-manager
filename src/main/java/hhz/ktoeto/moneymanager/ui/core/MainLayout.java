@@ -1,12 +1,15 @@
 package hhz.ktoeto.moneymanager.ui.core;
 
-import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.HasElement;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.ExtendedClientDetails;
 import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -19,7 +22,10 @@ import hhz.ktoeto.moneymanager.ui.event.TransactionCreateRequested;
 import org.springframework.context.ApplicationEventPublisher;
 import org.vaadin.addons.gl0b3.materialicons.MaterialIcons;
 
+import jakarta.annotation.security.PermitAll;
+
 @UIScope
+@PermitAll
 @SpringComponent
 public class MainLayout extends FlexLayout implements RouterLayout {
 
@@ -68,7 +74,13 @@ public class MainLayout extends FlexLayout implements RouterLayout {
         this.addAttachListener(attachEvent -> {
             Page page = attachEvent.getUI().getPage();
             page.addBrowserWindowResizeListener(resizeEvent -> this.updateResponsive(resizeEvent.getWidth()));
-            page.retrieveExtendedClientDetails(details -> this.updateResponsive(details.getWindowInnerWidth()));
+
+            ExtendedClientDetails details = page.getExtendedClientDetails();
+            if (details.getWindowInnerWidth() != -1) {
+                this.updateResponsive(details.getWindowInnerWidth());
+            } else {
+                details.refresh(refreshed -> this.updateResponsive(refreshed.getWindowInnerWidth()));
+            }
         });
     }
 
@@ -129,7 +141,7 @@ public class MainLayout extends FlexLayout implements RouterLayout {
     }
 
     private void configureAppLogo() {
-        this.appLogo.addClickListener(event -> UI.getCurrent().navigate(HomeRouteView.class));
+        this.appLogo.addClickListener(_ -> UI.getCurrent().navigate(HomeRouteView.class));
         this.appLogo.setWidth(11, Unit.REM);
         this.appLogo.setHeightFull();
         this.appLogo.setMaxHeight(3.25f, Unit.REM);
@@ -137,7 +149,7 @@ public class MainLayout extends FlexLayout implements RouterLayout {
     }
 
     private void configureAddTransactionButtonDesktop() {
-        this.addTransactionButtonDesktop.addClickListener(e -> this.eventPublisher.publishEvent(new TransactionCreateRequested(this)));
+        this.addTransactionButtonDesktop.addClickListener(_ -> this.eventPublisher.publishEvent(new TransactionCreateRequested(this)));
         this.addTransactionButtonDesktop.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         this.addTransactionButtonDesktop.addClassName(LumoUtility.AlignSelf.CENTER);
     }
@@ -156,7 +168,7 @@ public class MainLayout extends FlexLayout implements RouterLayout {
     }
 
     private void configureAddTransactionButtonMobile() {
-        this.addTransactionButtonMobile.addClickListener(e -> this.eventPublisher.publishEvent(new TransactionCreateRequested(this)));
+        this.addTransactionButtonMobile.addClickListener(_ -> this.eventPublisher.publishEvent(new TransactionCreateRequested(this)));
         this.addTransactionButtonMobile.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         this.addTransactionButtonMobile.getStyle().set("bottom", "11vh");
         this.addTransactionButtonMobile.addClassNames(

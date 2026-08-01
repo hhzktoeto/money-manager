@@ -71,7 +71,7 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
                 LumoUtility.FontWeight.BOLD
         );
         this.addNewCategoryButton.setHeight(2.5f, Unit.REM);
-        this.addNewCategoryButton.addClickListener(e -> this.presenter.onCreateRequested());
+        this.addNewCategoryButton.addClickListener(_ -> this.presenter.onCreateRequested());
         this.addNewCategoryButton.setVisible(this.isAddNewCategoryButtonVisible());
 
         root.add(this.addNewCategoryButton, this.rootGrid);
@@ -115,7 +115,7 @@ public abstract class CategoriesGridView extends Composite<VerticalLayout> imple
 
         public CategoryNameIconRenderer() {
             super(category -> {
-                Image icon = new Image("categories/" + category.getIconFileName(), "");
+                Image icon = new Image("/categories/" + category.getIconFileName(), "");
                 icon.setWidth(2, Unit.REM);
                 icon.setHeight(2, Unit.REM);
 

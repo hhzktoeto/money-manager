@@ -23,7 +23,7 @@ public class ExpiredBudgetsCardsView extends BudgetsCardsView {
 
     @Override
     protected void configureBudgetCard(BudgetCard card, Budget budget) {
-        card.addContentClickListener(event -> this.getPresenter().onEditRequested(budget));
+        card.addContentClickListener(_ -> this.getPresenter().onEditRequested(budget));
         card.hideAddToFavouriteButton();
         card.hideProgressSpan();
         String formattedStartDate = this.getPresenter().formatDate(budget.getStartDate());

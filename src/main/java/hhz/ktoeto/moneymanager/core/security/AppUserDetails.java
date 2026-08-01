@@ -2,6 +2,8 @@ package hhz.ktoeto.moneymanager.core.security;
 
 import hhz.ktoeto.moneymanager.feature.login.domain.User;
 import lombok.Getter;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -22,6 +24,7 @@ public class AppUserDetails implements UserDetails {
     }
 
     @Override
+    @NonNull
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();
     }

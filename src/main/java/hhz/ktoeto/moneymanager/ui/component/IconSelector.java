@@ -32,14 +32,14 @@ public class IconSelector extends CustomField<String> {
     private String selectedIconFileName = DEFAULT_ICON_NAME;
 
     public IconSelector(String iconFilePathPrefix) {
-        this.iconFilePathPrefix = iconFilePathPrefix;
+        this.iconFilePathPrefix = normalizeClasspathPrefix(iconFilePathPrefix);
         this.dialogOpenButton = new FlexLayout();
         this.iconSelectDialog = new IconSelectDialog(this::setValue, this::getValue, this.iconFilePathPrefix);
-        this.selectedIconImage = new Image(this.iconFilePathPrefix + this.selectedIconFileName, "");
+        this.selectedIconImage = new Image(toWebPath(this.iconFilePathPrefix, this.selectedIconFileName), "");
 
         this.selectedIconImage.setWidth(3, Unit.REM);
 
-        this.dialogOpenButton.addClickListener(event -> this.iconSelectDialog.open());
+        this.dialogOpenButton.addClickListener(_ -> this.iconSelectDialog.open());
         this.dialogOpenButton.addClassNames(
                 StyleConstants.CLICKABLE,
                 LumoUtility.BorderRadius.LARGE,
@@ -61,7 +61,16 @@ public class IconSelector extends CustomField<String> {
     @Override
     protected void setPresentationValue(String iconFileName) {
         this.selectedIconFileName = iconFileName != null ? iconFileName : DEFAULT_ICON_NAME;
-        this.selectedIconImage.setSrc(this.iconFilePathPrefix + this.selectedIconFileName);
+        this.selectedIconImage.setSrc(toWebPath(this.iconFilePathPrefix, this.selectedIconFileName));
+    }
+
+    private String normalizeClasspathPrefix(String prefix) {
+        String normalized = prefix.startsWith("/") ? prefix.substring(1) : prefix;
+        return normalized.endsWith("/") ? normalized : normalized + "/";
+    }
+
+    private String toWebPath(String classpathPrefix, String fileName) {
+        return "/" + classpathPrefix + fileName;
     }
 
     @Slf4j
@@ -143,11 +152,11 @@ public class IconSelector extends CustomField<String> {
                     );
                 }
 
-                Image icon = new Image(this.iconFilePathPrefix + iconFile, "");
+                Image icon = new Image("/" + this.iconFilePathPrefix + iconFile, "");
                 icon.setWidth(3, Unit.REM);
 
                 iconContainer.add(icon);
-                iconContainer.addClickListener(event -> {
+                iconContainer.addClickListener(_ -> {
                     this.layout.getChildren().forEach(c -> c.removeClassNames(LumoUtility.BorderColor.PRIMARY, LumoUtility.Border.ALL));
                     iconContainer.addClassNames(LumoUtility.BorderColor.PRIMARY, LumoUtility.Border.ALL);
 

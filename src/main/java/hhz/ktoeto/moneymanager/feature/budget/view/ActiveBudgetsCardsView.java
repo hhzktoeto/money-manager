@@ -21,7 +21,7 @@ public class ActiveBudgetsCardsView extends BudgetsCardsView {
 
     @Override
     protected void configureBudgetCard(BudgetCard card, Budget budget) {
-        card.addContentClickListener(event -> this.getPresenter().onEditRequested(budget));
-        card.addFavouriteButtonClickListener(event -> this.getPresenter().onAddToFavourites(budget));
+        card.addContentClickListener(_ -> this.getPresenter().onEditRequested(budget));
+        card.addFavouriteButtonClickListener(_ -> this.getPresenter().onAddToFavourites(budget));
     }
 }

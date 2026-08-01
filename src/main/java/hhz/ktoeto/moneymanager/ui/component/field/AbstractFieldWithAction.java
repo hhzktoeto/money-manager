@@ -18,7 +18,7 @@ public abstract class AbstractFieldWithAction<V, F extends Component & HasValue<
     @Getter(AccessLevel.PROTECTED)
     private final Button actionButton;
 
-    public AbstractFieldWithAction(F field, MaterialIcons buttonIcon) {
+    protected AbstractFieldWithAction(F field, MaterialIcons buttonIcon) {
         this.field = field;
         this.actionButton = new Button(buttonIcon.create());
         HorizontalLayout container = new HorizontalLayout(this.field, this.actionButton);

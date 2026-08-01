@@ -1,11 +1,9 @@
 package hhz.ktoeto.moneymanager.feature.login.ui.form;
 
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Input;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -30,9 +28,6 @@ public class LoginForm extends Composite<VerticalLayout> {
     private Button submitButton;
     private Button registerButton;
 
-    private HtmlComponent springForm;
-    private Input springUsername;
-    private Input springPassword;
     private VerticalLayout errorBox;
 
     private Binder<LoginRequest> binder;
@@ -62,20 +57,20 @@ public class LoginForm extends Composite<VerticalLayout> {
         passwordField.setWidthFull();
         passwordField.setPrefixComponent(MaterialIcons.LOCK.create());
         passwordField.getPrefixComponent().addClassName(LumoUtility.FontSize.SMALL);
-        passwordField.addKeyPressListener(Key.ENTER, ignored -> formLogic.onSubmit(this));
+        passwordField.addKeyPressListener(Key.ENTER, _ -> formLogic.onSubmit(this));
         root.add(passwordField);
 
         submitButton = new Button("Войти");
         submitButton.setWidthFull();
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.addClickShortcut(Key.ENTER);
-        submitButton.addClickListener(ignored -> formLogic.onSubmit(this));
+        submitButton.addClickListener(_ -> formLogic.onSubmit(this));
         root.add(submitButton);
 
         registerButton = new Button("Зарегистрироваться");
         registerButton.addClassName(LumoUtility.FontWeight.LIGHT);
         registerButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        registerButton.addClickListener(ignored -> formLogic.onRegister(this));
+        registerButton.addClickListener(_ -> formLogic.onRegister(this));
 
         Span noAccountSpan = new Span("Нет аккаунта?");
         noAccountSpan.addClassName(LumoUtility.FontWeight.EXTRALIGHT);
@@ -86,20 +81,6 @@ public class LoginForm extends Composite<VerticalLayout> {
                 LumoUtility.JustifyContent.CENTER
         );
         root.add(noAccountLayout);
-
-        springUsername = new Input();
-        springUsername.setType("hidden");
-        springUsername.getElement().setAttribute("name", "username");
-
-        springPassword = new Input();
-        springPassword.setType("hidden");
-        springPassword.getElement().setAttribute("name", "password");
-
-        springForm = new HtmlComponent("form");
-        springForm.getElement().setAttribute("method", "post");
-        springForm.getElement().setAttribute("action", "/login");
-        springForm.getElement().appendChild(springUsername.getElement(), springPassword.getElement());
-        root.add(springForm);
 
         binder = new Binder<>(LoginRequest.class);
         binder.forField(loginField)
@@ -137,10 +118,4 @@ public class LoginForm extends Composite<VerticalLayout> {
         loginField.setReadOnly(disabled);
         passwordField.setReadOnly(disabled);
     }
-
-    Components components() {
-        return new Components(springUsername, springPassword, springForm);
-    }
-
-    record Components(Input usernameInput, Input passwordInput, HtmlComponent hiddenForm) {}
 }
