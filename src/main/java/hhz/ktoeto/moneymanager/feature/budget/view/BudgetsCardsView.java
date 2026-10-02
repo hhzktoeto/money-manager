@@ -68,7 +68,7 @@ public abstract class BudgetsCardsView extends Composite<Div> implements View, H
                 LumoUtility.FontWeight.BOLD
         );
         this.addNewBudgetButton.setMinHeight(3, Unit.REM);
-        this.addNewBudgetButton.addClickListener(e -> this.presenter.onCreateRequested());
+        this.addNewBudgetButton.addClickListener(_ -> this.presenter.onCreateRequested());
 
         return root;
     }

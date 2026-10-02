@@ -1,18 +1,20 @@
 package hhz.ktoeto.moneymanager;
 
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.page.AppShellConfigurator;
+import com.vaadin.flow.component.page.ColorScheme;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Viewport("width=device-width, initial-scale=1")
-@Theme(
-        value = "nord",
-        variant = "dark"
-)
+@ColorScheme(ColorScheme.Value.DARK)
+@StyleSheet(Lumo.STYLESHEET)
+@StyleSheet(Lumo.UTILITY_STYLESHEET)
+@StyleSheet("nord/styles.css")
 @PWA(
         name = "Money Manager",
         shortName = "MM",
@@ -22,7 +24,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 public class Launcher implements AppShellConfigurator {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(Launcher.class, args);
     }
 }

@@ -43,7 +43,7 @@ public class FavouriteBudgetsCardsView extends BudgetsCardsView {
 
     @Override
     protected void configureBudgetCard(BudgetCard card, Budget budget) {
-        card.addContentClickListener(event -> this.getPresenter().onEditRequested(budget));
+        card.addContentClickListener(_ -> this.getPresenter().onEditRequested(budget));
         card.setMinWidth(18, Unit.REM);
         card.setMaxWidth(25, Unit.REM);
     }

@@ -19,9 +19,9 @@ public class CustomDialog extends Dialog {
 
     public CustomDialog() {
         this.setCloseOnOutsideClick(false);
-        this.addDialogCloseActionListener(event -> this.close());
-        this.setWidthFull();
-        this.addClassName(LumoUtility.MaxWidth.SCREEN_SMALL);
+        this.addDialogCloseActionListener(_ -> this.close());
+        this.setWidth("100%");
+        this.setMaxWidth("640px");
 
         header = new HorizontalLayout();
         header.addClassNames(
@@ -36,7 +36,7 @@ public class CustomDialog extends Dialog {
 
         closeButton = new Button(MaterialIcons.CLOSE.create());
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE, ButtonVariant.LUMO_LARGE);
-        closeButton.addClickListener(e -> this.close());
+        closeButton.addClickListener(_ -> this.close());
         header.add(closeButton);
         this.add(header);
 

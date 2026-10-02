@@ -82,7 +82,7 @@ public abstract class TransactionFormView extends AbstractFormView<Transaction> 
 
     private void configureFirstRow(FlexLayout row) {
         this.categorySelect.setItems(this.categoryProvider);
-        this.categorySelect.addButtonClickListener(event -> this.categoryAddDelegate.onCategoryAdd());
+        this.categorySelect.addButtonClickListener(_ -> this.categoryAddDelegate.onCategoryAdd());
 
         row.add(this.typeToggle, this.categorySelect);
         row.addClassNames(

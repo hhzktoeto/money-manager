@@ -83,7 +83,7 @@ public class AllCategoriesGridView extends CategoriesGridView {
                 Button button = new Button();
                 button.setTooltipText("Подробнее");
                 button.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE, ButtonVariant.LUMO_CONTRAST);
-                button.addAttachListener(event -> {
+                button.addAttachListener(_ -> {
                     boolean isVisible = grid.isDetailsVisible(category);
 
                     button.setIcon(isVisible
@@ -91,7 +91,7 @@ public class AllCategoriesGridView extends CategoriesGridView {
                             : MaterialIcons.KEYBOARD_ARROW_RIGHT.create()
                     );
                 });
-                button.addClickListener(event -> {
+                button.addClickListener(_ -> {
                     boolean newVisible = !grid.isDetailsVisible(category);
 
                     grid.setDetailsVisible(category, newVisible);

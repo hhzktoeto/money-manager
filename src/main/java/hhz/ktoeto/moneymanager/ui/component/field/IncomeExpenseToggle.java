@@ -54,7 +54,7 @@ public class IncomeExpenseToggle<T> extends CustomField<T> {
         );
 
         container = new FlexLayout();
-        container.addClickListener(e -> setValue(getValue().equals(expenseValue) ? incomeValue : expenseValue));
+        container.addClickListener(_ -> setValue(getValue().equals(expenseValue) ? incomeValue : expenseValue));
         container.addClassNames(
                 LumoUtility.FlexDirection.ROW,
                 LumoUtility.Position.RELATIVE,

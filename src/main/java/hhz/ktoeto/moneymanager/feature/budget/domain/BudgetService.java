@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -33,9 +33,7 @@ public class BudgetService {
                 .build()
                 .and((Specification<Budget>) (root, query, criteriaBuilder) -> {
                     root.fetch("categories", JoinType.LEFT);
-                    if (query != null) {
-                        query.distinct(true);
-                    }
+                    query.distinct(true);
 
                     return criteriaBuilder.conjunction();
                 });

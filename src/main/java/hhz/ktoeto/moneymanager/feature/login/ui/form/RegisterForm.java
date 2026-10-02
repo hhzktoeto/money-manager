@@ -73,13 +73,13 @@ public class RegisterForm extends Composite<VerticalLayout> {
         submitButton.setWidthFull();
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.addClickShortcut(Key.ENTER);
-        submitButton.addClickListener(ignored -> formLogic.onSubmit(this));
+        submitButton.addClickListener(_ -> formLogic.onSubmit(this));
         root.add(submitButton);
 
         loginButton = new Button("Войти");
         loginButton.addClassName(LumoUtility.FontWeight.LIGHT);
         loginButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        loginButton.addClickListener(ignored -> formLogic.onLogin(this));
+        loginButton.addClickListener(_ -> formLogic.onLogin(this));
 
         Span hasAccountSpan = new Span("Уже есть аккаунт?");
         hasAccountSpan.addClassName(LumoUtility.FontWeight.EXTRALIGHT);

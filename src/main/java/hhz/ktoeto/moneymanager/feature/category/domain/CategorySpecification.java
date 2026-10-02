@@ -6,8 +6,8 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.Builder;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 @Builder
 public class CategorySpecification implements Specification<Category> {
@@ -15,10 +15,10 @@ public class CategorySpecification implements Specification<Category> {
     @Nullable
     private final Long userId;
     @Nullable
-    private final CategoryFilter filter;
+    private final transient CategoryFilter filter;
 
     @Override
-    public Predicate toPredicate(@NonNull Root<Category> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+    public Predicate toPredicate(@NonNull Root<Category> root, @NonNull CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         Predicate predicate = criteriaBuilder.conjunction();
 
         if (userId != null) {

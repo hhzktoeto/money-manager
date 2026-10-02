@@ -79,7 +79,7 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
         Grid.Column<Transaction> categoryDateColumn = this.getRootGrid().getColumnByKey("date")
                 .setHeader("По дате")
                 .setSortable(true);
-        Grid.Column<Transaction> amountColumn = this.getRootGrid().getColumnByKey("sum")
+        Grid.Column<Transaction> amountColumn = this.getRootGrid().getColumnByKey("amount")
                 .setHeader("По сумме")
                 .setSortable(true);
 
@@ -91,7 +91,7 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
                 LumoUtility.FontSize.Breakpoint.Small.MEDIUM,
                 LumoUtility.TextColor.ERROR
         );
-        this.expensesFilterButton.addClickListener(e -> {
+        this.expensesFilterButton.addClickListener(_ -> {
             TransactionFilter filter = this.hasFilterDelegate.getFilter();
             Transaction.Type effectiveType = filter.getType() == Transaction.Type.EXPENSE
                     ? null
@@ -108,7 +108,7 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
                 LumoUtility.FontSize.Breakpoint.Small.MEDIUM,
                 LumoUtility.TextColor.SUCCESS
         );
-        this.incomesFilterButton.addClickListener(e -> {
+        this.incomesFilterButton.addClickListener(_ -> {
             TransactionFilter filter = this.hasFilterDelegate.getFilter();
             Transaction.Type effectiveType = filter.getType() == Transaction.Type.INCOME
                     ? null
@@ -169,7 +169,7 @@ public class AllTransactionsGridView extends TransactionsGridView implements Has
                 ? SimpleDateRanges.MONTH
                 : dateRangePicker.getDateRange();
         dateRangePicker.setValue(new DateRangeModel<>(transactionFilter.getFromDate(), transactionFilter.getToDate(), dateRange));
-        dateRangePicker.addValueChangeListener(event -> {
+        dateRangePicker.addValueChangeListener(_ -> {
             TransactionFilter filter = this.hasFilterDelegate.getFilter();
             DateRangeModel<SimpleDateRange> selectedRange = dateRangePicker.getValue();
             filter.setFromDate(selectedRange.getStart());

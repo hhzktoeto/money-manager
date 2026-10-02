@@ -11,8 +11,8 @@ import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionFilter;
 import hhz.ktoeto.moneymanager.feature.transaction.domain.TransactionService;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.jspecify.annotations.NonNull;
 import org.springframework.context.event.EventListener;
-import org.springframework.lang.NonNull;
 
 import java.util.stream.Stream;
 

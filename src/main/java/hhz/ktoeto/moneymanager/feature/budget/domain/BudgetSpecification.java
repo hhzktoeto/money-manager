@@ -2,9 +2,9 @@ package hhz.ktoeto.moneymanager.feature.budget.domain;
 
 import jakarta.persistence.criteria.*;
 import lombok.Builder;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
 
@@ -17,7 +17,7 @@ public class BudgetSpecification implements Specification<Budget> {
     private final transient BudgetFilter filter;
 
     @Override
-    public Predicate toPredicate(@NotNull Root<Budget> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+    public Predicate toPredicate(@NonNull Root<Budget> root, @NonNull CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         Predicate predicate = criteriaBuilder.conjunction();
 
         if (userId != null) {

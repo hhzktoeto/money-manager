@@ -39,7 +39,7 @@ public abstract class TransactionFormPresenter extends AbstractFormViewPresenter
     public void onDelete() {
         DeleteConfirmDialog confirmDialog = new DeleteConfirmDialog();
         confirmDialog.setHeader("Удалить транзакцию?");
-        confirmDialog.addConfirmListener(event -> {
+        confirmDialog.addConfirmListener(_ -> {
             Transaction transaction = this.getView().getEntity();
             this.transactionService.delete(transaction.getId(), this.userContextHolder.getCurrentUserId());
             confirmDialog.close();

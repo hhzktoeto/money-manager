@@ -6,8 +6,8 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.Builder;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.CollectionUtils;
 
 @Builder
@@ -19,7 +19,7 @@ public class TransactionSpecification implements Specification<Transaction> {
     private final transient TransactionFilter filter;
 
     @Override
-    public Predicate toPredicate(@NonNull Root<Transaction> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+    public Predicate toPredicate(@NonNull Root<Transaction> root, @NonNull CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         Predicate predicate = criteriaBuilder.conjunction();
 
         if (userId != null) {

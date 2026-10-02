@@ -1,14 +1,12 @@
 package hhz.ktoeto.moneymanager.core.security;
 
-import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
-import hhz.ktoeto.moneymanager.ui.constant.Routes;
-import hhz.ktoeto.moneymanager.feature.login.domain.UserService;
 import hhz.ktoeto.moneymanager.feature.login.LoginRouteView;
+import hhz.ktoeto.moneymanager.feature.login.domain.UserService;
+import hhz.ktoeto.moneymanager.ui.constant.Routes;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -19,15 +17,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
-@Import(VaadinAwareSecurityContextHolderStrategyConfiguration.class)
 public class SecurityConfig {
 
     @Bean
@@ -43,11 +40,24 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PersistentTokenRepository persistentTokenRepository(DataSource dataSource) {
+    public PersistentTokenRepository persistentTokenRepository(JdbcTemplate jdbcTemplate) {
         JdbcTokenRepositoryImpl repository = new JdbcTokenRepositoryImpl();
-        repository.setDataSource(dataSource);
+        repository.setJdbcTemplate(jdbcTemplate);
 
         return repository;
+    }
+
+    @Bean
+    public RememberMeServices rememberMeServices(UserDetailsService userDetailsService, PersistentTokenRepository persistentTokenRepository,
+            @Value("${spring.security.remember-me.key}") String rememberMeKey,
+            @Value("${spring.security.remember-me.cookie-name}") String rememberMeCookieName,
+            @Value("${spring.security.remember-me.max-age}") Integer rememberMeMaxAge) {
+        PersistentTokenBasedRememberMeServices services = new PersistentTokenBasedRememberMeServices(rememberMeKey, userDetailsService, persistentTokenRepository);
+        services.setCookieName(rememberMeCookieName);
+        services.setTokenValiditySeconds(rememberMeMaxAge);
+        services.setAlwaysRemember(true);
+        services.setUseSecureCookie(false);
+        return services;
     }
 
     @Bean
@@ -59,34 +69,19 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http,
-                                           UserDetailsService userDetailsService,
-                                           PersistentTokenRepository persistentTokenRepository,
-                                           @Value("${spring.security.remember-me.key}") String rememberMeKey,
-                                           @Value("${spring.security.remember-me.cookie-name}") String rememberMeCookieName,
-                                           @Value("${spring.security.remember-me.max-age}") Integer rememberMeMaxAge) throws Exception {
-        HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
-        requestCache.setMatchingRequestParameterName(null);
-
+    public SecurityFilterChain filterChain(HttpSecurity http, RememberMeServices rememberMeServices) {
         return http
-                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView(LoginRouteView.class, Routes.LOGIN.getPath()))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/logo.png").permitAll())
-                .requestCache(configurer -> configurer.requestCache(requestCache))
-                .formLogin(configurer -> configurer
-                        .loginPage(Routes.LOGIN.getPath())
-                        .loginProcessingUrl(Routes.LOGIN.getPath())
-                        .defaultSuccessUrl(Routes.HOME.getPath(), true)
-                )
-                .rememberMe(configurer -> configurer
-                        .key(rememberMeKey)
-                        .userDetailsService(userDetailsService)
-                        .tokenRepository(persistentTokenRepository)
-                        .rememberMeCookieName(rememberMeCookieName)
-                        .tokenValiditySeconds(rememberMeMaxAge)
-                        .useSecureCookie(true)
-                        .alwaysRemember(true)
-                )
-                .securityContext(context -> context.requireExplicitSave(false))
+                .with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer
+                        .loginView(LoginRouteView.class)
+                        .defaultSuccessUrl(Routes.Path.HOME, true))
+                .authorizeHttpRequests(auth -> auth.requestMatchers(
+                        "/logo.png",
+                        "/empty_data.png",
+                        "/categories/*.png",
+                        "/icons/**",
+                        "/nord/**"
+                ).permitAll())
+                .rememberMe(configurer -> configurer.rememberMeServices(rememberMeServices))
                 .build();
     }
 }

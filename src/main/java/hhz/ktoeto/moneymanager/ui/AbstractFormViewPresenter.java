@@ -10,9 +10,10 @@ import org.slf4j.LoggerFactory;
 
 public abstract class AbstractFormViewPresenter<T> implements FormViewPresenter<T> {
 
+    private final transient Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Getter(AccessLevel.PROTECTED)
     private final CustomDialog rootDialog = new CustomDialog();
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Getter(AccessLevel.PROTECTED)
     @Setter(AccessLevel.PROTECTED)

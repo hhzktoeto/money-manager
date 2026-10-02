@@ -29,8 +29,8 @@ public class ToggleButtonGroup<T> extends CustomField<T> {
     }
 
     @Getter
-    private List<T> items;
-    private T selected;
+    private transient List<T> items;
+    private transient T selected;
     @Getter
     private SerializableFunction<T, String> itemLabelGenerator = Object::toString;
     @Getter
@@ -296,7 +296,7 @@ public class ToggleButtonGroup<T> extends CustomField<T> {
 
     @Override
     protected void setPresentationValue(T t) {
-
+        //unused
     }
 
     @Override

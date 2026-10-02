@@ -24,7 +24,7 @@ public abstract class CategoryFormPresenter extends AbstractFormViewPresenter<Ca
         DeleteConfirmDialog confirmDialog = new DeleteConfirmDialog();
         confirmDialog.setHeader("Удалить категорию?");
         confirmDialog.setText("Все транзакции, связанные с категорией, так же будут удалены");
-        confirmDialog.addConfirmListener(event -> {
+        confirmDialog.addConfirmListener(_ -> {
             Category category = this.getView().getEntity();
             this.categoryService.delete(category.getId(), this.userContextHolder.getCurrentUserId());
             confirmDialog.close();

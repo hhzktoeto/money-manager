@@ -24,9 +24,9 @@ public class RecentTransactionsProvider extends AbstractTransactionsDataProvider
     @Override
     protected Stream<Transaction> doFetch(long userId, Query<Transaction, TransactionFilter> query) {
         // This won't be used but must be called to avoid internal Vaadin's exception
-        query.getLimit();
+        int _ = query.getLimit();
         query.getPage();
-        query.getOffset();
+        int _ = query.getOffset();
         // This won't be used but must be called to avoid internal Vaadin's exception
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
