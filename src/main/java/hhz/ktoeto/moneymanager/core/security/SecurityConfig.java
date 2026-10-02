@@ -76,6 +76,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl(Routes.Path.HOME, true))
                 .authorizeHttpRequests(auth -> auth.requestMatchers(
                         "/logo.png",
+                        "/empty_data.png",
                         "/categories/*.png",
                         "/icons/**",
                         "/nord/**"

@@ -9,7 +9,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 
 public class EmptyDataImage extends Composite<VerticalLayout> {
 
-    private final Image image = new Image("empty_data.png", "Пусто");
+    private final Image image = new Image("/empty_data.png", "Пусто");
     private final Span text = new Span();
 
     @Override
